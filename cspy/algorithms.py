@@ -23,14 +23,14 @@ class BiDirectional(object):
         self.F, self.B = expand(), expand()
         self.F.label, self.B.label = 'Source', 'Sink'
         self.F.unprocessed, self.B.unprocessed = {}, {}
-        self.F.res, self.B.res = 0, 50  # [0] * self.G.graph['n_res']
+        self.F.res, self.B.res = 0, 50
         self.F.path, self.B.path = [self.F.label], [self.B.label]
 
-    def _run(self):
+    def run(self):
         check_dominance = True
 
         while self.F.label or self.B.label:
-            direction = self._get_next_direction()
+            direction = self.getDirection()
             if direction == 'forward':  # forward
                 if self.F.res <= self.HF:
                     if self.F.label not in self.F.unprocessed.keys():
@@ -38,15 +38,9 @@ class BiDirectional(object):
                     edges = [e for e in self.G.edges(data=True)
                              if e[0] == self.F.label]
                     # edges = [(i, j) for j in self.G.successors_iter(i)]
-                    for edge in edges:
-                        res_cost = self.F.res + edge[2]['res_cost']
-                        self.F.res = res_cost
-                        # list(map(add, self.F.res, edge[2]['res_cost']))
-                        if res_cost <= self.HF:
-                            self.F.unprocessed[self.F.label].extend(
-                                [(edge[1], res_cost)])
+                    map(self.progateFlabel, edges)
                     self.HB = max(self.HB, min(self.F.res, self.HF))
-                    self._get_next_Flabel()
+                    self.getNextFlabel()
                     if self.F.label:
                         self.F.path.append(self.F.label)
                         if self.F.label == 'Sink':
@@ -57,15 +51,9 @@ class BiDirectional(object):
                         self.B.unprocessed[self.B.label] = []
                     edges = [e for e in self.G.edges(data=True)
                              if e[1] == self.B.label]
-                    for edge in edges:
-                        res_cost = self.B.res - edge[2]['res_cost']
-                        self.B.res = res_cost
-                        # list(map(add, self.B.res, edge[2]['res_cost']))
-                        if self.B.res > self.HB:
-                            self.B.unprocessed[self.B.label].extend(
-                                [(edge[0], res_cost)])
+                    map(self.progateBlabel, edges)
                     self.HF = min(self.HF, max(self.B.res, self.HB))
-                    self._get_next_Blabel()
+                    self.getNextBlabel()
                     if self.B.label:
                         self.B.path.append(self.B.label)
                         if self.B.label == 'Source':
@@ -73,10 +61,10 @@ class BiDirectional(object):
             else:
                 break
             if check_dominance:
-                self._check_dominance()
-        return self._join_paths()
+                self.checkDominance()
+        return self.joinPaths()
 
-    def _get_next_direction(self):
+    def getDirection(self):
         import random
 
         if self.F.label and not self.B.label:
@@ -89,7 +77,22 @@ class BiDirectional(object):
         else:  # if both are empty
             return
 
-    def _get_next_Flabel(self):
+    def progateFlabel(self, edge):
+        res_cost = self.F.res + edge[2]['res_cost']
+        self.F.res = res_cost
+        if res_cost <= self.HF:
+            self.F.unprocessed[self.F.label].extend(
+                [(edge[1], res_cost)])
+
+    def progateBlabel(self, edge):
+        res_cost = self.B.res - edge[2]['res_cost']
+        self.B.res = res_cost
+        # list(map(add, self.B.res, edge[2]['res_cost']))
+        if self.B.res > self.HB:
+            self.B.unprocessed[self.B.label].extend(
+                [(edge[0], res_cost)])
+
+    def getNextFlabel(self):
         if self.F.label in self.F.unprocessed.keys():
             labels = self.F.unprocessed[self.F.label]
             if len(labels) > 0:
@@ -98,7 +101,7 @@ class BiDirectional(object):
                 self.F.label = None
         return
 
-    def _get_next_Blabel(self):
+    def getNextBlabel(self):
         if self.B.label in self.B.unprocessed.keys():
             labels = self.B.unprocessed[self.B.label]
             if len(labels) > 0:
@@ -108,10 +111,10 @@ class BiDirectional(object):
                 self.B.label = None
         return
 
-    def _check_dominance(self):
+    def checkDominance(self):
         pass
 
-    def _join_paths(self):
+    def joinPaths(self):
         self.B.path.reverse()  # reverse order for backward path
         print list(OrderedDict.fromkeys(self.F.path + self.B.path))
         return list(OrderedDict.fromkeys(self.F.path + self.B.path))

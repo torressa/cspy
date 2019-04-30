@@ -13,19 +13,18 @@ class cspyTests(unittest.TestCase):
     def setUp(self):
         '''Create simple DiGraph'''
         self.G = nx.DiGraph(directed=True, n_res=2)
-        self.L = 10
-        self.U = 30
-        self.run_time = 0
+        self.L, self.U, self.run_time = 10, 30, 0
 
         self.G.add_edge('Source', 'A', res_cost=10, weight=0)
         self.G.add_edge('A', 'B', res_cost=10, weight=0)
-        self.G.add_edge('B', 'C', res_cost=100, weight=-1)
+        self.G.add_edge('A', 'C', res_cost=10, weight=0)
+        self.G.add_edge('B', 'C', res_cost=10, weight=-1)
         self.G.add_edge('C', 'Sink', res_cost=10, weight=0)
 
     def testOutput(self):
         '''Find shortest path subject to resource constraints.'''
         start = time.time()
-        path = alg.BiDirectional(self.G, self.L, self.U)._run()
+        path = alg.BiDirectional(self.G, self.L, self.U).run()
         self.run_time = time.time() - start
         self.assertIsInstance(path, list)
 
