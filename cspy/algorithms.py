@@ -1,6 +1,13 @@
-#!/usr/bin/env pypy
 
-# import networkx as nx
+''' Constrained Shortest Path Algorithm. Influenced by the pylgrim module, we
+implement the bidirectional algorithm from [1].
+AUTHOR: David Torres, 2019 <d.torressanchez@lancs.ac.uk>
+REFERENCES:
+[1] :   Tilk et al. (2017) Asymmetry matters: Dynamic half-way points in
+        bidirectional labeling for solving shortest path problems with resource
+        constraints faster. EJOR
+'''
+
 from .label import Label
 from collections import OrderedDict
 
@@ -10,21 +17,34 @@ class expand:
 
 
 class BiDirectional:
-    ''' bidirectional labeling algorithm with dynamic half-way point.
+    '''Bidirectional labeling algorithm with dynamic half-way point from [1].
+    Depending on the range of values for self.HF = HF and self.HB = HB, we get
+    four different algorithms.
+    (1) If HF = HB > U:
+        monodirectional forward labeling algorithm;
+    (2) If HF = HB ∈ (L, U):
+        bidirectional labeling algorithm with static half-way point;
+    (3) If HF = HB < L:
+        monodirectional backward labeling algorithm;
+    (4) If U = HF > HB = L then
+        bidirectional labeling algorithm with dynamic half-way point.
     PARAMS
         G :: Digraph;
         L :: float, lower bound for resource usage;
-        U :: float, upper bound for resource usage;'''
+        U :: float, upper bound for resource usage.
+    '''
 
     def __init__(self, G, L, U):
-        self.G, self.n_edges = G, len(G.edges())
+        self.G = G
+        self.L, self.U = L, U
         self.HB = L
         self.HF = U
+
+        n_edges, n_res = len(G.edges()), G.graph['n_res']
+
         self.F, self.B = expand(), expand()
-        self.F.Label = Label(
-            0, 'Source', [0] * G.graph['n_res'], ['Source'])
-        self.B.Label = Label(
-            0, 'Sink', [self.n_edges + 1] * G.graph['n_res'], ['Sink'])
+        self.F.Label = Label(0, 'Source', [0] * n_res, ['Source'])
+        self.B.Label = Label(0, 'Sink', [n_edges + 1] * n_res, ['Sink'])
         self.F.unprocessed, self.B.unprocessed = {}, {}
         self.finalFpath, self.finalBpath = [], []
 
@@ -115,21 +135,9 @@ class BiDirectional:
     def checkDominance(self):
         # print(self.F.unprocessed)
         # print(self.B.unprocessed)
-
-        for label_dicts in self.B.unprocessed.values():
-            if len(label_dicts) >= 1:
-                print(sorted(label_dicts.keys()))
-        # for labels in self.F.unprocessed.values():
-        #     labels_sorted = labels
-        # if a[0] == b[0] and all(a[1] == b[1]):
-        #     label_dominated = False
-        # else:
-        #     label_dominated = True
-        #     if a[0] < b[0]:
-        #         label_dominated = False
-        #     if any(a[1] < b[1]):
-        #         label_dominated = False
-        # for label in self.F.unprocessed[self.F.Label].keys():
+        # for label_dicts in self.B.unprocessed.values():
+        #     if len(label_dicts) >= 1:
+        #         print(sorted(label_dicts.keys()))
         pass
 
     def joinPaths(self):
@@ -138,3 +146,13 @@ class BiDirectional:
         self.finalBpath.reverse()  # reverse order for backward path
         print(list(OrderedDict.fromkeys(self.finalFpath + self.finalBpath)))
         return list(OrderedDict.fromkeys(self.finalFpath + self.finalBpath))
+
+    def nameAlgorithm(self):
+        if self.HF == self.HB > self.U:
+            print('Monodirectional forward labeling algorithm')
+        elif self.L < self.HF == self.HB < self.U:
+            print('bidirectional labeling algorithm with static halfway point')
+        elif self.HF == self.HB < self.L:
+            print('monodirectional backward labeling algorithm')
+        elif self.U == self.HF > self.HB == self.L:
+            print('bidirectional labeling algorithm with dynamic halfway point.')

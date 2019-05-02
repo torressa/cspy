@@ -37,8 +37,6 @@ class cspyTests(unittest.TestCase):
     def testDominance(self):
         L1 = label.Label(1, 'A', [1, 1], [])
         L2 = label.Label(-1, 'B', [1, 1], [])
-        labels = [L1, L2]
-        print(sorted(labels))
         self.assertTrue(L2.dominates(L1))
 
 
