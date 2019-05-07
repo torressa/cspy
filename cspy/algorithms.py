@@ -46,6 +46,7 @@ class BiDirectional:
         self.F, self.B = expand(), expand()
         self.F.Label = Label(0, 'Source', [0] * n_res, ['Source'])
         self.B.Label = Label(0, 'Sink', [n_edges + 1] * n_res, ['Sink'])
+        self.F.processed, self.B.processed = {}, {}
         self.F.unprocessed, self.B.unprocessed = {}, {}
         self.finalFpath, self.finalBpath = [], []
 
@@ -61,6 +62,7 @@ class BiDirectional:
                     # edges = [(i, j) for j in self.G.successors_iter(i)]
                     list(map(self.progateFlabel, edges))
                     self.HB = max(self.HB, min(self.F.Label.res[0], self.HF))
+                    self.finalFpath = self.F.Label.path
                     self.getNextFlabel()
                     if self.F.Label and self.F.Label.node == 'Sink':
                         break
@@ -72,12 +74,16 @@ class BiDirectional:
                              if e[1] == self.B.Label.node]
                     list(map(self.progateBlabel, edges))
                     self.HF = min(self.HF, max(self.B.Label.res[0], self.HB))
+                    self.finalBpath = self.B.Label.path
                     self.getNextBlabel()
                     if self.B.Label and self.B.Label.node == 'Source':
                         break
             else:
                 break
-            self.checkDominance()
+            if self.finalFpath and self.finalBpath and \
+                    (self.finalFpath[-1] == self.finalBpath[-1]):
+                break
+            self.checkDominance(direction)
         return self.joinPaths()
 
     def getDirection(self):
@@ -112,34 +118,37 @@ class BiDirectional:
         if self.F.Label in self.F.unprocessed.keys():
             labels_dict = self.F.unprocessed[self.F.Label]
             if labels_dict:
-                del self.F.unprocessed[self.F.Label]
                 self.F.Label = min(labels_dict.keys(),
-                                   key=lambda x: x.weight)
-                self.finalFpath = self.F.Label.path
-
+                                   key=lambda x: x.res[0])
             else:
-                self.finalFpath = self.F.Label.path
                 self.F.Label = None
 
     def getNextBlabel(self):
         if self.B.Label in self.B.unprocessed.keys():
             labels_dict = self.B.unprocessed[self.B.Label]
             if labels_dict:
-                del self.B.unprocessed[self.B.Label]
                 self.B.Label = min(labels_dict.keys(),
-                                   key=lambda x: x.weight)
-                self.finalBpath = self.B.Label.path
+                                   key=lambda x: x.res[0])
             else:
-                self.finalBpath = self.B.Label.path
                 self.B.Label = None
 
-    def checkDominance(self):
-        # print(self.F.unprocessed)
-        # print(self.B.unprocessed)
-        # for label_dicts in self.B.unprocessed.values():
-        #     if len(label_dicts) >= 1:
-        #         print(sorted(label_dicts.keys()))
-        pass
+    def checkDominance(self, direction):
+        if direction == 'forward':
+            if self.F.Label:
+                for sub_dict in [d for d in self.F.unprocessed.values()
+                                 if self.F.Label in d.keys()]:
+                    for label in sub_dict.keys():
+                        if label.dominates(self.F.Label):
+                            self.F.Label = label
+                            return
+        else:
+            if self.B.Label:
+                for sub_dict in [d for d in self.B.unprocessed.values()
+                                 if self.B.Label in d.keys()]:
+                    for label in sub_dict.keys():
+                        if label.dominates(self.B.Label):
+                            self.B.Label = label
+                            return
 
     def joinPaths(self):
         print(self.finalBpath)

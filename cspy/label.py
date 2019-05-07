@@ -38,7 +38,7 @@ class Label(object):
     def getNewLabel(self, direction, weight, node, res):
         path = list(self.path)
         path.append(node)
-        if direction == 'forward':
+        if direction == 'F':
             res_new = list(map(add, self.res, res))
         else:
             res_new = list(map(sub, self.res, res))
