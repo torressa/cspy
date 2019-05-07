@@ -1,6 +1,7 @@
 
-''' Constrained Shortest Path Algorithm. Influenced by the pylgrim module, we
-implement the bidirectional algorithm from [1].
+''' Constrained Shortest Path Algorithm.
+Implementation of the bidirectional algorithm for directed weighted graphs with
+resource considerations from [1].
 AUTHOR: David Torres, 2019 <d.torressanchez@lancs.ac.uk>
 REFERENCES:
 [1] :   Tilk et al. (2017) Asymmetry matters: Dynamic half-way points in

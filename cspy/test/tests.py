@@ -1,12 +1,10 @@
-#!/usr/bin/env pypy
-
+import sys
 import time
 import unittest
 import networkx as nx
-from cspy import label
-from cspy import algorithms as alg
-
-# use python -m cspy.test.tests to run
+sys.path.append('../')
+from cspy import label  # noqa
+from cspy import algorithms as alg  # noqa
 
 
 class cspyTests(unittest.TestCase):
@@ -25,7 +23,8 @@ class cspyTests(unittest.TestCase):
         self.G.add_edge('C', 'Sink', res_cost=[1, 10], weight=0)
 
     def testOutput(self):
-        '''Find shortest path subject to resource constraints.'''
+        '''Find shortest path subject to resource constraints and store
+        run time.'''
         start = time.time()
         path = alg.BiDirectional(self.G, self.L, self.U).run()
         self.run_time = time.time() - start
