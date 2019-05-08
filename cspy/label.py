@@ -2,6 +2,12 @@ from operator import add, sub
 
 
 class Label(object):
+    '''Label object that allows comparison.
+    PARAMS:
+        weight :: float, cumulative edge weight
+        node   :: string, name of last node visited
+        res    :: list, cumulative edge resource consumption
+        path   :: list, of all nodes in the path'''
 
     def __init__(self, weight, node, res, path):
         self.weight = weight  # cumulative edge weight

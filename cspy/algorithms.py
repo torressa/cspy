@@ -8,8 +8,8 @@ REFERENCES:
         bidirectional labeling for solving shortest path problems with resource
         constraints faster. EJOR
 '''
-
 from .label import Label
+from .preprocessing import *
 from collections import OrderedDict
 
 
@@ -36,7 +36,7 @@ class BiDirectional:
     '''
 
     def __init__(self, G, L, U):
-        self.G = G
+        self.G = preprocess(G)  # call preprocessing function
         self.L, self.U = L, U
         self.HB = L
         self.HF = U
@@ -119,7 +119,7 @@ class BiDirectional:
             labels_dict = self.F.unprocessed[self.F.Label]
             if labels_dict:
                 self.F.Label = min(labels_dict.keys(),
-                                   key=lambda x: x.res[0])
+                                   key=lambda x: x.weight)
             else:
                 self.F.Label = None
 
@@ -128,7 +128,7 @@ class BiDirectional:
             labels_dict = self.B.unprocessed[self.B.Label]
             if labels_dict:
                 self.B.Label = min(labels_dict.keys(),
-                                   key=lambda x: x.res[0])
+                                   key=lambda x: x.weight)
             else:
                 self.B.Label = None
 
