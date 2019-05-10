@@ -1,3 +1,7 @@
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+
 from operator import add, sub
 
 
@@ -10,10 +14,10 @@ class Label(object):
         path   :: list, of all nodes in the path'''
 
     def __init__(self, weight, node, res, path):
-        self.weight = weight  # cumulative edge weight
-        self.node = node  # current node
-        self.res = res  # cumulative resource consumption
-        self.path = path  # corresponding path
+        self.weight = weight  # type: float
+        self.node = node  # type: str
+        self.res = res  # type: list[float]
+        self.path = path  # type: list[str]
 
     def __repr__(self):
         return str(self)

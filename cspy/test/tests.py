@@ -2,9 +2,11 @@ import sys
 import time
 import unittest
 import networkx as nx
+
 sys.path.append('../')
-from cspy import label  # noqa
-from cspy import algorithms as alg  # noqa
+
+from cspy.label import Label
+from cspy.algorithms import BiDirectional
 
 
 class cspyTests(unittest.TestCase):
@@ -27,7 +29,9 @@ class cspyTests(unittest.TestCase):
         '''Find shortest path subject to resource constraints and store
         run time.'''
         start = time.time()
-        path = alg.BiDirectional(self.G, self.L, self.U).run()
+        algObj = BiDirectional(self.G, self.L, self.U)
+        path = algObj.run()
+        # print(algObj.nameAlgorithm())
         self.run_time = time.time() - start
         self.assertEqual(path, ['Source', 'A', 'B', 'C', 'Sink'])
 
@@ -35,8 +39,8 @@ class cspyTests(unittest.TestCase):
         self.assertTrue(self.run_time < 60)
 
     def testDominance(self):
-        L1 = label.Label(10, 'B', [6, 5], [])
-        L2 = label.Label(0, 'C', [6, -3], [])
+        L1 = Label(10, 'B', [6, 5], [])
+        L2 = Label(0, 'C', [6, -3], [])
         self.assertTrue(L2.dominates(L1))
 
 
