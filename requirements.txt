@@ -1,2 +1,2 @@
 networkx==2.2
-setuptools==39.0.1
+Cython==0.29.5
