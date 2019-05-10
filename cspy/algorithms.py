@@ -1,4 +1,3 @@
-
 ''' Constrained Shortest Path Algorithm.
 Implementation of the bidirectional algorithm for directed weighted graphs with
 resource considerations from [1].
@@ -9,8 +8,8 @@ REFERENCES:
         constraints faster. EJOR
 '''
 from .label import Label
-from .preprocessing import *
 from collections import OrderedDict
+from .preprocessing import preprocess
 
 
 class expand:
@@ -88,11 +87,20 @@ class BiDirectional:
     # FORWARD ALGORITHM #
     #####################
     def forwardAlg(self):
+
+        def progateFlabel(edge):
+            # Label propagation #
+            weight, res_cost = edge[2]['weight'], edge[2]['res_cost']
+            new_label = self.F.Label.getNewLabel(
+                'forward', weight, edge[1], res_cost)
+            if new_label.res[0] <= self.HF:  # feasibility check
+                self.F.unprocessed[self.F.Label][new_label] = new_label.path
+
         if self.F.Label not in self.F.unprocessed.keys():
             self.F.unprocessed[self.F.Label] = {}
         edges = [e for e in self.G.edges(data=True)
                  if e[0] == self.F.Label.node]
-        list(map(self.progateFlabel, edges))
+        list(map(progateFlabel, edges))
         self.HB = max(self.HB, min(self.F.Label.res[0], self.HF))
         self.finalFpath = self.F.Label.path
         self.getNextFlabel()
@@ -103,35 +111,25 @@ class BiDirectional:
     # BACKWARD ALGORITHM #
     ######################
     def backwardAlg(self):
+
+        def progateBlabel(edge):
+            # Label propagation #
+            weight, res_cost = edge[2]['weight'], edge[2]['res_cost']
+            new_label = self.B.Label.getNewLabel(
+                'backward', weight, edge[0], res_cost)
+            if new_label.res[0] > self.HB:  # feasibility check
+                self.B.unprocessed[self.B.Label][new_label] = new_label.path
+
         if self.B.Label not in self.B.unprocessed.keys():
             self.B.unprocessed[self.B.Label] = {}
         edges = [e for e in self.G.edges(data=True)
                  if e[1] == self.B.Label.node]
-        list(map(self.progateBlabel, edges))
+        list(map(progateBlabel, edges))
         self.HF = min(self.HF, max(self.B.Label.res[0], self.HB))
         self.finalBpath = self.B.Label.path
         self.getNextBlabel()
         if self.B.Label and self.B.Label.node == 'Source':
             self.stop = True
-
-    #####################
-    # Label propagation #
-    #####################
-    # Forward
-    def progateFlabel(self, edge):
-        weight, res_cost = edge[2]['weight'], edge[2]['res_cost']
-        new_label = self.F.Label.getNewLabel(
-            'forward', weight, edge[1], res_cost)
-        if new_label.res[0] <= self.HF:  # feasibility check
-            self.F.unprocessed[self.F.Label][new_label] = new_label.path
-
-    # Backward
-    def progateBlabel(self, edge):
-        weight, res_cost = edge[2]['weight'], edge[2]['res_cost']
-        new_label = self.B.Label.getNewLabel(
-            'backward', weight, edge[0], res_cost)
-        if new_label.res[0] > self.HB:  # feasibility check
-            self.B.unprocessed[self.B.Label][new_label] = new_label.path
 
     ###################
     # LABEL RETRIEVAL #
@@ -142,8 +140,7 @@ class BiDirectional:
         if self.F.Label in self.F.unprocessed.keys():
             labels_dict = self.F.unprocessed[self.F.Label]
             if labels_dict:
-                self.F.Label = min(labels_dict.keys(),
-                                   key=lambda x: x.weight)
+                self.F.Label = min(labels_dict.keys(), key=lambda x: x.weight)
             else:
                 self.F.Label = None
 
@@ -152,40 +149,39 @@ class BiDirectional:
         if self.B.Label in self.B.unprocessed.keys():
             labels_dict = self.B.unprocessed[self.B.Label]
             if labels_dict:
-                self.B.Label = min(labels_dict.keys(),
-                                   key=lambda x: x.weight)
+                self.B.Label = min(labels_dict.keys(), key=lambda x: x.weight)
             else:
                 self.B.Label = None
 
     #############
     # DOMINANCE #
     #############
-    # Wrapper
     def checkDominance(self, direction):
+
+        def dominanceF():
+            # Forward
+            for sub_dict in [d for d in self.F.unprocessed.values()
+                             if self.F.Label in d.keys()]:
+                for label in sub_dict.keys():
+                    if label.dominates(self.F.Label):
+                        self.F.Label = label
+                        return
+
+        def dominanceB():
+            # Backward
+            for sub_dict in [d for d in self.B.unprocessed.values()
+                             if self.B.Label in d.keys()]:
+                for label in sub_dict.keys():
+                    if label.dominates(self.B.Label):
+                        self.B.Label = label
+                        return
+
         if direction == 'forward':
             if self.F.Label:
-                self.dominanceF()
+                dominanceF()
         else:
             if self.B.Label:
-                self.dominanceB()
-
-    # Forward
-    def dominanceF(self):
-        for sub_dict in [d for d in self.F.unprocessed.values()
-                         if self.F.Label in d.keys()]:
-            for label in sub_dict.keys():
-                if label.dominates(self.F.Label):
-                    self.F.Label = label
-                    return
-
-    # Backward
-    def dominanceB(self):
-        for sub_dict in [d for d in self.B.unprocessed.values()
-                         if self.B.Label in d.keys()]:
-            for label in sub_dict.keys():
-                if label.dominates(self.B.Label):
-                    self.B.Label = label
-                    return
+                dominanceB()
 
     #################
     # PATH PRINTING #
@@ -205,4 +201,5 @@ class BiDirectional:
         elif self.HF == self.HB < self.L:
             print('monodirectional backward labeling algorithm')
         elif self.U == self.HF > self.HB == self.L:
-            print('bidirectional labeling algorithm with dynamic halfway point.')
+            print('bidirectional labeling algorithm with dynamic\
+                halfway point.')

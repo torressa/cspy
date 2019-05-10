@@ -1,4 +1,2 @@
-sys
-networkx
-pandas
-numpy
+networkx==2.2
+setuptools==39.0.1

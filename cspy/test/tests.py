@@ -14,7 +14,7 @@ class cspyTests(unittest.TestCase):
     def setUp(self):
         '''Create simple DiGraph'''
         self.G = nx.DiGraph(directed=True, n_res=2)
-        self.L, self.U, self.run_time = 1, 1.5, 0
+        self.L, self.U, self.run_time = 2, 2.5, 0
 
         self.G.add_edge('Source', 'A', res_cost=[1, 2], weight=0)
         self.G.add_edge('A', 'B', res_cost=[1, 0.3], weight=0)
