@@ -35,7 +35,8 @@ class Label(object):
 
     def __eq__(self, other):
         # Equality operator for two Label objects
-        return self.weight == other.weight and self.res == other.res
+        return (self.weight == other.weight and self.res == other.res and
+                self.node == other.node)
 
     def __hash__(self):
         # Redefinition of hash to avoid TypeError due to the __eq__ definition

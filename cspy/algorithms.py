@@ -13,7 +13,7 @@ from __future__ import print_function
 
 
 from collections import OrderedDict
-
+import random
 from cspy.label import Label
 from cspy.preprocessing import preprocess
 
@@ -28,7 +28,7 @@ class BiDirectional:
     four different algorithms.
     (1) If HF = HB > U:
         monodirectional forward labeling algorithm;
-    (2) If HF = HB ∈ (L, U):
+    (2) If HF = HB in (L, U):
         bidirectional labeling algorithm with static half-way point;
     (3) If HF = HB < L:
         monodirectional backward labeling algorithm;
@@ -45,18 +45,17 @@ class BiDirectional:
         self.L, self.U = L, U
         self.HB = L  # type: float
         self.HF = U  # type: float
+        self.stop = False  # type: bool
 
         n_edges, n_res = len(G.edges()), G.graph['n_res']
 
         self.F, self.B = expand(), expand()
         self.F.Label = Label(0, 'Source', [0] * n_res, ['Source'])
         self.B.Label = Label(0, 'Sink', [n_edges + 1] * n_res, ['Sink'])
-        self.F.processed = {}  # type: dict
         self.F.unprocessed, self.B.unprocessed = {}, {}
         self.finalFpath, self.finalBpath = [], []
 
     def run(self):
-        self.stop = False  # type: bool
         while self.F.Label or self.B.Label or self.stop:
             direction = self.getDirection()
             if direction == 'forward':  # forward
@@ -77,8 +76,6 @@ class BiDirectional:
     # DIRECTION #
     #############
     def getDirection(self):
-        import random
-
         if self.F.Label and not self.B.Label:
             return 'forward'
         elif not self.F.Label and self.B.Label:
@@ -190,14 +187,30 @@ class BiDirectional:
                 _dominanceB()
 
     #################
-    # PATH PRINTING #
+    # PATH CHECKING #
     #################
     def joinPaths(self):
-        print(self.finalBpath)
-        print(self.finalFpath)
+        # check if paths are compatible
+        def _checkPaths():
+            if (self.finalFpath[-1] == 'Sink' and  # if only forward path
+                    self.finalBpath[0] != 'Source'):
+                return self.finalFpath
+            elif (self.finalBpath[0] == 'Source' and  # if only backward path
+                  self.finalFpath[-1] != 'Sink'):
+                return self.finalBpath
+            elif (self.finalBpath[0] == 'Source' and  # if both full paths
+                  self.finalFpath[-1] == 'Sink'):
+                return random.choice([self.finalFpath, self.finalBpath])
+            else:  # if combination of the two is required
+                return list(OrderedDict.fromkeys(
+                    self.finalFpath + self.finalBpath))
+
+        # print(self.finalBpath)
+        # print(self.finalFpath)
         self.finalBpath.reverse()  # reverse order for backward path
-        print(list(OrderedDict.fromkeys(self.finalFpath + self.finalBpath)))
-        return list(OrderedDict.fromkeys(self.finalFpath + self.finalBpath))
+        joined_path = _checkPaths()
+        # print(list(OrderedDict.fromkeys(self.finalFpath + self.finalBpath)))
+        return joined_path
 
     def nameAlgorithm(self):
         if self.HF == self.HB > self.U:
