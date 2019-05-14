@@ -16,7 +16,7 @@ class cspyTests(unittest.TestCase):
     def setUp(self):
         '''Create simple DiGraph'''
         self.G = nx.DiGraph(directed=True, n_res=2)
-        self.L, self.U, self.run_time = 2, 2.5, 0
+        self.L, self.U, self.run_time = 2, 3, 0
 
         self.G.add_edge('Source', 'A', res_cost=[1, 2], weight=0)
         self.G.add_edge('A', 'B', res_cost=[1, 0.3], weight=0)
@@ -40,8 +40,10 @@ class cspyTests(unittest.TestCase):
 
     def testDominance(self):
         L1 = Label(10, 'B', [6, 5], [])
-        L2 = Label(0, 'C', [6, -3], [])
-        self.assertTrue(L2.dominates(L1))
+        L2 = Label(1, 'C', [6, -3], [])
+        L3 = Label(0, 'C', [6, 3], [])
+        self.assertTrue(L2.dominates(L1, direction='forward'))
+        self.assertTrue(L3.dominates(L2, direction='backward'))
 
 
 if __name__ == '__main__':

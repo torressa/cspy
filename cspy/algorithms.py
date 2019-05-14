@@ -3,9 +3,13 @@ Implementation of the bidirectional algorithm for directed weighted graphs with
 resource considerations from [1].
 AUTHOR: David Torres, 2019 <d.torressanchez@lancs.ac.uk>
 REFERENCES:
-[1] :   Tilk et al. (2017) Asymmetry matters: Dynamic half-way points in
+[1]  :  Tilk et al. (2017) Asymmetry matters: Dynamic half-way points in
         bidirectional labeling for solving shortest path problems with resource
         constraints faster. EJOR
+[2]  :  Righini, G. , & Salani, M. (2006). Symmetry helps: Bounded
+        bi-directional dynamic programming for the elementary shortest path
+        problem with resource constraints.
+        Discrete Optimization, 3 (3), 255-273 .
 '''
 from __future__ import absolute_import
 from __future__ import division
@@ -87,7 +91,7 @@ class BiDirectional:
             return
 
     #####################
-    # FORWARD ALGORITHM #
+    # FORWARD EXTENSION #
     #####################
     def forwardAlg(self):
 
@@ -99,19 +103,18 @@ class BiDirectional:
             if new_label.res[0] <= self.HF:  # feasibility check
                 self.F.unprocessed[self.F.Label][new_label] = new_label.path
 
-        if self.F.Label not in self.F.unprocessed.keys():
+        if self.F.Label not in self.F.unprocessed:
             self.F.unprocessed[self.F.Label] = {}
         edges = [e for e in self.G.edges(data=True)
                  if e[0] == self.F.Label.node]
         list(map(_progateFlabel, edges))
         self.HB = max(self.HB, min(self.F.Label.res[0], self.HF))
-        self.finalFpath = self.F.Label.path
         self.getNextFlabel()
         if self.F.Label and self.F.Label.node == 'Sink':
             self.stop = True
 
     ######################
-    # BACKWARD ALGORITHM #
+    # BACKWARD EXTENSION #
     ######################
     def backwardAlg(self):
 
@@ -123,13 +126,12 @@ class BiDirectional:
             if new_label.res[0] > self.HB:  # feasibility check
                 self.B.unprocessed[self.B.Label][new_label] = new_label.path
 
-        if self.B.Label not in self.B.unprocessed.keys():
+        if self.B.Label not in self.B.unprocessed:
             self.B.unprocessed[self.B.Label] = {}
         edges = [e for e in self.G.edges(data=True)
                  if e[1] == self.B.Label.node]
         list(map(_progateBlabel, edges))
         self.HF = min(self.HF, max(self.B.Label.res[0], self.HB))
-        self.finalBpath = self.B.Label.path
         self.getNextBlabel()
         if self.B.Label and self.B.Label.node == 'Source':
             self.stop = True
@@ -140,21 +142,29 @@ class BiDirectional:
     # Forward
     def getNextFlabel(self):
         # Update next forward label with one with least weight
-        if self.F.Label in self.F.unprocessed.keys():
-            labels_dict = self.F.unprocessed[self.F.Label]
-            if labels_dict:
-                self.F.Label = min(labels_dict.keys(), key=lambda x: x.weight)
-            else:
-                self.F.Label = None
+        for key, val in self.F.unprocessed.items():
+            if val:
+                next_label = min(val.keys(), key=lambda x: x.weight)
+                self.F.unprocessed[key].pop(next_label)
+                self.F.Label = next_label
+                break
+        else:
+            last_label = min(self.F.unprocessed.keys(), key=lambda x: x.weight)
+            self.finalFpath = last_label.path
+            self.F.Label = None
 
     # Backward
     def getNextBlabel(self):
-        if self.B.Label in self.B.unprocessed.keys():
-            labels_dict = self.B.unprocessed[self.B.Label]
-            if labels_dict:
-                self.B.Label = min(labels_dict.keys(), key=lambda x: x.weight)
-            else:
-                self.B.Label = None
+        for key, val in self.B.unprocessed.items():
+            if val:
+                next_label = min(val.keys(), key=lambda x: x.weight)
+                self.B.unprocessed[key].pop(next_label)
+                self.B.Label = next_label
+                break
+        else:
+            last_label = min(self.B.unprocessed.keys(), key=lambda x: x.weight)
+            self.finalBpath = last_label.path
+            self.B.Label = None
 
     #############
     # DOMINANCE #
@@ -164,21 +174,28 @@ class BiDirectional:
         def _dominanceF():
             # Forward
             for sub_dict in [d for d in self.F.unprocessed.values()
-                             if self.F.Label in d.keys()]:
+                             if self.F.Label in d]:
                 for label in sub_dict.keys():
-                    if label.dominates(self.F.Label):
-                        self.F.Label = label
+                    if label.dominates(self.F.Label, direction):
+                        self.F.unprocessed[sub_dict].pop(self.F.Label)
+                        self.F.unprocessed.pop(self.F.Label)
                         return
 
         def _dominanceB():
             # Backward
             for sub_dict in [d for d in self.B.unprocessed.values()
-                             if self.B.Label in d.keys()]:
+                             if self.B.Label in d]:
                 for label in sub_dict.keys():
-                    if label.dominates(self.B.Label):
-                        self.B.Label = label
+                    if label.dominates(self.B.Label, direction):
+                        self.B.unprocessed[sub_dict].pop(self.B.Label)
+                        self.B.unprocessed.pop(self.B.Label)
                         return
 
+        # print('FORWARD unprocessed')
+        # print(self.F.unprocessed)
+        # print('Backward unprocessed')
+        # print(self.B.unprocessed)
+        # print('\n')
         if direction == 'forward':
             if self.F.Label:
                 _dominanceF()
@@ -190,7 +207,8 @@ class BiDirectional:
     # PATH CHECKING #
     #################
     def joinPaths(self):
-        # check if paths are compatible
+        # check if paths are eligible to be joined. Joining phase as presented
+        # in [2]
         def _checkPaths():
             if (self.finalFpath[-1] == 'Sink' and  # if only forward path
                     self.finalBpath[0] != 'Source'):
@@ -205,10 +223,9 @@ class BiDirectional:
                 return list(OrderedDict.fromkeys(
                     self.finalFpath + self.finalBpath))
 
-        # print(self.finalBpath)
-        # print(self.finalFpath)
         self.finalBpath.reverse()  # reverse order for backward path
         joined_path = _checkPaths()
+        print(joined_path)
         # print(list(OrderedDict.fromkeys(self.finalFpath + self.finalBpath)))
         return joined_path
 

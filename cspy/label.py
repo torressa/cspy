@@ -42,9 +42,12 @@ class Label(object):
         # Redefinition of hash to avoid TypeError due to the __eq__ definition
         return id(self)
 
-    def dominates(self, other):
+    def dominates(self, other, direction):
         # Return whether self dominates other.
-        return self < other
+        if direction == 'forward':
+            return self < other
+        else:
+            return self.weight < other.weight and self.res >= other.res
 
     def getNewLabel(self, direction, weight, node, res):
         path = list(self.path)
