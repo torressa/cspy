@@ -12,12 +12,12 @@ REFERENCES:
         Discrete Optimization, 3 (3), 255-273 .
 '''
 from __future__ import absolute_import
-from __future__ import division
 from __future__ import print_function
 
 
-from collections import OrderedDict
 import random
+import logging
+from collections import OrderedDict
 from cspy.label import Label
 from cspy.preprocessing import preprocess
 
@@ -45,11 +45,13 @@ class BiDirectional:
     '''
 
     def __init__(self, G, L, U):
+        self.it = 0
         self.G = preprocess(G)  # call preprocessing function
         self.L, self.U = L, U
         self.HB = L  # type: float
         self.HF = U  # type: float
-        self.stop = False  # type: bool
+
+        self.nameAlgorithm()
 
         n_edges, n_res = len(G.edges()), G.graph['n_res']
 
@@ -60,7 +62,8 @@ class BiDirectional:
         self.finalFpath, self.finalBpath = [], []
 
     def run(self):
-        while self.F.Label or self.B.Label or self.stop:
+        while self.F.Label or self.B.Label:
+            self.stop = True
             direction = self.getDirection()
             if direction == 'forward':  # forward
                 if self.F.Label.res[0] <= self.HF:
@@ -74,6 +77,7 @@ class BiDirectional:
                     (self.finalFpath[-1] == self.finalBpath[-1])):
                 break
             self.checkDominance(direction)
+            self.it += 1
         return self.joinPaths()
 
     #############
@@ -110,8 +114,6 @@ class BiDirectional:
         list(map(_progateFlabel, edges))
         self.HB = max(self.HB, min(self.F.Label.res[0], self.HF))
         self.getNextFlabel()
-        if self.F.Label and self.F.Label.node == 'Sink':
-            self.stop = True
 
     ######################
     # BACKWARD EXTENSION #
@@ -133,8 +135,6 @@ class BiDirectional:
         list(map(_progateBlabel, edges))
         self.HF = min(self.HF, max(self.B.Label.res[0], self.HB))
         self.getNextBlabel()
-        if self.B.Label and self.B.Label.node == 'Source':
-            self.stop = True
 
     ###################
     # LABEL RETRIEVAL #
@@ -142,29 +142,33 @@ class BiDirectional:
     # Forward
     def getNextFlabel(self):
         # Update next forward label with one with least weight
+        if all(not val.keys() for key, val in self.F.unprocessed.items()):
+            last_label = min(self.F.unprocessed.keys(), key=lambda x: x.weight)
+            self.finalFpath = last_label.path
+            self.F.Label = None
+            return
         for key, val in self.F.unprocessed.items():
             if val:
                 next_label = min(val.keys(), key=lambda x: x.weight)
                 self.F.unprocessed[key].pop(next_label)
                 self.F.Label = next_label
                 break
-        else:
-            last_label = min(self.F.unprocessed.keys(), key=lambda x: x.weight)
-            self.finalFpath = last_label.path
-            self.F.Label = None
 
     # Backward
     def getNextBlabel(self):
+        if all(not val.keys() for key, val in self.B.unprocessed.items()):
+            last_label = min(self.B.unprocessed.keys(), key=lambda x: x.weight)
+            self.finalBpath = last_label.path
+            self.B.Label = None
+            print("entered")
+            print(self.B.Label)
+            return
         for key, val in self.B.unprocessed.items():
             if val:
                 next_label = min(val.keys(), key=lambda x: x.weight)
                 self.B.unprocessed[key].pop(next_label)
                 self.B.Label = next_label
                 break
-        else:
-            last_label = min(self.B.unprocessed.keys(), key=lambda x: x.weight)
-            self.finalBpath = last_label.path
-            self.B.Label = None
 
     #############
     # DOMINANCE #
@@ -179,7 +183,7 @@ class BiDirectional:
                     if label.dominates(self.F.Label, direction):
                         self.F.unprocessed[sub_dict].pop(self.F.Label)
                         self.F.unprocessed.pop(self.F.Label)
-                        return
+                        break
 
         def _dominanceB():
             # Backward
@@ -189,13 +193,15 @@ class BiDirectional:
                     if label.dominates(self.B.Label, direction):
                         self.B.unprocessed[sub_dict].pop(self.B.Label)
                         self.B.unprocessed.pop(self.B.Label)
-                        return
+                        break
 
-        # print('FORWARD unprocessed')
-        # print(self.F.unprocessed)
-        # print('Backward unprocessed')
-        # print(self.B.unprocessed)
-        # print('\n')
+        print('FORWARD unprocessed')
+        print(self.F.unprocessed)
+        print(self.F.Label)
+        print('Backward unprocessed')
+        print(self.B.unprocessed)
+        print(self.B.Label)
+        print('\n')
         if direction == 'forward':
             if self.F.Label:
                 _dominanceF()
@@ -225,17 +231,17 @@ class BiDirectional:
 
         self.finalBpath.reverse()  # reverse order for backward path
         joined_path = _checkPaths()
-        print(joined_path)
-        # print(list(OrderedDict.fromkeys(self.finalFpath + self.finalBpath)))
+        logging.info(joined_path)
         return joined_path
 
     def nameAlgorithm(self):
         if self.HF == self.HB > self.U:
-            print('Monodirectional forward labeling algorithm')
+            logging.info('Monodirectional forward labeling algorithm')
         elif self.L < self.HF == self.HB < self.U:
-            print('bidirectional labeling algorithm with static halfway point')
+            logging.info(
+                'bidirectional labeling algorithm with static halfway point')
         elif self.HF == self.HB < self.L:
-            print('monodirectional backward labeling algorithm')
+            logging.info('monodirectional backward labeling algorithm')
         elif self.U == self.HF > self.HB == self.L:
-            print('bidirectional labeling algorithm with dynamic' +
-                  ' halfway point.')
+            logging.info('bidirectional labeling algorithm with dynamic' +
+                         ' halfway point.')
