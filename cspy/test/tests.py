@@ -39,9 +39,9 @@ class cspyTests(unittest.TestCase):
         L3 = Label(-10, 'Source', [3, -8.3], [])
         L4 = Label(-9, 'A', [4, -6.3], [])
         L5 = Label(0, 'Source', [4, -5.1], [])
-        self.assertTrue(L2.dominates(L1, direction='forward'))
-        self.assertTrue(L3.dominates(L4, direction='backward'))
-        self.assertTrue(L3.dominates(L5, direction='backward'))
+        self.assertTrue(L2.dominates(L1))
+        self.assertTrue(L3.dominates(L4))
+        self.assertTrue(L3.dominates(L5))
 
     def testEmpty(self):
         # Check whether erratic graph raises exception

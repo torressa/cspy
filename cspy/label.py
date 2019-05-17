@@ -23,7 +23,7 @@ class Label(object):
 
     def __lt__(self, other):
         # Less than operator for two Label objects
-        return self.weight < other.weight and self.res <= other.res
+        return self.weight < other.weight or self.res < other.res
 
     def __le__(self, other):
         # Less than or equal to operator for two Label objects
@@ -38,7 +38,7 @@ class Label(object):
         # Redefinition of hash to avoid TypeError due to the __eq__ definition
         return id(self)
 
-    def dominates(self, other, direction):
+    def dominates(self, other):
         # Return whether self dominates other.
         # if direction == 'forward':
         return self < other
