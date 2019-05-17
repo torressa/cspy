@@ -26,6 +26,9 @@ class expand:
     pass
 
 
+# Gonna do some improvements
+
+
 class BiDirectional:
     '''Bidirectional labeling algorithm with dynamic half-way point from [1].
     Depending on the range of values for self.HF = HF and self.HB = HB, we get
