@@ -1,3 +1,4 @@
+
 import time
 import unittest
 import networkx as nx
@@ -10,7 +11,7 @@ class cspyTests(unittest.TestCase):
     path of simple DiGraph using the BiDirectional algorithm.'''
 
     def setUp(self):
-        self.L, self.U = 2, 3
+        self.L, self.U = 2, 4
         # Create simple digraph to test algorithm
         self.G = nx.DiGraph(directed=True, n_res=2)
         self.G.add_edge('Source', 'A', res_cost=[1, 2], weight=0)
@@ -35,9 +36,12 @@ class cspyTests(unittest.TestCase):
         # Check whether forward and backward dominance makes sense
         L1 = Label(10, 'B', [6, 5], [])
         L2 = Label(1, 'C', [6, -3], [])
-        L3 = Label(0, 'C', [6, 3], [])
+        L3 = Label(-10, 'Source', [3, -8.3], [])
+        L4 = Label(-9, 'A', [4, -6.3], [])
+        L5 = Label(0, 'Source', [4, -5.1], [])
         self.assertTrue(L2.dominates(L1, direction='forward'))
-        self.assertTrue(L3.dominates(L2, direction='backward'))
+        self.assertTrue(L3.dominates(L4, direction='backward'))
+        self.assertTrue(L3.dominates(L5, direction='backward'))
 
     def testEmpty(self):
         # Check whether erratic graph raises exception

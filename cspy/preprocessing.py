@@ -37,6 +37,8 @@ def check_graph(G):
 
 
 def prune_graph(G):
+    '''TODO: Implement graph pruning algorithm.
+    For example, like the one in pylgrim.ESPPRC.prune_graph'''
     pass
 
 

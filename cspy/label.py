@@ -40,10 +40,10 @@ class Label(object):
 
     def dominates(self, other, direction):
         # Return whether self dominates other.
-        if direction == 'forward':
-            return self < other
-        else:
-            return self.weight < other.weight and self.res >= other.res
+        # if direction == 'forward':
+        return self < other
+        # else:
+        #     return self.weight < other.weight and self.res >= other.res
 
     def getNewLabel(self, direction, weight, node, res):
         path = list(self.path)
