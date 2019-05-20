@@ -11,7 +11,7 @@ class cspyTests(unittest.TestCase):
     path of simple DiGraph using the BiDirectional algorithm.'''
 
     def setUp(self):
-        self.L, self.U = 2, 4
+        self.max_res, self.min_res = [4, 20], [3, 0]
         # Create simple digraph to test algorithm
         self.G = nx.DiGraph(directed=True, n_res=2)
         self.G.add_edge('Source', 'A', res_cost=[1, 2], weight=0)
@@ -21,13 +21,21 @@ class cspyTests(unittest.TestCase):
         self.G.add_edge('B', 'Sink', res_cost=[1, 2], weight=10)
         self.G.add_edge('C', 'Sink', res_cost=[1, 10], weight=0)
         # Create erratic digraph to test exception handling
-        self.H = nx.DiGraph(directed=True)
-        self.H.add_edge('Source', 'A', weight=0)
+        self.E = nx.DiGraph(directed=True)
+        self.E.add_edge('Source', 'A', weight=0)
+        # Create digraph with negative resource costs with unreachable node 'B'
+        self.H = nx.DiGraph(directed=True, n_res=2)
+        self.H.add_edge('Source', 'A', res_cost=[1, 2], weight=0)
+        self.H.add_edge('A', 'C', res_cost=[-1, 0.3], weight=0)
+        self.H.add_edge('A', 'B', res_cost=[-1, 3], weight=0)
+        self.H.add_edge('B', 'D', res_cost=[-1, 2], weight=0)
+        self.H.add_edge('C', 'D', res_cost=[1, 0.1], weight=0)
+        self.H.add_edge('D', 'Sink', res_cost=[1, 0.1], weight=0)
 
     def testOutput(self):
         # Find shortest path of simple test digraph
         start = time.time()
-        algObj = BiDirectional(self.G, self.L, self.U)
+        algObj = BiDirectional(self.G, self.max_res, self.min_res)
         path = algObj.run()
         self.assertEqual(path, ['Source', 'A', 'B', 'C', 'Sink'])
         self.assertTrue(time.time() - start < 1)
@@ -45,7 +53,25 @@ class cspyTests(unittest.TestCase):
 
     def testEmpty(self):
         # Check whether erratic graph raises exception
-        self.assertRaises(Exception, BiDirectional, self.H, self.L, self.U)
+        self.assertRaises(Exception, BiDirectional, self.E,
+                          self.max_res, self.min_res)
+
+    def testNegativeEdges(self):
+        # Check if negative resource costs work and whether
+        # unreachable nodes are eliminated
+        self.H = nx.DiGraph(directed=True, n_res=2)
+        self.H.add_edge('Source', 'A', res_cost=[1, 2], weight=0)
+        self.H.add_edge('A', 'C', res_cost=[-1, 0.3], weight=0)
+        self.H.add_edge('A', 'B', res_cost=[-1, 3], weight=0)
+        self.H.add_edge('B', 'D', res_cost=[-1, 2], weight=0)
+        self.H.add_edge('C', 'D', res_cost=[1, 0.1], weight=0)
+        self.H.add_edge('D', 'Sink', res_cost=[1, 0.1], weight=0)
+
+        algObj = BiDirectional(self.H, [4, 20], [0, 0])
+        path = algObj.run()
+        # check if the unreachable node has been eliminated
+        self.assertTrue('B' not in self.H.nodes())
+        self.assertEqual(path, ['Source', 'A', 'C', 'D', 'Sink'])
 
 
 if __name__ == '__main__':

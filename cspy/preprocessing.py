@@ -1,4 +1,19 @@
+import logging
 import networkx as nx
+
+
+def check_inputs(max_res, min_res):
+    if isinstance(max_res, list) and isinstance(min_res, list):
+        if len(max_res) == len(min_res) >= 2:
+            if (all(isinstance(item, (float, int)) for item in max_res) and
+                    all(isinstance(item, (float, int)) for item in min_res)):
+                pass
+            else:
+                raise Exception("Elements of input lists must be numbers")
+        else:
+            raise Exception("Input lists have to be equal length >= 2")
+    else:
+        raise Exception("Inputs have to be lists with length >= 2")
 
 
 def check_graph(G):
@@ -36,13 +51,52 @@ def check_graph(G):
         raise Exception('\n'.join('{}'.format(item) for item in errors))
 
 
-def prune_graph(G):
+def prune_graph(G, max_res, min_res):
     '''TODO: Implement graph pruning algorithm.
     For example, like the one in pylgrim.ESPPRC.prune_graph'''
-    pass
+
+    def _checkResource(r):
+        # check resource r's feasibility along a path
+
+        def _get_weight(i, j, attr_dict):
+            # returns number to use as weight for the algorithm
+            return attr_dict['res_cost'][r]
+
+        # Get paths from source to all other nodes
+        length, path = nx.single_source_bellman_ford(
+            G, 'Source', weight=_get_weight)
+        # res_min.append(
+        # dict(nx.all_pairs_bellman_ford_path_length(G, weight=_get_weight)))
+        try:
+            # If any path violates the resource upper or lower bounds
+            # then, add the problematic node to the dictionary
+            nodes_to_remove.update({
+                path[key][-2]: val for key, val in length.items()
+                if val > max_res[r] or val < min_res[r]})
+            # path is a dict of the form:
+            # {node_i: [Source, ..., node_k, node_i]}.
+            # Hence, if node_i is found to violate a resource constraint, it is
+            # because of node_k, therefore, we add path[key][-2] = node_k to
+            # the dictionary of nodes to remove.
+        except IndexError:  # No nodes violate resource limits
+            pass
+
+    nodes_to_remove = {}
+    # res_min = []
+    # Map function for each resource
+    list(map(_checkResource, range(0, G.graph['n_res'])))
+    if nodes_to_remove:  # if there are nodes to remove
+        # Filter out source or sink
+        nodes_to_remove = {
+            key: val for key, val in nodes_to_remove.items()
+            if key != 'Source' or key != 'Sink'}
+        G.remove_nodes_from(nodes_to_remove)
+        logging.info("Removed {} nodes".format(len(nodes_to_remove)))
+    return G, []
 
 
-def preprocess(G):
+def preprocess(G, max_res, min_res):
     check_graph(G)
-    prune_graph(G)
-    return G
+    G, res_min = prune_graph(G, max_res, min_res)
+    check_graph(G)
+    return G, res_min

@@ -19,7 +19,7 @@ import random
 import logging
 from collections import OrderedDict
 from cspy.label import Label
-from cspy.preprocessing import preprocess
+from cspy.preprocessing import preprocess, check_inputs
 
 
 class expand:
@@ -40,15 +40,22 @@ class BiDirectional:
         bidirectional labeling algorithm with dynamic half-way point.
     PARAMS
         G :: Digraph;
-        L :: float, lower bound for resource usage;
-        U :: float, upper bound for resource usage.
+        max_res :: list of floats, [L, M_1, M_2, ..., M_nres]
+                    upper bound for resource usage;
+        min_res :: list of floats, [U, L_1, L_2, ..., L_nres]
+                    lower bounds for resource usage.
     '''
 
-    def __init__(self, G, L, U):
-        self.G = preprocess(G)  # call preprocessing function
-        self.L, self.U = L, U
-        self.HB = L  # type: float
-        self.HF = U  # type: float
+    def __init__(self, G, max_res, min_res):
+
+        check_inputs(max_res, min_res)
+
+        # call preprocessing function
+        self.G, _ = preprocess(G, max_res, min_res)
+        self.max_res, self.min_res = max_res, min_res
+        self.L, self.U = self.max_res[0], self.min_res[0]
+        self.HB = self.L  # type: float
+        self.HF = self.U  # type: float
 
         self.nameAlgorithm()
 
@@ -107,11 +114,11 @@ class BiDirectional:
             new_label = self.Label[direc].getNewLabel(
                 direc, weight, node, res_cost)
             if direc == 'forward':
-                if new_label.res[0] <= self.HF:  # feasibility check
+                if new_label.res <= self.max_res:  # feasibility check
                     self.unprocessed[direc][self.Label[direc]][
                         new_label] = new_label.path
             else:
-                if new_label.res[0] > self.HB:  # feasibility check
+                if new_label.res > self.min_res:  # feasibility check
                     self.unprocessed[direc][self.Label[direc]][
                         new_label] = new_label.path
 
@@ -141,17 +148,19 @@ class BiDirectional:
                 self.finalpath[direc] = self.Label[direc].path
 
         if direc == 'forward':  # forward
-            if not self.Label[direc].res[0] <= self.HF:
+            if not self.Label[direc].res <= self.max_res:
                 return
             edges = [e for e in self.G.edges(data=True)
                      if e[0] == self.Label[direc].node]
-            self.HB = max(self.HB, min(self.Label[direc].res[0], self.HF))
-        elif direc == 'backward':
-            if not self.Label[direc].res[0] > self.HB:
+            self.min_res[0] = max(self.min_res[0], min(
+                self.Label[direc].res[0], self.max_res[0]))
+        else:  # backward
+            if not self.Label[direc].res > self.min_res:
                 return
             edges = [e for e in self.G.edges(data=True)
                      if e[1] == self.Label[direc].node]
-            self.HF = min(self.HF, max(self.Label[direc].res[0], self.HB))
+            self.max_res[0] = min(self.max_res[0], max(
+                self.Label[direc].res[0], self.min_res[0]))
 
         if self.Label[direc] not in self.unprocessed[direc]:
             self.unprocessed[direc][self.Label[direc]] = {}
