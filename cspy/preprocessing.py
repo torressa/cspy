@@ -96,6 +96,7 @@ def prune_graph(G, max_res, min_res):
 
 
 def preprocess(G, max_res, min_res):
+    '''Wrapper'''
     check_graph(G)
     G, res_min = prune_graph(G, max_res, min_res)
     check_graph(G)
