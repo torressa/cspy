@@ -3,6 +3,7 @@ import networkx as nx
 
 
 def check_inputs(max_res, min_res):
+    '''Checks whether inputs are acceptably formated lists'''
     if isinstance(max_res, list) and isinstance(min_res, list):
         if len(max_res) == len(min_res) >= 2:
             if (all(isinstance(item, (float, int)) for item in max_res) and
@@ -52,8 +53,7 @@ def check_graph(G):
 
 
 def prune_graph(G, max_res, min_res):
-    '''TODO: Implement graph pruning algorithm.
-    For example, like the one in pylgrim.ESPPRC.prune_graph'''
+    '''Removes nodes that cannot be reached due to resource limits'''
 
     def _checkResource(r):
         # check resource r's feasibility along a path
