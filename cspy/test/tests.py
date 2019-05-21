@@ -2,8 +2,8 @@
 import time
 import unittest
 import networkx as nx
-from cspy.label import Label
-from cspy.algorithms import BiDirectional
+from .cspy.label import Label
+from .cspy.algorithms import BiDirectional
 
 
 class cspyTests(unittest.TestCase):
@@ -59,14 +59,6 @@ class cspyTests(unittest.TestCase):
     def testNegativeEdges(self):
         # Check if negative resource costs work and whether
         # unreachable nodes are eliminated
-        self.H = nx.DiGraph(directed=True, n_res=2)
-        self.H.add_edge('Source', 'A', res_cost=[1, 2], weight=0)
-        self.H.add_edge('A', 'C', res_cost=[-1, 0.3], weight=0)
-        self.H.add_edge('A', 'B', res_cost=[-1, 3], weight=0)
-        self.H.add_edge('B', 'D', res_cost=[-1, 2], weight=0)
-        self.H.add_edge('C', 'D', res_cost=[1, 0.1], weight=0)
-        self.H.add_edge('D', 'Sink', res_cost=[1, 0.1], weight=0)
-
         algObj = BiDirectional(self.H, [4, 20], [0, 0])
         path = algObj.run()
         # check if the unreachable node has been eliminated
