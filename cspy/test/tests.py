@@ -1,8 +1,9 @@
 import sys
 import time
 import unittest
-import networkx as nx
-sys.path.append('../')
+# import networkx as 
+sys.path.append('~/cspy/cspy/')
+import cspy
 from cspy.label import Label
 from cspy.algorithms import BiDirectional
 
