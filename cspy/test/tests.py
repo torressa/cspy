@@ -3,8 +3,8 @@ import time
 import unittest
 import networkx as nx
 sys.path.append('../')
-from cspy.label import Label
-from cspy.algorithms import BiDirectional
+from cspy import label
+from cspy import algorithms as alg
 
 
 class cspyTests(unittest.TestCase):
@@ -36,18 +36,18 @@ class cspyTests(unittest.TestCase):
     def testOutput(self):
         # Find shortest path of simple test digraph
         start = time.time()
-        algObj = BiDirectional(self.G, self.max_res, self.min_res)
+        algObj = alg.BiDirectional(self.G, self.max_res, self.min_res)
         path = algObj.run()
         self.assertEqual(path, ['Source', 'A', 'B', 'C', 'Sink'])
         self.assertTrue(time.time() - start < 1)
 
     def testDominance(self):
         # Check whether forward and backward dominance makes sense
-        L1 = Label(10, 'B', [6, 5], [])
-        L2 = Label(1, 'C', [6, -3], [])
-        L3 = Label(-10, 'Source', [3, -8.3], [])
-        L4 = Label(-9, 'A', [4, -6.3], [])
-        L5 = Label(0, 'Source', [4, -5.1], [])
+        L1 = label.Label(10, 'B', [6, 5], [])
+        L2 = label.Label(1, 'C', [6, -3], [])
+        L3 = label.Label(-10, 'Source', [3, -8.3], [])
+        L4 = label.Label(-9, 'A', [4, -6.3], [])
+        L5 = label.Label(0, 'Source', [4, -5.1], [])
         self.assertTrue(L2.dominates(L1))
         self.assertTrue(L3.dominates(L4))
         self.assertTrue(L3.dominates(L5))
@@ -60,7 +60,7 @@ class cspyTests(unittest.TestCase):
     def testNegativeEdges(self):
         # Check if negative resource costs work and whether
         # unreachable nodes are eliminated
-        algObj = BiDirectional(self.H, [4, 20], [0, 0])
+        algObj = alg.BiDirectional(self.H, [4, 20], [0, 0])
         path = algObj.run()
         # check if the unreachable node has been eliminated
         self.assertTrue('B' not in self.H.nodes())
