@@ -2,8 +2,8 @@
 import time
 import unittest
 import networkx as nx
-from .cspy.label import Label
-from .cspy.algorithms import BiDirectional
+from .label import Label
+from .algorithms import BiDirectional
 
 
 class cspyTests(unittest.TestCase):
