@@ -47,8 +47,7 @@ jobs:
       - run:
           name: run tests
           command: |
-            ls
-            python3 /cspy/test/tests.py
+            python3 cspy/test/tests.py
 
       - store_artifacts:
           path: test-reports
