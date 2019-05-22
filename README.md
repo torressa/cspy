@@ -1,4 +1,5 @@
-[![CircleCI](https://circleci.com/gh/torressa/cspy.svg?style=svg)](https://circleci.com/gh/torressa/cspy) [![Requirements Status](https://requires.io/github/torressa/jpath/requirements.svg?branch=master)](https://requires.io/github/torressa/jpath/requirements/?branch=master)
+[![CircleCI](https://circleci.com/gh/torressa/cspy.svg?style=svg)](https://circleci.com/gh/torressa/cspy) 
+[![Requirements Status](https://requires.io/github/torressa/jpath/requirements.svg?branch=master)](https://requires.io/github/torressa/jpath/requirements/?branch=master)
 
 # cspy
 
