@@ -52,6 +52,8 @@ jobs:
             python3 -m venv venv
             . venv/bin/activate
             python3 -m unittest
+            cd ~/cspy
+            python3 -m coverage run test/tests.py
 
       - store_artifacts:
           path: test-reports
