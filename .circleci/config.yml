@@ -55,6 +55,7 @@ jobs:
             cd ~/cspy/cspy
             ls
             python3 -m coverage run test/tests.py
+            codecov
 
       - store_artifacts:
           path: test-reports
