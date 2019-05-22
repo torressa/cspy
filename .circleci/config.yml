@@ -52,7 +52,7 @@ jobs:
             python3 -m venv venv
             . venv/bin/activate
             python3 -m unittest
-            cd ~/cspy
+            cd ~/cspy/cspy
             ls
             python3 -m coverage run test/tests.py
 
