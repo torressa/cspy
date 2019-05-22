@@ -49,7 +49,8 @@ jobs:
           command: |
             python3 -m venv venv
             . venv/bin/activate
-            python3 cspy/test/tests.py
+            cd ~/cspy
+            python3 -m test.tests
 
       - store_artifacts:
           path: test-reports
