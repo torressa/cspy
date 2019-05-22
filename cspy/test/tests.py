@@ -2,13 +2,11 @@ import sys
 import time
 import unittest
 import networkx as nx
-sys.path.append('~/cspy/')
-import cspy
-from cspy.label import Label
-from cspy.algorithms import BiDirectional
+from .. import Label
+from .. import BiDirectional
 
 
-class cspyTests(unittest.TestCase):
+class TestsBasic(unittest.TestCase):
     ''' Tests for finding the resource constrained shortest
     path of simple DiGraph using the BiDirectional algorithm.'''
 
