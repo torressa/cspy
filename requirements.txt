@@ -1,2 +1,2 @@
-networkx==2.2
-Cython==0.29.5
+networkx>=2.2
+Cython>=0.29.5
