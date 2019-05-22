@@ -2,8 +2,9 @@ import sys
 import time
 import unittest
 import networkx as nx
-from .. import Label
-from .. import BiDirectional
+sys.path.append("../")
+from cspy.label import Label
+from cspy.algorithms import BiDirectional
 
 
 class TestsBasic(unittest.TestCase):
