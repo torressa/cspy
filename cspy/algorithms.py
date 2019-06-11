@@ -17,8 +17,8 @@ from __future__ import print_function
 import random
 import logging
 from collections import OrderedDict
-from label import Label
-from preprocessing import preprocess_graph, check_inputs
+from cspy.label import Label
+from cspy.preprocessing import preprocess_graph, check_inputs
 
 
 class expand:
