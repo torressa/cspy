@@ -1,16 +1,9 @@
-import os
-import sys
-cwd = os.getcwd()
-sys.path.insert(0, cwd)
-
-
-from label import Label
-from preprocessing import preprocess_graph
-from algorithms import BiDirectional
-
-# import cspy.algorithms
-# import cspy.preprocessing
-#import cspy.label
+import cspy.algorithms
+from cspy.algorithms import BiDirectional
+import cspy.preprocessing
+from cspy.preprocessing import preprocess_graph
+import cspy.label
+from cspy.label import Label
 
 name = "cspy"
 __all__ = ['BiDirectional', 'preprocess_graph', 'Label']
