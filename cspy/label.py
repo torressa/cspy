@@ -2,28 +2,30 @@ from operator import add, sub
 
 
 class Label(object):
-    '''Label object that allows comparison.
+    """Label object that allows comparison.
     PARAMS:
         weight :: float, cumulative edge weight
         node   :: string, name of last node visited
         res    :: list, cumulative edge resource consumption
-        path   :: list, of all nodes in the path'''
+        path   :: list, of all nodes in the path"""
 
     def __init__(self, weight, node, res, path):
-        self.weight = weight  # type: float
-        self.node = node  # type: str
-        self.res = res  # type: list[float]
-        self.path = path  # type: list[str]
+        self.weight = weight
+        self.node = node
+        self.res = res
+        self.path = path
 
     def __repr__(self):
         return str(self)
 
     def __str__(self):  # for printing purposes
-        return "Label({0},{1},{2})".format(self.node, self.weight, self.res)
+        return "Label({0},{1},{2})".format(self.weight, self.node, self.res)
 
     def __lt__(self, other):
         # Less than operator for two Label objects
-        return self.weight < other.weight or self.res < other.res
+        return (self.weight < other.weight)
+        # and self.res <= other.res) or (
+        #     self.weight <= other.weight and self.res < other.res)
 
     def __le__(self, other):
         # Less than or equal to operator for two Label objects
@@ -45,7 +47,7 @@ class Label(object):
         # else:
         #     return self.weight < other.weight and self.res >= other.res
 
-    def getNewLabel(self, direction, weight, node, res):
+    def get_new_label(self, direction, weight, node, res):
         path = list(self.path)
         path.append(node)
         if direction == 'forward':

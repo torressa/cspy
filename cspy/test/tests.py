@@ -1,10 +1,8 @@
 import sys
-import time
 import unittest
 import networkx as nx
-sys.path.append("../")
-from cspy.label import Label
-from cspy.algorithms import BiDirectional
+from label import Label
+from algorithms import BiDirectional
 
 
 class TestsBasic(unittest.TestCase):
@@ -21,9 +19,11 @@ class TestsBasic(unittest.TestCase):
         self.G.add_edge('B', 'C', res_cost=[1, 3], weight=-10)
         self.G.add_edge('B', 'Sink', res_cost=[1, 2], weight=10)
         self.G.add_edge('C', 'Sink', res_cost=[1, 10], weight=0)
+
         # Create erratic digraph to test exception handling
         self.E = nx.DiGraph(directed=True)
         self.E.add_edge('Source', 'A', weight=0)
+
         # Create digraph with negative resource costs with unreachable node 'B'
         self.H = nx.DiGraph(directed=True, n_res=2)
         self.H.add_edge('Source', 'A', res_cost=[1, 2], weight=0)
@@ -33,13 +33,23 @@ class TestsBasic(unittest.TestCase):
         self.H.add_edge('C', 'D', res_cost=[1, 0.1], weight=0)
         self.H.add_edge('D', 'Sink', res_cost=[1, 0.1], weight=0)
 
-    def testOutput(self):
+    def testBothDirections(self):
         # Find shortest path of simple test digraph
-        start = time.time()
         algObj = BiDirectional(self.G, self.max_res, self.min_res)
-        path = algObj.run()
+        path = algObj.run
         self.assertEqual(path, ['Source', 'A', 'B', 'C', 'Sink'])
-        self.assertTrue(time.time() - start < 1)
+
+    def testForward(self):
+        # Find shortest path of simple test digraph
+        algObj = BiDirectional(self.G, [200, 20], self.min_res, 'forward')
+        path = algObj.run
+        self.assertEqual(path, ['Source', 'A', 'B', 'C', 'Sink'])
+
+    def testBackward(self):
+        # Find shortest path of simple test digraph
+        algObj = BiDirectional(self.G, self.max_res, [-1, 20], 'backward')
+        path = algObj.run
+        self.assertEqual(path, ['Source', 'A', 'B', 'C', 'Sink'])
 
     def testDominance(self):
         # Check whether forward and backward dominance makes sense
@@ -55,13 +65,13 @@ class TestsBasic(unittest.TestCase):
     def testEmpty(self):
         # Check whether erratic graph raises exception
         self.assertRaises(Exception, BiDirectional, self.E,
-                          self.max_res, self.min_res)
+                          self.max_res, self.min_res, 'up')
 
     def testNegativeEdges(self):
         # Check if negative resource costs work and whether
         # unreachable nodes are eliminated
-        algObj = BiDirectional(self.H, [4, 20], [0, 0])
-        path = algObj.run()
+        algObj = BiDirectional(self.H, [5, 20], [0, 0])
+        path = algObj.run
         # check if the unreachable node has been eliminated
         self.assertTrue('B' not in self.H.nodes())
         self.assertEqual(path, ['Source', 'A', 'C', 'D', 'Sink'])

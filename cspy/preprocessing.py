@@ -2,7 +2,7 @@ import logging
 import networkx as nx
 
 
-def check_inputs(max_res, min_res):
+def check_inputs(max_res, min_res, direc_in):
     '''Checks whether inputs are acceptably formated lists'''
     if isinstance(max_res, list) and isinstance(min_res, list):
         if len(max_res) == len(min_res) >= 2:
@@ -15,6 +15,9 @@ def check_inputs(max_res, min_res):
             raise Exception("Input lists have to be equal length >= 2")
     else:
         raise Exception("Inputs have to be lists with length >= 2")
+    if direc_in not in ['forward', 'backward', 'both']:
+        raise Exception(
+            "Input direction has to be 'forward', 'backward', or 'both'")
 
 
 def check_graph(G):
@@ -65,8 +68,8 @@ def prune_graph(G, max_res, min_res):
         # Get paths from source to all other nodes
         length, path = nx.single_source_bellman_ford(
             G, 'Source', weight=_get_weight)
-        # res_min.append(
-        # dict(nx.all_pairs_bellman_ford_path_length(G, weight=_get_weight)))
+        res_min.append(
+            dict(nx.all_pairs_bellman_ford_path_length(G, weight=_get_weight)))
         try:
             # If any path violates the resource upper or lower bounds
             # then, add the problematic node to the dictionary
@@ -82,7 +85,7 @@ def prune_graph(G, max_res, min_res):
             pass
 
     nodes_to_remove = {}
-    # res_min = []
+    res_min = []
     # Map function for each resource
     list(map(_checkResource, range(0, G.graph['n_res'])))
     if nodes_to_remove:  # if there are nodes to remove
@@ -92,10 +95,10 @@ def prune_graph(G, max_res, min_res):
             if key != 'Source' or key != 'Sink'}
         G.remove_nodes_from(nodes_to_remove)
         logging.info("Removed {} nodes".format(len(nodes_to_remove)))
-    return G, []
+    return G, res_min
 
 
-def preprocess(G, max_res, min_res):
+def preprocess_graph(G, max_res, min_res):
     '''Wrapper'''
     check_graph(G)
     G, res_min = prune_graph(G, max_res, min_res)
