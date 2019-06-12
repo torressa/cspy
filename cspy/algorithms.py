@@ -49,7 +49,6 @@ class BiDirectional:
 
         check_inputs(max_res, min_res, direc_in)
 
-        # call preprocessing function
         self.G, _ = preprocess_graph(
             G, max_res, min_res) if preprocess else (G, _)
         self.direc_in = direc_in
@@ -76,7 +75,6 @@ class BiDirectional:
         self.finalpath['forward'], self.finalpath['backward'] = [
             "Source"], ["Sink"]
 
-    @property
     def run(self):
         while self.Label['forward'] or self.Label['backward']:
             direc = self.get_direction()
@@ -86,28 +84,6 @@ class BiDirectional:
             elif not direc or self.terminate(direc):
                 break
         return self.join_paths()
-
-    ###############
-    # TERMINATION #
-    ###############
-    def terminate(self, direc):
-        if self.direc_in == "both":
-            if (self.finalpath['forward'] and self.finalpath['backward'] and
-                    (self.finalpath['forward'][-1] == self.finalpath['backward'][-1])):
-                return True
-        else:
-            if (self.finalpath['forward'][-1] == "Sink" and
-                    not self.unprocessed['forward']):
-                return True
-            elif (self.finalpath['backward'][-1] == "Source" and
-                    not self.unprocessed['backward']):
-                return True
-            elif not self.Label[self.direc_in] and not self.G.edges():
-                return True
-
-    def save_final_path(self, direc):
-        if self.Label[direc]:
-            self.finalpath[direc] = self.Label[direc].path
 
     #############
     # DIRECTION #
@@ -141,14 +117,10 @@ class BiDirectional:
             node = edge[1] if direc == 'forward' else edge[0]
             new_label = self.Label[direc].get_new_label(
                 direc, weight, node, res_cost)
-            if direc == 'forward':
-                if new_label.res <= self.max_res:  # feasibility check
-                    self.unprocessed[direc][self.Label[direc]][
-                        new_label] = new_label.path
-            else:
-                if new_label.res > self.min_res:  # feasibility check
-                    self.unprocessed[direc][self.Label[direc]][
-                        new_label] = new_label.path
+            if new_label.feasibility_check(
+                    self.max_res, self.min_res, direc):
+                self.unprocessed[direc][self.Label[direc]][
+                    new_label] = new_label.path
             self.G.remove_edge(*edge[: 2])
 
         def _get_next_label():
@@ -172,25 +144,46 @@ class BiDirectional:
                 self.unprocessed[direc].pop(k, None)
 
         if direc == 'forward':  # forward
-            if not self.Label[direc].res <= self.max_res:
-                return
-            edges = [e for e in self.G.edges(data=True)
-                     if e[0] == self.Label[direc].node]
+            idx = 0
             self.min_res[0] = max(self.min_res[0], min(
                 self.Label[direc].res[0], self.max_res[0]))
-        else:  # backward
-            if not self.Label[direc].res > self.min_res:
-                return
-            edges = [e for e in self.G.edges(data=True)
-                     if e[1] == self.Label[direc].node]
+        else:
+            idx = 1
             self.max_res[0] = min(self.max_res[0], max(
                 self.Label[direc].res[0], self.min_res[0]))
-
+        if not self.Label[direc].feasibility_check(
+                self.max_res, self.min_res, direc):
+            return
+        edges = [e for e in self.G.edges(data=True)
+                 if e[idx] == self.Label[direc].node]
         if self.Label[direc] not in self.unprocessed[direc]:
             self.unprocessed[direc][self.Label[direc]] = {}
 
         list(map(_propagate_label, edges))
         _get_next_label()
+
+    ###############
+    # TERMINATION #
+    ###############
+    def terminate(self, direc):
+        if self.direc_in == "both":
+            if (self.finalpath['forward'] and self.finalpath['backward'] and
+                    (self.finalpath['forward'][-1] ==
+                        self.finalpath['backward'][-1])):
+                return True
+        else:
+            if (self.finalpath['forward'][-1] == "Sink" and
+                    not self.unprocessed['forward']):
+                return True
+            elif (self.finalpath['backward'][-1] == "Source" and
+                  not self.unprocessed['backward']):
+                return True
+            elif not self.Label[self.direc_in] and not self.G.edges():
+                return True
+
+    def save_final_path(self, direc):
+        if self.Label[direc]:
+            self.finalpath[direc] = self.Label[direc].path
 
     #############
     # DOMINANCE #
@@ -201,7 +194,7 @@ class BiDirectional:
         # removed.
         for sub_dict in ({k: v} for k, v in self.unprocessed[direc].items()):
             k = list(sub_dict.keys())[0]  # call dict_keys object as a list
-            for label in [k for v in sub_dict.values() for k in v.keys()]:
+            for label in [key for v in sub_dict.values() for key in v.keys()]:
                 if self.Label[direc].dominates(label):
                     self.unprocessed[direc][k].pop(
                         label, None)
@@ -242,7 +235,7 @@ class BiDirectional:
                 # reverse order for backward path
                 self.finalpath['backward'].reverse()
                 joined_path = _check_paths()
-                logging.info(joined_path)
+                logging.debug("[{0}] {1}".format(__name__, joined_path))
                 return joined_path
             elif self.finalpath['forward'] and not self.finalpath['backward']:
                 return self.finalpath['forward']
@@ -262,9 +255,9 @@ class BiDirectional:
             logging.info('Monodirectional forward labeling algorithm')
         elif self.L < self.HF == self.HB < self.U:
             logging.info(
-                'bidirectional labeling algorithm with static halfway point')
+                'Bidirectional labeling algorithm with static halfway point')
         elif self.HF == self.HB < self.L:
-            logging.info('monodirectional backward labeling algorithm')
+            logging.info('Monodirectional backward labeling algorithm')
         elif self.U == self.HF > self.HB == self.L:
-            logging.info('bidirectional labeling algorithm with dynamic' +
+            logging.info('Bidirectional labeling algorithm with dynamic' +
                          ' halfway point.')

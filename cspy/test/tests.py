@@ -7,8 +7,8 @@ from cspy.algorithms import BiDirectional
 
 
 class TestsBasic(unittest.TestCase):
-    ''' Tests for finding the resource constrained shortest
-    path of simple DiGraph using the BiDirectional algorithm.'''
+    """ Tests for finding the resource constrained shortest
+    path of simple DiGraph using the BiDirectional algorithm."""
 
     def setUp(self):
         self.max_res, self.min_res = [4, 20], [3, 0]
@@ -37,19 +37,19 @@ class TestsBasic(unittest.TestCase):
     def testBothDirections(self):
         # Find shortest path of simple test digraph
         algObj = BiDirectional(self.G, self.max_res, self.min_res)
-        path = algObj.run
+        path = algObj.run()
         self.assertEqual(path, ['Source', 'A', 'B', 'C', 'Sink'])
 
     def testForward(self):
         # Find shortest path of simple test digraph
         algObj = BiDirectional(self.G, [200, 20], self.min_res, 'forward')
-        path = algObj.run
+        path = algObj.run()
         self.assertEqual(path, ['Source', 'A', 'B', 'C', 'Sink'])
 
     def testBackward(self):
         # Find shortest path of simple test digraph
-        algObj = BiDirectional(self.G, self.max_res, [-1, 20], 'backward')
-        path = algObj.run
+        alg_obj = BiDirectional(self.G, self.max_res, [-1, 0], 'backward')
+        path = alg_obj.run()
         self.assertEqual(path, ['Source', 'A', 'B', 'C', 'Sink'])
 
     def testDominance(self):
@@ -71,8 +71,8 @@ class TestsBasic(unittest.TestCase):
     def testNegativeEdges(self):
         # Check if negative resource costs work and whether
         # unreachable nodes are eliminated
-        algObj = BiDirectional(self.H, [5, 20], [0, 0])
-        path = algObj.run
+        alg_obj = BiDirectional(self.H, [5, 20], [0, 0])
+        path = alg_obj.run()
         # check if the unreachable node has been eliminated
         self.assertTrue('B' not in self.H.nodes())
         self.assertEqual(path, ['Source', 'A', 'C', 'D', 'Sink'])

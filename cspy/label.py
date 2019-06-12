@@ -23,9 +23,8 @@ class Label(object):
 
     def __lt__(self, other):
         # Less than operator for two Label objects
-        return (self.weight < other.weight)
-        # and self.res <= other.res) or (
-        #     self.weight <= other.weight and self.res < other.res)
+        return (self.weight < other.weight and self.res <= other.res) or (
+            self.weight <= other.weight and self.res < other.res)
 
     def __le__(self, other):
         # Less than or equal to operator for two Label objects
@@ -40,12 +39,14 @@ class Label(object):
         # Redefinition of hash to avoid TypeError due to the __eq__ definition
         return id(self)
 
-    def dominates(self, other):
+    def dominates(self, other, direction="forward"):
         # Return whether self dominates other.
-        # if direction == 'forward':
-        return self < other
-        # else:
-        #     return self.weight < other.weight and self.res >= other.res
+        if direction == 'forward':
+            return (self.weight < other.weight and self.res <= other.res) or (
+                self.weight <= other.weight and self.res < other.res)
+        else:
+            return (self.weight < other.weight and self.res >= other.res) or (
+            self.weight <= other.weight and self.res > other.res)
 
     def get_new_label(self, direction, weight, node, res):
         path = list(self.path)
@@ -55,3 +56,24 @@ class Label(object):
         else:
             res_new = list(map(sub, self.res, res))
         return Label(weight + self.weight, node, res_new, path)
+
+    def feasibility_check(self, max_res=[], min_res=[],
+                          direction="forward"):
+        if direction == "forward":
+            return self.check_geq(max_res, self.res)
+        else:
+            return self.check_geq(self.res, min_res, "gt")
+
+    @staticmethod
+    def check_geq(l1, l2, inequality="ge"):
+        """Determines if all elements of list l1 either >=
+        or > than those in list l2.
+        PARAMS
+            l1, l2     :: list, lists of integers;
+            inequality :: string, type of inequality 'ge' for >= 'gt' for >."""
+        diff = list(map(sub, l1, l2))
+        if inequality == "gt":
+            return all(elem > 0 for elem in diff)
+        else:
+            return all(elem >= 0 for elem in diff)
+

@@ -1,9 +1,10 @@
+import copy
 import logging
 import networkx as nx
 
 
 def check_inputs(max_res, min_res, direc_in):
-    '''Checks whether inputs are acceptably formated lists'''
+    """Checks whether inputs are acceptably formated lists"""
     if isinstance(max_res, list) and isinstance(min_res, list):
         if len(max_res) == len(min_res) >= 2:
             if (all(isinstance(item, (float, int)) for item in max_res) and
@@ -21,22 +22,22 @@ def check_inputs(max_res, min_res, direc_in):
 
 
 def check_graph(G):
-    '''Checks whether input graph has required properties'''
+    """Checks whether input graph has required properties"""
 
     def _check_graph_attr():
-        '''Checks whether input graph has n_res attribute'''
+        """Checks whether input graph has n_res attribute"""
         if 'n_res' not in G.graph:
             raise Exception("Input graph must have 'n_res' attribute.")
 
     def _check_edge_attr():
-        '''Checks whether edges in input graph have res_cost attribute'''
+        """Checks whether edges in input graph have res_cost attribute"""
         if not all('res_cost' in edge[2] for edge in G.edges(data=True)):
             raise Exception(
                 "Input graph must have edges with 'res_cost' attribute.")
 
     def _check_path():
-        '''Checks whether a 'Source' -> 'Sink' path exists.
-        Also covers nodes missing and other standard networkx exceptions'''
+        """Checks whether a 'Source' -> 'Sink' path exists.
+        Also covers nodes missing and other standard networkx exceptions"""
         try:
             nx.has_path(G, 'Source', 'Sink')
         except nx.NetworkXException as e:
@@ -56,9 +57,9 @@ def check_graph(G):
 
 
 def prune_graph(G, max_res, min_res):
-    '''Removes nodes that cannot be reached due to resource limits'''
+    """Removes nodes that cannot be reached due to resource limits"""
 
-    def _checkResource(r):
+    def _check_resource(r):
         # check resource r's feasibility along a path
 
         def _get_weight(i, j, attr_dict):
@@ -76,6 +77,8 @@ def prune_graph(G, max_res, min_res):
             nodes_to_remove.update({
                 path[key][-2]: val for key, val in length.items()
                 if val > max_res[r] or val < min_res[r]})
+            if "Source" in nodes_to_remove or "Sink" in nodes_to_remove:
+                raise Exception("Sink not reachable for resource {}".format(r))
             # path is a dict of the form:
             # {node_i: [Source, ..., node_k, node_i]}.
             # Hence, if node_i is found to violate a resource constraint, it is
@@ -87,19 +90,20 @@ def prune_graph(G, max_res, min_res):
     nodes_to_remove = {}
     res_min = []
     # Map function for each resource
-    list(map(_checkResource, range(0, G.graph['n_res'])))
+    list(map(_check_resource, range(0, G.graph['n_res'])))
     if nodes_to_remove:  # if there are nodes to remove
         # Filter out source or sink
         nodes_to_remove = {
             key: val for key, val in nodes_to_remove.items()
             if key != 'Source' or key != 'Sink'}
         G.remove_nodes_from(nodes_to_remove)
-        logging.info("Removed {} nodes".format(len(nodes_to_remove)))
+        logging.info("[{0}] Removed {1} nodes".format(
+            __name__, len(nodes_to_remove)))
     return G, res_min
 
 
 def preprocess_graph(G, max_res, min_res):
-    '''Wrapper'''
+    """Wrapper"""
     check_graph(G)
     G, res_min = prune_graph(G, max_res, min_res)
     check_graph(G)

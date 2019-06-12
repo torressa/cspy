@@ -8,14 +8,11 @@ tags:
 authors:
   - name: David Torres Sanchez
     orcid: 0000-0003-0872-7098
-    affiliation: "1, 2" # (Multiple affiliations must be quoted)
-  - name: Author 2
-    orcid: 0000-0000-0000-0000
-    affiliation: 2
+    affiliation: 1 # (Multiple affiliations must be quoted)
 affiliations:
- - name: Lyman Spitzer, Jr. Fellow, Princeton University
+ - name: STOR-i, Lancaster University, UK.
    index: 1
-date: 13 August 2017
+date: August 2019
 bibliography: paper.bib
 ---
 
