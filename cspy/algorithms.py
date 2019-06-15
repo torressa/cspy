@@ -40,8 +40,8 @@ class BiDirectional:
                     Either 'both','forward', or, 'backward'.
         preprocess :: bool, enables preprocessing routine."""
 
-    def __init__(self, G, max_res=None, REF_forward=add, REF_backward=sub,
-                 min_res=None, direc_in='both', preprocess=True):
+    def __init__(self, G, max_res=None, min_res=None, direc_in='both',
+                 preprocess=True, REF_forward=add, REF_backward=sub,):
 
         self.G = check_and_preprocess(
             preprocess, G, max_res, min_res, direc_in)
