@@ -2,8 +2,8 @@ import sys
 import unittest
 import networkx as nx
 sys.path.append("../")
-from cspy.label import Label
 from cspy.algorithms import BiDirectional
+from cspy.label import Label
 
 
 class TestsBasic(unittest.TestCase):
@@ -63,7 +63,7 @@ class TestsBasic(unittest.TestCase):
         self.assertTrue(L3.dominates(L4))
         self.assertTrue(L3.dominates(L5))
 
-    def testEmpty(self):
+    def testExceptions(self):
         # Check whether wrong input raises exceptions
         self.assertRaises(Exception, BiDirectional, self.E,
                           'x', [1], 'up')
