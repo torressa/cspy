@@ -1,28 +1,28 @@
-import copy
 import logging
 import networkx as nx
 
 
-def check_inputs(max_res, min_res, direc_in):
-    """Checks whether inputs are acceptably formated lists"""
-    if isinstance(max_res, list) and isinstance(min_res, list):
-        if len(max_res) == len(min_res) >= 2:
-            if (all(isinstance(item, (float, int)) for item in max_res) and
-                    all(isinstance(item, (float, int)) for item in min_res)):
-                pass
+def check(G, max_res=None, min_res=None, direc_in=None):
+    """Checks whether inputs and the graph are of the appropriate types and
+    have the required properties"""
+
+    def _check_res():
+        if isinstance(max_res, list) and isinstance(min_res, list):
+            if len(max_res) == len(min_res) >= 2:
+                if (all(isinstance(i, (float, int)) for i in max_res) and
+                        all(isinstance(i, (float, int)) for i in min_res)):
+                    pass
+                else:
+                    raise Exception("Elements of input lists must be numbers")
             else:
-                raise Exception("Elements of input lists must be numbers")
+                raise Exception("Input lists have to be equal length >= 2")
         else:
-            raise Exception("Input lists have to be equal length >= 2")
-    else:
-        raise Exception("Inputs have to be lists with length >= 2")
-    if direc_in not in ['forward', 'backward', 'both']:
-        raise Exception(
-            "Input direction has to be 'forward', 'backward', or 'both'")
+            raise Exception("Inputs have to be lists with length >= 2")
 
-
-def check_graph(G):
-    """Checks whether input graph has required properties"""
+    def _check_direction():
+        if direc_in not in ['forward', 'backward', 'both']:
+            raise Exception(
+                "Input direction has to be 'forward', 'backward', or 'both'")
 
     def _check_graph_attr():
         """Checks whether input graph has n_res attribute"""
@@ -44,10 +44,16 @@ def check_graph(G):
             raise Exception("An error occured: {}".format(e))
 
     errors = []
-    # Perform each check
-    for check in [_check_graph_attr, _check_edge_attr, _check_path]:
+    # Select checks to perform based on the input provided
+    if max_res and min_res and direc_in:
+        check_funcs = [_check_res, _check_direction, _check_graph_attr,
+                       _check_edge_attr, _check_path]
+    else:
+        check_funcs = [_check_path]
+    # Check all functions in check_funcs
+    for func in check_funcs:
         try:
-            check()
+            func()
         except Exception as e:
             errors.append(e)  # if check fails save error message
     if errors:
@@ -69,8 +75,6 @@ def prune_graph(G, max_res, min_res):
         # Get paths from source to all other nodes
         length, path = nx.single_source_bellman_ford(
             G, 'Source', weight=_get_weight)
-        res_min.append(
-            dict(nx.all_pairs_bellman_ford_path_length(G, weight=_get_weight)))
         try:
             # If any path violates the resource upper or lower bounds
             # then, add the problematic node to the dictionary
@@ -88,7 +92,6 @@ def prune_graph(G, max_res, min_res):
             pass
 
     nodes_to_remove = {}
-    res_min = []
     # Map function for each resource
     list(map(_check_resource, range(0, G.graph['n_res'])))
     if nodes_to_remove:  # if there are nodes to remove
@@ -99,12 +102,13 @@ def prune_graph(G, max_res, min_res):
         G.remove_nodes_from(nodes_to_remove)
         logging.info("[{0}] Removed {1} nodes".format(
             __name__, len(nodes_to_remove)))
-    return G, res_min
+    return G
 
 
-def preprocess_graph(G, max_res, min_res):
+def check_and_preprocess(preprocess, G, max_res, min_res, direc):
     """Wrapper"""
-    check_graph(G)
-    G, res_min = prune_graph(G, max_res, min_res)
-    check_graph(G)
-    return G, res_min
+    check(G, max_res, min_res, direc)
+    if preprocess:
+        G = prune_graph(G, max_res, min_res)
+    check(G)
+    return G
