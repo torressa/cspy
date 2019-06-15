@@ -13,9 +13,10 @@ REFERENCES:
 '''
 from __future__ import absolute_import
 from __future__ import print_function
-
+# hi
 import random
 import logging
+from operator import add, sub
 from collections import OrderedDict
 from cspy.label import Label
 from cspy.preprocessing import check_and_preprocess
@@ -49,6 +50,9 @@ class BiDirectional:
         self.L, self.U = self.max_res[0], self.min_res[0]
         self.HB = self.L  # type: float
         self.HF = self.U  # type: float
+
+        Label._REF_forward = REF_forward
+        Label._REF_backward = REF_backward
 
         self.name_algorithm()
 
