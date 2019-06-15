@@ -1,9 +1,9 @@
+from cspy.label import Label
+from cspy.algorithms import BiDirectional
 import sys
 import unittest
 import networkx as nx
 sys.path.append("../")
-from cspy.label import Label
-from cspy.algorithms import BiDirectional
 
 
 class TestsBasic(unittest.TestCase):
@@ -11,7 +11,7 @@ class TestsBasic(unittest.TestCase):
     path of simple DiGraph using the BiDirectional algorithm."""
 
     def setUp(self):
-        self.max_res, self.min_res = [4, 20], [3, 0]
+        self.max_res, self.min_res = [4, 20], [1, 0]
         # Create simple digraph to test algorithm
         self.G = nx.DiGraph(directed=True, n_res=2)
         self.G.add_edge('Source', 'A', res_cost=[1, 2], weight=0)
@@ -55,18 +55,18 @@ class TestsBasic(unittest.TestCase):
     def testDominance(self):
         # Check whether forward and backward dominance makes sense
         L1 = Label(10, 'B', [6, 5], [])
-        L2 = Label(1, 'C', [6, -3], [])
-        L3 = Label(-10, 'Source', [3, -8.3], [])
+        L2 = Label(1, 'B', [6, -3], [])
+        L3 = Label(-10, 'A', [3, -8.3], [])
         L4 = Label(-9, 'A', [4, -6.3], [])
-        L5 = Label(0, 'Source', [4, -5.1], [])
+        L5 = Label(0, 'A', [4, -5.1], [])
         self.assertTrue(L2.dominates(L1))
         self.assertTrue(L3.dominates(L4))
         self.assertTrue(L3.dominates(L5))
 
     def testEmpty(self):
-        # Check whether erratic graph raises exception
+        # Check whether wrong input raises exceptions
         self.assertRaises(Exception, BiDirectional, self.E,
-                          self.max_res, self.min_res, 'up')
+                          'x', [1], 'up')
 
     def testNegativeEdges(self):
         # Check if negative resource costs work and whether

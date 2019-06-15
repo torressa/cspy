@@ -9,7 +9,7 @@ REFERENCES:
 [2]  :  Righini, G. , & Salani, M. (2006). Symmetry helps: Bounded
         bi-directional dynamic programming for the elementary shortest path
         problem with resource constraints.
-        Discrete Optimization, 3 (3), 255-273 .
+        Discrete Optimization, 3 (3), 255-273.
 '''
 from __future__ import absolute_import
 from __future__ import print_function
@@ -18,7 +18,7 @@ import random
 import logging
 from collections import OrderedDict
 from cspy.label import Label
-from cspy.preprocessing import preprocess_graph, check_inputs
+from cspy.preprocessing import check_and_preprocess
 
 
 class expand:
@@ -26,31 +26,24 @@ class expand:
 
 
 class BiDirectional:
-    '''Bidirectional labeling algorithm with dynamic half-way point from [1].
+    """Bidirectional labeling algorithm with dynamic half-way point from [1].
     Depending on the range of values for self.HF = HF and self.HB = HB, we get
-    four different algorithms.
-    (1) If HF = HB > U:
-        monodirectional forward labeling algorithm;
-    (2) If HF = HB in (L, U):
-        bidirectional labeling algorithm with static half-way point;
-    (3) If HF = HB < L:
-        monodirectional backward labeling algorithm;
-    (4) If U = HF > HB = L then
-        bidirectional labeling algorithm with dynamic half-way point.
+    four different algorithms. See self.name_algorithm.
     PARAMS
-        G :: nx.Digraph() object with n_res attribute;
-        max_res :: list of floats, [L, M_1, M_2, ..., M_nres]
+        G          :: nx.Digraph() object with n_res attribute;
+        max_res    :: list of floats, [L, M_1, M_2, ..., M_nres]
                     upper bound for resource usage;
-        min_res :: list of floats, [U, L_1, L_2, ..., L_nres]
+        min_res    :: list of floats, [U, L_1, L_2, ..., L_nres]
                     lower bounds for resource usage.
-    '''
+        direc_in   :: string, preferred search direction.
+                    Either 'both','forward', or, 'backward'.
+        preprocess :: bool, enables preprocessing routine."""
 
-    def __init__(self, G, max_res, min_res, direc_in='both', preprocess=True):
+    def __init__(self, G, max_res=None, min_res=None, direc_in='both',
+                 preprocess=True):
 
-        check_inputs(max_res, min_res, direc_in)
-
-        self.G, _ = preprocess_graph(
-            G, max_res, min_res) if preprocess else (G, _)
+        self.G = check_and_preprocess(
+            preprocess, G, max_res, min_res, direc_in)
         self.direc_in = direc_in
         self.max_res, self.min_res = max_res, min_res
         self.L, self.U = self.max_res[0], self.min_res[0]
@@ -121,7 +114,6 @@ class BiDirectional:
                     self.max_res, self.min_res, direc):
                 self.unprocessed[direc][self.Label[direc]][
                     new_label] = new_label.path
-            self.G.remove_edge(*edge[: 2])
 
         def _get_next_label():
             # Label Extension #
@@ -133,14 +125,24 @@ class BiDirectional:
                     # Remove it from the unprocessed labels
                     self.unprocessed[direc][key].pop(next_label)
                     self.Label[direc] = next_label
+                    if not self.unprocessed[direc][key]:
+                        keys_to_pop.append(key)
                     break
                 else:
                     keys_to_pop.extend([self.Label[direc], key])
             else:  # if no break
-                self.save_final_path(direc)
-                keys_to_pop.append(self.Label[direc])
-                self.Label[direc] = None
-            for k in keys_to_pop:
+                next_label = min(
+                    self.unprocessed[direc].keys(), key=lambda x: x.weight)
+                # Remove it from the unprocessed labels
+                keys_to_pop.append(next_label)
+                if self.Label[direc] == next_label:
+                    self.save_final_path(direc)
+                    keys_to_pop.append(self.Label[direc])
+                    self.Label[direc] = None
+                else:
+                    self.Label[direc] = next_label
+            # Remove all processed labels from unprocessed dict
+            for k in list(set(keys_to_pop)):
                 self.unprocessed[direc].pop(k, None)
 
         if direc == 'forward':  # forward
@@ -151,9 +153,6 @@ class BiDirectional:
             idx = 1
             self.max_res[0] = min(self.max_res[0], max(
                 self.Label[direc].res[0], self.min_res[0]))
-        if not self.Label[direc].feasibility_check(
-                self.max_res, self.min_res, direc):
-            return
         edges = [e for e in self.G.edges(data=True)
                  if e[idx] == self.Label[direc].node]
         if self.Label[direc] not in self.unprocessed[direc]:
@@ -178,7 +177,7 @@ class BiDirectional:
             elif (self.finalpath['backward'][-1] == "Source" and
                   not self.unprocessed['backward']):
                 return True
-            elif not self.Label[self.direc_in] and not self.G.edges():
+            if not self.Label[self.direc_in] and not self.G.edges():
                 return True
 
     def save_final_path(self, direc):
@@ -195,13 +194,14 @@ class BiDirectional:
         for sub_dict in ({k: v} for k, v in self.unprocessed[direc].items()):
             k = list(sub_dict.keys())[0]  # call dict_keys object as a list
             for label in [key for v in sub_dict.values() for key in v.keys()]:
-                if self.Label[direc].dominates(label):
-                    self.unprocessed[direc][k].pop(
-                        label, None)
-                    self.unprocessed[direc].pop(label, None)
-                elif label.dominates(self.Label[direc]):
-                    self.unprocessed[direc][k].pop(label, None)
-                    self.unprocessed[direc].pop(label, None)
+                if label.node == self.Label[direc].node:
+                    if self.Label[direc].dominates(label, direc):
+                        self.unprocessed[direc][k].pop(
+                            label, None)
+                        self.unprocessed[direc].pop(label, None)
+                    elif label.dominates(self.Label[direc], direc):
+                        self.unprocessed[direc][k].pop(self.Label[direc], None)
+                        self.unprocessed[direc].pop(self.Label[direc], None)
 
     #################
     # PATH CHECKING #
@@ -209,34 +209,13 @@ class BiDirectional:
     def join_paths(self):
         # check if paths are eligible to be joined. Joining phase as presented
         # in [2]
-        def _check_paths():
-            if (self.finalpath['forward'][-1] == 'Sink' and
-                    self.finalpath['backward'][0] != 'Source'):
-                # if only backward path
-                return self.finalpath['forward']
-            elif (self.finalpath['backward'][0] == 'Source' and
-                  self.finalpath['forward'][-1] != 'Sink'):
-                # if only backward path
-                return self.finalpath['backward']
-            elif (self.finalpath['backward'][0] == 'Source' and
-                  self.finalpath['forward'][-1] == 'Sink'):
-                # if both full paths
-                return random.choice(
-                    [self.finalpath['forward'], self.finalpath['backward']])
-            elif not self.Label['forward'] or not self.Label['backward']:
-                # if combination of the two is required
-                return list(OrderedDict.fromkeys(
-                    self.finalpath['forward'] + self.finalpath['backward']))
-            else:
-                return
 
         if self.direc_in == 'both':
             if self.finalpath['forward'] and self.finalpath['backward']:
                 # reverse order for backward path
                 self.finalpath['backward'].reverse()
-                joined_path = _check_paths()
-                logging.debug("[{0}] {1}".format(__name__, joined_path))
-                return joined_path
+                return list(OrderedDict.fromkeys(
+                    self.finalpath['forward'] + self.finalpath['backward']))
             elif self.finalpath['forward'] and not self.finalpath['backward']:
                 return self.finalpath['forward']
             elif not self.finalpath['forward'] and self.finalpath['backward']:
@@ -251,12 +230,12 @@ class BiDirectional:
     # Classify Algorithm Type #
     ###########################
     def name_algorithm(self):
-        if self.HF == self.HB > self.U:
+        if self.HF == self.HB > self.U or self.direc_in == 'forward':
             logging.info('Monodirectional forward labeling algorithm')
         elif self.L < self.HF == self.HB < self.U:
             logging.info(
                 'Bidirectional labeling algorithm with static halfway point')
-        elif self.HF == self.HB < self.L:
+        elif self.HF == self.HB < self.L or self.direc_in == 'backward':
             logging.info('Monodirectional backward labeling algorithm')
         elif self.U == self.HF > self.HB == self.L:
             logging.info('Bidirectional labeling algorithm with dynamic' +
