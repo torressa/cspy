@@ -1,4 +1,4 @@
-from operator import add, sub
+from operator import sub
 
 
 class Label(object):
@@ -8,6 +8,8 @@ class Label(object):
         node   :: string, name of last node visited
         res    :: list, cumulative edge resource consumption
         path   :: list, of all nodes in the path"""
+
+    _REF_forward, _REF_backward = None, None
 
     def __init__(self, weight, node, res, path):
         self.weight = weight
@@ -46,15 +48,15 @@ class Label(object):
                 self.weight <= other.weight and self.res < other.res)
         else:
             return (self.weight < other.weight and self.res >= other.res) or (
-            self.weight <= other.weight and self.res > other.res)
+                self.weight <= other.weight and self.res > other.res)
 
     def get_new_label(self, direction, weight, node, res):
         path = list(self.path)
         path.append(node)
         if direction == 'forward':
-            res_new = list(map(add, self.res, res))
+            res_new = list(map(self._REF_forward, self.res, res))
         else:
-            res_new = list(map(sub, self.res, res))
+            res_new = list(map(self._REF_backward, self.res, res))
         return Label(weight + self.weight, node, res_new, path)
 
     def feasibility_check(self, max_res=[], min_res=[],
@@ -76,4 +78,3 @@ class Label(object):
             return all(elem > 0 for elem in diff)
         else:
             return all(elem >= 0 for elem in diff)
-

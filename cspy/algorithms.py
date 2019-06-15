@@ -9,13 +9,14 @@ REFERENCES:
 [2]  :  Righini, G. , & Salani, M. (2006). Symmetry helps: Bounded
         bi-directional dynamic programming for the elementary shortest path
         problem with resource constraints.
-        Discrete Optimization, 3 (3), 255-273 .
+        Discrete Optimization, 3 (3), 255-273.
 '''
 from __future__ import absolute_import
 from __future__ import print_function
-
+# hi
 import random
 import logging
+from operator import add, sub
 from collections import OrderedDict
 from cspy.label import Label
 from cspy.preprocessing import preprocess_graph, check_inputs
@@ -45,17 +46,21 @@ class BiDirectional:
                     lower bounds for resource usage.
     '''
 
-    def __init__(self, G, max_res, min_res, direc_in='both', preprocess=True):
+    def __init__(self, G, max_res, min_res, direc_in='both', preprocess=True,
+                 REF_forward=add, REF_backward=sub):
 
         check_inputs(max_res, min_res, direc_in)
 
         self.G, _ = preprocess_graph(
-            G, max_res, min_res) if preprocess else (G, _)
+            G, max_res, min_res) if preprocess else (G, [])
         self.direc_in = direc_in
         self.max_res, self.min_res = max_res, min_res
         self.L, self.U = self.max_res[0], self.min_res[0]
         self.HB = self.L  # type: float
         self.HF = self.U  # type: float
+
+        Label._REF_forward = REF_forward
+        Label._REF_backward = REF_backward
 
         self.name_algorithm()
 
