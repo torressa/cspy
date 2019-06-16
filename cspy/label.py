@@ -2,12 +2,22 @@ from operator import sub
 
 
 class Label(object):
-    """Label object that allows comparison.
-    PARAMS:
-        weight :: float, cumulative edge weight
-        node   :: string, name of last node visited
-        res    :: list, cumulative edge resource consumption
-        path   :: list, of all nodes in the path"""
+    """Label object that allows comparison and the modelling of dominance relations
+
+    Parameters
+    -----------
+
+    weight : float
+        cumulative edge weight
+
+    node : string
+        name of last node visited
+
+    res : list
+        cumulative edge resource consumption
+
+    path : list
+        all nodes in the path"""
 
     _REF_forward, _REF_backward = None, None
 
@@ -72,9 +82,15 @@ class Label(object):
     def check_geq(l1, l2, inequality="ge"):
         """Determines if all elements of list l1 either >=
         or > than those in list l2.
-        PARAMS
-            l1, l2     :: list, lists of integers;
-            inequality :: string, type of inequality 'ge' for >= 'gt' for >."""
+
+        Parameters
+        ----------
+        l1, l2 : list
+            lists of integers.
+
+        inequality : string, optional
+            type of inequality 'ge' for >= 'gt' for >. Default: 'ge'
+            """
         diff = list(map(sub, l1, l2))
         if inequality == "gt":
             return all(elem > 0 for elem in diff)

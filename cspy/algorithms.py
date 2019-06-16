@@ -27,25 +27,54 @@ class expand:
 
 
 class BiDirectional:
-    """Bidirectional labeling algorithm with dynamic half-way point from [1].
+    """
+    Implementation of the bidirectional labeling algorithm with dynamic
+    half-way point Tilk2017.
     Depending on the range of values for self.HF = HF and self.HB = HB, we get
     four different algorithms. See self.name_algorithm.
-    PARAMS
-        G          :: nx.Digraph() object with n_res attribute;
-        max_res    :: list of floats, [L, M_1, M_2, ..., M_nres]
-                    upper bound for resource usage;
-        min_res    :: list of floats, [U, L_1, L_2, ..., L_nres]
-                    lower bounds for resource usage.
-        direc_in   :: string, preferred search direction.
-                    Either 'both','forward', or, 'backward'.
-        preprocess :: bool, enables preprocessing routine."""
 
-    def __init__(self, G, max_res=None, min_res=None, direc_in='both',
+    Parameters
+    ----------
+    G : object instance `nx.Digraph()`
+        must have `n_res` graph attribute and all edges must have `res_cost`
+        attribute.
+
+    max_res : list of floats
+        [L, M_1, M_2, ..., M_nres] upper bound for resource usage.
+        We must have len(max_res) >= 2
+
+    min_res : list of floats
+        [U, L_1, L_2, ..., L_nres] lower bounds for resource usage.
+        We must have len(min_res) == len(max_res) >= 2
+
+    direc_in : string, optional
+        preferred search direction.
+        Either 'both','forward', or, 'backward'. Default : 'both'.
+
+    preprocess : bool, optional
+        enables preprocessing routine.
+
+    REF_forward, REF_backward : functions, optional
+        non-additive resource extension functions.
+
+    Returns
+    -------
+    joined_path : list
+        nodes in shortest path obtained.
+
+    Notes
+    -----
+    The input graph must have a `n_res` attribute in the input graph has
+    to be >= 2. The edges in the graph must all have a `res_cost` attribute.
+
+    """
+
+    def __init__(self, G, max_res=None, min_res=None, direction='both',
                  preprocess=True, REF_forward=add, REF_backward=sub,):
 
         self.G = check_and_preprocess(
-            preprocess, G, max_res, min_res, direc_in)
-        self.direc_in = direc_in
+            preprocess, G, max_res, min_res, direction)
+        self.direc_in = direction
         self.max_res, self.min_res = max_res, min_res
         self.L, self.U = self.max_res[0], self.min_res[0]
         self.HB = self.L  # type: float
@@ -212,8 +241,7 @@ class BiDirectional:
     #################
     def join_paths(self):
         # check if paths are eligible to be joined. Joining phase as presented
-        # in [2]
-
+        # in Righini2006
         if self.direc_in == 'both':
             if self.finalpath['forward'] and self.finalpath['backward']:
                 # reverse order for backward path

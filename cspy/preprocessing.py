@@ -3,8 +3,6 @@ import networkx as nx
 
 
 def check(G, max_res=None, min_res=None, direc_in=None):
-    """Checks whether inputs and the graph are of the appropriate types and
-    have the required properties"""
 
     def _check_res():
         if isinstance(max_res, list) and isinstance(min_res, list):
@@ -63,7 +61,23 @@ def check(G, max_res=None, min_res=None, direc_in=None):
 
 
 def prune_graph(G, max_res, min_res):
-    """Removes nodes that cannot be reached due to resource limits"""
+    """Removes nodes that cannot be reached due to resource limits.
+
+    Parameters
+    ----------
+
+    G : object instance `nx.Digraph()`
+        must have `n_res` graph attribute and all edges must have `res_cost`
+        attribute.
+
+    max_res : list of floats
+        [L, M_1, M_2, ..., M_nres] upper bound for resource usage.
+        We must have len(max_res) >= 2
+
+    min_res : list of floats
+        [U, L_1, L_2, ..., L_nres] lower bounds for resource usage.
+        We must have len(min_res) == len(max_res) >= 2
+    """
 
     def _check_resource(r):
         # check resource r's feasibility along a path
@@ -106,7 +120,32 @@ def prune_graph(G, max_res, min_res):
 
 
 def check_and_preprocess(preprocess, G, max_res, min_res, direc):
-    """Wrapper"""
+    """
+    Checks whether inputs and the graph are of the appropriate types and
+    have the required properties.
+    Removes nodes that cannot be reached due to resource limits.
+
+    Parameters
+    ----------
+    preprocess : bool, optional
+        enables preprocessing routine.
+
+    G : object instance `nx.Digraph()`
+        must have `n_res` graph attribute and all edges must have `res_cost`
+        attribute.
+
+    max_res : list of floats
+        [L, M_1, M_2, ..., M_nres] upper bound for resource usage.
+        We must have len(max_res) >= 2
+
+    min_res : list of floats
+        [U, L_1, L_2, ..., L_nres] lower bounds for resource usage.
+        We must have len(min_res) == len(max_res) >= 2
+
+    direc : string
+        preferred search direction.
+        Either 'both','forward', or, 'backward'. Default : 'both'.
+    """
     check(G, max_res, min_res, direc)
     if preprocess:
         G = prune_graph(G, max_res, min_res)
