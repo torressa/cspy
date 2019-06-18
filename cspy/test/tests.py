@@ -41,20 +41,18 @@ class TestsBasic(unittest.TestCase):
 
     def testBothDirections(self):
         # Find shortest path of simple test digraph
-        algObj = BiDirectional(self.G, self.max_res, self.min_res)
-        path = algObj.run()
+        path = BiDirectional(self.G, self.max_res, self.min_res).run()
         self.assertEqual(path, ['Source', 'A', 'B', 'C', 'Sink'])
 
     def testForward(self):
         # Find shortest path of simple test digraph
-        algObj = BiDirectional(self.G, [200, 20], self.min_res, 'forward')
-        path = algObj.run()
+        path = BiDirectional(
+            self.G, [200, 20], self.min_res, 'forward').run()
         self.assertEqual(path, ['Source', 'A', 'B', 'C', 'Sink'])
 
     def testBackward(self):
         # Find shortest path of simple test digraph
-        alg_obj = BiDirectional(self.G, self.max_res, [-1, 0], 'backward')
-        path = alg_obj.run()
+        path = BiDirectional(self.G, self.max_res, [-1, 0], 'backward').run()
         self.assertEqual(path, ['Source', 'A', 'B', 'C', 'Sink'])
 
     def testDominance(self):
@@ -76,14 +74,14 @@ class TestsBasic(unittest.TestCase):
     def testNegativeEdges(self):
         # Check if negative resource costs work and whether
         # unreachable nodes are eliminated
-        alg_obj = BiDirectional(self.H, [5, 20], [0, 0])
-        path = alg_obj.run()
+        path = BiDirectional(self.H, [5, 20], [0, 0]).run()
         # check if the unreachable node has been eliminated
         self.assertTrue('B' not in self.H.nodes())
         self.assertEqual(path, ['Source', 'A', 'C', 'D', 'Sink'])
 
     def testTabu(self):
-        pass
+        path, _ = Tabu(self.G, self.max_res, self.min_res).run()
+        self.assertEqual(path, ['Source', 'A', 'B', 'C', 'Sink'])
 
 
 if __name__ == '__main__':
