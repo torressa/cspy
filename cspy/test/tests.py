@@ -1,8 +1,13 @@
+"""TODO:
+ -  write tests for Tabu algorithm
+"""
+
 import sys
 import unittest
 import networkx as nx
 sys.path.append("../")
-from cspy.algorithms import BiDirectional
+from cspy.algorithms.bidirectional import BiDirectional
+from cspy.algorithms.tabu import Tabu
 from cspy.label import Label
 
 
@@ -76,6 +81,9 @@ class TestsBasic(unittest.TestCase):
         # check if the unreachable node has been eliminated
         self.assertTrue('B' not in self.H.nodes())
         self.assertEqual(path, ['Source', 'A', 'C', 'D', 'Sink'])
+
+    def testTabu(self):
+        pass
 
 
 if __name__ == '__main__':

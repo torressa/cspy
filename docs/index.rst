@@ -26,12 +26,21 @@ Features implemented include: generic resource extension functions (`Inrich 2005
     getting_started
     how_to
 
-.. toctree::
-    :maxdepth: 2
-    :caption: API Documentation
+
+Documentation
+------------
+
+.. automodule:: cspy.algorithms
+.. autosummary::
+   :toctree: api/
+
+   	cspy.BiDirectional
+   	cspy.Tabu
+   	cspy.check_and_preprocess
+    cspy.Label
+
     
-    api/cspy.BiDirectional
-    api/check_and_preprocess
+    
 
 .. _Tilk 2017: https://www.sciencedirect.com/science/article/pii/S0377221717302035
 .. _Inrich 2005: https://www.researchgate.net/publication/227142556_Shortest_Path_Problems_with_Resource_Constraints

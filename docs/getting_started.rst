@@ -16,7 +16,7 @@ Altenatively, you can clone the latest development version of ``cspy`` from the 
 
 .. code-block:: none
 
-    git clone https://github.com/torres/cspy
+    git clone https://github.com/torressa/cspy
 
 
 .. _repository: https://github.com/torressa/cspy
