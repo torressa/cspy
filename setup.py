@@ -6,12 +6,13 @@ with open("README.md", "r") as fh:
 setuptools.setup(
     name="cspy-torressa",
     version="0.0.1",
-    description="A bidirectional algorithm for the Constrained Shortest Path",
+    description="A collection of algorithms for the (Resource) Constrained" +
+    "Shortest Path Problem",
     license="MIT",
     author="David Torres",
     author_email="d.torressanchez@lancs.ac.uk",
     keywords=["shortest path", "resource constrained shortest path",
-              "bidirectional algorithm"],
+              "bidirectional algorithm", "tabu search"],
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/torressa/cspy",

@@ -1,6 +1,5 @@
-cspy.check_and_preprocess
-=========================
+``cspy.check_and_preprocess``
+=============================
 
-.. automodule:: cspy.preprocessing.check_and_preprocess
-    :inherited-members:
-    :private-members:
+.. autofunction:: cspy.check_and_preprocess
+	

@@ -1,6 +1,6 @@
-cspy.BiDirectional
-==================
+``cspy.BiDirectional``
+======================
 
-.. automodule:: cspy.algorithms.bidirectional
-    :inherited-members:
-    :private-members:
+.. automodule:: cspy.BiDirectional
+	:members:
+   	:undoc-members:

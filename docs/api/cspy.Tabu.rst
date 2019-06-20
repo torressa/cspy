@@ -1,6 +1,6 @@
-cspy.Tabu
-=========
+``cspy.Tabu``
+=============
 
-.. automodule:: cspy.algorithms.tabu
+.. automodule:: cspy.Tabu
     :inherited-members:
     :private-members:

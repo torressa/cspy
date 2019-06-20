@@ -7,7 +7,7 @@ tags:
   - Graph Theory
 authors:
   - name: David Torres Sanchez
-    orcid: 0000-0003-0872-7098
+    orcid: 0000-0002-2894-9432
     affiliation: 1 # (Multiple affiliations must be quoted)
 affiliations:
  - name: STOR-i, Lancaster University, UK.

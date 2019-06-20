@@ -23,37 +23,61 @@ class BiDirectional:
 
     Parameters
     ----------
-    G : object instance `nx.Digraph()`
-        must have `n_res` graph attribute and all edges must have `res_cost`
-        attribute.
+    ``G`` : object instance ``nx.Digraph()``
+        must have ``n_res`` graph attribute and all edges must have
+        ``res_cost`` attribute.
 
-    max_res : list of floats
-        [L, M_1, M_2, ..., M_nres] upper bound for resource usage.
-        We must have len(max_res) >= 2
+    ``max_res`` : list of floats
+        :math:`[L, M_1, M_2, ..., M_{n\_res}]`
+        upper bound for resource usage.
+        We must have ``len(max_res)`` :math:`\geq 2`
 
-    min_res : list of floats
-        [U, L_1, L_2, ..., L_nres] lower bounds for resource usage.
-        We must have len(min_res) == len(max_res) >= 2
+    ``min_res`` : list of floats
+        :math:`[U, L_1, L_2, ..., L_{n\_res}]` lower bounds for resource usage.
+        We must have ``len(min_res)`` :math:`=` ``len(max_res)`` :math:`\geq 2`
 
-    direc_in : string, optional
+    ``direc_in`` : string, optional
         preferred search direction.
         Either 'both','forward', or, 'backward'. Default : 'both'.
 
-    preprocess : bool, optional
+    ``preprocess`` : bool, optional
         enables preprocessing routine.
 
-    REF_forward, REF_backward : functions, optional
+    ``REF_forward``, ``REF_backward`` : functions, optional
         non-additive resource extension functions.
 
     Returns
     -------
-    joined_path : list
+    list
         nodes in shortest path obtained.
 
     Notes
     -----
-    The input graph must have a `n_res` attribute in the input graph has
-    to be >= 2. The edges in the graph must all have a `res_cost` attribute.
+    The input graph must have a ``n_res`` attribute in the input graph has
+    to be :math:`\geq 2`. The edges in the graph must all have a ``res_cost``
+    attribute.
+
+    Example
+    -------
+    To run the algorithm, create a :class:`BiDirectional` instance and call
+    ``run``.
+
+    .. code-block:: python
+
+        >>> import cspy
+        >>> import networkx as nx
+        >>> G = nx.DiGraph(directed=True, n_res=2)
+        >>> G.add_edge('Source', 'A', res_cost=[1, 2], weight=0)
+        >>> G.add_edge('A', 'B', res_cost=[1, 0.3], weight=0)
+        >>> G.add_edge('A', 'C', res_cost=[1, 0.1], weight=0)
+        >>> G.add_edge('B', 'C', res_cost=[1, 3], weight=-10)
+        >>> G.add_edge('B', 'Sink', res_cost=[1, 2], weight=10)
+        >>> G.add_edge('C', 'Sink', res_cost=[1, 10], weight=0)
+        >>> max_res, min_res = [4, 20], [1, 0]
+        >>> algObj = BiDirectional(G, max_res, min_res, direction='both')
+        >>> path = algObj.run()
+        >>> print(path)
+        ['Source', 'A', 'B', 'C', 'Sink']
 
     """
 
@@ -209,9 +233,9 @@ class BiDirectional:
     # DOMINANCE #
     #############
     def check_dominance(self, direc):
-        # For all labels, check if it is dominated, or itself dominates other
-        # labels. If this is found to be the case, the dominated label is
-        # removed.
+        """ For all labels, check if it is dominated, or itself dominates other
+        labels. If this is found to be the case, the dominated label is
+        removed """
         for sub_dict in ({k: v} for k, v in self.unprocessed[direc].items()):
             k = list(sub_dict.keys())[0]  # call dict_keys object as a list
             for label in [key for v in sub_dict.values() for key in v.keys()]:
@@ -228,19 +252,34 @@ class BiDirectional:
     # PATH CHECKING #
     #################
     def join_paths(self):
-        # check if paths are eligible to be joined. Joining phase as presented
-        # in Righini2006
+        # check if paths are eligible to be joined
+
+        def _check_paths():
+            if (self.finalpath['forward'][-1] == 'Sink' and
+                    self.finalpath['backward'][0] != 'Source'):
+                # if only backward path
+                return self.finalpath['forward']
+            elif (self.finalpath['backward'][0] == 'Source' and
+                  self.finalpath['forward'][-1] != 'Sink'):
+                # if only backward path
+                return self.finalpath['backward']
+            elif (self.finalpath['backward'][0] == 'Source' and
+                  self.finalpath['forward'][-1] == 'Sink'):
+                # if both full paths
+                return random.choice(
+                    [self.finalpath['forward'], self.finalpath['backward']])
+            elif not self.Label['forward'] or not self.Label['backward']:
+                # if combination of the two is required
+                return list(OrderedDict.fromkeys(
+                    self.finalpath['forward'] + self.finalpath['backward']))
+            else:
+                return
+
         if self.direc_in == 'both':
             if self.finalpath['forward'] and self.finalpath['backward']:
                 # reverse order for backward path
                 self.finalpath['backward'].reverse()
-                return list(OrderedDict.fromkeys(
-                    self.finalpath['forward'] + self.finalpath['backward']))
-            elif self.finalpath['forward'] and not self.finalpath['backward']:
-                return self.finalpath['forward']
-            elif not self.finalpath['forward'] and self.finalpath['backward']:
-                self.finalpath['backward'].reverse()
-                return self.finalpath['backward']
+                return _check_paths()
         else:
             if self.direc_in == 'backward':
                 self.finalpath[self.direc_in].reverse()

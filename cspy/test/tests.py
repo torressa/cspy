@@ -39,6 +39,17 @@ class TestsBasic(unittest.TestCase):
         self.H.add_edge('C', 'D', res_cost=[1, 0.1], weight=0)
         self.H.add_edge('D', 'Sink', res_cost=[1, 0.1], weight=0)
 
+        self.J = nx.DiGraph(directed=True, n_res=2)
+        self.J.add_edge('Source', 'A', res_cost=[1, 1], weight=1)
+        self.J.add_edge('Source', 'B', res_cost=[1, 1], weight=1)
+        self.J.add_edge('A', 'C', res_cost=[1, 1], weight=1)
+        self.J.add_edge('B', 'C', res_cost=[2, 1], weight=-1)
+        self.J.add_edge('C', 'D', res_cost=[1, 1], weight=-1)
+        self.J.add_edge('D', 'E', res_cost=[1, 1], weight=1)
+        self.J.add_edge('D', 'F', res_cost=[1, 1], weight=1)
+        self.J.add_edge('F', 'Sink', res_cost=[1, 1], weight=1)
+        self.J.add_edge('E', 'Sink', res_cost=[1, 1], weight=1)
+
     def testBothDirections(self):
         # Find shortest path of simple test digraph
         path = BiDirectional(self.G, self.max_res, self.min_res).run()
@@ -80,8 +91,8 @@ class TestsBasic(unittest.TestCase):
         self.assertEqual(path, ['Source', 'A', 'C', 'D', 'Sink'])
 
     def testTabu(self):
-        path, _ = Tabu(self.G, self.max_res, self.min_res).run()
-        self.assertEqual(path, ['Source', 'A', 'B', 'C', 'Sink'])
+        path = Tabu(self.J, [5, 5], [0, 0]).run()
+        self.assertEqual(path, ['Source', 'A', 'C', 'D', 'E', 'Sink'])
 
 
 if __name__ == '__main__':

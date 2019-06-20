@@ -1,6 +1,5 @@
-cspy.Label
-==========
+``cspy.Label``
+==============
 
-.. automodule:: cspy.Label
-    :inherited-members:
-    :private-members:
+.. autoclass:: cspy.Label
+	

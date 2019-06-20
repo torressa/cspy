@@ -3,6 +3,8 @@ import networkx as nx
 
 
 def check(G, max_res=None, min_res=None, direc_in=None):
+    """Check whether inputs have the appropriate attributes and
+    are of the appropriate types."""
 
     def _check_res():
         if isinstance(max_res, list) and isinstance(min_res, list):
@@ -24,8 +26,11 @@ def check(G, max_res=None, min_res=None, direc_in=None):
 
     def _check_graph_attr():
         """Checks whether input graph has n_res attribute"""
-        if 'n_res' not in G.graph:
-            raise Exception("Input graph must have 'n_res' attribute.")
+        if isinstance(G, nx.DiGraph):
+            if 'n_res' not in G.graph:
+                raise Exception("Input graph must have 'n_res' attribute.")
+        else:
+            raise Exception("Input must be a nx.Digraph()")
 
     def _check_edge_attr():
         """Checks whether edges in input graph have res_cost attribute"""
@@ -45,6 +50,9 @@ def check(G, max_res=None, min_res=None, direc_in=None):
     # Select checks to perform based on the input provided
     if max_res and min_res and direc_in:
         check_funcs = [_check_res, _check_direction, _check_graph_attr,
+                       _check_edge_attr, _check_path]
+    elif max_res and min_res:
+        check_funcs = [_check_res, _check_graph_attr,
                        _check_edge_attr, _check_path]
     else:
         check_funcs = [_check_path]
@@ -66,17 +74,28 @@ def prune_graph(G, max_res, min_res):
     Parameters
     ----------
 
-    G : object instance `nx.Digraph()`
-        must have `n_res` graph attribute and all edges must have `res_cost`
-        attribute.
+    ``G`` : object instance ``nx.Digraph()``
+        must have ``n_res`` graph attribute and all edges must have
+        ``res_cost`` attribute.
 
-    max_res : list of floats
-        [L, M_1, M_2, ..., M_nres] upper bound for resource usage.
-        We must have len(max_res) >= 2
+    ``max_res`` : list of floats
+        :math:`[L, M_1, M_2, ..., M_{n\_res}]`
+        upper bound for resource usage.
+        We must have ``len(max_res)`` :math:`\geq 2`
 
-    min_res : list of floats
-        [U, L_1, L_2, ..., L_nres] lower bounds for resource usage.
-        We must have len(min_res) == len(max_res) >= 2
+    ``min_res`` : list of floats
+        :math:`[U, L_1, L_2, ..., L_{n\_res}]` lower bounds for resource usage.
+        We must have ``len(min_res)`` :math:`=` ``len(max_res)`` :math:`\geq 2`
+
+    Raises
+    ------
+
+    Raises exceptions if incorrect input is given. If multiple exceptions are
+    raised, and exception with a list of exceptions is raised.
+
+    Returns
+    -------
+    Preprocessed graph ``G``
     """
 
     def _check_resource(r):
@@ -119,7 +138,8 @@ def prune_graph(G, max_res, min_res):
     return G
 
 
-def check_and_preprocess(preprocess, G, max_res, min_res, direc):
+def check_and_preprocess(preprocess, G, max_res=None, min_res=None,
+                         direction=None):
     """
     Checks whether inputs and the graph are of the appropriate types and
     have the required properties.
@@ -127,27 +147,34 @@ def check_and_preprocess(preprocess, G, max_res, min_res, direc):
 
     Parameters
     ----------
-    preprocess : bool, optional
+    ``preprocess`` : bool
         enables preprocessing routine.
 
-    G : object instance `nx.Digraph()`
-        must have `n_res` graph attribute and all edges must have `res_cost`
-        attribute.
+    ``G`` : object instance ``nx.Digraph()``
+        must have ``n_res`` graph attribute and all edges must have
+        ``res_cost`` attribute.
 
-    max_res : list of floats
-        [L, M_1, M_2, ..., M_nres] upper bound for resource usage.
-        We must have len(max_res) >= 2
+    ``max_res`` : list of floats, optional
+        :math:`[L, M_1, M_2, ..., M_{n\_res}]`
+        upper bound for resource usage.
+        We must have ``len(max_res)`` :math:`\geq 2`
 
-    min_res : list of floats
-        [U, L_1, L_2, ..., L_nres] lower bounds for resource usage.
-        We must have len(min_res) == len(max_res) >= 2
+    ``min_res`` : list of floats, optional
+        :math:`[U, L_1, L_2, ..., L_{nres}]` lower bounds for resource usage.
+        We must have ``len(min_res)`` :math:`=` ``len(max_res)`` :math:`\geq 2`
 
-    direc : string
-        preferred search direction.
-        Either 'both','forward', or, 'backward'. Default : 'both'.
+    ``direction`` : string, optional
+        preferred search direction. Either 'both','forward', or, 'backward'.
+        Default : 'both'.
+
+    :return: If ``preprocess``, returns preprocessed graph ``G`` if no
+        exceptions are raised, otherwise doesn't return anything.
+
+    :raises: Raises exceptions if incorrect input is given. If multiple exceptions are
+        raised, and exception with a list of exceptions is raised.
     """
-    check(G, max_res, min_res, direc)
+    check(G, max_res, min_res, direction)
     if preprocess:
         G = prune_graph(G, max_res, min_res)
-    check(G)
-    return G
+        check(G)
+        return G
