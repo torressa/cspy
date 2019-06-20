@@ -1,5 +1,5 @@
-``cspy.BiDirectional``
-======================
+cspy.BiDirectional
+==================
 
 .. automodule:: cspy.BiDirectional
 	:members:

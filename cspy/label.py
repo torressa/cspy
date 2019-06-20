@@ -7,16 +7,16 @@ class Label(object):
     Parameters
     -----------
 
-    ``weight`` : float
+    weight : float
         cumulative edge weight
 
-    ``node`` : string
+    node : string
         name of last node visited
 
-    ``res`` : list
+    res : list
         cumulative edge resource consumption
 
-    ``path`` : list
+    path : list
         all nodes in the path"""
 
     _REF_forward, _REF_backward = None, None

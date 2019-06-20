@@ -1,5 +1,5 @@
-``cspy.Label``
-==============
+cspy.Label
+==========
 
 .. autoclass:: cspy.Label
 	

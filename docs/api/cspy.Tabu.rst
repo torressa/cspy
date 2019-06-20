@@ -1,5 +1,5 @@
-``cspy.Tabu``
-=============
+cspy.Tabu
+=========
 
 .. automodule:: cspy.Tabu
     :inherited-members:

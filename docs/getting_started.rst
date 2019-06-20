@@ -4,7 +4,7 @@ Getting started
 Installation
 ------------
 
-You can install the latest release of ``cspy`` from PyPi_ by:
+You can install the latest release of `cspy` from PyPi_ by:
 
 .. code-block:: none
 
@@ -12,7 +12,7 @@ You can install the latest release of ``cspy`` from PyPi_ by:
 
 .. _PyPi: https://pypi.python.org/pypi/cspy
 
-Altenatively, you can clone the latest development version of ``cspy`` from the repository_:
+Altenatively, you can clone the latest development version of `cspy` from the repository_:
 
 .. code-block:: none
 
@@ -24,6 +24,6 @@ Altenatively, you can clone the latest development version of ``cspy`` from the 
 
 Requirements
 ************
-The requirements for running ``cspy`` are:
+The requirements for running `cspy` are:
 
  - networkx: Graph manipulation and creation.

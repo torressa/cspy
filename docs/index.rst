@@ -1,7 +1,7 @@
-``cspy`` Documentation
+`cspy` Documentation
 ======================
 
-``cspy`` is an open source Python package that gathers some well-known algorithms to solve the resource constrained shortest path problem.
+`cspy` is an open source Python package that gathers some well-known algorithms to solve the resource constrained shortest path problem.
 
 The algorithms implemented include: Bidirectional Labelling Algorithm (with dynamic and static halfway points) (`Tilk 2017`_). This algorithm is a generalisation of the monodirectional labelling algorithm, which is also included. 
 
@@ -15,7 +15,7 @@ By setting different options when calling the algorithm, one can have up to four
 
 Features implemented include: generic resource extension functions (`Inrich 2005`_) (not restricted to additive resources), generic resource consumptions (not restricted to non-negative values), and, increased efficiency (when compared to other implementations of monodirectional algorithms).
 
-``cspy`` is installable via `pip` (see `Getting Started`_) or the source code is made available here_.
+`cspy` is installable via `pip` (see `Getting Started`_) or the source code is made available here_.
 
 .. _here: https://github.com/torressa/cspy
 .. _PyPI: https://pypi.org/project/cspy
