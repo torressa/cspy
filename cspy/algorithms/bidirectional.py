@@ -30,11 +30,11 @@ class BiDirectional:
     max_res : list of floats
         :math:`[L, M_1, M_2, ..., M_{n\_res}]`
         upper bound for resource usage.
-        We must have `len(max_res)` :math:`\geq 2`
+        We must have ``len(max_res)`` :math:`\geq 2`
 
     min_res : list of floats
         :math:`[U, L_1, L_2, ..., L_{n\_res}]` lower bounds for resource usage.
-        We must have `len(min_res)` :math:`=` `len(max_res)` :math:`\geq 2`
+        We must have ``len(min_res)`` :math:`=` ``len(max_res)`` :math:`\geq 2`
 
     direc_in : string, optional
         preferred search direction.
@@ -53,9 +53,23 @@ class BiDirectional:
 
     Notes
     -----
-    The input graph must have a `n_res` attribute in the input graph has
-    to be :math:`\geq 2`. The edges in the graph must all have a `res_cost`
+    The input graph must have a ``n_res`` attribute in the input graph has
+    to be :math:`\geq 2`. The edges in the graph must all have a ``res_cost``
     attribute.
+
+    According to the inputs, four different algorithms can be implemented:
+
+    - HF = HB > U or ``direc_in`` = 'forward': Monodirectional forward
+    labeling algorithm
+
+    - L < HF = HB < U: Bidirectional labeling algorithm with static
+    halfway point
+
+    - HF = HB < L or ``direc_in`` == 'backward': Monodirectional backward
+    labeling algorithm'
+
+    - U = HF > HB = L: Bidirectional labeling algorithm with
+    dynamic halfway point.
 
     Example
     -------

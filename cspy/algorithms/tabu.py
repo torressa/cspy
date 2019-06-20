@@ -18,14 +18,14 @@ class Tabu:
         must have ``n_res`` graph attribute and all edges must have
         ``res_cost`` attribute.
 
-    max_res : list of floats
+     max_res : list of floats
         :math:`[L, M_1, M_2, ..., M_{n\_res}]`
         upper bound for resource usage.
-        We must have `len(max_res)` :math:`\geq 2`
+        We must have ``len(max_res)`` :math:`\geq 2`
 
     min_res : list of floats
         :math:`[U, L_1, L_2, ..., L_{n\_res}]` lower bounds for resource usage.
-        We must have `len(min_res)` :math:`=` `len(max_res)` :math:`\geq 2`
+        We must have ``len(min_res)`` :math:`=` ``len(max_res)`` :math:`\geq 2`
 
     Returns
     -------
@@ -34,7 +34,7 @@ class Tabu:
 
     Notes
     -----
-    The input graph must have a `n_res` attribute in the input graph has
+    The input graph must have a ``n_res`` attribute in the input graph has
     to be :math:`\geq 2`. The edges in the graph must all have a `res_cost`
     attribute.
 
