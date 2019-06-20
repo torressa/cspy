@@ -1,5 +1,7 @@
 [![CircleCI](https://circleci.com/gh/torressa/cspy/tree/master.svg?style=svg&circle-token=910e28b03dd0d32967fae038a3cf28b6cdf56334)](https://circleci.com/gh/torressa/cspy/tree/master)
 [![codecov](https://codecov.io/gh/torressa/cspy/branch/master/graph/badge.svg?token=24tyrWinNT)](https://codecov.io/gh/torressa/cspy)
+[![Documentation Status](https://readthedocs.org/projects/cspy/badge/?version=latest)](https://cspy.readthedocs.io/en/latest/?badge=latest)
+[![Requirements Status](https://requires.io/github/torressa/cspy/requirements.svg?branch=master)](https://requires.io/github/torressa/cspy/requirements/?branch=master)
 
 cspy
 ====
