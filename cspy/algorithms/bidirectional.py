@@ -59,17 +59,10 @@ class BiDirectional:
 
     According to the inputs, four different algorithms can be implemented:
 
-    - HF = HB > U or ``direc_in`` = 'forward': Monodirectional forward
-    labeling algorithm
-
-    - L < HF = HB < U: Bidirectional labeling algorithm with static
-    halfway point
-
-    - HF = HB < L or ``direc_in`` == 'backward': Monodirectional backward
-    labeling algorithm'
-
-    - U = HF > HB = L: Bidirectional labeling algorithm with
-    dynamic halfway point.
+    - HF = HB > U or ``direc_in`` = 'forward': Monodirectional forward labeling algorithm
+    - L < HF = HB < U: Bidirectional labeling algorithm with static halfway point
+    - HF = HB < L or ``direc_in`` == 'backward': Monodirectional backward labeling algorithm
+    - U = HF > HB = L: Bidirectional labeling algorithm with dynamic halfway point.
 
     Example
     -------
