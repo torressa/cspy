@@ -1,54 +1,15 @@
 import logging
 import networkx as nx
+from cspy.checks import *
 
 
-def check(G, max_res=None, min_res=None, direc_in=None):
+def check(G, max_res=None, min_res=None, direction=None):
     """Check whether inputs have the appropriate attributes and
     are of the appropriate types."""
 
-    def _check_res():
-        if isinstance(max_res, list) and isinstance(min_res, list):
-            if len(max_res) == len(min_res) >= 2:
-                if (all(isinstance(i, (float, int)) for i in max_res) and
-                        all(isinstance(i, (float, int)) for i in min_res)):
-                    pass
-                else:
-                    raise Exception("Elements of input lists must be numbers")
-            else:
-                raise Exception("Input lists have to be equal length >= 2")
-        else:
-            raise Exception("Inputs have to be lists with length >= 2")
-
-    def _check_direction():
-        if direc_in not in ['forward', 'backward', 'both']:
-            raise Exception(
-                "Input direction has to be 'forward', 'backward', or 'both'")
-
-    def _check_graph_attr():
-        """Checks whether input graph has n_res attribute"""
-        if isinstance(G, nx.DiGraph):
-            if 'n_res' not in G.graph:
-                raise Exception("Input graph must have 'n_res' attribute.")
-        else:
-            raise Exception("Input must be a nx.Digraph()")
-
-    def _check_edge_attr():
-        """Checks whether edges in input graph have res_cost attribute"""
-        if not all('res_cost' in edge[2] for edge in G.edges(data=True)):
-            raise Exception(
-                "Input graph must have edges with 'res_cost' attribute.")
-
-    def _check_path():
-        """Checks whether a 'Source' -> 'Sink' path exists.
-        Also covers nodes missing and other standard networkx exceptions"""
-        try:
-            nx.has_path(G, 'Source', 'Sink')
-        except nx.NetworkXException as e:
-            raise Exception("An error occured: {}".format(e))
-
     errors = []
     # Select checks to perform based on the input provided
-    if max_res and min_res and direc_in:
+    if max_res and min_res and direction:
         check_funcs = [_check_res, _check_direction, _check_graph_attr,
                        _check_edge_attr, _check_path]
     elif max_res and min_res:
@@ -59,7 +20,7 @@ def check(G, max_res=None, min_res=None, direc_in=None):
     # Check all functions in check_funcs
     for func in check_funcs:
         try:
-            func()
+            func(G, max_res, min_res, direction)
         except Exception as e:
             errors.append(e)  # if check fails save error message
     if errors:
@@ -74,13 +35,13 @@ def prune_graph(G, max_res, min_res):
     def _check_resource(r):
         # check resource r's feasibility along a path
 
-        def _get_weight(i, j, attr_dict):
+        def __get_weight(i, j, attr_dict):
             # returns number to use as weight for the algorithm
             return attr_dict['res_cost'][r]
 
         # Get paths from source to all other nodes
         length, path = nx.single_source_bellman_ford(
-            G, 'Source', weight=_get_weight)
+            G, 'Source', weight=__get_weight)
         try:
             # If any path violates the resource upper or lower bounds
             # then, add the problematic node to the dictionary
