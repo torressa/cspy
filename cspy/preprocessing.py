@@ -69,34 +69,7 @@ def check(G, max_res=None, min_res=None, direc_in=None):
 
 
 def prune_graph(G, max_res, min_res):
-    """Removes nodes that cannot be reached due to resource limits.
-
-    Parameters
-    ----------
-
-    G : object instance :class:`nx.Digraph()`
-        must have ``n_res`` graph attribute and all edges must have
-        ``res_cost`` attribute.
-
-     max_res : list of floats
-        :math:`[L, M_1, M_2, ..., M_{n\_res}]`
-        upper bound for resource usage.
-        We must have ``len(max_res)`` :math:`\geq 2`
-
-    min_res : list of floats
-        :math:`[U, L_1, L_2, ..., L_{n\_res}]` lower bounds for resource usage.
-        We must have ``len(min_res)`` :math:`=` ``len(max_res)`` :math:`\geq 2`
-
-    Raises
-    ------
-
-    Raises exceptions if incorrect input is given. If multiple exceptions are
-    raised, and exception with a list of exceptions is raised.
-
-    Returns
-    -------
-    Preprocessed graph G
-    """
+    """Removes nodes that cannot be reached due to resource limits."""
 
     def _check_resource(r):
         # check resource r's feasibility along a path
@@ -147,31 +120,32 @@ def check_and_preprocess(preprocess, G, max_res=None, min_res=None,
 
     Parameters
     ----------
-    ``preprocess`` : bool
+    preprocess : bool
         enables preprocessing routine.
 
-    ``G`` : object instance ``nx.Digraph()``
+    G : object instance :class:`nx.Digraph()`
         must have ``n_res`` graph attribute and all edges must have
         ``res_cost`` attribute.
 
-    ``max_res`` : list of floats, optional
+    max_res : list of floats, optional
         :math:`[L, M_1, M_2, ..., M_{n\_res}]`
         upper bound for resource usage.
         We must have ``len(max_res)`` :math:`\geq 2`
 
-    ``min_res`` : list of floats, optional
+    min_res : list of floats, optional
         :math:`[U, L_1, L_2, ..., L_{nres}]` lower bounds for resource usage.
         We must have ``len(min_res)`` :math:`=` ``len(max_res)`` :math:`\geq 2`
 
-    ``direction`` : string, optional
+    direction : string, optional
         preferred search direction. Either 'both','forward', or, 'backward'.
         Default : 'both'.
 
     :return: If ``preprocess``, returns preprocessed graph ``G`` if no
         exceptions are raised, otherwise doesn't return anything.
 
-    :raises: Raises exceptions if incorrect input is given. If multiple exceptions are
-        raised, and exception with a list of exceptions is raised.
+    :raises: Raises exceptions if incorrect input is given.
+        If multiple exceptions are raised, and exception with a list of
+        exceptions is raised.
     """
     check(G, max_res, min_res, direction)
     if preprocess:

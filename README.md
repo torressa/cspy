@@ -2,6 +2,7 @@
 [![codecov](https://codecov.io/gh/torressa/cspy/branch/master/graph/badge.svg?token=24tyrWinNT)](https://codecov.io/gh/torressa/cspy)
 [![Documentation Status](https://readthedocs.org/projects/cspy/badge/?version=latest)](https://cspy.readthedocs.io/en/latest/?badge=latest)
 [![Requirements Status](https://requires.io/github/torressa/cspy/requirements.svg?branch=master)](https://requires.io/github/torressa/cspy/requirements/?branch=master)
+[![BCH compliance](https://bettercodehub.com/edge/badge/torressa/cspy?branch=master)](https://bettercodehub.com/)
 
 cspy
 ====
