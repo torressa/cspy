@@ -79,7 +79,7 @@ class Label(object):
             return self.check_geq(self.res, min_res, "gt")
 
     @staticmethod
-    def check_geq(l1, l2, inequality="ge"):
+    def check_geq(l1, l2, inequality="geq"):
         """Determines if all elements of list l1 either >=
         or > than those in list l2.
 

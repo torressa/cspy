@@ -112,4 +112,4 @@ def check_and_preprocess(preprocess, G, max_res=None, min_res=None,
     if preprocess:
         G = prune_graph(G, max_res, min_res)
         check(G)
-        return G
+    return G

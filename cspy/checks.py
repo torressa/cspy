@@ -12,16 +12,16 @@ def _check_res(G, max_res, min_res, direction):
                     all(isinstance(i, (float, int)) for i in min_res)):
                 pass
             else:
-                raise Exception("Elements of input lists must be numbers")
+                raise TypeError("Elements of input lists must be numbers")
         else:
-            raise Exception("Input lists have to be equal length >= 2")
+            raise TypeError("Input lists have to be equal length >= 2")
     else:
-        raise Exception("Inputs have to be lists with length >= 2")
+        raise TypeError("Inputs have to be lists with length >= 2")
 
 
 def _check_direction(G, max_res, min_res, direction):
     if direction not in ['forward', 'backward', 'both']:
-        raise Exception(
+        raise TypeError(
             "Input direction has to be 'forward', 'backward', or 'both'")
 
 
@@ -29,15 +29,15 @@ def _check_graph_attr(G, max_res, min_res, direction):
     """Checks whether input graph has n_res attribute"""
     if isinstance(G, nx.DiGraph):
         if 'n_res' not in G.graph:
-            raise Exception("Input graph must have 'n_res' attribute.")
+            raise TypeError("Input graph must have 'n_res' attribute.")
     else:
-        raise Exception("Input must be a nx.Digraph()")
+        raise TypeError("Input must be a nx.Digraph()")
 
 
 def _check_edge_attr(G, max_res, min_res, direction):
     """Checks whether edges in input graph have res_cost attribute"""
     if not all('res_cost' in edge[2] for edge in G.edges(data=True)):
-        raise Exception(
+        raise TypeError(
             "Input graph must have edges with 'res_cost' attribute.")
 
 
