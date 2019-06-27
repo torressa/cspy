@@ -259,37 +259,34 @@ class BiDirectional:
     #################
     def join_paths(self):
         # check if paths are eligible to be joined
-
-        def _check_paths():
-            if (self.finalpath['forward'][-1] == 'Sink' and
-                    self.finalpath['backward'][0] != 'Source'):
-                # if only backward path
-                return self.finalpath['forward']
-            elif (self.finalpath['backward'][0] == 'Source' and
-                  self.finalpath['forward'][-1] != 'Sink'):
-                # if only backward path
-                return self.finalpath['backward']
-            elif (self.finalpath['backward'][0] == 'Source' and
-                  self.finalpath['forward'][-1] == 'Sink'):
-                # if both full paths
-                return random.choice(
-                    [self.finalpath['forward'], self.finalpath['backward']])
-            elif not self.Label['forward'] or not self.Label['backward']:
-                # if combination of the two is required
-                return list(OrderedDict.fromkeys(
-                    self.finalpath['forward'] + self.finalpath['backward']))
-            else:
-                return
-
-        if self.direc_in == 'both':
-            if self.finalpath['forward'] and self.finalpath['backward']:
+        if self.direc_in == 'both' and (
+                self.finalpath['forward'] and self.finalpath['backward']):
                 # reverse order for backward path
-                self.finalpath['backward'].reverse()
-                return _check_paths()
+            self.finalpath['backward'].reverse()
+            return self._check_paths()
         else:
             if self.direc_in == 'backward':
                 self.finalpath[self.direc_in].reverse()
             return self.finalpath[self.direc_in]
+
+    def _check_paths(self):
+        if (self.finalpath['forward'][-1] == 'Sink' and
+                self.finalpath['backward'][0] != 'Source'):
+            # if only forward path
+            return self.finalpath['forward']
+        elif (self.finalpath['backward'][0] == 'Source' and
+              self.finalpath['forward'][-1] != 'Sink'):
+            # if only backward path
+            return self.finalpath['backward']
+        elif (self.finalpath['backward'][0] == 'Source' and
+              self.finalpath['forward'][-1] == 'Sink'):
+            # if both full paths
+            return random.choice(
+                [self.finalpath['forward'], self.finalpath['backward']])
+        else:
+            # if combination of the two is required
+            return list(OrderedDict.fromkeys(
+                self.finalpath['forward'] + self.finalpath['backward']))
 
     ###########################
     # Classify Algorithm Type #

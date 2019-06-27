@@ -24,8 +24,7 @@ def check(G, max_res=None, min_res=None, direction=None):
         except Exception as e:
             errors.append(e)  # if check fails save error message
     if errors:
-        # if any check has failed raise an exception with all the error
-        # messages
+        # if any check has failed raise an exception with all the errors
         raise Exception('\n'.join('{}'.format(item) for item in errors))
 
 
