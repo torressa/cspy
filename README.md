@@ -15,7 +15,7 @@ The algorithms implemented include:
  - [X] Monodirectional backward labeling algorithm;
  - [X] Bidirectional labeling algorithm with static halfway point;
  - [X] Bidirectional labeling algorithm with dynamic halfway point [1];
- - [ ] Heuristic Tabu search [2].
+ - [X] Heuristic Tabu search [2].
 
 Features implemented include: generic resource extension functions (not restricted to additive resources), generic resource consumptions (not restricted to non-negative values), and, increased efficiency (when compared to other implementations of monodirectional algorithms) [3].
 
@@ -24,7 +24,7 @@ TODO
 ----
 
  - [ ] Implement generic resource extension functions for bidirectional algorithm
- - [ ] Tabu clean up
+ - [X] Tabu clean up
  
 Changelog
 ---------

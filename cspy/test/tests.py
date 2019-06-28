@@ -4,10 +4,11 @@
 
 import sys
 import unittest
-import networkx as nx
+from networkx import DiGraph
 sys.path.append("../")
 from cspy.algorithms.bidirectional import BiDirectional
 from cspy.algorithms.tabu import Tabu
+from cspy.algorithms.greedy_elimination import GreedyElim
 from cspy.label import Label
 
 
@@ -18,7 +19,7 @@ class TestsBasic(unittest.TestCase):
     def setUp(self):
         self.max_res, self.min_res = [4, 20], [1, 0]
         # Create simple digraph to test algorithm
-        self.G = nx.DiGraph(directed=True, n_res=2)
+        self.G = DiGraph(directed=True, n_res=2)
         self.G.add_edge('Source', 'A', res_cost=[1, 2], weight=0)
         self.G.add_edge('A', 'B', res_cost=[1, 0.3], weight=0)
         self.G.add_edge('A', 'C', res_cost=[1, 0.1], weight=0)
@@ -27,11 +28,11 @@ class TestsBasic(unittest.TestCase):
         self.G.add_edge('C', 'Sink', res_cost=[1, 10], weight=0)
 
         # Create erratic digraph to test exception handling
-        self.E = nx.DiGraph(directed=True)
+        self.E = DiGraph(directed=True)
         self.E.add_edge('Source', 'A', weight=0)
 
         # Create digraph with negative resource costs with unreachable node 'B'
-        self.H = nx.DiGraph(directed=True, n_res=2)
+        self.H = DiGraph(directed=True, n_res=2)
         self.H.add_edge('Source', 'A', res_cost=[1, 2], weight=0)
         self.H.add_edge('A', 'C', res_cost=[-1, 0.3], weight=0)
         self.H.add_edge('A', 'B', res_cost=[-1, 3], weight=0)
@@ -39,15 +40,21 @@ class TestsBasic(unittest.TestCase):
         self.H.add_edge('C', 'D', res_cost=[1, 0.1], weight=0)
         self.H.add_edge('D', 'Sink', res_cost=[1, 0.1], weight=0)
 
-        # Create digraph with a resource infeasible path
-        self.J = nx.DiGraph(directed=True, n_res=2)
+        # Create digraph with a resource infeasible minimum cost path
+        self.J = DiGraph(directed=True, n_res=2)
         self.J.add_edge('Source', 'A', res_cost=[1, 1], weight=1)
         self.J.add_edge('Source', 'B', res_cost=[1, 1], weight=1)
+        self.J.add_edge('Source', 'C', res_cost=[10, 1], weight=100)
         self.J.add_edge('A', 'C', res_cost=[1, 1], weight=1)
+        self.J.add_edge('A', 'E', res_cost=[10, 1], weight=100)
+        self.J.add_edge('A', 'F', res_cost=[10, 1], weight=100)
         self.J.add_edge('B', 'C', res_cost=[2, 1], weight=-1)
+        self.J.add_edge('B', 'F', res_cost=[10, 1], weight=100)
+        self.J.add_edge('B', 'E', res_cost=[10, 1], weight=100)
         self.J.add_edge('C', 'D', res_cost=[1, 1], weight=-1)
         self.J.add_edge('D', 'E', res_cost=[1, 1], weight=1)
         self.J.add_edge('D', 'F', res_cost=[1, 1], weight=1)
+        self.J.add_edge('D', 'Sink', res_cost=[10, 10], weight=100)
         self.J.add_edge('F', 'Sink', res_cost=[1, 1], weight=1)
         self.J.add_edge('E', 'Sink', res_cost=[1, 1], weight=1)
 
@@ -60,12 +67,13 @@ class TestsBasic(unittest.TestCase):
     def testForward(self):
         # Find shortest path of simple test digraph
         path = BiDirectional(
-            self.G, [200, 20], self.min_res, 'forward').run()
+            self.G, [200, 20], self.min_res, direction='forward').run()
         self.assertEqual(path, ['Source', 'A', 'B', 'C', 'Sink'])
 
     def testBackward(self):
         # Find shortest path of simple test digraph
-        path = BiDirectional(self.G, self.max_res, [-1, 0], 'backward').run()
+        path = BiDirectional(self.G, self.max_res,
+                             [-1, 0], direction='backward').run()
         self.assertEqual(path, ['Source', 'A', 'B', 'C', 'Sink'])
 
     def testDominance(self):
@@ -95,6 +103,9 @@ class TestsBasic(unittest.TestCase):
     def testTabu(self):
         path = Tabu(self.J, [5, 5], [0, 0]).run()
         self.assertEqual(path, ['Source', 'A', 'C', 'D', 'E', 'Sink'])
+
+    def testGreedyElim(self):
+        self.assertRaises(Exception, GreedyElim.run, self.J, [5, 5], [0, 0])
 
 
 if __name__ == '__main__':

@@ -19,7 +19,7 @@ class expand:
 class BiDirectional:
     """
     Implementation of the bidirectional labeling algorithm with dynamic
-    half-way point Tilk 2017.
+    half-way point (Tilk et al 2017).
     Depending on the range of values for U, L, we get
     four different algorithms. See self.name_algorithm and Notes.
 
