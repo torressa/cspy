@@ -5,7 +5,9 @@ Here is the guide of how to use the `cspy` package.
 
 Initialisations
 ~~~~~~~~~~~~~~~
-In order to use `cspy` package and the algorithms within, first, one has to create a graph on which to apply the algorithms. To do so, we make use of the well-known `networkx` package. To be able to apply resource constraints, we have the following graph requirements 
+
+In order to use `cspy` package and the algorithms within, first, one has to create a graph on which to apply the algorithms. To do so, we make use of the well-known `networkx` package. To be able to apply resource constraints, we have the following graph requirements,
+
  - graph attribute `n_res` which determines the number of resources we are considering for the particular problem;
  - edge attributes `res_cost` and `weight`;
  - the graph must have a single `Source` and `Sink` nodes with no incoming or outgoing edges respectively.
@@ -19,6 +21,7 @@ Please see BiDirectional_ or Tabu_ for examples.
 
 Prerequirements
 ~~~~~~~~~~~~~~~
+
 For the :class:`BiDirectional` algorithm, there is a number of assumptions required (`Tilk 2017`_).
 
  1. The first resource must be a monotone resource;
