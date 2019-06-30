@@ -26,4 +26,6 @@ Requirements
 ************
 The requirements for running `cspy` are:
 
- - networkx: Graph manipulation and creation.
+ - networkx_: Graph manipulation and creation.
+
+.. _networkx: https://networkx.github.io/documentation/stable/
