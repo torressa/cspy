@@ -36,6 +36,7 @@ By setting different options when calling the algorithms, one can have up to fiv
 
    api/cspy.BiDirectional
    api/cspy.Tabu
+   api/cspy.GreedyElim
    api/cspy.check_and_preprocess
    api/cspy.Label
 

@@ -11,6 +11,8 @@ from cspy.algorithms.tabu import Tabu
 from cspy.algorithms.greedy_elimination import GreedyElim
 from cspy.label import Label
 
+# logging.basicConfig(level=logging.INFO)
+
 
 class TestsBasic(unittest.TestCase):
     """ Tests for finding the resource constrained shortest
@@ -60,20 +62,32 @@ class TestsBasic(unittest.TestCase):
 
     def testBothDirections(self):
         # Find shortest path of simple test digraph
-        path = BiDirectional(self.G, self.max_res, self.min_res,
-                             U=self.max_res[0], L=self.min_res[0]).run()
+        alg_obj = BiDirectional(self.G, self.max_res, self.min_res)
+        with self.assertLogs('cspy.algorithms.bidirectional') as cm:
+            alg_obj.name_algorithm(
+                U=self.max_res[0], L=self.min_res[0])
+        self.assertRegex(cm.output[0], 'dynamic')
+        path = alg_obj.run()
         self.assertEqual(path, ['Source', 'A', 'B', 'C', 'Sink'])
 
     def testForward(self):
         # Find shortest path of simple test digraph
-        path = BiDirectional(
-            self.G, [200, 20], self.min_res, direction='forward').run()
+        alg_obj = BiDirectional(
+            self.G, [200, 20], self.min_res, direction='forward')
+        with self.assertLogs('cspy.algorithms.bidirectional') as cm:
+            alg_obj.name_algorithm()
+        self.assertRegex(cm.output[0], 'forward')
+        path = alg_obj.run()
         self.assertEqual(path, ['Source', 'A', 'B', 'C', 'Sink'])
 
     def testBackward(self):
         # Find shortest path of simple test digraph
-        path = BiDirectional(self.G, self.max_res,
-                             [-1, 0], direction='backward').run()
+        alg_obj = BiDirectional(self.G, self.max_res,
+                                [-1, 0], direction='backward')
+        with self.assertLogs('cspy.algorithms.bidirectional') as cm:
+            alg_obj.name_algorithm()
+        self.assertRegex(cm.output[0], 'backward')
+        path = alg_obj.run()
         self.assertEqual(path, ['Source', 'A', 'B', 'C', 'Sink'])
 
     def testDominance(self):
@@ -90,7 +104,7 @@ class TestsBasic(unittest.TestCase):
     def testExceptions(self):
         # Check whether wrong input raises exceptions
         self.assertRaises(Exception, BiDirectional, self.E,
-                          'x', [1], 'up')
+                          'x', [1, 'foo'], 'up')
 
     def testNegativeEdges(self):
         # Check if negative resource costs work and whether

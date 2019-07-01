@@ -12,7 +12,7 @@ You can install the latest release of `cspy` from PyPi_ by:
 
 .. _PyPi: https://pypi.python.org/pypi/cspy
 
-Altenatively, you can clone the latest development version of `cspy` from the repository_:
+Alternatively, you can clone the latest development version of `cspy` from the repository_:
 
 .. code-block:: none
 

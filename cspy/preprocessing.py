@@ -2,6 +2,8 @@ import logging
 import networkx as nx
 from cspy.checks import *
 
+log = logging.getLogger(__name__)
+
 
 def check(G, max_res=None, min_res=None, direction=None):
     """Check whether inputs have the appropriate attributes and
@@ -66,7 +68,7 @@ def prune_graph(G, max_res, min_res):
             key: val for key, val in nodes_to_remove.items()
             if key != 'Source' or key != 'Sink'}
         G.remove_nodes_from(nodes_to_remove)
-        logging.info("[{0}] Removed {1} nodes".format(
+        log.info("[{0}] Removed {1} nodes".format(
             __name__, len(nodes_to_remove)))
     return G
 

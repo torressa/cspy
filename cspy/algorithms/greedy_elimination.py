@@ -10,8 +10,10 @@ from cspy.preprocessing import check
 
 class GreedyElim:
     """
-    Simple heuristic algorithm for the (resource) constrained shortest
-    path problem.
+    Simple Greedy elimination algorithm for the (resource) constrained shortest
+    path problem. The algorithms solves a standard shortest path problem and
+    eliminates resource infeasible edges iteratively until a resource feasible
+    path is found.
 
     Parameters
     ----------
@@ -19,19 +21,25 @@ class GreedyElim:
         must have ``n_res`` graph attribute and all edges must have
         ``res_cost`` attribute.
 
-     max_res : list of floats
-        :math:`[L, M_1, M_2, ..., M_{n\_res}]`
-        upper bound for resource usage.
+    max_res : list of floats
+        :math:`[H_F, M_1, M_2, ..., M_{n\_res}]` upper bounds for resource
+        usage (including initial forward stopping point).
         We must have ``len(max_res)`` :math:`\geq 2`
 
     min_res : list of floats
-        :math:`[U, L_1, L_2, ..., L_{n\_res}]` lower bounds for resource usage.
+        :math:`[H_B, L_1, L_2, ..., L_{n\_res}]` lower bounds for resource
+        usage (including initial backward stopping point).
         We must have ``len(min_res)`` :math:`=` ``len(max_res)`` :math:`\geq 2`
 
     Returns
     -------
     path : list
         nodes in shortest path obtained.
+
+    Raises
+    ------
+    Exception
+        if no resource feasible path is found
 
     Notes
     -----

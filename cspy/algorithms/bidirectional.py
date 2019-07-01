@@ -11,6 +11,8 @@ from collections import OrderedDict
 from cspy.label import Label
 from cspy.preprocessing import check_and_preprocess
 
+log = logging.getLogger(__name__)
+
 
 class expand:
     pass
@@ -98,7 +100,7 @@ class BiDirectional:
 
     """
 
-    def __init__(self, G, max_res, min_res, U=None, L=None, direction='both',
+    def __init__(self, G, max_res, min_res, direction='both',
                  preprocess=True, REF_forward=add, REF_backward=sub):
         # Check inputs and preprocess G unless option disabled
         self.G = check_and_preprocess(
@@ -118,7 +120,7 @@ class BiDirectional:
         Label._REF_forward = REF_forward
         Label._REF_backward = REF_backward
         # Log algorithm type
-        self.name_algorithm(U, L)
+        # self.name_algorithm(U, L)
 
     def run(self):
         while self.Label['forward'] or self.Label['backward']:
@@ -291,16 +293,16 @@ class BiDirectional:
     ###########################
     # Classify Algorithm Type #
     ###########################
-    def name_algorithm(self, U, L):
-        if U and L:
+    def name_algorithm(self, U=None, L=None):
+        if (U and L) or self.direc_in != "both":
             HF, HB = self.max_res[0], self.min_res[0]
             if HF == HB > U or self.direc_in == 'forward':
-                logging.info('Monodirectional forward labeling algorithm')
-            elif L < HF == HB < U:
-                logging.info('Bidirectional labeling algorithm with' +
-                             ' static halfway point')
+                log.info('Monodirectional forward labeling algorithm')
             elif HF == HB < L or self.direc_in == 'backward':
-                logging.info('Monodirectional backward labeling algorithm')
+                log.info('Monodirectional backward labeling algorithm')
+            elif L < HF == HB < U:
+                log.info('Bidirectional labeling algorithm with' +
+                         ' static halfway point')
             elif U == HF > HB == L:
-                logging.info('Bidirectional labeling algorithm with' +
-                             ' dynamic halfway point.')
+                log.info('Bidirectional labeling algorithm with' +
+                         ' dynamic halfway point.')
