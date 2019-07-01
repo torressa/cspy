@@ -1,6 +1,3 @@
-"""TODO:
- -  write tests for Tabu algorithm
-"""
 
 import sys
 import unittest

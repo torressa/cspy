@@ -41,14 +41,6 @@ class BiDirectional:
         usage (including initial backward stopping point).
         We must have ``len(min_res)`` :math:`=` ``len(max_res)`` :math:`\geq 2`
 
-    U : float, optional
-        Upper bound for monotone resource
-        (for algorithm classification purposes see Notes).
-
-    L : float, optional
-        Lower bound for monotone resource
-        (for algorithm classification purposes see Notes).
-
     direc_in : string, optional
         preferred search direction.
         Either 'both','forward', or, 'backward'. Default : 'both'.
@@ -70,12 +62,20 @@ class BiDirectional:
     to be :math:`\geq 2`. The edges in the graph must all have a ``res_cost``
     attribute.
 
-    According to the inputs, four different algorithms can be implemented:
+    According to the inputs, four different algorithms can be implemented, if you'd like to check which algorithm your running given your resource limits, run ``.name_algorithm(U, L)`` for a log where. If ``direction`` is not given the absolute resource limits have to be given:
 
-    - HF = HB > U or ``direc_in`` = 'forward': Monodirectional forward labeling algorithm
-    - L < HF = HB < U: Bidirectional labeling algorithm with static halfway point
-    - HF = HB < L or ``direc_in`` == 'backward': Monodirectional backward labeling algorithm
-    - U = HF > HB = L: Bidirectional labeling algorithm with dynamic halfway point.
+    U : float, optional
+        Upper bound for monotone resource
+        (for algorithm classification purposes see Notes).
+
+    L : float, optional
+        Lower bound for monotone resource
+        (for algorithm classification purposes see Notes).
+
+    -  :math:`H_F = H_B > U` or ``direc_in`` = 'forward': Monodirectional forward labeling algorithm
+    -  :math:`L < H_F = H_B < U`: Bidirectional labeling algorithm with static halfway point
+    -  :math:`H_F = H_B < L` or ``direc_in`` == 'backward': Monodirectional backward labeling algorithm
+    -  :math:`U = H_F > H_B = L`: Bidirectional labeling algorithm with dynamic halfway point.
 
     Example
     -------
