@@ -6,23 +6,28 @@ Here is the guide of how to use the `cspy` package.
 Initialisations
 ~~~~~~~~~~~~~~~
 
-In order to use `cspy` package and the algorithms within, first, one has to create a graph on which to apply the algorithms. To do so, we make use of the well-known `networkx` package. To be able to apply resource constraints, we have the following graph requirements,
+In order to use `cspy` package and the algorithms within, first, one has to create a graph on which to apply the algorithms. 
 
- - graph attribute `n_res` which determines the number of resources we are considering for the particular problem;
- - edge attributes `res_cost` and `weight`;
- - the graph must have a single `Source` and `Sink` nodes with no incoming or outgoing edges respectively.
+To do so, we make use of the well-known `networkx` package. To be able to apply resource constraints, we have the following input graph requirements,
 
-In order to run the algorithms create a appropriate algorithm instance (with the corresponding inputs) and call `run()`. 
 
-Please see BiDirectional_ or Tabu_ for examples.
+ - Graph must be a :class:`networkx.DiGraph`;
+ - Graph must have an attribute `n_res` (set when initialising the graph) which determines the number of resources we are considering for the particular problem;
+ - Graph must have a single `Source` and `Sink` nodes with no incoming or outgoing edges respectively;
+ - Edges must have `res_cost` and `weight` attributes.
+
+In order to run the algorithms create a appropriate algorithm instance (with the corresponding inputs) and call `run()`.
+
+Please see individual algorithm documentation (BiDirectional_, Tabu_, GreedyElim_) for examples.
 
 .. _BiDirectional: https://cspy.readthedocs.io/en/latest/api/cspy.BiDirectional.html
 .. _Tabu: https://cspy.readthedocs.io/en/latest/api/cspy.Tabu.html
+.. _GreedyElim: https://cspy.readthedocs.io/en/latest/api/cspy.GreedyElim.html
 
 Prerequirements
 ~~~~~~~~~~~~~~~
 
-For the :class:`BiDirectional` algorithm, there is a number of assumptions required (`Tilk 2017`_).
+For the :class:`BiDirectional` algorithm, there is a number of assumptions required (`Tilk et al 2017`_).
 
  1. The first resource must be a monotone resource;
  2. The resource extension are invertible.
@@ -32,4 +37,4 @@ This allows for the monotone resource to comparable for the forward and backward
 
 For assumption 2, if resource extension functions are additive, these are easily invertible.
 
-.. _Tilk 2017: https://www.sciencedirect.com/science/article/pii/S0377221717302035
+.. _Tilk et al 2017: https://www.sciencedirect.com/science/article/pii/S0377221717302035

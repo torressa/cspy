@@ -25,9 +25,8 @@ Currently, the algorithms implemented include:
  - [X] Bidirectional labeling algorithm with static halfway point;
  - [X] Bidirectional labeling algorithm with dynamic halfway point Tilk et al. (2017) [@tilk];
  - [X] Heuristic Tabu search;
- - [X] Greedy elimination procedure.
-
-Features implemented include: generic resource extension functions (not restricted to additive resources), generic resource consumptions (not restricted to non-negative values), and, increased efficiency (when compared to other implementations of monodirectional algorithms) [@inrich].
+ - [X] Greedy elimination procedure;
+ - [ ] Particle Swarm Optimization with combined Local and Global Expanding Neighborhood Topology (PSOLGENT) Marinakis et al. (2017) [@Marinakis].
 
 
 ## Getting Started
@@ -35,7 +34,7 @@ Features implemented include: generic resource extension functions (not restrict
 
 ### Prerequisites
 
-Conceptual prerequisites and input formatting is discussed in the [docs](https://cspy.readthedocs.io/en/latest/how_to.html).
+Conceptual background and input formatting is discussed in the [docs](https://cspy.readthedocs.io/en/latest/how_to.html).
 
 Module dependencies are listed in [requirements.txt](requirements.txt).
 
@@ -101,3 +100,5 @@ Personal MIT LICENSE
 [@inrich]: https://www.researchgate.net/publication/227142556_Shortest_Path_Problems_with_Resource_Constraints
 
 [@tilk]: https://www.sciencedirect.com/science/article/pii/S0377221717302035
+
+[@Marinakis]: https://www.sciencedirect.com/science/article/pii/S0377221717302357
