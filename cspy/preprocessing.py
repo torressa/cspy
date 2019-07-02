@@ -60,6 +60,7 @@ def prune_graph(G, max_res, min_res):
             pass
 
     nodes_to_remove = {}
+    n_nodes = len(G.nodes())
     # Map function for each resource
     list(map(_check_resource, range(0, G.graph['n_res'])))
     if nodes_to_remove:  # if there are nodes to remove
@@ -68,8 +69,8 @@ def prune_graph(G, max_res, min_res):
             key: val for key, val in nodes_to_remove.items()
             if key != 'Source' or key != 'Sink'}
         G.remove_nodes_from(nodes_to_remove)
-        log.info("[{0}] Removed {1} nodes".format(
-            __name__, len(nodes_to_remove)))
+        log.info("Removed {0}/{1} nodes".format(len(nodes_to_remove),
+                                                n_nodes))
     return G
 
 

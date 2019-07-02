@@ -14,14 +14,10 @@ from cspy.preprocessing import check_and_preprocess
 log = logging.getLogger(__name__)
 
 
-class expand:
-    pass
-
-
 class BiDirectional:
     """
     Implementation of the bidirectional labeling algorithm with dynamic
-    half-way point (Tilk et al 2017).
+    half-way point (`Tilk 2017`_).
     Depending on the range of values for U, L, we get
     four different algorithms. See self.name_algorithm and Notes.
 
@@ -43,7 +39,7 @@ class BiDirectional:
 
     direc_in : string, optional
         preferred search direction.
-        Either 'both','forward', or, 'backward'. Default : 'both'.
+        Either 'both', 'forward', or, 'backward'. Default : 'both'.
 
     preprocess : bool, optional
         enables preprocessing routine.
@@ -98,6 +94,7 @@ class BiDirectional:
         >>> print(path)
         ['Source', 'A', 'B', 'C', 'Sink']
 
+    .. _Tilk 2017: https://www.sciencedirect.com/science/article/pii/S0377221717302035
     """
 
     def __init__(self, G, max_res, min_res, direction='both',
@@ -127,10 +124,10 @@ class BiDirectional:
             direc = self.get_direction()
             if direc:
                 self.algorithm(direc)
-                self.check_dominance(direc)
-            elif not direc or self.terminate(direc):
+                self._check_dominance(direc)
+            elif not direc or self._terminate(direc):
                 break
-        return self.join_paths()
+        return self._join_paths()
 
     #############
     # DIRECTION #
@@ -158,22 +155,25 @@ class BiDirectional:
     #############
     def algorithm(self, direc):
         if direc == 'forward':  # forward
-            idx = 0
+            idx = 0  # index for head node
             self.min_res[0] = max(self.min_res[0], min(
                 self.Label[direc].res[0], self.max_res[0]))
         else:
-            idx = 1
+            idx = 1  # index for tail node
             self.max_res[0] = min(self.max_res[0], max(
                 self.Label[direc].res[0], self.min_res[0]))
+        # Select edges with the same head/tail node as the current label node.
         edges = [e for e in self.G.edges(data=True)
                  if e[idx] == self.Label[direc].node]
+        # If Label not been seen before, initialise a dict
         if self.Label[direc] not in self.unprocessed[direc]:
             self.unprocessed[direc][self.Label[direc]] = {}
+        # Propagate current label along all suitable edges in current direction
+        list(map(self._propagate_label, edges, repeat(direc, len(edges))))
+        # Extend label
+        self._get_next_label(direc)
 
-        list(map(self.propagate_label, edges, repeat(direc, len(edges))))
-        self.get_next_label(direc)
-
-    def propagate_label(self, edge, direc):
+    def _propagate_label(self, edge, direc):
         # Label propagation #
         weight, res_cost = edge[2]['weight'], edge[2]['res_cost']
         node = edge[1] if direc == 'forward' else edge[0]
@@ -184,7 +184,7 @@ class BiDirectional:
             self.unprocessed[direc][self.Label[direc]][
                 new_label] = new_label.path
 
-    def get_next_label(self, direc):
+    def _get_next_label(self, direc):
         # Label Extension #
         keys_to_pop = []
         for key, val in self.unprocessed[direc].items():
@@ -205,7 +205,7 @@ class BiDirectional:
             # Remove it from the unprocessed labels
             keys_to_pop.append(next_label)
             if self.Label[direc] == next_label:
-                self.save_final_path(direc)
+                self._save_final_path(direc)
                 keys_to_pop.append(self.Label[direc])
                 self.Label[direc] = None
             else:
@@ -214,14 +214,14 @@ class BiDirectional:
         for k in list(set(keys_to_pop)):
             self.unprocessed[direc].pop(k, None)
 
-    def save_final_path(self, direc):
+    def _save_final_path(self, direc):
         if self.Label[direc]:
             self.finalpath[direc] = self.Label[direc].path
 
     ###############
     # TERMINATION #
     ###############
-    def terminate(self, direc):
+    def _terminate(self, direc):
         if self.direc_in == "both":
             if (self.finalpath['forward'] and self.finalpath['backward'] and
                     (self.finalpath['forward'][-1] ==
@@ -240,7 +240,7 @@ class BiDirectional:
     #############
     # DOMINANCE #
     #############
-    def check_dominance(self, direc):
+    def _check_dominance(self, direc):
         """ For all labels, check if it is dominated, or itself dominates other
         labels. If this is found to be the case, the dominated label is
         removed """
@@ -259,7 +259,7 @@ class BiDirectional:
     #################
     # PATH CHECKING #
     #################
-    def join_paths(self):
+    def _join_paths(self):
         # check if paths are eligible to be joined
         if self.direc_in == 'both' and (
                 self.finalpath['forward'] and self.finalpath['backward']):

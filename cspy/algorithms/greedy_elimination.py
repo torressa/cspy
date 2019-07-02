@@ -4,8 +4,9 @@ from __future__ import print_function
 import logging
 import numpy as np
 from networkx import astar_path, NetworkXException
-from cspy.label import Label
 from cspy.preprocessing import check
+
+log = logging.getLogger(__name__)
 
 
 class GreedyElim:
@@ -30,6 +31,9 @@ class GreedyElim:
         :math:`[H_B, L_1, L_2, ..., L_{n\_res}]` lower bounds for resource
         usage (including initial backward stopping point).
         We must have ``len(min_res)`` :math:`=` ``len(max_res)`` :math:`\geq 2`
+
+    return_G : bool
+        whether or not you'd like the resulting graph returned
 
     Returns
     -------
@@ -71,13 +75,14 @@ class GreedyElim:
 
     """
 
-    def __init__(self, G, max_res, min_res):
+    def __init__(self, G, max_res, min_res, return_G=False):
         # Check input graph and parameters
         check(G, max_res, min_res)
         # Input parameters
         self.G = G
         self.max_res = max_res
         self.min_res = min_res
+        self.return_G = return_G
         # Algorithm specific parameters
         self.it = 0
         self.path = []
@@ -85,8 +90,6 @@ class GreedyElim:
         self.predecessor_edges = []
         self.last_edge_removed = None
         self.edges_to_remove = dict(self.G.edges())
-        # Import function from cspy.label.Label
-        self.check_feasibility = Label.check_geq
 
     def run(self):
         while self.stop is False:
@@ -94,8 +97,10 @@ class GreedyElim:
             self.it += 1
 
         if self.path:
-            logging.debug(self.path)
-            return self.path
+            if self.return_G:
+                return self.G, self.path
+            else:
+                return self.path
         else:
             raise Exception("No resource feasible path has been found")
 
@@ -114,8 +119,8 @@ class GreedyElim:
             # Check path for resource feasibility by adding one edge at a time
             for edge in shortest_path_edges:
                 total_res += self._edge_extract(edge)
-                if (self.check_feasibility(self.max_res, total_res) and
-                        self.check_feasibility(total_res, self.min_res)):
+                if (all(total_res <= self.max_res) and
+                        all(total_res >= self.min_res)):
                     pass
                 else:
                     self._update_graph(edge)
@@ -128,13 +133,13 @@ class GreedyElim:
                             res_cost=self.last_edge_removed[2]['res_cost'],
                             weight=self.last_edge_removed[2]['weight'])
             self._update_graph(
-                self.get_predecessor_edges(self.last_edge_removed))
+                self._get_predecessor_edges(self.last_edge_removed))
 
     def _update_graph(self, edge=None):
         self.G.remove_edge(*edge[: 2])
         self.last_edge_removed = edge
 
-    def get_predecessor_edges(self, edge):
+    def _get_predecessor_edges(self, edge):
         if not self.predecessor_edges:
             node = edge[0]
             if node == "Source":

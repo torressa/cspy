@@ -123,7 +123,7 @@ class Tabu:
             self._get_neighbour(self.tabu_edge)
 
     def _update_path(self, path):
-        # Joins path using previous path and [neighbour,...,sink] path
+        # Joins path using previous path and [neighbour, ..., sink] path
         if self.it == 0:
             self.path = path
         if self.neighbour in self.path:

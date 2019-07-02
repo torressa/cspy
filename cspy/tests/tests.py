@@ -8,8 +8,6 @@ from cspy.algorithms.tabu import Tabu
 from cspy.algorithms.greedy_elimination import GreedyElim
 from cspy.label import Label
 
-# logging.basicConfig(level=logging.INFO)
-
 
 class TestsBasic(unittest.TestCase):
     """ Tests for finding the resource constrained shortest
@@ -19,12 +17,12 @@ class TestsBasic(unittest.TestCase):
         self.max_res, self.min_res = [4, 20], [1, 0]
         # Create simple digraph to test algorithm
         self.G = DiGraph(directed=True, n_res=2)
-        self.G.add_edge('Source', 'A', res_cost=[1, 2], weight=0)
-        self.G.add_edge('A', 'B', res_cost=[1, 0.3], weight=0)
-        self.G.add_edge('A', 'C', res_cost=[1, 0.1], weight=0)
+        self.G.add_edge('Source', 'A', res_cost=[1, 2], weight=-1)
+        self.G.add_edge('A', 'B', res_cost=[1, 0.3], weight=-1)
+        self.G.add_edge('A', 'C', res_cost=[1, 0.1], weight=-1)
         self.G.add_edge('B', 'C', res_cost=[1, 3], weight=-10)
         self.G.add_edge('B', 'Sink', res_cost=[1, 2], weight=10)
-        self.G.add_edge('C', 'Sink', res_cost=[1, 10], weight=0)
+        self.G.add_edge('C', 'Sink', res_cost=[1, 10], weight=-1)
 
         # Create erratic digraph to test exception handling
         self.E = DiGraph(directed=True)
