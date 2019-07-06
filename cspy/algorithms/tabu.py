@@ -4,6 +4,7 @@ from __future__ import print_function
 import logging
 import numpy as np
 from networkx import astar_path, NetworkXException
+from cspy.path import Path
 from cspy.label import Label
 from cspy.preprocessing import check
 
@@ -20,14 +21,13 @@ class Tabu:
         ``res_cost`` attribute.
 
     max_res : list of floats
-        :math:`[H_F, M_1, M_2, ..., M_{n\_res}]` upper bounds for resource
+        :math:`[M_1, M_2, ..., M_{n\_res}]` upper bounds for resource
         usage (including initial forward stopping point).
-        We must have ``len(max_res)`` :math:`\geq 2`
 
     min_res : list of floats
-        :math:`[H_B, L_1, L_2, ..., L_{n\_res}]` lower bounds for resource
+        :math:`[L_1, L_2, ..., L_{n\_res}]` lower bounds for resource
         usage (including initial backward stopping point).
-        We must have ``len(min_res)`` :math:`=` ``len(max_res)`` :math:`\geq 2`
+        We must have ``len(min_res)`` :math:`=` ``len(max_res)``.
 
     Returns
     -------
@@ -36,9 +36,11 @@ class Tabu:
 
     Notes
     -----
-    The input graph must have a ``n_res`` attribute in the input graph has
-    to be :math:`\geq 2`. The edges in the graph must all have a `res_cost`
-    attribute.
+    The input graph must have a ``n_res`` attribute.
+    The edges in the graph must all have a ``res_cost`` attribute.
+    See `Using cspy`_
+
+    .. _Using cspy: https://cspy.readthedocs.io/en/latest/how_to.html
 
     Example
     -------
@@ -103,22 +105,29 @@ class Tabu:
             pass
         if path:
             self._update_path(path)
-            shortest_path_edges = (
-                edge for edge in self.G.edges(
-                    self.G.nbunch_iter(self.path), data=True)
-                if edge[0:2] in zip(self.path, self.path[1:]))
-            total_res = np.zeros(self.G.graph['n_res'])
-            # Check path for resource feasibility by adding one edge at a time
-            for edge in shortest_path_edges:
-                total_res += self._edge_extract(edge)
-                if (all(total_res <= self.max_res) and
-                        all(total_res >= self.min_res)):
-                    pass
-                else:
-                    self._get_neighbour(edge)
-                    break
-            else:
+            edge_or_true = Path(self.G, self.path, self.max_res,
+                                self.min_res)._check_feasibility()
+            if edge_or_true is True:
                 self.stop = True
+            else:
+                self._get_neighbour(edge_or_true)
+
+            # shortest_path_edges = (
+            #     edge for edge in self.G.edges(
+            #         self.G.nbunch_iter(self.path), data=True)
+            #     if edge[0:2] in zip(self.path, self.path[1:]))
+            # total_res = np.zeros(self.G.graph['n_res'])
+            # # Check path for resource feasibility by adding one edge at a time
+            # for edge in shortest_path_edges:
+            #     total_res += self._edge_extract(edge)
+            #     if (all(total_res <= self.max_res) and
+            #             all(total_res >= self.min_res)):
+            #         pass
+            #     else:
+            #         self._get_neighbour(edge)
+            #         break
+            # else:
+            #     self.stop = True
         else:
             self._get_neighbour(self.tabu_edge)
 

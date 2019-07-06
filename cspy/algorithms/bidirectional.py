@@ -30,7 +30,7 @@ class BiDirectional:
     max_res : list of floats
         :math:`[H_F, M_1, M_2, ..., M_{n\_res}]` upper bounds for resource
         usage (including initial forward stopping point).
-        We must have ``len(max_res)`` :math:`\geq 2`
+        We must have ``len(max_res)`` :math:`\geq 2`.
 
     min_res : list of floats
         :math:`[H_B, L_1, L_2, ..., L_{n\_res}]` lower bounds for resource
@@ -54,11 +54,15 @@ class BiDirectional:
 
     Notes
     -----
-    The input graph must have a ``n_res`` attribute in the input graph has
-    to be :math:`\geq 2`. The edges in the graph must all have a ``res_cost``
+    The input graph must have a ``n_res`` attribute which must be
+    :math:`\geq 2`. The edges in the graph must all have a ``res_cost``
     attribute.
 
-    According to the inputs, four different algorithms can be implemented, if you'd like to check which algorithm your running given your resource limits, run ``.name_algorithm(U, L)`` for a log with the classification. If ``direction`` is not given the absolute resource limits have to be given:
+    According to the inputs, four different algorithms can be implemented,
+    if you'd like to check which algorithm your running given your resource
+    limits, run ``.name_algorithm(U, L)`` for a log with the classification.
+    If ``direction`` is not given the absolute resource limits have to be
+    given:
 
     U : float, optional
         Upper bound for monotone resource
@@ -67,6 +71,8 @@ class BiDirectional:
     L : float, optional
         Lower bound for monotone resource
         (for algorithm classification purposes see Notes).
+
+    According to these, we have,
 
     -  :math:`H_F = H_B > U` or ``direc_in`` = 'forward': Monodirectional forward labeling algorithm
     -  :math:`L < H_F = H_B < U`: Bidirectional labeling algorithm with static halfway point
@@ -101,7 +107,7 @@ class BiDirectional:
                  preprocess=True, REF_forward=add, REF_backward=sub):
         # Check inputs and preprocess G unless option disabled
         self.G = check_and_preprocess(
-            preprocess, G, max_res, min_res, direction)
+            preprocess, G, max_res, min_res, direction, __name__)
         self.direc_in = direction
         self.max_res, self.min_res = max_res, min_res
         # init current forward and backward labels

@@ -6,6 +6,8 @@ sys.path.append("../")
 from cspy.algorithms.bidirectional import BiDirectional
 from cspy.algorithms.tabu import Tabu
 from cspy.algorithms.greedy_elimination import GreedyElim
+from cspy.algorithms.grasp import GRASP
+
 from cspy.label import Label
 
 
@@ -19,14 +21,14 @@ class TestsBasic(unittest.TestCase):
         self.G = DiGraph(directed=True, n_res=2)
         self.G.add_edge('Source', 'A', res_cost=[1, 2], weight=-1)
         self.G.add_edge('A', 'B', res_cost=[1, 0.3], weight=-1)
-        self.G.add_edge('A', 'C', res_cost=[1, 0.1], weight=-1)
+        # self.G.add_edge('A', 'C', res_cost=[1, 0.1], weight=1)
         self.G.add_edge('B', 'C', res_cost=[1, 3], weight=-10)
         self.G.add_edge('B', 'Sink', res_cost=[1, 2], weight=10)
         self.G.add_edge('C', 'Sink', res_cost=[1, 10], weight=-1)
 
         # Create erratic digraph to test exception handling
         self.E = DiGraph(directed=True)
-        self.E.add_edge('Source', 'A', weight=0)
+        self.E.add_edge('Source', 'A')
 
         # Create digraph with negative resource costs with unreachable node 'B'
         self.H = DiGraph(directed=True, n_res=2)
@@ -41,18 +43,18 @@ class TestsBasic(unittest.TestCase):
         self.J = DiGraph(directed=True, n_res=2)
         self.J.add_edge('Source', 'A', res_cost=[1, 1], weight=1)
         self.J.add_edge('Source', 'B', res_cost=[1, 1], weight=1)
-        self.J.add_edge('Source', 'C', res_cost=[10, 1], weight=100)
+        self.J.add_edge('Source', 'C', res_cost=[10, 1], weight=10)
         self.J.add_edge('A', 'C', res_cost=[1, 1], weight=1)
-        self.J.add_edge('A', 'E', res_cost=[10, 1], weight=100)
-        self.J.add_edge('A', 'F', res_cost=[10, 1], weight=100)
+        self.J.add_edge('A', 'E', res_cost=[10, 1], weight=10)
+        self.J.add_edge('A', 'F', res_cost=[10, 1], weight=10)
         self.J.add_edge('B', 'C', res_cost=[2, 1], weight=-1)
-        self.J.add_edge('B', 'F', res_cost=[10, 1], weight=100)
-        self.J.add_edge('B', 'E', res_cost=[10, 1], weight=100)
+        self.J.add_edge('B', 'F', res_cost=[10, 1], weight=10)
+        self.J.add_edge('B', 'E', res_cost=[10, 1], weight=10)
         self.J.add_edge('C', 'D', res_cost=[1, 1], weight=-1)
         self.J.add_edge('D', 'E', res_cost=[1, 1], weight=1)
         self.J.add_edge('D', 'F', res_cost=[1, 1], weight=1)
-        self.J.add_edge('D', 'Sink', res_cost=[10, 10], weight=100)
-        self.J.add_edge('F', 'Sink', res_cost=[1, 1], weight=1)
+        self.J.add_edge('D', 'Sink', res_cost=[10, 10], weight=10)
+        self.J.add_edge('F', 'Sink', res_cost=[10, 1], weight=1)
         self.J.add_edge('E', 'Sink', res_cost=[1, 1], weight=1)
 
     def testBothDirections(self):
@@ -86,7 +88,7 @@ class TestsBasic(unittest.TestCase):
         self.assertEqual(path, ['Source', 'A', 'B', 'C', 'Sink'])
 
     def testDominance(self):
-        # Check whether forward and backward dominance makes sense
+        # Check forward and backward dominance
         L1 = Label(10, 'B', [6, 5], [])
         L2 = Label(1, 'B', [6, -3], [])
         L3 = Label(-10, 'A', [3, -8.3], [])
@@ -115,6 +117,10 @@ class TestsBasic(unittest.TestCase):
 
     def testGreedyElim(self):
         self.assertRaises(Exception, GreedyElim.run, self.J, [5, 5], [0, 0])
+
+    def testGRASP(self):
+        path = GRASP(self.J, [5, 5], [0, 0], 50, 10).run()
+        self.assertEqual(path, ['Source', 'A', 'C', 'D', 'E', 'Sink'])
 
 
 if __name__ == '__main__':

@@ -1,9 +1,9 @@
-[![PyPI version](https://badge.fury.io/py/cspy.svg)](https://badge.fury.io/py/cspy)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Documentation Status](https://readthedocs.org/projects/cspy/badge/?version=latest)](https://cspy.readthedocs.io/en/latest/?badge=latest)
 [![CircleCI](https://circleci.com/gh/torressa/cspy/tree/master.svg?style=svg&circle-token=910e28b03dd0d32967fae038a3cf28b6cdf56334)](https://circleci.com/gh/torressa/cspy/tree/master)
-[![codecov](https://codecov.io/gh/torressa/cspy/branch/master/graph/badge.svg?token=24tyrWinNT)](https://codecov.io/gh/torressa/cspy)
+[![Documentation Status](https://readthedocs.org/projects/cspy/badge/?version=latest)](https://cspy.readthedocs.io/en/latest/?badge=latest)
+[![PyPI version](https://badge.fury.io/py/cspy.svg)](https://badge.fury.io/py/cspy)
+<!-- [![codecov](https://codecov.io/gh/torressa/cspy/branch/master/graph/badge.svg?token=24tyrWinNT)](https://codecov.io/gh/torressa/cspy)
 [![BCH compliance](https://bettercodehub.com/edge/badge/torressa/cspy?branch=master)](https://bettercodehub.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) -->
 
 # cspy
 
@@ -26,6 +26,7 @@ Currently, the algorithms implemented include:
  - [X] Bidirectional labeling algorithm with dynamic halfway point Tilk et al. (2017) [@tilk];
  - [X] Heuristic Tabu search;
  - [X] Greedy elimination procedure;
+ - [X] Greedy Randomised Adaptive Search Procedure (GRASP). Adapted from Ferone et al. (2019) [@Ferone];
  - [ ] Particle Swarm Optimization with combined Local and Global Expanding Neighborhood Topology (PSOLGENT) Marinakis et al. (2017) [@Marinakis].
 
 
@@ -57,7 +58,8 @@ Please see the individual algorithms API Documentation for specific examples and
 
 - [Bidirectional and monodirectional algorithms](https://cspy.readthedocs.io/en/latest/api/cspy.BiDirectional.html)
 - [Heuristic Tabu Search](https://cspy.readthedocs.io/en/latest/api/cspy.Tabu.html)
-- [Greedy Elimination Procedure](https://cspy.readthedocs.io/en/latest/api/cspy.Tabu.html)
+- [Greedy Elimination Procedure](https://cspy.readthedocs.io/en/latest/api/cspy.GreedyElim.html)
+- [GRASP](https://cspy.readthedocs.io/en/latest/api/cspy.GRASP.html)
 
 
 ## Running the tests
@@ -86,7 +88,7 @@ If you have a question or need help, feel free to raise an issue explaining it.
  
 ### Changelog
 
-pre-release v0.0.1: 1/07/2019
+pre-release v0.0.3: 6/07/2019
 
 ```
 Documentation updates.
@@ -95,6 +97,8 @@ Greedy elimination procedure
 assertLogs tests for bidirectional algorithm classification
 updated README
 Personal MIT LICENSE
+GRASP
+Removed duplicate code in tabu.py and greedy_elimination.py
 ```
 
 [@inrich]: https://www.researchgate.net/publication/227142556_Shortest_Path_Problems_with_Resource_Constraints
@@ -102,3 +106,5 @@ Personal MIT LICENSE
 [@tilk]: https://www.sciencedirect.com/science/article/pii/S0377221717302035
 
 [@Marinakis]: https://www.sciencedirect.com/science/article/pii/S0377221717302357
+
+[@Ferone]: https://www.tandfonline.com/doi/full/10.1080/10556788.2018.1548015

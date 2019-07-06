@@ -10,7 +10,9 @@ By setting different options when calling the algorithms, one can have up to fiv
  - Monodirectional backward labeling algorithm;
  - Bidirectional labeling algorithm with static halfway point;
  - Bidirectional labeling algorithm with dynamic halfway point (`Tilk et al 2017`_);
- - Heuristic Tabu search.
+ - Heuristic Tabu search;
+ - Greedy Randomised Adaptive Search Procedure (GRASP). Adapted from `Ferone et al 2019`_.
+ - (COMING SOON) Particle Swarm Optimization with combined Local and Global Expanding Neighborhood Topology (PSOLGET) (`Marinakis et al 2017`_).
 
 .. Features implemented include: generic resource extension functions (`Inrich 2005`_) (not restricted to additive resources), generic resource consumptions (not restricted to non-negative values), and, increased efficiency (when compared to other implementations of monodirectional algorithms).
 
@@ -37,7 +39,7 @@ By setting different options when calling the algorithms, one can have up to fiv
    api/cspy.BiDirectional
    api/cspy.Tabu
    api/cspy.GreedyElim
-   api/cspy.PSOLGENT
+   api/cspy.GRASP
    api/cspy.check_and_preprocess
    api/cspy.Label
 
@@ -46,3 +48,5 @@ By setting different options when calling the algorithms, one can have up to fiv
 
 .. _Tilk et al 2017: https://www.sciencedirect.com/science/article/pii/S0377221717302035
 .. _Inrich 2005: https://www.researchgate.net/publication/227142556_Shortest_Path_Problems_with_Resource_Constraints
+.. _Marinakis et al 2017: https://www.sciencedirect.com/science/article/pii/S0377221717302357z
+.. _Ferone et al 2019: https://www.tandfonline.com/doi/full/10.1080/10556788.2018.1548015

@@ -4,6 +4,7 @@ from __future__ import print_function
 import logging
 import numpy as np
 from networkx import astar_path, NetworkXException
+from cspy.path import Path
 from cspy.preprocessing import check
 
 log = logging.getLogger(__name__)
@@ -23,16 +24,15 @@ class GreedyElim:
         ``res_cost`` attribute.
 
     max_res : list of floats
-        :math:`[H_F, M_1, M_2, ..., M_{n\_res}]` upper bounds for resource
+        :math:`[M_1, M_2, ..., M_{n\_res}]` upper bounds for resource
         usage (including initial forward stopping point).
-        We must have ``len(max_res)`` :math:`\geq 2`
 
     min_res : list of floats
-        :math:`[H_B, L_1, L_2, ..., L_{n\_res}]` lower bounds for resource
+        :math:`[L_1, L_2, ..., L_{n\_res}]` lower bounds for resource
         usage (including initial backward stopping point).
-        We must have ``len(min_res)`` :math:`=` ``len(max_res)`` :math:`\geq 2`
+        We must have ``len(min_res)`` :math:`=` ``len(max_res)``.
 
-    return_G : bool
+    return_G : bool, optional
         whether or not you'd like the resulting graph returned
 
     Returns
@@ -47,9 +47,12 @@ class GreedyElim:
 
     Notes
     -----
-    The input graph must have a ``n_res`` attribute in the input graph has
-    to be :math:`\geq 2`. The edges in the graph must all have a `res_cost`
-    attribute.
+    The input graph must have a ``n_res`` attribute.
+    The edges in the graph must all have a ``res_cost`` attribute.
+    See `Using cspy`_
+
+    .. _Using cspy: https://cspy.readthedocs.io/en/latest/how_to.html
+
 
     Example
     -------
@@ -111,23 +114,30 @@ class GreedyElim:
         except NetworkXException:
             pass
         if path:
-            shortest_path_edges = (
-                edge for edge in self.G.edges(
-                    self.G.nbunch_iter(path), data=True)
-                if edge[0:2] in zip(path, path[1:]))
-            total_res = np.zeros(self.G.graph['n_res'])
-            # Check path for resource feasibility by adding one edge at a time
-            for edge in shortest_path_edges:
-                total_res += self._edge_extract(edge)
-                if (all(total_res <= self.max_res) and
-                        all(total_res >= self.min_res)):
-                    pass
-                else:
-                    self._update_graph(edge)
-                    break
-            else:  # no break so resource feasible path found
+            edge_or_true = Path(self.G, path, self.max_res,
+                                self.min_res)._check_feasibility()
+            if edge_or_true is True:
                 self.path = path
                 self.stop = True
+            else:
+                self._update_graph(edge_or_true)
+            # shortest_path_edges = (
+            #     edge for edge in self.G.edges(
+            #         self.G.nbunch_iter(path), data=True)
+            #     if edge[0:2] in zip(path, path[1:]))
+            # total_res = np.zeros(self.G.graph['n_res'])
+            # # Check path for resource feasibility by adding one edge at a time
+            # for edge in shortest_path_edges:
+            #     total_res += self._edge_extract(edge)
+            #     if (all(total_res <= self.max_res) and
+            #             all(total_res >= self.min_res)):
+            #         pass
+            #     else:
+            #         self._update_graph(edge)
+            #         break
+            # else:  # no break so resource feasible path found
+            #     self.path = path
+            #     self.stop = True
         else:
             self.G.add_edge(*self.last_edge_removed[:2],
                             res_cost=self.last_edge_removed[2]['res_cost'],

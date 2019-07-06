@@ -5,7 +5,7 @@ from cspy.checks import *
 log = logging.getLogger(__name__)
 
 
-def check(G, max_res=None, min_res=None, direction=None):
+def check(G, max_res=None, min_res=None, direction=None, algorithm=None):
     """Check whether inputs have the appropriate attributes and
     are of the appropriate types."""
 
@@ -22,7 +22,7 @@ def check(G, max_res=None, min_res=None, direction=None):
     # Check all functions in check_funcs
     for func in check_funcs:
         try:
-            func(G, max_res, min_res, direction)
+            func(G, max_res, min_res, direction, algorithm)
         except Exception as e:
             errors.append(e)  # if check fails save error message
     if errors:
@@ -75,7 +75,7 @@ def prune_graph(G, max_res, min_res):
 
 
 def check_and_preprocess(preprocess, G, max_res=None, min_res=None,
-                         direction=None):
+                         direction=None, algorithm=None):
     """
     Checks whether inputs and the graph are of the appropriate types and
     have the required properties.
@@ -110,7 +110,7 @@ def check_and_preprocess(preprocess, G, max_res=None, min_res=None,
         If multiple exceptions are raised, and exception with a list of
         exceptions is raised.
     """
-    check(G, max_res, min_res, direction)
+    check(G, max_res, min_res, direction, algorithm)
     if preprocess:
         G = prune_graph(G, max_res, min_res)
         check(G)

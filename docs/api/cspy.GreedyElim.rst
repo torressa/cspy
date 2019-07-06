@@ -1,5 +1,5 @@
 cspy.GreedyElim
-==================
+===============
 
 .. automodule:: cspy.GreedyElim
 	:members:
