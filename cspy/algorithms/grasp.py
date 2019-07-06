@@ -71,6 +71,7 @@ class GRASP:
     .. code-block:: python
 
         >>> from cspy import GRASP
+        >>> from networkx import DiGraph
         >>> G = DiGraph(directed=True, n_res=2)
         >>> G.add_edge('Source', 'A', res_cost=[1, 1], weight=1)
         >>> G.add_edge('Source', 'B', res_cost=[1, 1], weight=1)

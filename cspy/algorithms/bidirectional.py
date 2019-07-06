@@ -87,8 +87,8 @@ class BiDirectional:
     .. code-block:: python
 
         >>> import cspy
-        >>> import networkx as nx
-        >>> G = nx.DiGraph(directed=True, n_res=2)
+        >>> from networkx import DiGraph
+        >>> G = DiGraph(directed=True, n_res=2)
         >>> G.add_edge('Source', 'A', res_cost=[1, 2], weight=0)
         >>> G.add_edge('A', 'B', res_cost=[1, 0.3], weight=0)
         >>> G.add_edge('A', 'C', res_cost=[1, 0.1], weight=0)

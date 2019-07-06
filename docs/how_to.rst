@@ -20,7 +20,8 @@ For example,
 
 .. code-block:: python
 
-        >>> G = nx.DiGraph(directed=True, n_res=2)
+        >>> from networkx import DiGraph
+        >>> G = DiGraph(directed=True, n_res=2)
         >>> G.add_edge('Source', 'A', res_cost=[1], weight=1)
         >>> G.add_edge('A', 'B', res_cost=[1], weight=1)
         >>> G.add_edge('B', 'Sink', res_cost=[1], weight=1)
