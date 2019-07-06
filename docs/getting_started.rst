@@ -31,4 +31,4 @@ The requirements for running `cspy` are:
 
 
 .. _NetworkX: https://networkx.github.io/documentation/stable/
-.. _NumPY: https://docs.scipy.org/doc/numpy/reference/
+.. _NumPy: https://docs.scipy.org/doc/numpy/reference/
