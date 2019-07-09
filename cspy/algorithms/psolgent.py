@@ -19,9 +19,6 @@ log = logging.getLogger(__name__)
 
 
 class StandardGraph:
-    """
-
-    """
 
     def __init__(self, G, max_res, min_res):
         # Check input graph and parameters
@@ -44,7 +41,7 @@ class StandardGraph:
                     self.best_path = path
                     return 0
                 else:
-                    return 10
+                    return 1e2
             else:
                 return False
         else:
@@ -318,16 +315,16 @@ class PSOLGENT(StandardGraph):
         disconnected = self._save_shortest_path(shortest_path_edges)
         if shortest_path_edges:
             if disconnected:
-                return 10000  # disconnected path
+                return 1e5  # disconnected path
             penalty = self._check_path(self.shortest_path)
             if penalty is not False:
                 # Valid path with penalty
                 return penalty + sum(
                     edge[2]['weight'] for edge in shortest_path_edges)
             else:
-                return 10000  # path not valid
+                return 1e5  # path not valid
         else:
-            return 1000000  # no path
+            return 1e10  # no path
 
     @staticmethod
     def _edge_extract(edge):
