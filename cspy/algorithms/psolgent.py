@@ -14,12 +14,14 @@ from numpy import (apply_along_axis, argmin, array, copy, diag_indices_from,
 from numpy.random import uniform
 from cspy.path import Path
 from cspy.preprocessing import check
-# from cspy.algorithms.grasp import GRASP
 
 log = logging.getLogger(__name__)
 
 
 class StandardGraph:
+    """
+
+    """
 
     def __init__(self, G, max_res, min_res):
         # Check input graph and parameters
@@ -59,15 +61,19 @@ class PSOLGENT(StandardGraph):
     Given the nature of our problem we have set the default parameters of
     the algorithm as suggested in the paper mentioned.
 
-    Code adapted from `Solid`_.
+    Code adapted from `Solid`_
+
+    .. _Marinakis et al 2017: https://www.sciencedirect.com/science/article/pii/S0377221717302357z
+
+    .. _Solid: https://github.com/100/Solid/blob/master/Solid/ParticleSwarm.py
 
     Parameters
     ----------
-    G : object instance :class:`nx.Digraph()`
-        must have ``n_res`` graph attribute and all edges must have
+    G : object
+        :class:`nx.Digraph()` must have ``n_res`` graph attribute and all edges must have
         ``res_cost`` attribute.
 
-   max_res : list of floats
+    max_res : list of floats
         :math:`[M_1, M_2, ..., M_{n\_res}]` upper bounds for resource
         usage.
 
@@ -152,8 +158,7 @@ class PSOLGENT(StandardGraph):
         >>> print(path)
         ['Source', 'A', 'C', 'D', 'E', 'Sink']
 
-    .. _Marinakis et al 2017: https://www.sciencedirect.com/science/article/pii/S0377221717302357z
-    .. _Solid: https://github.com/100/Solid/blob/master/Solid/ParticleSwarm.py
+
     """
 
     __metaclass__ = ABCMeta
