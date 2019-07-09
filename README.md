@@ -89,7 +89,7 @@ If you have a question or need help, feel free to raise an issue explaining it.
  
 ### Changelog
 
-pre-release v0.0.2: 9/07/2019
+pre-release v0.0.4: 9/07/2019
 
 ```
 Implemented PSOLGENT
