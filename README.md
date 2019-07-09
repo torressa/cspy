@@ -27,7 +27,7 @@ Currently, the algorithms implemented include:
  - [X] Heuristic Tabu search;
  - [X] Greedy elimination procedure;
  - [X] Greedy Randomised Adaptive Search Procedure (GRASP). Adapted from Ferone et al. (2019) [@Ferone];
- - [ ] Particle Swarm Optimization with combined Local and Global Expanding Neighborhood Topology (PSOLGENT) Marinakis et al. (2017) [@Marinakis].
+ - [X] Particle Swarm Optimization with combined Local and Global Expanding Neighborhood Topology (PSOLGENT) Marinakis et al. (2017) [@Marinakis].
 
 
 ## Getting Started
@@ -60,6 +60,7 @@ Please see the individual algorithms API Documentation for specific examples and
 - [Heuristic Tabu Search](https://cspy.readthedocs.io/en/latest/api/cspy.Tabu.html)
 - [Greedy Elimination Procedure](https://cspy.readthedocs.io/en/latest/api/cspy.GreedyElim.html)
 - [GRASP](https://cspy.readthedocs.io/en/latest/api/cspy.GRASP.html)
+- [PSOLGENT](https://cspy.readthedocs.io/en/latest/api/cspy.PSOLGENT.html)
 
 
 ## Running the tests
@@ -88,17 +89,13 @@ If you have a question or need help, feel free to raise an issue explaining it.
  
 ### Changelog
 
-pre-release v0.0.3: 6/07/2019
+pre-release v0.0.2: 9/07/2019
 
 ```
-Documentation updates.
-  - docstring modifications to include maths
-Greedy elimination procedure
-assertLogs tests for bidirectional algorithm classification
-updated README
-Personal MIT LICENSE
-GRASP
-Removed duplicate code in tabu.py and greedy_elimination.py
+Implemented PSOLGENT
+GreedyElim simple test
+fixed prune_graph preprocessing routine
+YAPF google style
 ```
 
 [@inrich]: https://www.researchgate.net/publication/227142556_Shortest_Path_Problems_with_Resource_Constraints

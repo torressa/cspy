@@ -12,11 +12,14 @@ def check(G, max_res=None, min_res=None, direction=None, algorithm=None):
     errors = []
     # Select checks to perform based on the input provided
     if max_res and min_res and direction:
-        check_funcs = [_check_res, _check_direction, _check_graph_attr,
-                       _check_edge_attr, _check_path]
+        check_funcs = [
+            _check_res, _check_direction, _check_graph_attr, _check_edge_attr,
+            _check_path
+        ]
     elif max_res and min_res:
-        check_funcs = [_check_res, _check_graph_attr,
-                       _check_edge_attr, _check_path]
+        check_funcs = [
+            _check_res, _check_graph_attr, _check_edge_attr, _check_path
+        ]
     else:
         check_funcs = [_check_path]
     # Check all functions in check_funcs
@@ -41,41 +44,58 @@ def prune_graph(G, max_res, min_res):
             return attr_dict['res_cost'][r]
 
         # Get paths from source to all other nodes
-        length, path = nx.single_source_bellman_ford(
-            G, 'Source', weight=__get_weight)
+        length_s, path_s = nx.single_source_bellman_ford(G,
+                                                         'Source',
+                                                         weight=__get_weight)
+        length_t, path_t = nx.single_source_bellman_ford(G.reverse(copy=True),
+                                                         'Sink',
+                                                         weight=__get_weight)
         try:
-            # If any path violates the resource upper or lower bounds
-            # then, add the problematic node to the dictionary
-            nodes_to_remove.update({
-                path[key][-2]: val for key, val in length.items()
-                if val > max_res[r] or val < min_res[r]})
-            if "Source" in nodes_to_remove or "Sink" in nodes_to_remove:
-                raise Exception("Sink not reachable for resource {}".format(r))
-            # path is a dict of the form:
-            # {node_i: [Source, ..., node_k, node_i]}.
-            # Hence, if node_i is found to violate a resource constraint, it is
-            # because of node_k, therefore, we add path[key][-2] = node_k to
-            # the dictionary of nodes to remove.
+            # Collect nodes in paths that violate the resource bounds
+            nodes_source.update({
+                path_s[key][-2]: val
+                for key, val in length_s.items()
+                if val > max_res[r] or val < min_res[r]
+            })
+            nodes_sink.update({
+                path_t[key][-2]: val
+                for key, val in length_t.items()
+                if val > max_res[r] or val < min_res[r]
+            })
+            """
+            path_s and path_t containts all partial paths e.g.
+                {node_i: [Source, ..., node_k, node_i]}.
+            or  {node_i: [Sink, ..., node_k, node_i]}
+            Hence, if node_i is found to violate a resource bound, it is
+            because of node_k, therefore, we add path[key][-2] = node_k to
+            the dictionary of nodes to remove.
+            """
         except IndexError:  # No nodes violate resource limits
             pass
 
-    nodes_to_remove = {}
+    nodes_source = {}
+    nodes_sink = {}
     n_nodes = len(G.nodes())
     # Map function for each resource
     list(map(_check_resource, range(0, G.graph['n_res'])))
-    if nodes_to_remove:  # if there are nodes to remove
+    if nodes_source and nodes_sink:  # if there are nodes to remove
         # Filter out source or sink
-        nodes_to_remove = {
-            key: val for key, val in nodes_to_remove.items()
-            if key != 'Source' or key != 'Sink'}
+        nodes_to_remove = [
+            node for node in G.nodes() if node in nodes_source and nodes_sink
+        ]
+        if "Source" in nodes_to_remove or "Sink" in nodes_to_remove:
+            raise Exception("Sink not reachable for resource {}".format(r))
         G.remove_nodes_from(nodes_to_remove)
-        log.info("Removed {0}/{1} nodes".format(len(nodes_to_remove),
-                                                n_nodes))
+        log.info("Removed {}/{} nodes".format(len(nodes_to_remove), n_nodes))
     return G
 
 
-def check_and_preprocess(preprocess, G, max_res=None, min_res=None,
-                         direction=None, algorithm=None):
+def check_and_preprocess(preprocess,
+                         G,
+                         max_res=None,
+                         min_res=None,
+                         direction=None,
+                         algorithm=None):
     """
     Checks whether inputs and the graph are of the appropriate types and
     have the required properties.

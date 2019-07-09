@@ -12,7 +12,7 @@ By setting different options when calling the algorithms, one can have up to fiv
  - Bidirectional labeling algorithm with dynamic halfway point (`Tilk et al 2017`_);
  - Heuristic Tabu search;
  - Greedy Randomised Adaptive Search Procedure (GRASP). Adapted from `Ferone et al 2019`_.
- - (COMING SOON) Particle Swarm Optimization with combined Local and Global Expanding Neighborhood Topology (PSOLGET) (`Marinakis et al 2017`_).
+ - Particle Swarm Optimization with combined Local and Global Expanding Neighborhood Topology (PSOLGET) (`Marinakis et al 2017`_).
 
 .. Features implemented include: generic resource extension functions (`Inrich 2005`_) (not restricted to additive resources), generic resource consumptions (not restricted to non-negative values), and, increased efficiency (when compared to other implementations of monodirectional algorithms).
 

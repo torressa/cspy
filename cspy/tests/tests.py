@@ -1,12 +1,13 @@
-
 import sys
 import unittest
 from networkx import DiGraph
+from numpy import zeros, ones
 sys.path.append("../")
 from cspy.algorithms.bidirectional import BiDirectional
 from cspy.algorithms.tabu import Tabu
 from cspy.algorithms.greedy_elimination import GreedyElim
 from cspy.algorithms.grasp import GRASP
+from cspy.algorithms.psolgent import PSOLGENT
 
 from cspy.label import Label
 
@@ -61,16 +62,16 @@ class TestsBasic(unittest.TestCase):
         # Find shortest path of simple test digraph
         alg_obj = BiDirectional(self.G, self.max_res, self.min_res)
         with self.assertLogs('cspy.algorithms.bidirectional') as cm:
-            alg_obj.name_algorithm(
-                U=self.max_res[0], L=self.min_res[0])
+            alg_obj.name_algorithm(U=self.max_res[0], L=self.min_res[0])
         self.assertRegex(cm.output[0], 'dynamic')
         path = alg_obj.run()
         self.assertEqual(path, ['Source', 'A', 'B', 'C', 'Sink'])
 
     def testForward(self):
         # Find shortest path of simple test digraph
-        alg_obj = BiDirectional(
-            self.G, [200, 20], self.min_res, direction='forward')
+        alg_obj = BiDirectional(self.G, [200, 20],
+                                self.min_res,
+                                direction='forward')
         with self.assertLogs('cspy.algorithms.bidirectional') as cm:
             alg_obj.name_algorithm()
         self.assertRegex(cm.output[0], 'forward')
@@ -79,8 +80,9 @@ class TestsBasic(unittest.TestCase):
 
     def testBackward(self):
         # Find shortest path of simple test digraph
-        alg_obj = BiDirectional(self.G, self.max_res,
-                                [-1, 0], direction='backward')
+        alg_obj = BiDirectional(self.G,
+                                self.max_res, [-1, 0],
+                                direction='backward')
         with self.assertLogs('cspy.algorithms.bidirectional') as cm:
             alg_obj.name_algorithm()
         self.assertRegex(cm.output[0], 'backward')
@@ -100,8 +102,8 @@ class TestsBasic(unittest.TestCase):
 
     def testExceptions(self):
         # Check whether wrong input raises exceptions
-        self.assertRaises(Exception, BiDirectional, self.E,
-                          'x', [1, 'foo'], 'up')
+        self.assertRaises(Exception, BiDirectional, self.E, 'x', [1, 'foo'],
+                          'up')
 
     def testNegativeEdges(self):
         # Check if negative resource costs work and whether
@@ -116,10 +118,21 @@ class TestsBasic(unittest.TestCase):
         self.assertEqual(path, ['Source', 'A', 'C', 'D', 'E', 'Sink'])
 
     def testGreedyElim(self):
-        self.assertRaises(Exception, GreedyElim.run, self.J, [5, 5], [0, 0])
+        with self.assertRaises(Exception) as context:
+            GreedyElim(self.J, [5, 5], [0, 0]).run()
+        self.assertTrue(
+            str(context.exception) in
+            'No resource feasible path has been found')
+
+        # self.assertRaises(Exception, GreedyElim.run, self.J, [5, 5], [0, 0])
 
     def testGRASP(self):
         path = GRASP(self.J, [5, 5], [0, 0], 50, 10).run()
+        self.assertEqual(path, ['Source', 'A', 'C', 'D', 'E', 'Sink'])
+
+    def testPSOLGENT(self):
+        n_nodes = len(self.J.nodes())
+        path = PSOLGENT(self.J, [5, 5], [0, 0], 200, 50, n_nodes, 50).run()
         self.assertEqual(path, ['Source', 'A', 'C', 'D', 'E', 'Sink'])
 
 
