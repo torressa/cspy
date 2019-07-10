@@ -9,8 +9,8 @@ import logging
 from abc import ABCMeta
 from math import sqrt
 from random import random
-from numpy import (apply_along_axis, argmin, array, copy, diag_indices_from,
-                   exp, dot, zeros, ones)
+from numpy import (argmin, array, copy, diag_indices_from, exp, dot, zeros,
+                   ones, where)
 from numpy.random import uniform
 from cspy.path import Path
 from cspy.preprocessing import check
@@ -27,21 +27,45 @@ class StandardGraph:
         self.G = G
         self.max_res = max_res
         self.min_res = min_res
+        self.path = None
+        self.path_edges = None
         self.best_path = None
 
-    def _check_path(self, path):
+    def _get_path_edges(self, nodes):
+        # Creates a list of edges given the nodes selected
+        self.path_edges = list(
+            edge for edge in self.G.edges(self.G.nbunch_iter(nodes), data=True)
+            if edge[0:2] in zip(nodes, nodes[1:]))
+
+    def _save_shortest_path(self):
+        """If edges given, saves the path provided.
+        Returns whether the path is disconnected or not"""
+        if self.path_edges:
+            self.path = [edge[0] for edge in self.path_edges]
+            self.path.append(self.path_edges[-1][1])
+            return any(edge[1] not in self.path for edge in self.path_edges)
+
+    def _check_path(self):
         """
-        Returns False if input path is not valid
+        Returns False if path is not valid
         Penalty otherwise
         """
-        if path:
-            if (len(path) > 2 and path[0] == 'Source' and path[-1] == 'Sink'):
-                if Path(self.G, path, self.max_res,
-                        self.min_res)._check_feasibility() is True:
-                    self.best_path = path
-                    return 0
+        if self.path:
+            if len(self.path) > 2 and (self.path[0] == 'Source' or
+                                       self.path[-1] == 'Sink'):
+                base_cost = sum(edge[2]['weight'] for edge in self.path_edges)
+                if self.path[0] == 'Source' and self.path[-1] == 'Sink':
+                    if Path(self.G, self.path, self.max_res,
+                            self.min_res)._check_feasibility() is True:
+                        self.best_path = self.path
+                        log.info("Resource feasible path found")
+                        return base_cost
+                    else:
+                        # penalty for resource infeasible valid path
+                        return 1e1 + base_cost
                 else:
-                    return 1e2
+                    # penalty for nearly valid path
+                    return 1e3 + base_cost
             else:
                 return False
         else:
@@ -188,7 +212,8 @@ class PSOLGENT(StandardGraph):
         self.pos = None
         self.vel = None
         self.best = None
-        self.curr_obj = None
+        self.fitness = None
+        self.best_fit = None
         self.local_best = None
         self.global_best = None
         self.shortest_path = None
@@ -196,14 +221,15 @@ class PSOLGENT(StandardGraph):
     def run(self):
         self._init_swarm()
         while self.iter < self.max_iter:
-            vel_new = self._get_vel_new()
-            pos_new = self.pos + vel_new
-
-            self._best(self.pos, pos_new)
+            pos_new = self.pos + self._get_vel()
+            self._update_best(self.pos, pos_new)
             self.pos = pos_new
-            self.scores = self._score(self.pos)
+            self.fitness = self._get_fitness(self.pos)
             self._global_best()
-            self._local_best(self.iter)
+            self._local_best(self.iter, self.hood_size)
+            if self.iter % 100 == 0:
+                log.info("Iteration: {0}. Current best fit: {1}".format(
+                    self.iter, self.best_fit))
             self.iter += 1
         if self.best_path:
             return self.best_path
@@ -218,19 +244,19 @@ class PSOLGENT(StandardGraph):
         self.vel = uniform(self.lower_bound - self.upper_bound,
                            self.upper_bound - self.lower_bound,
                            size=(self.swarm_size, self.member_size))
-        self.scores = self._score(self.pos)
+        self.fitness = self._get_fitness(self.pos)
         self.best = copy(self.pos)
         self._global_best()
         self.local_best = copy(self.pos)
 
-    def _get_vel_new(self):
+    def _get_vel(self):
         # Generate random numbers
         u1 = zeros((self.swarm_size, self.swarm_size))
         u1[diag_indices_from(u1)] = [random() for _ in range(self.swarm_size)]
         u2 = zeros((self.swarm_size, self.swarm_size))
         u2[diag_indices_from(u2)] = [random() for _ in range(self.swarm_size)]
         u3 = zeros((self.swarm_size, self.swarm_size))
-        u3[diag_indices_from(u3)] = [random() for _ in range(self.swarm_size)]
+        u3[diag_indices_from(u2)] = [random() for _ in range(self.swarm_size)]
         # Coefficients
         c = self.c1 + self.c2 + self.c3
         chi_1 = 2 / abs(2 - c - sqrt(pow(c, 2) - 4 * c))
@@ -240,100 +266,92 @@ class PSOLGENT(StandardGraph):
                 (self.c2 * dot(u2, (self.global_best - self.pos))) +
                 (self.c3 * dot(u3, (self.local_best - self.pos))))
 
-    def _best(self, old, new):
+    def _update_best(self, old, new):
         # Updates the best objective function values for each member
-        old_scores = self._score(old)
-        new_scores = self._score(new)
-        best = []
-        for i in range(len(old_scores)):
-            if old_scores[i] < new_scores[i]:
-                best.append(old[i])
-            else:
-                best.append(new[i])
+        old_fitness = array(self._get_fitness(old))
+        new_fitness = array(self._get_fitness(new))
+        best = zeros(shape=old.shape)
+        if any(of < nf for of, nf in zip(old_fitness, new_fitness)):
+            # replace indices in best with old members if lower fitness
+            idx_old = list(
+                idx for idx, val in enumerate(zip(old_fitness, new_fitness))
+                if val[0] < val[1])
+            best[idx_old] = old[idx_old]
+            idx_new = where(best == 0)
+            # replace indices in best with new members if lower fitness
+            best[idx_new] = new[idx_new]
+        else:
+            best = new
         self.best = array(best)
 
     def _global_best(self):
         # Finds the global best across swarm
-        if self.global_best is None:
-            self.global_best = array([self.pos[argmin(self.scores)]] *
+        if not self.best_fit or self.best_fit > min(self.fitness):
+            self.global_best = array([self.pos[argmin(self.fitness)]] *
                                      self.swarm_size)
-            self.curr_obj = min(self.scores)
+            self.best_fit = min(self.fitness)  # update best fitness
 
-    def _local_best(self, i):
-        bottom = max(i - self.hood_size, 0)
-        top = min(bottom + self.hood_size, len(self.scores))
-        if top - bottom < self.hood_size:
+    def _local_best(self, i, hood_size):
+        bottom = max(i - hood_size, 0)
+        top = min(bottom + hood_size, len(self.fitness))
+        if top - bottom < hood_size:
             # Maximum length reached
-            bottom = top - self.hood_size
-        self.local_best = array([self.pos[argmin(self.scores[bottom:top])]] *
+            bottom = top - hood_size
+        self.local_best = array([self.pos[argmin(self.fitness[bottom:top])]] *
                                 self.swarm_size)
 
     ###########
     # Fitness #
     ###########
     # Fitness conversion to path representation of solutions and evaluation
-    def _score(self, pos):
+    def _get_fitness(self, pos):
         # Applies objective function to all members of swarm
-        return apply_along_axis(self._objective, 1, pos)
+        return list(map(self._evaluate_member, pos))
 
-    def _objective(self, member):
+    def _evaluate_member(self, member):
         rand = random()
         self._update_current_nodes(self._discretise_solution(member, rand))
-        return self._get_objective()
+        return self._get_fitness_member()
 
     def _discretise_solution(self, member, rand):
-        self.sig = array(1 / (1 + exp(-member)))
-        return array([1 if s < rand else 0 for s in self.sig])
+        sig = array(1 / (1 + exp(-member)))
+        return array([1 if s < rand else 0 for s in sig])
 
     def _update_current_nodes(self, arr):
         """ Saves binary representation of nodes in path.
-        0 not present 1 present. """
+        0 not present, 1 present. """
         nodes = self._sort_nodes(list(self.G.nodes()))
         self.current_nodes = list(
             nodes[i] for i in range(len(nodes)) if arr[i] == 1)
 
-    def _get_path_edges(self):
-        # Creates a list of edges given the nodes selected
-        shortest_path_edges = list(
-            edge for edge in self.G.edges(
-                self.G.nbunch_iter(self.current_nodes), data=True)
-            if edge[0:2] in zip(self.current_nodes, self.current_nodes[1:]))
-        return shortest_path_edges
-
-    def _save_shortest_path(self, shortest_path_edges):
-        """If edges given, saves the path provided.
-        Returns whether the path is disconnected or not"""
-        if shortest_path_edges:
-            self.shortest_path = [edge[0] for edge in shortest_path_edges]
-            self.shortest_path.append(shortest_path_edges[-1][1])
-            return any(edge[1] not in self.shortest_path
-                       for edge in shortest_path_edges)
-
-    def _get_objective(self):
+    def _get_fitness_member(self):
         # Returns the objective for a given path
-        shortest_path_edges = self._get_path_edges()
-        disconnected = self._save_shortest_path(shortest_path_edges)
-        if shortest_path_edges:
+        self._get_path_edges(self.current_nodes)
+        disconnected = self._save_shortest_path()
+        if self.path_edges:
             if disconnected:
                 return 1e5  # disconnected path
-            penalty = self._check_path(self.shortest_path)
-            if penalty is not False:
+            cost = self._check_path()
+            if cost is not False:
                 # Valid path with penalty
-                return penalty + sum(
-                    edge[2]['weight'] for edge in shortest_path_edges)
+                return cost
             else:
                 return 1e5  # path not valid
         else:
-            return 1e10  # no path
-
-    @staticmethod
-    def _edge_extract(edge):
-        return array(edge[2]['res_cost'])
+            return 1e5  # no path
 
     @staticmethod
     def _sort_nodes(nodes):
-        # Sort nodes between Source and Sink
+        """ Sort nodes between Source and Sink. If node data allows data,
+        edit the sorting function to make use of it.
+        Otherwise, add the following lines:
+
         order_dict = {'Source': '0', 'Sink': 'Z{}'.format(len(nodes))}
+        return sorted(nodes,
+                      key=lambda x: order_dict[x] if x in order_dict else x)
+        """
         # String comparison for all nodes keeping source first and sink last
+        # return sorted(nodes, key=lambda x: x[1]['pos'][0])
+        order_dict = {'Source': '0', 'Sink': 'Z{}'.format(len(nodes))}
         return sorted(nodes,
                       key=lambda x: order_dict[x] if x in order_dict else x)
