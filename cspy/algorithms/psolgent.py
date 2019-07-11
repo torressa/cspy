@@ -341,7 +341,12 @@ class PSOLGENT(StandardGraph):
 
     @staticmethod
     def _sort_nodes(nodes):
-        """ Sort nodes between Source and Sink. If node data allows data,
+        """ Sort nodes between Source and Sink. If node data allows sorting,
+        edit line 322 to pass `list(selg.G.nodes(data=True))` and used that
+        in the sorting function below.
+        For example, if nodes have an attribute `pos` a tuple that contains
+        the position of a node in space (x, y), replace the return with:
+        `return sorted(nodes, key=lambda n: n[1]['pos'][0])`
         edit the sorting function to make use of it.
         """
         order_dict = {'Source': '0', 'Sink': 'Z{}'.format(len(nodes))}
