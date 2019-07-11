@@ -5,7 +5,6 @@ import logging
 from numpy import array
 from networkx import astar_path, NetworkXException
 from cspy.path import Path
-from cspy.label import Label
 from cspy.preprocessing import check
 
 
