@@ -2,7 +2,7 @@ from __future__ import absolute_import
 from __future__ import print_function
 
 import logging
-import numpy as np
+from numpy import array
 from networkx import astar_path, NetworkXException
 from cspy.path import Path
 from cspy.label import Label
@@ -100,8 +100,10 @@ class Tabu:
     def algorithm(self):
         path = []
         try:
-            path = astar_path(self.G, self.neighbour,
-                              'Sink', heuristic=self._heuristic)
+            path = astar_path(self.G,
+                              self.neighbour,
+                              'Sink',
+                              heuristic=self._heuristic)
         except NetworkXException:
             pass
         if path:
@@ -112,23 +114,6 @@ class Tabu:
                 self.stop = True
             else:
                 self._get_neighbour(edge_or_true)
-
-            # shortest_path_edges = (
-            #     edge for edge in self.G.edges(
-            #         self.G.nbunch_iter(self.path), data=True)
-            #     if edge[0:2] in zip(self.path, self.path[1:]))
-            # total_res = np.zeros(self.G.graph['n_res'])
-            # # Check path for resource feasibility by adding one edge at a time
-            # for edge in shortest_path_edges:
-            #     total_res += self._edge_extract(edge)
-            #     if (all(total_res <= self.max_res) and
-            #             all(total_res >= self.min_res)):
-            #         pass
-            #     else:
-            #         self._get_neighbour(edge)
-            #         break
-            # else:
-            #     self.stop = True
         else:
             self._get_neighbour(self.tabu_edge)
 
@@ -137,10 +122,11 @@ class Tabu:
         if self.it == 0:
             self.path = path
         if self.neighbour in self.path:
-            self.path = [node for node in self.path
-                         if (node != self.neighbour and
-                             self.path.index(node) <
-                             self.path.index(self.neighbour))] + path
+            self.path = [
+                node for node in self.path
+                if (node != self.neighbour and
+                    self.path.index(node) < self.path.index(self.neighbour))
+            ] + path
         else:
             self._merge_paths(path)
 
@@ -148,9 +134,10 @@ class Tabu:
         branch_path = [n for n in self.path if n not in path]
         for node in reversed(branch_path):
             if (node, self.neighbour) in self.G.edges():
-                self.path = [n for n in branch_path
-                             if (branch_path.index(n) <=
-                                 branch_path.index(node))] + path
+                self.path = [
+                    n for n in branch_path
+                    if (branch_path.index(n) <= branch_path.index(node))
+                ] + path
                 break
 
     def _get_neighbour(self, edge=None):
@@ -178,13 +165,11 @@ class Tabu:
                 self.stop = True
                 return edge
             self.neighbourhood = [
-                e for e in self.G.edges(
-                    self.G.nbunch_iter(
-                        [node] + list(self.G.predecessors(node))),
-                    data=True)
-                if e[1] == node and e != edge]
-            self.neighbourhood.sort(
-                key=lambda x: x[2]['weight'])
+                e for e in self.G.edges(self.G.nbunch_iter(
+                    [node] + list(self.G.predecessors(node))),
+                                        data=True) if e[1] == node and e != edge
+            ]
+            self.neighbourhood.sort(key=lambda x: x[2]['weight'])
         next_edge = self.neighbourhood[-1]
         self.neighbourhood.pop(-1)
         return next_edge
@@ -198,4 +183,4 @@ class Tabu:
 
     @staticmethod
     def _edge_extract(edge):
-        return np.array(edge[2]['res_cost'])
+        return array(edge[2]['res_cost'])

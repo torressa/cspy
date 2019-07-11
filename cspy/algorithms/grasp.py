@@ -4,7 +4,7 @@ from __future__ import absolute_import
 from __future__ import print_function
 
 import logging
-import numpy as np
+from numpy.random import choice
 from math import factorial
 from random import sample, randint
 from itertools import permutations
@@ -142,7 +142,7 @@ class GRASP:
                          (max(weights) - min(weights)))
             ]
             # Select random node from RCL to add to the current solution
-            solution.path.append(np.random.choice(restriced_candidates))
+            solution.path.append(choice(restriced_candidates))
             solution.cost = self._cost_solution(solution)
         return solution
 
