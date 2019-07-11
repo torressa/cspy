@@ -28,8 +28,8 @@ class StandardGraph:
         self.max_res = max_res
         self.min_res = min_res
         self.path = None
-        self.path_edges = None
         self.best_path = None
+        self.path_edges = None
 
     def _get_path_edges(self, nodes):
         # Creates a list of edges given the nodes selected
@@ -216,7 +216,6 @@ class PSOLGENT(StandardGraph):
         self.best_fit = None
         self.local_best = None
         self.global_best = None
-        self.shortest_path = None
 
     def run(self):
         self._init_swarm()
@@ -344,14 +343,7 @@ class PSOLGENT(StandardGraph):
     def _sort_nodes(nodes):
         """ Sort nodes between Source and Sink. If node data allows data,
         edit the sorting function to make use of it.
-        Otherwise, add the following lines:
-
-        order_dict = {'Source': '0', 'Sink': 'Z{}'.format(len(nodes))}
-        return sorted(nodes,
-                      key=lambda x: order_dict[x] if x in order_dict else x)
         """
-        # String comparison for all nodes keeping source first and sink last
-        # return sorted(nodes, key=lambda x: x[1]['pos'][0])
         order_dict = {'Source': '0', 'Sink': 'Z{}'.format(len(nodes))}
         return sorted(nodes,
                       key=lambda x: order_dict[x] if x in order_dict else x)
