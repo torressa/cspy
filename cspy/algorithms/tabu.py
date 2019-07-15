@@ -5,7 +5,7 @@ import logging
 from numpy import array
 from networkx import astar_path, NetworkXException
 from cspy.path import Path
-from cspy.preprocessing import check
+from cspy.preprocessing import check_and_preprocess
 
 
 class Tabu:
@@ -28,6 +28,15 @@ class Tabu:
         usage (including initial backward stopping point).
         We must have ``len(min_res)`` :math:`=` ``len(max_res)``.
 
+    REF : function, optional
+        Custom resource extension function. See `REFs`_ for more details.
+        Default : additive.
+
+    preprocess : bool, optional
+        enables preprocessing routine. Default : False.
+
+    .. _REFs : https://cspy.readthedocs.io/en/latest/how_to.html#refs
+
     Returns
     -------
     path : list
@@ -49,16 +58,17 @@ class Tabu:
 
         >>> from cspy import Tabu
         >>> from networkx import DiGraph
+        >>> from numpy import array
         >>> G = DiGraph(directed=True, n_res=2)
-        >>> G.add_edge('Source', 'A', res_cost=[1, 1], weight=1)
-        >>> G.add_edge('Source', 'B', res_cost=[1, 1], weight=1)
-        >>> G.add_edge('A', 'C', res_cost=[1, 1], weight=1)
-        >>> G.add_edge('B', 'C', res_cost=[2, 1], weight=-1)
-        >>> G.add_edge('C', 'D', res_cost=[1, 1], weight=-1)
-        >>> G.add_edge('D', 'E', res_cost=[1, 1], weight=1)
-        >>> G.add_edge('D', 'F', res_cost=[1, 1], weight=1)
-        >>> G.add_edge('F', 'Sink', res_cost=[1, 1], weight=1)
-        >>> G.add_edge('E', 'Sink', res_cost=[1, 1], weight=1)
+        >>> G.add_edge('Source', 'A', res_cost=array([1, 1]), weight=1)
+        >>> G.add_edge('Source', 'B', res_cost=array([1, 1]), weight=1)
+        >>> G.add_edge('A', 'C', res_cost=array([1, 1]), weight=1)
+        >>> G.add_edge('B', 'C', res_cost=array([2, 1]), weight=-1)
+        >>> G.add_edge('C', 'D', res_cost=array([1, 1]), weight=-1)
+        >>> G.add_edge('D', 'E', res_cost=array([1, 1]), weight=1)
+        >>> G.add_edge('D', 'F', res_cost=array([1, 1]), weight=1)
+        >>> G.add_edge('F', 'Sink', res_cost=array([1, 1]), weight=1)
+        >>> G.add_edge('E', 'Sink', res_cost=array([1, 1]), weight=1)
         >>> max_res, min_res = [5, 5], [0, 0]
         >>> path = Tabu(G, max_res, min_res).run()
         >>> print(path)
@@ -66,11 +76,10 @@ class Tabu:
 
     """
 
-    def __init__(self, G, max_res, min_res):
+    def __init__(self, G, max_res, min_res, REF=None, preprocess=False):
         # Check input graph and parameters
-        check(G, max_res, min_res)
+        self.G = check_and_preprocess(preprocess, G, max_res, min_res, REF)
         # Input parameters
-        self.G = G
         self.max_res = max_res
         self.min_res = min_res
         # Algorithm specific parameters
@@ -81,6 +90,9 @@ class Tabu:
         self.neighbourhood = []
         self.tabu_edge = None
         self.edges_to_check = dict(self.G.edges())
+
+        if REF:
+            Path._REF = REF
 
     def run(self):
         """
@@ -176,7 +188,7 @@ class Tabu:
     def _heuristic(self, i, j):
         # Given a node pair returns a weight to apply
         if (i, j) == self.tabu_edge or not (i, j) in self.G.edges():
-            return 1e10
+            return 1e7
         else:
             return self.G.get_edge_data(i, j)['weight']
 

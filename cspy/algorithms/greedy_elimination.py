@@ -5,7 +5,7 @@ import logging
 from numpy import array
 from networkx import astar_path, NetworkXException
 from cspy.path import Path
-from cspy.preprocessing import check
+from cspy.preprocessing import check_and_preprocess
 
 log = logging.getLogger(__name__)
 
@@ -32,8 +32,17 @@ class GreedyElim:
         usage (including initial backward stopping point).
         We must have ``len(min_res)`` :math:`=` ``len(max_res)``.
 
+    REF : function, optional
+        Custom resource extension function. See `REFs`_ for more details.
+        Default : additive.
+
+    preprocess : bool, optional
+        enables preprocessing routine. Default : False.
+
     return_G : bool, optional
         whether or not you'd like the resulting graph returned
+
+    .. _REFs : https://cspy.readthedocs.io/en/latest/how_to.html#refs
 
     Returns
     -------
@@ -78,11 +87,16 @@ class GreedyElim:
 
     """
 
-    def __init__(self, G, max_res, min_res, return_G=False):
+    def __init__(self,
+                 G,
+                 max_res,
+                 min_res,
+                 REF=None,
+                 preprocess=False,
+                 return_G=False):
         # Check input graph and parameters
-        check(G, max_res, min_res)
+        self.G = check_and_preprocess(preprocess, G, max_res, min_res, REF)
         # Input parameters
-        self.G = G
         self.max_res = max_res
         self.min_res = min_res
         self.return_G = return_G
@@ -93,6 +107,9 @@ class GreedyElim:
         self.predecessor_edges = []
         self.last_edge_removed = None
         self.edges_to_remove = dict(self.G.edges())
+
+        if REF:
+            Path._REF = REF
 
     def run(self):
         while self.stop is False:

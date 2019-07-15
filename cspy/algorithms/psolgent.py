@@ -13,16 +13,16 @@ from numpy import (argmin, array, copy, diag_indices_from, exp, dot, zeros,
                    ones, where)
 from numpy.random import uniform
 from cspy.path import Path
-from cspy.preprocessing import check
+from cspy.preprocessing import check_and_preprocess
 
 log = logging.getLogger(__name__)
 
 
 class StandardGraph:
 
-    def __init__(self, G, max_res, min_res):
+    def __init__(self, G, max_res, min_res, REF, preprocess):
         # Check input graph and parameters
-        check(G, max_res, min_res)
+        G = check_and_preprocess(preprocess, G, max_res, min_res, REF)
         # Input parameters
         self.G = G
         self.max_res = max_res
@@ -31,6 +31,9 @@ class StandardGraph:
         self.best_path = None
         self.path_edges = None
 
+        if REF:
+            Path._REF = REF
+
     def _get_path_edges(self, nodes):
         # Creates a list of edges given the nodes selected
         self.path_edges = list(
@@ -38,8 +41,10 @@ class StandardGraph:
             if edge[0:2] in zip(nodes, nodes[1:]))
 
     def _save_shortest_path(self):
-        """If edges given, saves the path provided.
-        Returns whether the path is disconnected or not"""
+        """
+        If edges given, saves the path provided.
+        Returns whether the path is disconnected or not
+        """
         if self.path_edges:
             self.path = [edge[0] for edge in self.path_edges]
             self.path.append(self.path_edges[-1][1])
@@ -51,21 +56,18 @@ class StandardGraph:
         Penalty otherwise
         """
         if self.path:
-            if len(self.path) > 2 and (self.path[0] == 'Source' or
+            if len(self.path) > 2 and (self.path[0] == 'Source' and
                                        self.path[-1] == 'Sink'):
                 base_cost = sum(edge[2]['weight'] for edge in self.path_edges)
-                if self.path[0] == 'Source' and self.path[-1] == 'Sink':
-                    if Path(self.G, self.path, self.max_res,
-                            self.min_res)._check_feasibility() is True:
-                        self.best_path = self.path
-                        log.info("Resource feasible path found")
-                        return base_cost
-                    else:
-                        # penalty for resource infeasible valid path
-                        return 1e1 + base_cost
+                # if self.path[0] == 'Source' and self.path[-1] == 'Sink':
+                if Path(self.G, self.path, self.max_res,
+                        self.min_res)._check_feasibility() is True:
+                    self.best_path = self.path
+                    log.info("Resource feasible path found")
+                    return base_cost
                 else:
-                    # penalty for nearly valid path
-                    return 1e3 + base_cost
+                    # penalty for resource infeasible valid path
+                    return 1e6 + base_cost
             else:
                 return False
         else:
@@ -102,32 +104,46 @@ class PSOLGENT(StandardGraph):
         :math:`[L_1, L_2, ..., L_{n\_res}]` lower bounds for resource
         usage.
 
-    max_iter : int
-        Maximum number of iterations for algorithm
+    REF : function, optional
+        Custom resource extension function. See `REFs`_ for more details.
+        Default : additive.
 
-    swarm_size : int
-        number of members in swarm
+    preprocess : bool, optional
+        enables preprocessing routine. Default : False.
 
-    member_size : int
-        number of components per member vector
+    max_iter : int, optional
+        Maximum number of iterations for algorithm. Default : 100.
 
-    neighbourhood_size : int
-        size of neighbourhood
+    swarm_size : int, optional
+        number of members in swarm. Default : 50.
+
+    member_size : int, optional
+        number of components per member vector. Default : ``len(G.nodes())``.
+
+    neighbourhood_size : int, optional
+        size of neighbourhood. Default : 10.
 
     lower_bound : list of floats, optional
-        list of lower bounds
+        list of lower bounds. Default : ``numpy.zeros(member_size)``
+        (no nodes in path).
 
     upper_bound : list of floats, optional
-        list of upper bounds
+        list of upper bounds. Default : ``numpy.ones(member_size)``
+        (all nodes in path).
 
     c1 : float, optional
-        constant for 1st term in the velocity equation
+        constant for 1st term in the velocity equation.
+        Default : 1.35.
 
     c2 : float, optional
-        contsant for 2nd term in the velocity equation
+        contsant for 2nd term in the velocity equation.
+        Default : 1.35.
 
     c3 : float, optional
-        constant for 3rd term in the velocity equation
+        constant for 3rd term in the velocity equation.
+        Default : 1.4.
+
+    .. _REFs : https://cspy.readthedocs.io/en/latest/how_to.html#refs
 
     Returns
     -------
@@ -146,6 +162,9 @@ class PSOLGENT(StandardGraph):
     Also, we must have ``len(min_res)`` :math:`=` ``len(max_res)``.
     See `Using cspy`_.
 
+    This algorithm requires a consistent sorting of the nodes in the graph.
+    Please see comments and edit the function ``_sort_nodes`` accordingly.
+
     .. _Using cspy: https://cspy.readthedocs.io/en/latest/how_to.html
 
     Example
@@ -156,26 +175,29 @@ class PSOLGENT(StandardGraph):
 
         >>> from cspy import PSOLGENT
         >>> from networkx import DiGraph
-        >>> from numpy import zeros, ones
+        >>> from numpy import zeros, ones, array
         >>> G = DiGraph(directed=True, n_res=2)
-        >>> G.add_edge('Source', 'A', res_cost=[1, 1], weight=1)
-        >>> G.add_edge('Source', 'B', res_cost=[1, 1], weight=1)
-        >>> G.add_edge('Source', 'C', res_cost=[10, 1], weight=10)
-        >>> G.add_edge('A', 'C', res_cost=[1, 1], weight=1)
-        >>> G.add_edge('A', 'E', res_cost=[10, 1], weight=10)
-        >>> G.add_edge('A', 'F', res_cost=[10, 1], weight=10)
-        >>> G.add_edge('B', 'C', res_cost=[2, 1], weight=-1)
-        >>> G.add_edge('B', 'F', res_cost=[10, 1], weight=10)
-        >>> G.add_edge('B', 'E', res_cost=[10, 1], weight=10)
-        >>> G.add_edge('C', 'D', res_cost=[1, 1], weight=-1)
-        >>> G.add_edge('D', 'E', res_cost=[1, 1], weight=1)
-        >>> G.add_edge('D', 'F', res_cost=[1, 1], weight=1)
-        >>> G.add_edge('D', 'Sink', res_cost=[10, 10], weight=10)
-        >>> G.add_edge('F', 'Sink', res_cost=[10, 1], weight=1)
-        >>> G.add_edge('E', 'Sink', res_cost=[1, 1], weight=1)
+        >>> G.add_edge('Source', 'A', res_cost=array([1, 1]), weight=1)
+        >>> G.add_edge('Source', 'B', res_cost=array([1, 1]), weight=1)
+        >>> G.add_edge('Source', 'C', res_cost=array([10, 1]), weight=10)
+        >>> G.add_edge('A', 'C', res_cost=array([1, 1]), weight=1)
+        >>> G.add_edge('A', 'E', res_cost=array([10, 1]), weight=10)
+        >>> G.add_edge('A', 'F', res_cost=array([10, 1]), weight=10)
+        >>> G.add_edge('B', 'C', res_cost=array([2, 1]), weight=-1)
+        >>> G.add_edge('B', 'F', res_cost=array([10, 1]), weight=10)
+        >>> G.add_edge('B', 'E', res_cost=array([10, 1]), weight=10)
+        >>> G.add_edge('C', 'D', res_cost=array([1, 1]), weight=-1)
+        >>> G.add_edge('D', 'E', res_cost=array([1, 1]), weight=1)
+        >>> G.add_edge('D', 'F', res_cost=array([1, 1]), weight=1)
+        >>> G.add_edge('D', 'Sink', res_cost=array([10, 10]), weight=10)
+        >>> G.add_edge('F', 'Sink', res_cost=array([10, 1]), weight=1)
+        >>> G.add_edge('E', 'Sink', res_cost=array([1, 1]), weight=1)
         >>> n_nodes = len(self.J.nodes())
-        >>> path = PSOLGENT(G, [5, 5], [0, 0], 100, 50, n_nodes, 50,
-                        zeros(n_nodes), ones(n_nodes), 1.35, 1.5, 1.40).run()
+        >>> path = PSOLGENT(G, [5, 5], [0, 0],
+                            max_iter=200,
+                            swarm_size=50,
+                            member_size=n_nodes,
+                            neighbourhood_size=50).run()
         >>> print(path)
         ['Source', 'A', 'C', 'D', 'E', 'Sink']
 
@@ -188,15 +210,19 @@ class PSOLGENT(StandardGraph):
                  G,
                  max_res,
                  min_res,
-                 max_iter,
-                 swarm_size,
-                 member_size,
-                 neighbourhood_size,
+                 REF=None,
+                 preprocess=False,
+                 max_iter=100,
+                 swarm_size=50,
+                 member_size=None,
+                 lower_bound=None,
+                 upper_bound=None,
+                 neighbourhood_size=10,
                  c1=1.35,
                  c2=1.35,
-                 c3=1.40):
+                 c3=1.4):
         # Init graph
-        StandardGraph.__init__(self, G, max_res, min_res)
+        StandardGraph.__init__(self, G, max_res, min_res, REF, preprocess)
         # Inputs
         self.swarm_size = swarm_size
         self.member_size = member_size
@@ -320,7 +346,7 @@ class PSOLGENT(StandardGraph):
         """ Saves binary representation of nodes in path.
         0 not present, 1 present. """
         nodes = self._sort_nodes(list(self.G.nodes()))
-        self.current_nodes = list(
+        self.current_nodes = list(  # remove data
             nodes[i] for i in range(len(nodes)) if arr[i] == 1)
 
     def _get_fitness_member(self):
@@ -329,20 +355,20 @@ class PSOLGENT(StandardGraph):
         disconnected = self._save_shortest_path()
         if self.path_edges:
             if disconnected:
-                return 1e5  # disconnected path
+                return 1e7  # disconnected path
             cost = self._check_path()
             if cost is not False:
                 # Valid path with penalty
                 return cost
             else:
-                return 1e5  # path not valid
+                return 1e7  # path not valid
         else:
-            return 1e5  # no path
+            return 1e7  # no path
 
     @staticmethod
     def _sort_nodes(nodes):
         """ Sort nodes between Source and Sink. If node data allows sorting,
-        edit line 322 to pass `list(selg.G.nodes(data=True))` and used that
+        edit line 327 to pass `list(self.G.nodes(data=True))` and used that
         in the sorting function below.
         For example, if nodes have an attribute `pos` a tuple that contains
         the position of a node in space (x, y), replace the return with:

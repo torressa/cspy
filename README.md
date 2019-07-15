@@ -84,18 +84,29 @@ If you have a question or need help, feel free to raise an issue explaining it.
 
 ### TODO
 
- - [ ] Implement generic resource extension functions for bidirectional algorithm
+ - [X] Implement generic resource extension functions for bidirectional algorithm
  - [ ] Greedy elimination algorithm tests.
  
 ### Changelog
 
-pre-release v0.0.4: 9/07/2019
+pre-release v0.0.5: 15/07/2019
 
 ```
-Implemented PSOLGENT
-GreedyElim simple test
-fixed prune_graph preprocessing routine
-YAPF google style
+numpy.array integration
+Generic resource extension functions options
+```
+
+## Citing
+
+If you'd like to cite this package, please use the following bib format:
+
+```
+@Misc{cspy,
+  author = {Torres Sanchez, David},
+  title = {{\texttt{cspy}-- A Python package with a collection of algorithms for the (Resource) Constrained Shortest Path problem}},
+  year = {2019},
+  url = {\url{https://github.com/torressa/cspy}}
+}
 ```
 
 [@inrich]: https://www.researchgate.net/publication/227142556_Shortest_Path_Problems_with_Resource_Constraints

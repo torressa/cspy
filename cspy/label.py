@@ -1,4 +1,6 @@
-from operator import sub
+import types
+from numpy import array, equal
+from operator import add, sub
 
 
 class Label(object):
@@ -19,7 +21,7 @@ class Label(object):
     path : list
         all nodes in the path"""
 
-    _REF_forward, _REF_backward = None, None
+    _REF_forward, _REF_backward = add, sub
 
     def __init__(self, weight, node, res, path):
         self.weight = weight
@@ -35,64 +37,44 @@ class Label(object):
 
     def __lt__(self, other):
         # Less than operator for two Label objects
-        return (self.weight < other.weight and self.res <= other.res) or (
-            self.weight <= other.weight and self.res < other.res)
+        return (self.weight < other.weight and
+                all(self.res <= other.res)) or (self.weight <= other.weight and
+                                                all(self.res < other.res))
 
     def __le__(self, other):
         # Less than or equal to operator for two Label objects
-        return self.weight <= other.weight and self.res <= other.res
+        return self.weight <= other.weight and all(self.res <= other.res)
 
     def __eq__(self, other):
         # Equality operator for two Label objects
-        return (self.weight == other.weight and self.res == other.res and
-                self.node == other.node)
+        return (self.weight == other.weight and
+                all(equal(self.res, other.res)) and self.node == other.node)
 
     def __hash__(self):
         # Redefinition of hash to avoid TypeError due to the __eq__ definition
         return id(self)
 
-    def dominates(self, other, direction="forward"):
+    def dominates(self, other):
         # Return whether self dominates other.
-        if direction == 'forward':
-            return self.node == other.node and (
-                (self.weight < other.weight and self.res <= other.res) or (
-                    self.weight <= other.weight and self.res < other.res))
-        else:
-            return self.node == other.node and (
-                (self.weight < other.weight and self.res >= other.res) or (
-                    self.weight <= other.weight and self.res > other.res))
+        return self.node == other.node and (
+            (self.weight < other.weight and all(self.res <= other.res)) or
+            (self.weight <= other.weight and all(self.res < other.res)))
 
-    def get_new_label(self, direction, weight, node, res):
+    def get_new_label(self, edge, direction, weight, res):
         path = list(self.path)
+        node = edge[1] if direction == 'forward' else edge[0]
         path.append(node)
         if direction == 'forward':
-            res_new = list(map(self._REF_forward, self.res, res))
+            if isinstance(self._REF_forward, types.BuiltinFunctionType):
+                res_new = self.res + res
+            else:
+                res_new = self._REF_forward(self.res, edge)
         else:
-            res_new = list(map(self._REF_backward, self.res, res))
+            if isinstance(self._REF_backward, types.BuiltinFunctionType):
+                res_new = self.res - res
+            else:
+                res_new = self._REF_backward(self.res, edge)
         return Label(weight + self.weight, node, res_new, path)
 
-    def feasibility_check(self, max_res=[], min_res=[],
-                          direction="forward"):
-        if direction == "forward":
-            return self.check_geq(max_res, self.res)
-        else:
-            return self.check_geq(self.res, min_res, "gt")
-
-    @staticmethod
-    def check_geq(l1, l2, inequality="geq"):
-        """Determines if all elements of list l1 either >=
-        or > than those in list l2.
-
-        Parameters
-        ----------
-        l1, l2 : list
-            lists of integers.
-
-        inequality : string, optional
-            type of inequality 'ge' for >= 'gt' for >. Default: 'ge'
-            """
-        diff = list(map(sub, l1, l2))
-        if inequality == "gt":
-            return all(elem > 0 for elem in diff)
-        else:
-            return all(elem >= 0 for elem in diff)
+    def feasibility_check(self, max_res, min_res, direction="forward"):
+        return all(max_res >= self.res) and all(min_res <= self.res)

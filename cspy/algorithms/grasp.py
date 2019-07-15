@@ -7,9 +7,9 @@ import logging
 from numpy.random import choice
 from math import factorial
 from random import sample, randint
-from itertools import permutations
+from itertools import permutations, repeat
 # from networkx import astar_path, NetworkXException
-from cspy.preprocessing import check
+from cspy.preprocessing import check_and_preprocess
 from cspy.path import Path
 
 log = logging.getLogger(__name__)
@@ -35,14 +35,23 @@ class GRASP:
         :math:`[L_1, L_2, ..., L_{n\_res}]` lower bounds for resource
         usage.
 
-    max_iter : int
-        Maximum number of iterations for algorithm
+    REF : function, optional
+        Custom resource extension function. See `REFs`_ for more details.
+        Default : additive.
 
-    max_localiter : int
-        Maximum number of local search iterations
+    preprocess : bool, optional
+        enables preprocessing routine. Default : False.
+
+    max_iter : int, optional
+        Maximum number of iterations for algorithm. Default : 100.
+
+    max_localiter : int, optional
+        Maximum number of local search iterations. Default : 10.
 
     alpha : float, optional
-        Greediness factor 0 (random) --> 1 (greedy)
+        Greediness factor 0 (random) --> 1 (greedy). Default : 0.2.
+
+    .. _REFs : https://cspy.readthedocs.io/en/latest/how_to.html#refs
 
     Returns
     -------
@@ -72,23 +81,25 @@ class GRASP:
 
         >>> from cspy import GRASP
         >>> from networkx import DiGraph
+        >>> from numpy import array
         >>> G = DiGraph(directed=True, n_res=2)
-        >>> G.add_edge('Source', 'A', res_cost=[1, 1], weight=1)
-        >>> G.add_edge('Source', 'B', res_cost=[1, 1], weight=1)
-        >>> G.add_edge('Source', 'C', res_cost=[10, 1], weight=10)
-        >>> G.add_edge('A', 'C', res_cost=[1, 1], weight=1)
-        >>> G.add_edge('A', 'E', res_cost=[10, 1], weight=10)
-        >>> G.add_edge('A', 'F', res_cost=[10, 1], weight=10)
-        >>> G.add_edge('B', 'C', res_cost=[2, 1], weight=-1)
-        >>> G.add_edge('B', 'F', res_cost=[10, 1], weight=10)
-        >>> G.add_edge('B', 'E', res_cost=[10, 1], weight=10)
-        >>> G.add_edge('C', 'D', res_cost=[1, 1], weight=-1)
-        >>> G.add_edge('D', 'E', res_cost=[1, 1], weight=1)
-        >>> G.add_edge('D', 'F', res_cost=[1, 1], weight=1)
-        >>> G.add_edge('D', 'Sink', res_cost=[10, 10], weight=10)
-        >>> G.add_edge('F', 'Sink', res_cost=[10, 1], weight=1)
-        >>> G.add_edge('E', 'Sink', res_cost=[1, 1], weight=1)
-        >>> path = GRASP(G, [5, 5], [0, 0], 50, 10).run()
+        >>> G.add_edge('Source', 'A', res_cost=array([1, 1]), weight=1)
+        >>> G.add_edge('Source', 'B', res_cost=array([1, 1]), weight=1)
+        >>> G.add_edge('Source', 'C', res_cost=array([10, 1]), weight=10)
+        >>> G.add_edge('A', 'C', res_cost=array([1, 1]), weight=1)
+        >>> G.add_edge('A', 'E', res_cost=array([10, 1]), weight=10)
+        >>> G.add_edge('A', 'F', res_cost=array([10, 1]), weight=10)
+        >>> G.add_edge('B', 'C', res_cost=array([2, 1]), weight=-1)
+        >>> G.add_edge('B', 'F', res_cost=array([10, 1]), weight=10)
+        >>> G.add_edge('B', 'E', res_cost=array([10, 1]), weight=10)
+        >>> G.add_edge('C', 'D', res_cost=array([1, 1]), weight=-1)
+        >>> G.add_edge('D', 'E', res_cost=array([1, 1]), weight=1)
+        >>> G.add_edge('D', 'F', res_cost=array([1, 1]), weight=1)
+        >>> G.add_edge('D', 'Sink', res_cost=array([10, 10]), weight=10)
+        >>> G.add_edge('F', 'Sink', res_cost=array([10, 1]), weight=1)
+        >>> G.add_edge('E', 'Sink', res_cost=array([1, 1]), weight=1)
+        >>> path = GRASP(G, [5, 5], [0, 0], max_iter=50,
+                         max_localiter=10).run()
         >>> print(path)
         ['Source', 'A', 'C', 'D', 'E', 'Sink']
 
@@ -96,9 +107,17 @@ class GRASP:
 
     """
 
-    def __init__(self, G, max_res, min_res, max_iter, max_localiter, alpha=0.9):
+    def __init__(self,
+                 G,
+                 max_res,
+                 min_res,
+                 REF=None,
+                 preprocess=False,
+                 max_iter=100,
+                 max_localiter=10,
+                 alpha=0.2):
         # Check input graph and parameters
-        check(G, max_res, min_res)
+        G = check_and_preprocess(preprocess, G, max_res, min_res, REF)
         # Input parameters
         self.G = G
         self.max_res = max_res
@@ -106,6 +125,8 @@ class GRASP:
         self.max_iter = max_iter
         self.max_localiter = max_localiter
         self.alpha = alpha
+        if REF:
+            Path._REF = REF
         # Algorithm specific parameters
         self.it = 0
         self.best = None
@@ -131,9 +152,8 @@ class GRASP:
         # Construction phase
         while len(solution.path) < len(self.nodes):
             candidates = [i for i in self.nodes if i not in solution.path]
-            weights = [
-                self._heuristic(solution.path[-1], i) for i in candidates
-            ]
+            weights = list(
+                map(self._heuristic, repeat(solution.path[-1]), candidates))
             # Build Restricted Candidiate List (RCL)
             restriced_candidates = [
                 candidates[i]
@@ -181,7 +201,7 @@ class GRASP:
         Using a subset of edges, it generates a connected path starting at
         the source node. """
         n_permutations = int(factorial(len(path)) / factorial(len(path) - 2))
-        sample_size = randint(int(n_permutations / 2), n_permutations)
+        sample_size = randint(3, n_permutations)
         selection = sample(list(permutations(path, 2)), sample_size)
         path_edges = dict(list(edge for edge in selection if edge in G.edges()))
         elem = 'Source'  # start point in the new list

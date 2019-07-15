@@ -1,14 +1,13 @@
 import sys
 import unittest
 from networkx import DiGraph
-from numpy import zeros, ones
+from numpy import array
 sys.path.append("../")
 from cspy.algorithms.bidirectional import BiDirectional
 from cspy.algorithms.tabu import Tabu
 from cspy.algorithms.greedy_elimination import GreedyElim
 from cspy.algorithms.grasp import GRASP
 from cspy.algorithms.psolgent import PSOLGENT
-
 from cspy.label import Label
 
 
@@ -20,12 +19,12 @@ class TestsBasic(unittest.TestCase):
         self.max_res, self.min_res = [4, 20], [1, 0]
         # Create simple digraph to test algorithm
         self.G = DiGraph(directed=True, n_res=2)
-        self.G.add_edge('Source', 'A', res_cost=[1, 2], weight=-1)
-        self.G.add_edge('A', 'B', res_cost=[1, 0.3], weight=-1)
+        self.G.add_edge('Source', 'A', res_cost=array([1, 2]), weight=-1)
+        self.G.add_edge('A', 'B', res_cost=array([1, 0.3]), weight=-1)
         # self.G.add_edge('A', 'C', res_cost=[1, 0.1], weight=1)
-        self.G.add_edge('B', 'C', res_cost=[1, 3], weight=-10)
-        self.G.add_edge('B', 'Sink', res_cost=[1, 2], weight=10)
-        self.G.add_edge('C', 'Sink', res_cost=[1, 10], weight=-1)
+        self.G.add_edge('B', 'C', res_cost=array([1, 3]), weight=-10)
+        self.G.add_edge('B', 'Sink', res_cost=array([1, 2]), weight=10)
+        self.G.add_edge('C', 'Sink', res_cost=array([1, 10]), weight=-1)
 
         # Create erratic digraph to test exception handling
         self.E = DiGraph(directed=True)
@@ -33,30 +32,38 @@ class TestsBasic(unittest.TestCase):
 
         # Create digraph with negative resource costs with unreachable node 'B'
         self.H = DiGraph(directed=True, n_res=2)
-        self.H.add_edge('Source', 'A', res_cost=[1, 2], weight=0)
-        self.H.add_edge('A', 'C', res_cost=[-1, 0.3], weight=0)
-        self.H.add_edge('A', 'B', res_cost=[-1, 3], weight=0)
-        self.H.add_edge('B', 'D', res_cost=[-1, 2], weight=0)
-        self.H.add_edge('C', 'D', res_cost=[1, 0.1], weight=0)
-        self.H.add_edge('D', 'Sink', res_cost=[1, 0.1], weight=0)
+        self.H.add_edge('Source', 'A', res_cost=array([1, 2]), weight=0)
+        self.H.add_edge('A', 'C', res_cost=array([-1, 0.3]), weight=0)
+        self.H.add_edge('A', 'B', res_cost=array([-1, 3]), weight=0)
+        # Unreachable node B
+        self.H.add_edge('B', 'D', res_cost=array([-1, 2]), weight=0)
+        self.H.add_edge('C', 'D', res_cost=array([1, 0.1]), weight=0)
+        self.H.add_edge('D', 'Sink', res_cost=array([1, 0.1]), weight=0)
 
         # Create digraph with a resource infeasible minimum cost path
         self.J = DiGraph(directed=True, n_res=2)
-        self.J.add_edge('Source', 'A', res_cost=[1, 1], weight=1)
-        self.J.add_edge('Source', 'B', res_cost=[1, 1], weight=1)
-        self.J.add_edge('Source', 'C', res_cost=[10, 1], weight=10)
-        self.J.add_edge('A', 'C', res_cost=[1, 1], weight=1)
-        self.J.add_edge('A', 'E', res_cost=[10, 1], weight=10)
-        self.J.add_edge('A', 'F', res_cost=[10, 1], weight=10)
-        self.J.add_edge('B', 'C', res_cost=[2, 1], weight=-1)
-        self.J.add_edge('B', 'F', res_cost=[10, 1], weight=10)
-        self.J.add_edge('B', 'E', res_cost=[10, 1], weight=10)
-        self.J.add_edge('C', 'D', res_cost=[1, 1], weight=-1)
-        self.J.add_edge('D', 'E', res_cost=[1, 1], weight=1)
-        self.J.add_edge('D', 'F', res_cost=[1, 1], weight=1)
-        self.J.add_edge('D', 'Sink', res_cost=[10, 10], weight=10)
-        self.J.add_edge('F', 'Sink', res_cost=[10, 1], weight=1)
-        self.J.add_edge('E', 'Sink', res_cost=[1, 1], weight=1)
+        self.J.add_edge('Source', 'A', res_cost=array([1, 1]), weight=1)
+        self.J.add_edge('Source', 'B', res_cost=array([1, 1]), weight=1)
+        # Resource infeasible edge
+        self.J.add_edge('Source', 'C', res_cost=array([10, 1]), weight=10)
+        self.J.add_edge('A', 'C', res_cost=array([1, 1]), weight=1)
+        # Resource infeasible edge
+        self.J.add_edge('A', 'E', res_cost=array([10, 1]), weight=10)
+        # Resource infeasible edge
+        self.J.add_edge('A', 'F', res_cost=array([10, 1]), weight=10)
+        self.J.add_edge('B', 'C', res_cost=array([2, 1]), weight=-1)
+        # Resource infeasible edge
+        self.J.add_edge('B', 'F', res_cost=array([10, 1]), weight=10)
+        # Resource infeasible edge
+        self.J.add_edge('B', 'E', res_cost=array([10, 1]), weight=10)
+        self.J.add_edge('C', 'D', res_cost=array([1, 1]), weight=-1)
+        self.J.add_edge('D', 'E', res_cost=array([1, 1]), weight=1)
+        self.J.add_edge('D', 'F', res_cost=array([1, 1]), weight=1)
+        # Resource infeasible edge
+        self.J.add_edge('D', 'Sink', res_cost=array([10, 10]), weight=10)
+        # Resource infeasible edge
+        self.J.add_edge('F', 'Sink', res_cost=array([10, 1]), weight=1)
+        self.J.add_edge('E', 'Sink', res_cost=array([1, 1]), weight=1)
 
     def testBothDirections(self):
         # Find shortest path of simple test digraph
@@ -91,11 +98,11 @@ class TestsBasic(unittest.TestCase):
 
     def testDominance(self):
         # Check forward and backward dominance
-        L1 = Label(10, 'B', [6, 5], [])
-        L2 = Label(1, 'B', [6, -3], [])
-        L3 = Label(-10, 'A', [3, -8.3], [])
-        L4 = Label(-9, 'A', [4, -6.3], [])
-        L5 = Label(0, 'A', [4, -5.1], [])
+        L1 = Label(10, 'B', array([6, 5]), [])
+        L2 = Label(1, 'B', array([6, -3]), [])
+        L3 = Label(-10, 'A', array([3, -8.3]), [])
+        L4 = Label(-9, 'A', array([4, -6.3]), [])
+        L5 = Label(0, 'A', array([4, -5.1]), [])
         self.assertTrue(L2.dominates(L1))
         self.assertTrue(L3.dominates(L4))
         self.assertTrue(L3.dominates(L5))
@@ -105,16 +112,16 @@ class TestsBasic(unittest.TestCase):
         self.assertRaises(Exception, BiDirectional, self.E, 'x', [1, 'foo'],
                           'up')
 
-    def testNegativeEdges(self):
+    def testPreprocessing(self):
         # Check if negative resource costs work and whether
         # unreachable nodes are eliminated
-        path = BiDirectional(self.H, [5, 20], [0, 0]).run()
+        path = BiDirectional(self.H, [5, 20], [0, 0], preprocess=True).run()
         # check if the unreachable node has been eliminated
         self.assertTrue('B' not in self.H.nodes())
         self.assertEqual(path, ['Source', 'A', 'C', 'D', 'Sink'])
 
     def testTabu(self):
-        path = Tabu(self.J, [5, 5], [0, 0]).run()
+        path = Tabu(self.J, max_res=[5, 5], min_res=[0, 0]).run()
         self.assertEqual(path, ['Source', 'A', 'C', 'D', 'E', 'Sink'])
 
     def testGreedyElim(self):
@@ -124,15 +131,20 @@ class TestsBasic(unittest.TestCase):
             str(context.exception) in
             'No resource feasible path has been found')
 
-        # self.assertRaises(Exception, GreedyElim.run, self.J, [5, 5], [0, 0])
-
     def testGRASP(self):
-        path = GRASP(self.J, [5, 5], [0, 0], 50, 10).run()
+        path = GRASP(self.J, [5, 5], [0, 0], max_iter=50,
+                     max_localiter=10).run()
         self.assertEqual(path, ['Source', 'A', 'C', 'D', 'E', 'Sink'])
 
     def testPSOLGENT(self):
         n_nodes = len(self.J.nodes())
-        path = PSOLGENT(self.J, [5, 5], [0, 0], 200, 50, n_nodes, 50).run()
+        path = PSOLGENT(self.J,
+                        max_res=[5, 5],
+                        min_res=[0, 0],
+                        max_iter=200,
+                        swarm_size=50,
+                        member_size=n_nodes,
+                        neighbourhood_size=50).run()
         self.assertEqual(path, ['Source', 'A', 'C', 'D', 'E', 'Sink'])
 
 

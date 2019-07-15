@@ -94,12 +94,15 @@ def check_and_preprocess(preprocess,
                          G,
                          max_res=None,
                          min_res=None,
+                         REF_forward=None,
+                         REF_backward=None,
                          direction=None,
                          algorithm=None):
     """
     Checks whether inputs and the graph are of the appropriate types and
     have the required properties.
-    Removes nodes that cannot be reached due to resource limits.
+    For non-specified REFs, removes nodes that cannot be reached due to
+    resource limits.
 
     Parameters
     ----------
@@ -119,9 +122,15 @@ def check_and_preprocess(preprocess,
         :math:`[U, L_1, L_2, ..., L_{nres}]` lower bounds for resource usage.
         We must have ``len(min_res)`` :math:`=` ``len(max_res)`` :math:`\geq 2`
 
+    REF_forward, REF_backward : function, optional
+        Custom resource extension function. See `REFs`_ for more details.
+        Default: additive, subtractive.
+
     direction : string, optional
         preferred search direction. Either 'both','forward', or, 'backward'.
         Default : 'both'.
+
+    .. _REFs : https://cspy.readthedocs.io/en/latest/how_to.html#refs
 
     :return: If ``preprocess``, returns preprocessed graph ``G`` if no
         exceptions are raised, otherwise doesn't return anything.
@@ -131,6 +140,9 @@ def check_and_preprocess(preprocess,
         exceptions is raised.
     """
     check(G, max_res, min_res, direction, algorithm)
+    if REF_forward or REF_backward:
+        _check_REFs(REF_forward, REF_backward)
+        return G
     if preprocess:
         G = prune_graph(G, max_res, min_res)
         check(G)

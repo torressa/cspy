@@ -5,7 +5,6 @@ import random
 import logging
 import numpy as np
 from itertools import repeat
-from operator import add, sub
 from collections import OrderedDict
 # Local module imports
 from cspy.label import Label
@@ -37,15 +36,18 @@ class BiDirectional:
         usage (including initial backward stopping point).
         We must have ``len(min_res)`` :math:`=` ``len(max_res)`` :math:`\geq 2`
 
-    direc_in : string, optional
+    REF_forward REF_backward : function, optional
+        Custom resource extension function. See `REFs`_ for more details.
+        Default : additive, subtractive.
+
+    preprocess : bool, optional
+        enables preprocessing routine. Default : False.
+
+    direction : string, optional
         preferred search direction.
         Either 'both', 'forward', or, 'backward'. Default : 'both'.
 
-    preprocess : bool, optional
-        enables preprocessing routine.
-
-    REF_forward REF_backward : functions, optional
-        non-additive resource extension functions.
+    .. _REFs : https://cspy.readthedocs.io/en/latest/how_to.html#refs
 
     Returns
     -------
@@ -90,13 +92,14 @@ class BiDirectional:
 
         >>> import cspy
         >>> from networkx import DiGraph
+        >>> from numpy import array
         >>> G = DiGraph(directed=True, n_res=2)
-        >>> G.add_edge('Source', 'A', res_cost=[1, 2], weight=0)
-        >>> G.add_edge('A', 'B', res_cost=[1, 0.3], weight=0)
-        >>> G.add_edge('A', 'C', res_cost=[1, 0.1], weight=0)
-        >>> G.add_edge('B', 'C', res_cost=[1, 3], weight=-10)
-        >>> G.add_edge('B', 'Sink', res_cost=[1, 2], weight=10)
-        >>> G.add_edge('C', 'Sink', res_cost=[1, 10], weight=0)
+        >>> G.add_edge('Source', 'A', res_cost=array([1, 2]), weight=0)
+        >>> G.add_edge('A', 'B', res_cost=array([1, 0.3]), weight=0)
+        >>> G.add_edge('A', 'C', res_cost=array([1, 0.1]), weight=0)
+        >>> G.add_edge('B', 'C', res_cost=array([1, 3]), weight=-10)
+        >>> G.add_edge('B', 'Sink', res_cost=array([1, 2]), weight=10)
+        >>> G.add_edge('C', 'Sink', res_cost=array([1, 10]), weight=0)
         >>> max_res, min_res = [4, 20], [1, 0]
         >>> path = BiDirectional(G, max_res, min_res, direction='both').run()
         >>> print(path)
@@ -109,13 +112,14 @@ class BiDirectional:
                  G,
                  max_res,
                  min_res,
-                 direction='both',
-                 preprocess=True,
-                 REF_forward=add,
-                 REF_backward=sub):
+                 REF_forward=None,
+                 REF_backward=None,
+                 preprocess=False,
+                 direction='both'):
         # Check inputs and preprocess G unless option disabled
         self.G = check_and_preprocess(preprocess, G, max_res, min_res,
-                                      direction, __name__)
+                                      REF_forward, REF_backward, direction,
+                                      __name__)
         self.direc_in = direction
         self.max_res, self.min_res = max_res, min_res
         # init current forward and backward labels
@@ -128,11 +132,11 @@ class BiDirectional:
         self.unprocessed = {'forward': {}, 'backward': {}}
         # init final path
         self.finalpath = {'forward': ["Source"], 'backward': ["Sink"]}
-        # Set REFs for dominance relations and feasibility checks
-        Label._REF_forward = REF_forward
-        Label._REF_backward = REF_backward
-        # Log algorithm type
-        # self.name_algorithm(U, L)
+
+        # If given, set REFs for dominance relations and feasibility checks
+        if REF_forward and REF_backward:
+            Label._REF_forward = REF_forward
+            Label._REF_backward = REF_backward
 
     def run(self):
         while self.Label['forward'] or self.Label['backward']:
@@ -193,8 +197,8 @@ class BiDirectional:
     def _propagate_label(self, edge, direc):
         # Label propagation #
         weight, res_cost = edge[2]['weight'], edge[2]['res_cost']
-        node = edge[1] if direc == 'forward' else edge[0]
-        new_label = self.Label[direc].get_new_label(direc, weight, node,
+        # node = edge[1] if direc == 'forward' else edge[0]
+        new_label = self.Label[direc].get_new_label(edge, direc, weight,
                                                     res_cost)
         if new_label.feasibility_check(self.max_res, self.min_res, direc):
             self.unprocessed[direc][
@@ -264,10 +268,10 @@ class BiDirectional:
             k = list(sub_dict.keys())[0]  # call dict_keys object as a list
             for label in [key for v in sub_dict.values() for key in v.keys()]:
                 if label.node == self.Label[direc].node:
-                    if self.Label[direc].dominates(label, direc):
+                    if self.Label[direc].dominates(label):
                         self.unprocessed[direc][k].pop(label, None)
                         self.unprocessed[direc].pop(label, None)
-                    elif label.dominates(self.Label[direc], direc):
+                    elif label.dominates(self.Label[direc]):
                         self.unprocessed[direc][k].pop(self.Label[direc], None)
                         self.unprocessed[direc].pop(self.Label[direc], None)
 
