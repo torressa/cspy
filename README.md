@@ -84,7 +84,6 @@ If you have a question or need help, feel free to raise an issue explaining it.
 
 ### TODO
 
- - [X] Implement generic resource extension functions for bidirectional algorithm
  - [ ] Greedy elimination algorithm tests.
  - [ ] Write input checks for grasp.py and psolgent.py.
  
