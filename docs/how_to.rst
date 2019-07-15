@@ -21,6 +21,7 @@ For example,
 .. code-block:: python
 
         >>> from networkx import DiGraph
+        >>> from numpy import array
         >>> G = DiGraph(directed=True, n_res=2)
         >>> G.add_edge('Source', 'A', res_cost=array([1]), weight=1)
         >>> G.add_edge('A', 'B', res_cost=array([1]), weight=1)
@@ -83,7 +84,7 @@ As an example, the following function would be valid:
         	if head_node != tail_node:
         		arr[0] = 0
         	else:
-        		arr[0] = cumulative_res + 1
+        		arr[0] = cumulative_res[0] + 1
         	return arr
 
 Your custom REF can then be passed with this format, into the algorithm of choice using the ``REF`` argument (see individual algorithms for details). Note that for the :class:`BiDirectional` algorithm, due to the properties of the algorithm, if you want to use this feature, you have to pass two custom REFs: one for the forward search and one for the backward search. Where the backward REF has to be the inverse of the forward REF, otherwise the algorithm will not return a meaningful path (`Tilk et al 2017`_).
