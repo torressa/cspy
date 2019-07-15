@@ -1,5 +1,5 @@
 ---
-title: 'cspy: A Python package for Resource Constrained Shortest Path Algorithms'
+title: 'cspy: A Python package with a collection of algorithms for the (Resource) Constrained Shortest Path problem'
 tags:
   - Python
   - Resource Constrained Shortest path
@@ -8,71 +8,52 @@ tags:
 authors:
   - name: David Torres Sanchez
     orcid: 0000-0002-2894-9432
-    affiliation: 1 # (Multiple affiliations must be quoted)
+    affiliation: 1
 affiliations:
  - name: STOR-i, Lancaster University, UK.
    index: 1
-date: August 2019
+date: July 2019
 bibliography: paper.bib
 ---
 
-# Summary
+# Introduction
 
-The forces on stars, galaxies, and dark matter under external gravitational
-fields lead to the dynamical evolution of structures in the universe. The orbits
-of these bodies are therefore key to understanding the formation, history, and
-future state of galaxies. The field of "galactic dynamics," which aims to model
-the gravitating components of galaxies to study their structure and evolution,
-is now well-established, commonly taught, and frequently used in astronomy.
-Aside from toy problems and demonstrations, the majority of problems require
-efficient numerical tools, many of which require the same base code (e.g., for
-performing numerical orbit integration).
+When solving the shortest path problem and considering multiple operational restrictions, one may resort to the (resource) constrained shortest path (CSP) problem. 
+In the applied column generation framework, particularly in the scheduling related literature, the CSP problem is commonly employed to generate columns. It consists, as its name suggests, in finding, among all paths, the shortest path from source to sink nodes that satisfies a set of constraints for a defined set of resources. 
 
-``Gala`` is an Astropy-affiliated Python package for galactic dynamics. Python
-enables wrapping low-level languages (e.g., C) for speed without losing
-flexibility or ease-of-use in the user-interface. The API for ``Gala`` was
-designed to provide a class-based and user-friendly interface to fast (C or
-Cython-optimized) implementations of common operations such as gravitational
-potential and force evaluation, orbit integration, dynamical transformations,
-and chaos indicators for nonlinear dynamics. ``Gala`` also relies heavily on and
-interfaces well with the implementations of physical units and astronomical
-coordinate systems in the ``Astropy`` package [@astropy] (``astropy.units`` and
-``astropy.coordinates``).
+``cspy`` is a Python package that allows you to solve instances of the CSP problem using up to eight different algorithms.
 
-``Gala`` was designed to be used by both astronomical researchers and by
-students in courses on gravitational dynamics or astronomy. It has already been
-used in a number of scientific publications [@Pearson:2017] and has also been
-used in graduate courses on Galactic dynamics to, e.g., provide interactive
-visualizations of textbook material [@Binney:2008]. The combination of speed,
-design, and support for Astropy functionality in ``Gala`` will enable exciting
-scientific explorations of forthcoming data releases from the *Gaia* mission
-[@gaia] by students and experts alike.
+The CSP problem was first introduced as a subproblem for the bus driver scheduling problem.
+These have been shown to be applicable to a wide variety of problems including: the vehicle routing problem with time windows, the technician routing and scheduling problem, the capacitated arc-routing problem, on-demand transportation systems, and, airport ground movement [@Desrochers1988; @Feillet2004 @Inrich2006; @Righini2008; @Bode2014; @Chen2016; @GARAIX201062; @Tilk2017; @Zamorano2017]. 
 
-# Mathematics
+# Algorithms
 
-Single dollars ($) are required for inline mathematics e.g. $f(x) = e^{\pi/x}$
+Even though the RCSPP is $\mathcal{NP}$-hard [@gary1979], several algorithms have been developed to solve it. The most common algorithms are dynamic programming labelling algorithms. 
+@inrich presented an exact algorithm based on DP, the monodirectional forward labelling algorithm, based on the pioneering work by @Desrochers1988. 
 
-Double dollars make self-standing equations:
+Advanced and efficient algorithms have been developed since. @Boland2006 published a state augmenting algorithm that uses a monodirectional labelling algorithm to find an elementary path (one without repeating nodes). Such algorithm has been implemented by @pylgrim.
 
-$$\Theta(x) = \left\{\begin{array}{l}
-0\textrm{ if } x < 0\cr
-1\textrm{ else}
-\end{array}\right.$$
+@righini2006 introduced a bidirectional labelling algorithm for the SPPRC. The bidirectional algorithm is an extension of the monodirectional algorithm that supports search from both ends of the graph, hence, reducing the computational efforts.
+More recently, @Tilk2017 developed a bidirectional labelling algorithm with dynamic halfway point. The bidirectional search is bounded for both directions and these bounds are dynamically updated as the search in either direction advances. The algorithm has shown to be significantly more efficient that monodirectional ones [@gschwind2018].
 
+Even with some of the most recent algorithms, solving an instance of the SPPRC can be slow, thus, heuristic algorithms have been developed.
+Local search or metaheuristics start with a given path and perform a series of moves (edge/node deletion, insertion, or exchange) to obtain another feasible path with lower cost.
+Some metaheuristics developed include, Tabu search [@desaulniers2008tabu], hybrid particle swarm algorithm [@marinakis2017hybrid], and, greedy randomised adaptive search procedure (GRASP) [@Ferone2019].
 
-# Citations
+``cspy`` implements several of these recent exact and metaheuristic algorithms including:
 
-Citations to entries in paper.bib should be in
-[rMarkdown](http://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html)
-format.
+- Bidirectional labeling algorithm with dynamic halfway point [@Tilk2017]; which includes the bidirectional labeling algorithm with static halfway point, and the monodirectional forward and backward labeling algorithms;
+- Tabu search. Adapted from @desaulniers2008tabu;
+- Greedy elimination procedure;
+- Greedy Randomised Adaptive Search Procedure (GRASP). Adapted from @Ferone2019;
+- Particle Swarm Optimization with combined Local and Global Expanding Neighborhood Topology (PSOLGENT) [@marinakis2017hybrid].
 
-# Figures
+The implementations allow for custom resource extension functions (REFs) to be used. Hence, allowing for generic consumption of the resources through the graph, not restricted to additive and subtractive REFs [@irnich2008]. 
 
-Figures can be included like this: ![Example figure.](figure.png)
+``cspy`` is of interest to the operational research community and others that wish to solve an instance of the CSP problem.
 
 # Acknowledgements
 
-We acknowledge contributions from Brigitta Sipocz, Syrtis Major, and Semyeong
-Oh, and support from Kathryn Johnston during the genesis of this project.
+The author gratefully acknowledges the support of the EPSRC funded EP/L015692/1 STOR-i Centre for Doctoral Training. 
 
 # References

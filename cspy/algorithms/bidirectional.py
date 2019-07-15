@@ -66,7 +66,7 @@ class BiDirectional:
     If ``direction`` is not given the absolute resource limits have to be
     given:
 
-    :function:`BiDirectional.name_algorithm(U, L)`
+    :func:`BiDirectional.name_algorithm(U, L)`
 
     U : float, optional
         Upper bound for monotone resource

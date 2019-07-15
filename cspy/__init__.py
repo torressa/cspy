@@ -7,5 +7,10 @@ from cspy.preprocessing import check_and_preprocess
 from cspy.label import Label
 
 name = "cspy"
-__all__ = ['BiDirectional', 'Tabu', 'GreedyElim',
-           'PSOLGENT', 'GRASP', 'check_and_preprocess', 'Label']
+
+__all__ = [
+    'BiDirectional', 'Tabu', 'GreedyElim', 'PSOLGENT', 'GRASP',
+    'check_and_preprocess', 'Label'
+]
+
+__version__ = '0.0.8'
