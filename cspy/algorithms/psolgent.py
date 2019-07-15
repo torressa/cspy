@@ -84,7 +84,7 @@ class PSOLGENT(StandardGraph):
     Given the nature of our problem we have set the default parameters of
     the algorithm as suggested in the paper mentioned.
 
-    Code adapted from `Solid`_
+    Code adapted from `Solid`_.
 
     .. _Marinakis et al 2017: https://www.sciencedirect.com/science/article/pii/S0377221717302357z
 
