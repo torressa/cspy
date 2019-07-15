@@ -67,7 +67,7 @@ REFs
 
 Additive resource extension functions (REFs), are implemented by default in all the algorithms. However, you can use your own custom REFs. For theoretical information on what REFs we refer you to the paper by `Inrich 2005`_.
 
-Practically, a custom REF will need two inputs: ``res``, a cumulative resource array, and ``edge``, an edge to consider for the extension of the current partial path. This function will be called everytime the algorithms wish to consider and edge as part of the shortest path.
+Practically, a custom REF will need two inputs: ``res``, a cumulative resource array, and ``edge``, an edge to consider for the extension of the current partial path. This function will be called every time the algorithms wish to consider and edge as part of the shortest path.
 
 As an example, the following function would be valid:
 
@@ -77,7 +77,7 @@ As an example, the following function would be valid:
         def REF_CUSTOM(cumulative_res, edge):
         	n_res = len(cumulative_res)
         	arr = zeros(n_res)
-        	# your filtering criteria that changes the elemements of arr
+        	# your filtering criteria that changes the elements of arr
         	# For example:
         	head_node, tail_node = edge[0:2]
         	if head_node != tail_node:
@@ -86,7 +86,7 @@ As an example, the following function would be valid:
         		arr[0] = cumulative_res + 1
         	return arr
 
-Your custom REF can then be passed with this format, into the algorithm of choice using the ``REF`` argument (see individual algorithms for details). Note that for the :class:`BiDirectional` algorithm, due to the properties of the algorithm, if you want to use this feature, you have to pass two custom REFs: one for the forward search and one for the backward search. Where the backward REF has to be the inverse of the forward REF, otherwise the algorithm will not return a meningful path (`Tilk et al 2017`_).
+Your custom REF can then be passed with this format, into the algorithm of choice using the ``REF`` argument (see individual algorithms for details). Note that for the :class:`BiDirectional` algorithm, due to the properties of the algorithm, if you want to use this feature, you have to pass two custom REFs: one for the forward search and one for the backward search. Where the backward REF has to be the inverse of the forward REF, otherwise the algorithm will not return a meaningful path (`Tilk et al 2017`_).
 
 
 .. _Tilk et al 2017: https://www.sciencedirect.com/science/article/pii/S0377221717302035
