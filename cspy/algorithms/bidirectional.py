@@ -182,10 +182,8 @@ class BiDirectional:
             self.max_res[0] = min(
                 self.max_res[0], max(self.Label[direc].res[0], self.min_res[0]))
         # Select edges with the same head/tail node as the current label node.
-        edges = [
-            e for e in self.G.edges(data=True)
-            if e[idx] == self.Label[direc].node
-        ]
+        edges = list(e for e in self.G.edges(data=True)
+                     if e[idx] == self.Label[direc].node)
         # If Label not been seen before, initialise a dict
         if self.Label[direc] not in self.unprocessed[direc]:
             self.unprocessed[direc][self.Label[direc]] = {}
@@ -197,10 +195,9 @@ class BiDirectional:
     def _propagate_label(self, edge, direc):
         # Label propagation #
         weight, res_cost = edge[2]['weight'], edge[2]['res_cost']
-        # node = edge[1] if direc == 'forward' else edge[0]
         new_label = self.Label[direc].get_new_label(edge, direc, weight,
                                                     res_cost)
-        if new_label.feasibility_check(self.max_res, self.min_res, direc):
+        if new_label.feasibility_check(self.max_res, self.min_res):
             self.unprocessed[direc][
                 self.Label[direc]][new_label] = new_label.path
 

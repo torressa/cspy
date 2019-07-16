@@ -19,7 +19,8 @@ class Label(object):
         cumulative edge resource consumption
 
     path : list
-        all nodes in the path"""
+        all nodes in the path
+    """
 
     _REF_forward, _REF_backward = add, sub
 
@@ -76,5 +77,5 @@ class Label(object):
                 res_new = self._REF_backward(self.res, edge)
         return Label(weight + self.weight, node, res_new, path)
 
-    def feasibility_check(self, max_res, min_res, direction="forward"):
+    def feasibility_check(self, max_res, min_res):
         return all(max_res >= self.res) and all(min_res <= self.res)

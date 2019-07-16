@@ -24,11 +24,11 @@ In the applied column generation framework, particularly in the scheduling relat
 ``cspy`` is a Python package that allows you to solve instances of the CSP problem using up to eight different algorithms.
 
 The CSP problem was first introduced as a subproblem for the bus driver scheduling problem.
-These have been shown to be applicable to a wide variety of problems including: the vehicle routing problem with time windows, the technician routing and scheduling problem, the capacitated arc-routing problem, on-demand transportation systems, and, airport ground movement [@Desrochers1988; @Feillet2004 @Inrich2006; @Righini2008; @Bode2014; @Chen2016; @GARAIX201062; @Tilk2017; @Zamorano2017]. 
+These have been shown to be applicable to a wide variety of problems including: the vehicle routing problem with time windows, the technician routing and scheduling problem, the capacitated arc-routing problem, on-demand transportation systems, and, airport ground movement [@Desrochers1988; @Feillet2004; @Inrich2006; @Righini2008; @Bode2014; @Chen2016; @GARAIX201062; @Tilk2017; @Zamorano2017]. 
 
 # Algorithms
 
-Even though the RCSPP is $\mathcal{NP}$-hard [@gary1979], several algorithms have been developed to solve it. The most common algorithms are dynamic programming labelling algorithms. 
+Even though the CSP problem is $\mathcal{NP}$-hard [@gary1979], several algorithms have been developed to solve it. The most common algorithms are dynamic programming labelling algorithms. 
 @inrich presented an exact algorithm based on DP, the monodirectional forward labelling algorithm, based on the pioneering work by @Desrochers1988. 
 
 Advanced and efficient algorithms have been developed since. @Boland2006 published a state augmenting algorithm that uses a monodirectional labelling algorithm to find an elementary path (one without repeating nodes). Such algorithm has been implemented by @pylgrim.
