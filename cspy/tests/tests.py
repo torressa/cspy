@@ -137,14 +137,7 @@ class TestsBasic(unittest.TestCase):
         self.assertEqual(path, ['Source', 'A', 'C', 'D', 'E', 'Sink'])
 
     def testPSOLGENT(self):
-        n_nodes = len(self.J.nodes())
-        path = PSOLGENT(self.J,
-                        max_res=[5, 5],
-                        min_res=[0, 0],
-                        max_iter=200,
-                        swarm_size=50,
-                        member_size=n_nodes,
-                        neighbourhood_size=50).run()
+        path = PSOLGENT(self.J, max_res=[5, 5], min_res=[0, 0]).run()
         self.assertEqual(path, ['Source', 'A', 'C', 'D', 'E', 'Sink'])
 
 

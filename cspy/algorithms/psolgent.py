@@ -225,7 +225,7 @@ class PSOLGENT(StandardGraph):
         StandardGraph.__init__(self, G, max_res, min_res, REF, preprocess)
         # Inputs
         self.swarm_size = swarm_size
-        self.member_size = member_size
+        self.member_size = member_size if member_size else len(G.nodes())
         self.hood_size = neighbourhood_size
         self.lower_bound = zeros(member_size)
         self.upper_bound = ones(member_size)
@@ -338,7 +338,8 @@ class PSOLGENT(StandardGraph):
         self._update_current_nodes(self._discretise_solution(member, rand))
         return self._get_fitness_member()
 
-    def _discretise_solution(self, member, rand):
+    @staticmethod
+    def _discretise_solution(member, rand):
         sig = array(1 / (1 + exp(-member)))
         return array([1 if s < rand else 0 for s in sig])
 
@@ -346,8 +347,11 @@ class PSOLGENT(StandardGraph):
         """ Saves binary representation of nodes in path.
         0 not present, 1 present. """
         nodes = self._sort_nodes(list(self.G.nodes()))
+        # nodes = self._sort_nodes(list(self.G.nodes()))
         self.current_nodes = list(  # remove data
             nodes[i] for i in range(len(nodes)) if arr[i] == 1)
+        # self.current_nodes = list(  # remove data
+        #     nodes[i] for i in range(len(nodes)) if arr[i] == 1)
 
     def _get_fitness_member(self):
         # Returns the objective for a given path
