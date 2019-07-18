@@ -1,5 +1,5 @@
 import types
-from numpy import array, equal
+from numpy import equal
 from operator import add, sub
 
 

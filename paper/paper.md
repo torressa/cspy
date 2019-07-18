@@ -2,7 +2,7 @@
 title: 'cspy: A Python package with a collection of algorithms for the (Resource) Constrained Shortest Path problem'
 tags:
   - Python
-  - Resource Constrained Shortest path
+  - Resource Constrained Shortest Path
   - Networks
   - Graph Theory
 authors:

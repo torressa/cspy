@@ -74,17 +74,17 @@ As an example, the following function would be valid:
 
 .. code-block:: python
 
-        from numpy import array, zeros
+        from numpy import array
+
         def REF_CUSTOM(cumulative_res, edge):
-        	n_res = len(cumulative_res)
-        	arr = zeros(n_res)
+        	new_res = array(cumulative_res)
         	# your filtering criteria that changes the elements of arr
         	# For example:
         	head_node, tail_node = edge[0:2]
         	if head_node != tail_node:
-        		arr[0] = 0
+        		new_res[0] = 0
         	else:
-        		arr[0] = cumulative_res[0] + 1
+        		new_res[0] = new_res[0] + 1
         	return arr
 
 Your custom REF can then be passed with this format, into the algorithm of choice using the ``REF`` argument (see individual algorithms for details). Note that for the :class:`BiDirectional` algorithm, due to the properties of the algorithm, if you want to use this feature, you have to pass two custom REFs: one for the forward search and one for the backward search. Where the backward REF has to be the inverse of the forward REF, otherwise the algorithm will not return a meaningful path (`Tilk et al 2017`_).

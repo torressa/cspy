@@ -34,7 +34,15 @@ def check(G, max_res=None, min_res=None, direction=None, algorithm=None):
 
 
 def prune_graph(G, max_res, min_res):
-    """Removes nodes that cannot be reached due to resource limits."""
+    """Removes nodes that cannot be reached due to resource limits.
+    Note:
+        path_s and path_t contains all partial paths e.g.
+            {node_i: [Source, ..., node_k, node_i]}.
+        or  {node_i: [Sink, ..., node_k, node_i]}
+        Hence, if node_i is found to violate a resource bound, it is
+        because of node_k, therefore, we add path[key][-2] = node_k to
+        the dictionary of nodes to remove.
+    """
 
     def _check_resource(r):
         # check resource r's feasibility along a path
@@ -52,6 +60,7 @@ def prune_graph(G, max_res, min_res):
                                                          weight=__get_weight)
         try:
             # Collect nodes in paths that violate the resource bounds
+            # see note above
             nodes_source.update({
                 path_s[key][-2]: val
                 for key, val in length_s.items()
@@ -62,14 +71,6 @@ def prune_graph(G, max_res, min_res):
                 for key, val in length_t.items()
                 if val > max_res[r] or val < min_res[r]
             })
-            """
-            path_s and path_t containts all partial paths e.g.
-                {node_i: [Source, ..., node_k, node_i]}.
-            or  {node_i: [Sink, ..., node_k, node_i]}
-            Hence, if node_i is found to violate a resource bound, it is
-            because of node_k, therefore, we add path[key][-2] = node_k to
-            the dictionary of nodes to remove.
-            """
         except IndexError:  # No nodes violate resource limits
             pass
 

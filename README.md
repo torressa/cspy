@@ -10,7 +10,7 @@
 
 A collection of algorithms for the (resource) Constrained Shortest Path (CSP) problem. 
 
-The CSP problem was popularised by Inrich and Desaulniers (2005) [@inrich]. It was initially introduced as a subproblem for the bus driver scheduling problem, and has since then widely studied in a variety of different settings including: the vehicle routing problem with time windows (VRPTW), the technician routing and scheduling problem, the capacitated arc-routing problem, on-demand transportation systems, and, airport ground movement; among others.
+The CSP problem was popularised by [Inrich and Desaulniers (2005)](@inrich). It was initially introduced as a subproblem for the bus driver scheduling problem, and has since then widely studied in a variety of different settings including: the vehicle routing problem with time windows (VRPTW), the technician routing and scheduling problem, the capacitated arc-routing problem, on-demand transportation systems, and, airport ground movement; among others.
 
 More generally, in the applied column generation framework, particularly in the scheduling related literature, the CSP problem is commonly employed to generate columns.
 
@@ -20,18 +20,16 @@ Therefore, this library is of interest to the operational research community, st
 
 Currently, the algorithms implemented include:
 
- - [X] Monodirectional forward labeling algorithm;
- - [X] Monodirectional backward labeling algorithm;
- - [X] Bidirectional labeling algorithm with static halfway point;
- - [X] Bidirectional labeling algorithm with dynamic halfway point Tilk et al. (2017) [@tilk];
- - [X] Heuristic Tabu search;
- - [X] Greedy elimination procedure;
- - [X] Greedy Randomised Adaptive Search Procedure (GRASP). Adapted from Ferone et al. (2019) [@Ferone];
- - [X] Particle Swarm Optimization with combined Local and Global Expanding Neighborhood Topology (PSOLGENT) Marinakis et al. (2017) [@Marinakis].
-
+- [X] Monodirectional forward labeling algorithm;
+- [X] Monodirectional backward labeling algorithm;
+- [X] Bidirectional labeling algorithm with static halfway point;
+- [X] Bidirectional labeling algorithm with dynamic halfway point [Tilk et al. (2017)](@tilk);
+- [X] Heuristic Tabu search;
+- [X] Greedy elimination procedure;
+- [X] Greedy Randomised Adaptive Search Procedure (GRASP). Adapted from [Ferone et al. (2019)]((@ferone);
+- [X] Particle Swarm Optimization with combined Local and Global Expanding Neighborhood Topology (PSOLGENT) [Marinakis et al. (2017)](@marinakis).
 
 ## Getting Started
-
 
 ### Prerequisites
 
@@ -62,7 +60,6 @@ Please see the individual algorithms API Documentation for specific examples and
 - [GRASP](https://cspy.readthedocs.io/en/latest/api/cspy.GRASP.html)
 - [PSOLGENT](https://cspy.readthedocs.io/en/latest/api/cspy.PSOLGENT.html)
 
-
 ## Running the tests
 
 Tests can be run using the standard ``unittest`` by running
@@ -81,26 +78,11 @@ Feel free to contribute to this project either by either working trough some of 
 
 If you have a question or need help, feel free to raise an issue explaining it.
 
-
-### TODO
-
- - [ ] Greedy elimination algorithm tests.
- - [ ] Write input checks for grasp.py and psolgent.py.
- 
-### Changelog
-
-pre-release v0.0.5: 15/07/2019
-
-```
-numpy.array integration
-Generic resource extension functions options
-```
-
 ## Citing
 
 If you'd like to cite this package, please use the following bib format:
 
-```
+```none
 @Misc{cspy,
   author = {Torres Sanchez, David},
   title = {{\texttt{cspy}-- A Python package with a collection of algorithms for the (Resource) Constrained Shortest Path problem}},
@@ -113,6 +95,6 @@ If you'd like to cite this package, please use the following bib format:
 
 [@tilk]: https://www.sciencedirect.com/science/article/pii/S0377221717302035
 
-[@Marinakis]: https://www.sciencedirect.com/science/article/pii/S0377221717302357
+[@marinakis]: https://www.sciencedirect.com/science/article/pii/S0377221717302357
 
-[@Ferone]: https://www.tandfonline.com/doi/full/10.1080/10556788.2018.1548015
+[@ferone]: https://www.tandfonline.com/doi/full/10.1080/10556788.2018.1548015
