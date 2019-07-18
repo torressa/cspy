@@ -26,7 +26,7 @@ Currently, the algorithms implemented include:
 - [X] Bidirectional labeling algorithm with dynamic halfway point [Tilk et al. (2017)](@tilk);
 - [X] Heuristic Tabu search;
 - [X] Greedy elimination procedure;
-- [X] Greedy Randomised Adaptive Search Procedure (GRASP). Adapted from [Ferone et al. (2019)]((@ferone);
+- [X] Greedy Randomised Adaptive Search Procedure (GRASP). Adapted from [Ferone et al. (2019)](@ferone);
 - [X] Particle Swarm Optimization with combined Local and Global Expanding Neighborhood Topology (PSOLGENT) [Marinakis et al. (2017)](@marinakis).
 
 ## Getting Started
