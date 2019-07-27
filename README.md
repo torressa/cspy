@@ -3,6 +3,7 @@
 [![PyPI version](https://badge.fury.io/py/cspy.svg)](https://badge.fury.io/py/cspy)
 [![codecov](https://codecov.io/gh/torressa/cspy/branch/master/graph/badge.svg?token=24tyrWinNT)](https://codecov.io/gh/torressa/cspy)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/c28f50e92dae4bcc921f1bd142370608)](https://www.codacy.com/app/torressa/cspy?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=torressa/cspy&amp;utm_campaign=Badge_Grade)
+[![JOSS badge](http://joss.theoj.org/papers/25eda55801a528b982d03a6a61f7730d/status.svg)](https://github.com/openjournals/joss-reviews/issues/1571)
 <!-- [![BCH compliance](https://bettercodehub.com/edge/badge/torressa/cspy?branch=master)](https://bettercodehub.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) -->
 
@@ -63,10 +64,17 @@ Please see the individual algorithms API Documentation for specific examples and
 
 ## Running the tests
 
-Tests can be run using the standard ``unittest`` by running
+To run the tests you first, clone the repository in some folder of your machine ``~/path/newfolder`` by running 
 
+```none
+git clone https://github.com/torressa/cspy.git ~/path/newfolder
 ```
-  python3 -m unittest
+
+Then, go into the folder and run the tests using ``unittest``,
+
+```none
+cd ~/path/newfolder
+python3 -m unittest
 ```
 
 ## License

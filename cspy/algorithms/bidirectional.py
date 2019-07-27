@@ -78,9 +78,9 @@ class BiDirectional:
 
     According to these, we have,
 
-    -  :math:`H_F = H_B > U` or ``direc_in`` = 'forward': Monodirectional forward labeling algorithm
+    -  :math:`H_F = H_B > U` or ``direction`` = 'forward': Monodirectional forward labeling algorithm
     -  :math:`L < H_F = H_B < U`: Bidirectional labeling algorithm with static halfway point
-    -  :math:`H_F = H_B < L` or ``direc_in`` = 'backward': Monodirectional backward labeling algorithm
+    -  :math:`H_F = H_B < L` or ``direction`` = 'backward': Monodirectional backward labeling algorithm
     -  :math:`U = H_F > H_B = L`: Bidirectional labeling algorithm with dynamic halfway point.
 
     Example
