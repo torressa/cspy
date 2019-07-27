@@ -37,9 +37,11 @@ Currently, the algorithms implemented include:
 
 Conceptual background and input formatting is discussed in the [docs](https://cspy.readthedocs.io/en/latest/how_to.html).
 
-Module dependencies as listed in [requirements.txt](requirements.txt), are:
+Module dependencies are:
 - [NetwokrX](https://networkx.github.io/documentation/stable/)
 - [NumPy](https://docs.scipy.org/doc/numpy/reference/)
+
+Note that [requirements.txt](requirements.txt) contains modules for development purposes.
 
 ### Installing
 
