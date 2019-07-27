@@ -64,13 +64,13 @@ Please see the individual algorithms API Documentation for specific examples and
 
 ## Running the tests
 
-To run the tests you first, clone the repository in some folder of your machine ``~/path/newfolder`` by running 
+To run the tests first, clone the repository into a path in your machine ``~/path/newfolder`` by running 
 
 ```none
 git clone https://github.com/torressa/cspy.git ~/path/newfolder
 ```
 
-Then, go into the folder and run the tests using ``unittest``,
+Then, go into the folder and run the tests using ``unittest``
 
 ```none
 cd ~/path/newfolder
