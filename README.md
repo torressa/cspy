@@ -37,7 +37,9 @@ Currently, the algorithms implemented include:
 
 Conceptual background and input formatting is discussed in the [docs](https://cspy.readthedocs.io/en/latest/how_to.html).
 
-Module dependencies are listed in [requirements.txt](requirements.txt).
+Module dependencies as listed in [requirements.txt](requirements.txt), are:
+- [NetwokrX](https://networkx.github.io/documentation/stable/)
+- [NumPy](https://docs.scipy.org/doc/numpy/reference/)
 
 ### Installing
 
@@ -64,7 +66,7 @@ Please see the individual algorithms API Documentation for specific examples and
 
 ## Running the tests
 
-To run the tests first, clone the repository into a path in your machine ``~/path/newfolder`` by running 
+To run the tests first, clone the repository into a path in your machine ``~/path/newfolder`` by running
 
 ```none
 git clone https://github.com/torressa/cspy.git ~/path/newfolder
