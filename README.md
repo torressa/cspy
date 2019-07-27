@@ -47,13 +47,13 @@ Note that [requirements.txt](requirements.txt) contains modules for development 
 
 Installing the ``cspy`` package with ``pip`` should also install all the required packages. You can do this by running the following command in your terminal
 
-```
-  pip install cspy
+```none
+pip install cspy
 ```
 or
 
-```
-  python3 -m pip install cspy
+```none
+python3 -m pip install cspy
 ```
 
 ### Usage Examples
