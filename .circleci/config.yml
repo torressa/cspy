@@ -35,6 +35,9 @@ jobs:
             python3 -m venv venv
             . venv/bin/activate
             pip install -r requirements.txt
+      - run:
+          name: codecov-install
+          command: sudo pip install codecov
 
       - save_cache:
           paths:
@@ -43,9 +46,6 @@ jobs:
 
       # run tests!
       # this example uses Django's built-in test-runner
-      # other common Python testing frameworks include pytest and nose
-      # https://pytest.org
-      # https://nose.readthedocs.io
       - run:
           name: run tests
           command: |
