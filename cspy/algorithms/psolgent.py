@@ -8,10 +8,12 @@ from __future__ import print_function
 import logging
 from abc import ABCMeta
 from math import sqrt
-from random import random
+from random import random, seed
+seed(1)
 from numpy import (argmin, array, copy, diag_indices_from, exp, dot, zeros,
                    ones, where)
-from numpy.random import uniform
+from numpy.random import uniform, seed
+seed(2)
 from cspy.path import Path
 from cspy.preprocessing import check_and_preprocess
 
@@ -310,13 +312,14 @@ class PSOLGENT(StandardGraph):
         self.best = array(best)
 
     def _global_best(self):
-        # Finds the global best across swarm
+        # Updates the global best across swarm
         if not self.best_fit or self.best_fit > min(self.fitness):
             self.global_best = array([self.pos[argmin(self.fitness)]] *
                                      self.swarm_size)
             self.best_fit = min(self.fitness)  # update best fitness
 
     def _local_best(self, i, hood_size):
+        # Updates the local best across swarm
         bottom = max(i - hood_size, 0)
         top = min(bottom + hood_size, len(self.fitness))
         if top - bottom < hood_size:
@@ -347,11 +350,8 @@ class PSOLGENT(StandardGraph):
         """ Saves binary representation of nodes in path.
         0 not present, 1 present. """
         nodes = self._sort_nodes(list(self.G.nodes()))
-        # nodes = self._sort_nodes(list(self.G.nodes()))
-        self.current_nodes = list(  # remove data
+        self.current_nodes = list(
             nodes[i] for i in range(len(nodes)) if arr[i] == 1)
-        # self.current_nodes = list(  # remove data
-        #     nodes[i] for i in range(len(nodes)) if arr[i] == 1)
 
     def _get_fitness_member(self):
         # Returns the objective for a given path
