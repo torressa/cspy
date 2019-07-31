@@ -87,9 +87,9 @@ This project is licensed under the MIT License - see the [LICENSE.txt](LICENSE.t
 
 ## Contributing
 
-Feel free to contribute to this project either by either working trough some of issues flagged as help wanted, or raise a new issue with any bugs/improvements.
+Feel free to contribute to this project either by either working trough some of issues flagged as help wanted, or raise a new issue with any bugs/improvements (see [feature_request.md](/.github/ISSUE_TEMPLATE/feature_request.md) for a template).
 
-If you have a question or need help, feel free to raise an issue explaining it.
+If you have a question or need help, feel free to raise an issue explaining it (see [bug_report.md](/.github/ISSUE_TEMPLATE/bug_report.md) for a template).
 
 ## Citing
 
