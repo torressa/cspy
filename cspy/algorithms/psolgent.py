@@ -10,7 +10,7 @@ from abc import ABCMeta
 from math import sqrt
 from numpy import (argmin, array, copy, diag_indices_from, exp, dot, zeros,
                    ones, where)
-from numpy.random import uniform, RandomState
+from numpy.random import RandomState
 
 from cspy.path import Path
 from cspy.preprocessing import check_and_preprocess
