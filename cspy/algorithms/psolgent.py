@@ -8,12 +8,10 @@ from __future__ import print_function
 import logging
 from abc import ABCMeta
 from math import sqrt
-from random import random, seed
-seed(1)
 from numpy import (argmin, array, copy, diag_indices_from, exp, dot, zeros,
                    ones, where)
-from numpy.random import uniform, seed
-seed(2)
+from numpy.random import uniform, RandomState
+
 from cspy.path import Path
 from cspy.preprocessing import check_and_preprocess
 
@@ -69,7 +67,7 @@ class StandardGraph:
                     return base_cost
                 else:
                     # penalty for resource infeasible valid path
-                    return 1e6 + base_cost
+                    return 1e5 + base_cost
             else:
                 return False
         else:
@@ -244,6 +242,7 @@ class PSOLGENT(StandardGraph):
         self.best_fit = None
         self.local_best = None
         self.global_best = None
+        self.random_state = RandomState(100)
 
     def run(self):
         self._init_swarm()
@@ -265,12 +264,14 @@ class PSOLGENT(StandardGraph):
 
     def _init_swarm(self):
         # Initialises the variables that are altered during the algorithm
-        self.pos = uniform(self.lower_bound,
-                           self.upper_bound,
-                           size=(self.swarm_size, self.member_size))
-        self.vel = uniform(self.lower_bound - self.upper_bound,
-                           self.upper_bound - self.lower_bound,
-                           size=(self.swarm_size, self.member_size))
+        self.pos = self.random_state.uniform(self.lower_bound,
+                                             self.upper_bound,
+                                             size=(self.swarm_size,
+                                                   self.member_size))
+        self.vel = self.random_state.uniform(
+            self.lower_bound - self.upper_bound,
+            self.upper_bound - self.lower_bound,
+            size=(self.swarm_size, self.member_size))
         self.fitness = self._get_fitness(self.pos)
         self.best = copy(self.pos)
         self._global_best()
@@ -279,11 +280,17 @@ class PSOLGENT(StandardGraph):
     def _get_vel(self):
         # Generate random numbers
         u1 = zeros((self.swarm_size, self.swarm_size))
-        u1[diag_indices_from(u1)] = [random() for _ in range(self.swarm_size)]
+        u1[diag_indices_from(u1)] = [
+            self.random_state.uniform(0, 1) for _ in range(self.swarm_size)
+        ]
         u2 = zeros((self.swarm_size, self.swarm_size))
-        u2[diag_indices_from(u2)] = [random() for _ in range(self.swarm_size)]
+        u2[diag_indices_from(u2)] = [
+            self.random_state.uniform(0, 1) for _ in range(self.swarm_size)
+        ]
         u3 = zeros((self.swarm_size, self.swarm_size))
-        u3[diag_indices_from(u2)] = [random() for _ in range(self.swarm_size)]
+        u3[diag_indices_from(u2)] = [
+            self.random_state.uniform(0, 1) for _ in range(self.swarm_size)
+        ]
         # Coefficients
         c = self.c1 + self.c2 + self.c3
         chi_1 = 2 / abs(2 - c - sqrt(pow(c, 2) - 4 * c))
@@ -337,7 +344,7 @@ class PSOLGENT(StandardGraph):
         return list(map(self._evaluate_member, pos))
 
     def _evaluate_member(self, member):
-        rand = random()
+        rand = self.random_state.uniform(0, 1)
         self._update_current_nodes(self._discretise_solution(member, rand))
         return self._get_fitness_member()
 
@@ -365,9 +372,9 @@ class PSOLGENT(StandardGraph):
                 # Valid path with penalty
                 return cost
             else:
-                return 1e7  # path not valid
+                return 1e6  # path not valid
         else:
-            return 1e7  # no path
+            return 1e6  # no path
 
     @staticmethod
     def _sort_nodes(nodes):
