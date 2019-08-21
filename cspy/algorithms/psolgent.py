@@ -143,6 +143,10 @@ class PSOLGENT(StandardGraph):
         constant for 3rd term in the velocity equation.
         Default : 1.4.
 
+    seed : None or int or numpy.random.RandomState instance, optional
+        seed for PSOLGENT class. Default : None (which gives a single value
+        numpy.random.RandomState).
+
     .. _REFs : https://cspy.readthedocs.io/en/latest/how_to.html#refs
 
     Returns
@@ -220,7 +224,8 @@ class PSOLGENT(StandardGraph):
                  neighbourhood_size=10,
                  c1=1.35,
                  c2=1.35,
-                 c3=1.4):
+                 c3=1.4,
+                 seed=None):
         # Init graph
         StandardGraph.__init__(self, G, max_res, min_res, REF, preprocess)
         # Inputs
@@ -242,7 +247,18 @@ class PSOLGENT(StandardGraph):
         self.best_fit = None
         self.local_best = None
         self.global_best = None
-        self.random_state = RandomState(100)
+        # Check seed and init `random_state`. Altered from:
+        # https://github.com/scikit-learn/scikit-learn/blob/92af3dabbb5f3381a656f7727171f332b8928e05/sklearn/utils/validation.py#L764-L782
+        if seed is None:
+            self.random_state = RandomState()
+        elif isinstance(seed, int):
+            self.random_state = RandomState(seed)
+        elif isinstance(seed, RandomState):
+            self.random_state = seed
+        else:
+            raise Exception(
+                '{} cannot be used to seed numpy.random.RandomState'.format(
+                    seed))
 
     def run(self):
         self._init_swarm()
@@ -280,17 +296,14 @@ class PSOLGENT(StandardGraph):
     def _get_vel(self):
         # Generate random numbers
         u1 = zeros((self.swarm_size, self.swarm_size))
-        u1[diag_indices_from(u1)] = [
-            self.random_state.uniform(0, 1) for _ in range(self.swarm_size)
-        ]
+        u1[diag_indices_from(u1)] = list(
+            self.random_state.uniform(0, 1) for _ in range(self.swarm_size))
         u2 = zeros((self.swarm_size, self.swarm_size))
-        u2[diag_indices_from(u2)] = [
-            self.random_state.uniform(0, 1) for _ in range(self.swarm_size)
-        ]
+        u2[diag_indices_from(u2)] = list(
+            self.random_state.uniform(0, 1) for _ in range(self.swarm_size))
         u3 = zeros((self.swarm_size, self.swarm_size))
-        u3[diag_indices_from(u2)] = [
-            self.random_state.uniform(0, 1) for _ in range(self.swarm_size)
-        ]
+        u3[diag_indices_from(u2)] = list(
+            self.random_state.uniform(0, 1) for _ in range(self.swarm_size))
         # Coefficients
         c = self.c1 + self.c2 + self.c3
         chi_1 = 2 / abs(2 - c - sqrt(pow(c, 2) - 4 * c))
