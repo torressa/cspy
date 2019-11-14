@@ -87,9 +87,30 @@ This project is licensed under the MIT License - see the [LICENSE.txt](LICENSE.t
 
 ## Contributing
 
-Feel free to contribute to this project either by either working trough some of issues flagged as help wanted, or raise a new issue with any bugs/improvements (see [feature_request.md](/.github/ISSUE_TEMPLATE/feature_request.md) for a template).
+### Issues
 
-If you have a question or need help, feel free to raise an issue explaining it (see [bug_report.md](/.github/ISSUE_TEMPLATE/bug_report.md) for a template).
+If you find a bug or there are some improvements you'd like to see (e.g. more algorithms), please raise a new issue with a clear explanation. 
+
+See [feature_request.md](/.github/ISSUE_TEMPLATE/feature_request.md) for a template.
+
+See [bug_report.md](/.github/ISSUE_TEMPLATE/bug_report.md) for a template.
+
+### Contributing to the Software
+
+When contributing to this repository, please first discuss the change you wish to make via an issue or email.
+After that feel free to send a pull request.
+
+#### Pull Request Process
+ 
+ - If necessary, please perform documentation updates where appropriate (e.g. README.md, docs and [CHANGELOG.md](CHANGELOG.md)).
+ - Increase the version numbers and reference the changes appropriately. Note that the versioning scheme used is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
+ - Wait for approval for merging.
+
+### Seeking Support
+
+If you have a question or need help, feel free to raise an issue explaining it.
+
+Alternatively, email me at ``d.torressanchez@lancs.ac.uk``.
 
 ## Citing
 
