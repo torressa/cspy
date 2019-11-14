@@ -2,6 +2,7 @@ import sys
 import unittest
 from networkx import DiGraph
 from numpy import array
+from numpy.random import RandomState
 sys.path.append("../")
 from cspy.algorithms.bidirectional import BiDirectional
 from cspy.algorithms.tabu import Tabu
@@ -137,7 +138,8 @@ class TestsBasic(unittest.TestCase):
         self.assertEqual(path, ['Source', 'A', 'C', 'D', 'E', 'Sink'])
 
     def testPSOLGENT(self):
-        path = PSOLGENT(self.J, max_res=[5, 5], min_res=[0, 0]).run()
+        path = PSOLGENT(self.J, max_res=[5, 5], min_res=[0, 0],
+                        seed=RandomState(123)).run()
         self.assertEqual(path, ['Source', 'A', 'C', 'D', 'E', 'Sink'])
 
 

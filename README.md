@@ -81,6 +81,8 @@ cd ~/path/newfolder
 python3 -m unittest
 ```
 
+Please make sure that the python package cspy is not already installed in your machine.
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.txt](LICENSE.txt) file for details.
