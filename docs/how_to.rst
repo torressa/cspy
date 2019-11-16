@@ -14,7 +14,7 @@ To do so, we make use of the well-known `networkx` package. To be able to apply 
  - Graph must be a :class:`networkx.DiGraph`;
  - Graph must have an attribute ``n_res`` (set when initialising the graph) which determines the number of resources we are considering for the particular problem;
  - Graph must have a single `Source` and `Sink` nodes with no incoming or outgoing edges respectively;
- - Edges must have ``res_cost`` (of type :class:`numpy.array`) and ``weight`` (of type :class:`int`) attributes.
+ - Edges must have ``res_cost`` (of type :class:`numpy.array`) and ``weight`` attributes.
 
 For example,
 
@@ -23,9 +23,9 @@ For example,
         >>> from networkx import DiGraph
         >>> from numpy import array
         >>> G = DiGraph(directed=True, n_res=2)
-        >>> G.add_edge('Source', 'A', res_cost=array([1]), weight=1)
-        >>> G.add_edge('A', 'B', res_cost=array([1]), weight=1)
-        >>> G.add_edge('B', 'Sink', res_cost=array([1]), weight=1)
+        >>> G.add_edge('Source', 'A', res_cost=array([1]), weight=1.0)
+        >>> G.add_edge('A', 'B', res_cost=array([1]), weight=1.0)
+        >>> G.add_edge('B', 'Sink', res_cost=array([1]), weight=1.0)
 
 Algorithms
 ~~~~~~~~~~

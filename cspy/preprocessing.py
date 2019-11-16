@@ -1,6 +1,7 @@
 import logging
 import networkx as nx
-from cspy.checks import *
+from cspy.checks import (_check_res, _check_direction, _check_graph_attr,
+                         _check_edge_attr, _check_path, _check_REFs)
 
 log = logging.getLogger(__name__)
 
