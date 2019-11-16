@@ -98,7 +98,7 @@ If you'd like to cite this package, please use the following bib format:
 ```none
 @Misc{cspy,
   author = {Torres Sanchez, David},
-  title = {{\texttt{cspy}-- A Python package with a collection of algorithms for the (Resource) Constrained Shortest Path problem}},
+  title = {{cspy : A Python package with a collection of algorithms for the (Resource) Constrained Shortest Path problem}},
   year = {2019},
   url = {\url{https://github.com/torressa/cspy}}
 }
