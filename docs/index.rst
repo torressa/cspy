@@ -1,18 +1,18 @@
 `cspy` Documentation
 ====================
 
-`cspy` is an open source Python package that gathers some algorithms to solve the (resource) Constrained Shortest Path problem.
+`cspy` is an open source Python package that gathers some algorithms to solve the (resource) Constrained Shortest Path (CSP) problem.
 
+By setting different options when calling the algorithms, one can have up to five different algorithms (exact and metaheuristic).
 
-By setting different options when calling the algorithms, one can have up to five different algorithms.
-
- - Monodirectional forward labeling algorithm;
- - Monodirectional backward labeling algorithm;
- - Bidirectional labeling algorithm with static halfway point;
- - Bidirectional labeling algorithm with dynamic halfway point (`Tilk et al 2017`_);
- - Heuristic Tabu search;
- - Greedy Randomised Adaptive Search Procedure (GRASP). Adapted from `Ferone et al 2019`_.
- - Particle Swarm Optimization with combined Local and Global Expanding Neighborhood Topology (PSOLGENT) (`Marinakis et al 2017`_).
+ - Monodirectional forward labeling algorithm (exact);
+ - Monodirectional backward labeling algorithm (exact);
+ - Bidirectional labeling algorithm with static halfway point (exact);
+ - Bidirectional labeling algorithm with dynamic halfway point (exact) (`Tilk et al 2017`_);
+ - Heuristic Tabu search (metaheuristic);
+ - Greedy Elimination Procedure (metaheuristic);
+ - Greedy Randomised Adaptive Search Procedure (GRASP) (metaheuristic). Adapted from `Ferone et al 2019`_.
+ - Particle Swarm Optimization with combined Local and Global Expanding Neighborhood Topology (PSOLGENT) (metaheuristic) (`Marinakis et al 2017`_).
 
 Features implemented include: generic resource extension functions (`Inrich 2005`_) (not restricted to additive resources), generic resource consumptions (not restricted to non-negative values), and, increased efficiency (when compared to other implementations of monodirectional algorithms).
 

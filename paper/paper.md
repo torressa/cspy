@@ -131,8 +131,7 @@ Hence, each resource is restricted and updated as follows:
 
 - ``'sights'`` : the cumulative number of sights visited has a dummy upper bound equal to the number of edges in the graph as there is no restriction to as how many sights Jane visits. Additionally, the value of this resource in the final path, will provide us with the accumulated number of sights in the path;
 - ``'shift'`` : the cumulative shift time is updated as the travel time along the edge plus the delivery time, the upper bound of ``SHIFT_DURATION`` ensures that Jane doesn't exceed her part-time hours;
-- ``'travel-time'`` : the cumulative travel time is updated using the positive distance travelled (``-edge_data['weight']``) over an average walking speed. Given the relationship between this resource and 
-- ``'shift'`` : a maximum of the shift duration provides no restriction.
+- ``'travel-time'`` : the cumulative travel time is updated using the positive distance travelled (``-edge_data['weight']``) over an average walking speed. Given the relationship between this resource and ``'shift'``, a maximum of the shift duration provides no restriction;
 - ``'delivery-time'`` : the cumulative delivery time is simply updated using edge data. Similarly as for the previous resource, a maximum of the shift duration provides no restriction.
 
 If we wish to implement the bidirectional labelling algorithm, we have to invert ``jane_REF``. In this case, it can be easily done,

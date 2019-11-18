@@ -20,16 +20,16 @@ Therefore, this library is of interest to the operational research community, st
 
 ## Algorithms
 
-Currently, the algorithms implemented include:
+Currently, the exact and metaheuristic algorithms implemented include:
 
-- [X] Monodirectional forward labeling algorithm;
-- [X] Monodirectional backward labeling algorithm;
-- [X] Bidirectional labeling algorithm with static halfway point;
-- [X] Bidirectional labeling algorithm with dynamic halfway point [Tilk et al. (2017)](@tilk);
-- [X] Heuristic Tabu search;
-- [X] Greedy elimination procedure;
-- [X] Greedy Randomised Adaptive Search Procedure (GRASP). Adapted from [Ferone et al. (2019)](@ferone);
-- [X] Particle Swarm Optimization with combined Local and Global Expanding Neighborhood Topology (PSOLGENT) [Marinakis et al. (2017)](@marinakis).
+- [X] Monodirectional forward labeling algorithm (exact);
+- [X] Monodirectional backward labeling algorithm (exact);
+- [X] Bidirectional labeling algorithm with static halfway point (exact);
+- [X] Bidirectional labeling algorithm with dynamic halfway point (exact) [Tilk et al. (2017)](@tilk);
+- [X] Heuristic Tabu search (metaheuristic);
+- [X] Greedy elimination procedure (metaheuristic);
+- [X] Greedy Randomised Adaptive Search Procedure (GRASP) (metaheuristic). Adapted from [Ferone et al. (2019)](@ferone);
+- [X] Particle Swarm Optimization with combined Local and Global Expanding Neighborhood Topology (PSOLGENT) (metaheuristic) [Marinakis et al. (2017)](@marinakis).
 
 ## Getting Started
 
@@ -121,7 +121,7 @@ If you'd like to cite this package, please use the following bib format:
 ```none
 @Misc{cspy,
   author = {Torres Sanchez, David},
-  title = {{\texttt{cspy}-- A Python package with a collection of algorithms for the (Resource) Constrained Shortest Path problem}},
+  title = {{cspy-- A Python package with a collection of algorithms for the (Resource) Constrained Shortest Path problem}},
   year = {2019},
   url = {\url{https://github.com/torressa/cspy}}
 }
