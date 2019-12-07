@@ -1,0 +1,84 @@
+aircraft,airline,departure,arrival,destination,flight,origin,scheduled.arrival,scheduled.departure,type
+OH-LWB,Finnair (Oneworld Livery),0,9.54416666666667,Helsinki Vantaa Airport,AY90,Bangkok Suvarnabhumi Airport,1487336100,1487297100,A359
+OH-LWB,Finnair (Oneworld Livery),36.6133333333333,38.8275,Bangkok Suvarnabhumi Airport,AY89,Helsinki Vantaa Airport,1487291100,1487257500,A359
+OH-LWB,Finnair (Oneworld Livery),36.9730555555556,39.5275,Helsinki Vantaa Airport,AY70,Hong Kong International Airport,1487042700,1487004300,A359
+OH-LWB,Finnair (Oneworld Livery),41.1908333333333,43.0775,Hong Kong International Airport,AY69,Helsinki Vantaa Airport,1486971000,1486935900,A359
+OH-LWB,Finnair (Oneworld Livery),44.4644444444444,46.7275,Helsinki Vantaa Airport,AY832,London Heathrow Airport,1486905300,1486894800,A359
+OH-LWB,Finnair (Oneworld Livery),48.6341666666667,58.0941666666667,Hong Kong International Airport,AY69,Helsinki Vantaa Airport,1486798200,1486763100,A359
+OH-LWB,Finnair (Oneworld Livery),55.7725,57.7441666666667,Shanghai Pudong International Airport,AY57,Helsinki Vantaa Airport,1487376900,1487345400,A359
+OH-LWB,Finnair (Oneworld Livery),60.9333333333333,63.2108333333333,Helsinki Vantaa Airport,AY58,Shanghai Pudong International Airport,1487420400,1487383500,A359
+OH-LVD,Finnair (Oneworld Livery),64.2722222222222,65.1441666666667,Helsinki Vantaa Airport,AY768,Vienna International Airport,1487450700,1487441700,A319
+OH-LVD,Finnair (Oneworld Livery),65.8216666666666,66.5108333333333,Vienna International Airport,AY767,Helsinki Vantaa Airport,1487439000,1487430000,A319
+OH-LVD,Finnair (Oneworld Livery),67.1591666666666,77.1941666666666,Helsinki Vantaa Airport,AY822,Frankfurt Airport,1487423400,1487414100,A319
+OH-LVD,Finnair (Oneworld Livery),67.4055555555555,68.5608333333333,Frankfurt Airport,AY821,Helsinki Vantaa Airport,1487406000,1487396400,A319
+OH-LVD,Finnair (Oneworld Livery),69.6477777777777,70.7608333333333,Helsinki Vantaa Airport,AY356,Oulu Airport,1487365500,1487361900,A319
+OH-LVD,Finnair (Oneworld Livery),79.3680555555555,80.2941666666666,Oulu Airport,AY359,Helsinki Vantaa Airport,1487359500,1487355300,A319
+OH-LVD,Finnair (Oneworld Livery),80.9052777777778,81.6275,Helsinki Vantaa Airport,AY678,Gothenburg Landvetter Airport,1487352600,1487347800,A319
+OH-LVD,Finnair (Oneworld Livery),83.9625,85.2275,Gothenburg Landvetter Airport,AY677,Helsinki Vantaa Airport,1487345400,1487340300,A319
+OH-LVD,Finnair (Oneworld Livery),86.2722222222222,87.4108333333333,Helsinki Vantaa Airport,AY812,Brussels Airport,1487337300,1487328000,A319
+OH-LVD,Finnair (Oneworld Livery),88.2780555555555,89.4941666666666,Brussels Airport,AY811,Helsinki Vantaa Airport,1487319300,1487309700,A319
+OH-LVD,Finnair (Oneworld Livery),90.2044444444444,91.2941666666666,Helsinki Vantaa Airport,AY650,Stockholm Arlanda Airport,1487277600,1487274300,A319
+OH-LVD,Finnair (Oneworld Livery),92.3011111111111,93.0608333333333,Stockholm Arlanda Airport,AY649,Helsinki Vantaa Airport,1487272500,1487268900,A319
+OH-LVD,Finnair (Oneworld Livery),93.86,94.5441666666666,Helsinki Vantaa Airport,AY664,Copenhagen Airport,1487265900,1487260200,A319
+OH-LVD,Finnair (Oneworld Livery),103.730833333333,106.160833333333,Copenhagen Airport,AY663,Helsinki Vantaa Airport,1487257800,1487252100,A319
+OH-LVD,Finnair (Oneworld Livery),108.856944444444,111.010833333333,Helsinki Vantaa Airport,AY716,Prague Vaclav Havel Airport,1487248500,1487240700,A319
+OH-LVD,Finnair (Oneworld Livery),112.3225,113.6775,Prague Vaclav Havel Airport,AY715,Helsinki Vantaa Airport,1487238300,1487230800,A319
+OH-LVD,Finnair (Oneworld Livery),114.838055555556,115.810833333333,Helsinki Vantaa Airport,AY660,Oslo Gardermoen Airport,1487180100,1487175000,A319
+OH-LVD,Finnair (Oneworld Livery),129.789166666667,131.7775,Oslo Gardermoen Airport,AY659,Helsinki Vantaa Airport,1487172900,1487167500,A319
+OH-LVD,Finnair (Oneworld Livery),132.642222222222,134.384166666667,Helsinki Vantaa Airport,AY812,Brussels Airport,1487164500,1487155200,A319
+OH-LVD,Finnair (Oneworld Livery),135.683888888889,137.1275,Brussels Airport,AY811,Helsinki Vantaa Airport,1487146500,1487136900,A319
+OH-LVD,Finnair (Oneworld Livery),137.496388888889,146.694166666667,Helsinki Vantaa Airport,AY650,Stockholm Arlanda Airport,1487104800,1487101500,A319
+OH-LVD,Finnair (Oneworld Livery),137.989166666667,139.231666666667,Stockholm Arlanda Airport,AY649,Helsinki Vantaa Airport,1487099700,1487096100,A319
+OH-LVD,Finnair (Oneworld Livery),140.438611111111,141.2275,Helsinki Vantaa Airport,AY678,Gothenburg Landvetter Airport,1487093400,1487088600,A319
+OH-LVD,Finnair (Oneworld Livery),142.0025,142.644166666667,Gothenburg Landvetter Airport,AY677,Helsinki Vantaa Airport,1487086200,1487081100,A319
+OH-LVD,Finnair (Oneworld Livery),148.785,159.060833333333,Helsinki Vantaa Airport,AY676,Gothenburg Landvetter Airport,1487078400,1487073300,A319
+OH-LVD,Finnair (Oneworld Livery),151.91,154.194166666667,Gothenburg Landvetter Airport,AY675,Helsinki Vantaa Airport,1487070900,1487065800,A319
+OH-LVD,Finnair (Oneworld Livery),156.882222222222,159.394166666667,Helsinki Vantaa Airport,AY364,Oulu Airport,1487058900,1487055300,A319
+OH-LVD,Finnair (Oneworld Livery),160.608611111111,161.744166666667,Oulu Airport,AY363,Helsinki Vantaa Airport,1487053500,1487049600,A319
+OH-LVD,Finnair (Oneworld Livery),161.8475,169.9775,Helsinki Vantaa Airport,AY658,Oslo Gardermoen Airport,1487018700,1487013600,A319
+OH-LVD,Finnair (Oneworld Livery),162.490833333333,163.694166666667,Oslo Gardermoen Airport,AY657,Helsinki Vantaa Airport,1487011500,1487006100,A319
+OH-LVD,Finnair (Oneworld Livery),164.656666666667,165.552222222222,Helsinki Vantaa Airport,AY368,Oulu Airport,1487003700,1487000100,A319
+OH-LVD,Finnair (Oneworld Livery),166.051944444444,166.8775,Oulu Airport,AY367,Helsinki Vantaa Airport,1486998300,1486994400,A319
+OH-LVD,Finnair (Oneworld Livery),172.3425,182.210833333333,Helsinki Vantaa Airport,AY704,Dusseldorf International Airport,1486991400,1486982700,A319
+OH-LVD,Finnair (Oneworld Livery),175.926111111111,177.860833333333,Dusseldorf International Airport,AY703,Helsinki Vantaa Airport,1486973100,1486964400,A319
+OH-LVD,Finnair (Oneworld Livery),181.053611111111,183.5275,Helsinki Vantaa Airport,AY768,Vienna International Airport,1486932300,1486923300,A319
+OH-LVD,Finnair (Oneworld Livery),185.268333333333,194.244166666667,Vienna International Airport,AY767,Helsinki Vantaa Airport,1486920600,1486911600,A319
+OH-LVD,Finnair (Oneworld Livery),185.374444444444,187.260833333333,Helsinki Vantaa Airport,AY754,Budapest Ferenc Liszt International Airport,1486904100,1486895700,A319
+OH-LVD,Finnair (Oneworld Livery),188.3425,190.5775,Helsinki Vantaa Airport,AY656,Oslo Gardermoen Airport,1487684400,1487679300,A319
+OH-LVD,Finnair (Oneworld Livery),196.544722222222,207.310833333333,Oslo Gardermoen Airport,AY651,Helsinki Vantaa Airport,1487661000,1487655300,A319
+OH-LVD,Finnair (Oneworld Livery),200.083333333333,202.560833333333,Helsinki Vantaa Airport,AY768,Vienna International Airport,1487623500,1487614500,A319
+OH-LVD,Finnair (Oneworld Livery),204.006111111111,206.360833333333,Vienna International Airport,AY767,Helsinki Vantaa Airport,1487611800,1487602800,A319
+OH-LVD,Finnair (Oneworld Livery),208.262222222222,209.149444444445,Helsinki Vantaa Airport,AY642,Stockholm Arlanda Airport,1487599800,1487596200,A319
+OH-LVD,Finnair (Oneworld Livery),209.858611111111,218.110833333333,Stockholm Arlanda Airport,AY641,Helsinki Vantaa Airport,1487593500,1487590200,A319
+OH-LVD,Finnair (Oneworld Livery),209.871111111111,210.644166666667,Helsinki Vantaa Airport,AY3126,London Heathrow Airport,1487586000,1487575800,A319
+OH-LVD,Finnair (Oneworld Livery),211.723333333333,214.144166666667,London Heathrow Airport,AY3125,Helsinki Vantaa Airport,1487536800,1487525400,A319
+OH-LVD,Finnair (Oneworld Livery),220.451111111111,230.144166666667,Helsinki Vantaa Airport,AY368,Oulu Airport,1487522100,1487518500,A319
+OH-LVD,Finnair (Oneworld Livery),225.663611111111,228.094166666667,Oulu Airport,AY367,Helsinki Vantaa Airport,1487516700,1487512800,A319
+OH-LVD,Finnair (Oneworld Livery),229.657222222222,230.394166666667,Helsinki Vantaa Airport,AY858,Zurich Airport,1487508300,1487498100,A319
+OH-LVD,Finnair (Oneworld Livery),231.166111111111,231.810833333333,Zurich Airport,AY857,Helsinki Vantaa Airport,1487493900,1487483700,A319
+OH-LVD,Finnair (Oneworld Livery),233.437222222222,235.394166666667,Stockholm Arlanda Airport,AY645,Helsinki Vantaa Airport,1487694600,1487691000,A319
+OH-LWB,Finnair (Oneworld Livery),234.047222222222,242.244166666667,Helsinki Vantaa Airport,AY58,Shanghai Pudong International Airport,1487679600,1487642700,A359
+OH-LWB,Finnair (Oneworld Livery),236.375,238.5275,Shanghai Pudong International Airport,AY57,Helsinki Vantaa Airport,1487636100,1487604600,A359
+OH-LWB,Finnair (Oneworld Livery),244.522222222222,253.860833333333,Helsinki Vantaa Airport,AY58,Shanghai Pudong International Airport,1487593200,1487556300,A359
+OH-LWB,Finnair (Oneworld Livery),247.896666666667,249.160833333333,Shanghai Pudong International Airport,AY57,Helsinki Vantaa Airport,1487549700,1487518200,A359
+OH-LWB,Finnair (Oneworld Livery),254.496388888889,255.6775,Helsinki Vantaa Airport,AY90,Bangkok Suvarnabhumi Airport,1487508900,1487469900,A359
+OH-LWB,Finnair (Oneworld Livery),257.573611111111,266.494166666667,Bangkok Suvarnabhumi Airport,AY89,Helsinki Vantaa Airport,1487463900,1487430300,A359
+OH-LVD,Finnair (Oneworld Livery),257.617777777778,258.344166666667,Helsinki Vantaa Airport,AY822,Frankfurt Airport,1487769000,1487759700,A319
+OH-LVD,Finnair (Oneworld Livery),259.254166666667,259.894166666667,Frankfurt Airport,AY821,Helsinki Vantaa Airport,1487751600,1487742000,A319
+OH-LVD,Finnair (Oneworld Livery),268.575555555556,279.410833333333,Helsinki Vantaa Airport,AY646,Stockholm Arlanda Airport,1487700300,1487697000,A319
+OH-LWB,Finnair (Oneworld Livery),271.887222222222,274.1775,Helsinki Vantaa Airport,AY90,Bangkok Suvarnabhumi Airport,1487768100,1487729100,A359
+OH-LWB,Finnair (Oneworld Livery),276.863611111111,279.010833333333,Bangkok Suvarnabhumi Airport,AY89,Helsinki Vantaa Airport,1487723100,1487689500,A359
+OH-LVD,Finnair (Oneworld Livery),281.168333333333,283.460833333334,Helsinki Vantaa Airport,AY708,Dusseldorf International Airport,1487793900,1487785500,A319
+OH-LVD,Finnair (Oneworld Livery),285.301111111111,287.5275,Dusseldorf International Airport,AY707,Helsinki Vantaa Airport,1487782500,1487773800,A319
+OH-LWB,Finnair (Oneworld Livery),288.555555555556,297.994166666667,Hong Kong International Airport,AY69,Helsinki Vantaa Airport,1487835000,1487799900,A359
+OH-LVD,Finnair (Oneworld Livery),295.86,298.434722222222,Helsinki Vantaa Airport,AY658,Oslo Gardermoen Airport,1487969100,1487964000,A319
+OH-LVD,Finnair (Oneworld Livery),300.746944444445,302.860833333334,Oslo Gardermoen Airport,AY657,Helsinki Vantaa Airport,1487961900,1487956500,A319
+OH-LVD,Finnair (Oneworld Livery),305.389444444445,307.4775,Helsinki Vantaa Airport,AY368,Oulu Airport,1487954100,1487950500,A319
+OH-LVD,Finnair (Oneworld Livery),308.536944444445,310.4775,Oulu Airport,AY367,Helsinki Vantaa Airport,1487948700,1487944800,A319
+OH-LVD,Finnair (Oneworld Livery),319.938888888889,322.0275,Helsinki Vantaa Airport,AY704,Dusseldorf International Airport,1487941800,1487933100,A319
+OH-LVD,Finnair (Oneworld Livery),325.004444444445,327.1275,Dusseldorf International Airport,AY703,Helsinki Vantaa Airport,1487923500,1487914800,A319
+OH-LVD,Finnair (Oneworld Livery),328.402222222222,329.2275,Helsinki Vantaa Airport,AY768,Vienna International Airport,1487882700,1487873700,A319
+OH-LVD,Finnair (Oneworld Livery),329.979166666667,330.710833333334,Vienna International Airport,AY767,Helsinki Vantaa Airport,1487871000,1487862000,A319
+OH-LVD,Finnair (Oneworld Livery),331.723055555556,332.910833333334,Helsinki Vantaa Airport,AY812,Brussels Airport,1487855700,1487846400,A319
+OH-LVD,Finnair (Oneworld Livery),333.871388888889,335.010833333334,Brussels Airport,AY811,Helsinki Vantaa Airport,1487837700,1487828100,A319
+OH-LVD,Finnair (Oneworld Livery),352.255833333334,355.344166666667,London Heathrow Airport,AY833,Helsinki Vantaa Airport,1488042600,1488031200,A319
