@@ -105,7 +105,7 @@ After that feel free to send a pull request.
 #### Pull Request Process
  
  - If necessary, please perform documentation updates where appropriate (e.g. README.md, docs and [CHANGELOG.md](CHANGELOG.md)).
- - Increase the version numbers and reference the changes appropriately. Note that the versioning scheme used is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
+ - Increase the version numbers and reference the changes appropriately. Note that the versioning scheme used is based on [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
  - Wait for approval for merging.
 
 ### Seeking Support
