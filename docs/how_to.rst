@@ -23,9 +23,9 @@ For example,
         >>> from networkx import DiGraph
         >>> from numpy import array
         >>> G = DiGraph(directed=True, n_res=2)
-        >>> G.add_edge('Source', 'A', res_cost=array([1]), weight=1.0)
-        >>> G.add_edge('A', 'B', res_cost=array([1]), weight=1.0)
-        >>> G.add_edge('B', 'Sink', res_cost=array([1]), weight=1.0)
+        >>> G.add_edge('Source', 'A', res_cost=array([1, 0]), weight=1.0)
+        >>> G.add_edge('A', 'B', res_cost=array([1, 0]), weight=1.0)
+        >>> G.add_edge('B', 'Sink', res_cost=array([1, 0]), weight=1.0)
 
 Algorithms
 ~~~~~~~~~~
@@ -76,7 +76,7 @@ As an example, the following function would be valid:
 
         from numpy import array
 
-        def REF_CUSTOM(cumulative_res, edge):
+        def REF_custom(cumulative_res, edge):
         	new_res = array(cumulative_res)
         	# your filtering criteria that changes the elements of new_res
         	# For example:

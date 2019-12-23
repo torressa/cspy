@@ -63,12 +63,12 @@ def prune_graph(G, max_res, min_res):
             # Collect nodes in paths that violate the resource bounds
             # see note above
             nodes_source.update({
-                path_s[key][-2]: val
+                path_s[key][-2]: (val, r)
                 for key, val in length_s.items()
                 if val > max_res[r] or val < min_res[r]
             })
             nodes_sink.update({
-                path_t[key][-2]: val
+                path_t[key][-2]: (val, r)
                 for key, val in length_t.items()
                 if val > max_res[r] or val < min_res[r]
             })
@@ -86,7 +86,16 @@ def prune_graph(G, max_res, min_res):
             node for node in G.nodes() if node in nodes_source and nodes_sink
         ]
         if "Source" in nodes_to_remove or "Sink" in nodes_to_remove:
-            raise Exception("Sink not reachable for resource {}".format(r))
+            if "Sink" in nodes_source:
+                unreachable_res = nodes_source["Sink"][1]
+            elif "Sink" in nodes_sink:
+                unreachable_res = nodes_sink["Sink"][1]
+            elif "Source" in nodes_sink:
+                unreachable_res = nodes_sink["Source"][1]
+            elif "Source" in nodes_source:
+                unreachable_res = nodes_source["Source"][1]
+            raise Exception(
+                "Sink not reachable for resource {}".format(unreachable_res))
         G.remove_nodes_from(nodes_to_remove)
         log.info("Removed {}/{} nodes".format(len(nodes_to_remove), n_nodes))
     return G
