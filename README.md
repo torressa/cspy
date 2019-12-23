@@ -20,16 +20,16 @@ Therefore, this library is of interest to the operational research community, st
 
 ## Algorithms
 
-Currently, the algorithms implemented include:
+Currently, the exact and metaheuristic algorithms implemented include:
 
-- [X] Monodirectional forward labeling algorithm;
-- [X] Monodirectional backward labeling algorithm;
-- [X] Bidirectional labeling algorithm with static halfway point;
-- [X] Bidirectional labeling algorithm with dynamic halfway point [Tilk et al. (2017)](@tilk);
-- [X] Heuristic Tabu search;
-- [X] Greedy elimination procedure;
-- [X] Greedy Randomised Adaptive Search Procedure (GRASP). Adapted from [Ferone et al. (2019)](@ferone);
-- [X] Particle Swarm Optimization with combined Local and Global Expanding Neighborhood Topology (PSOLGENT) [Marinakis et al. (2017)](@marinakis).
+- [X] Monodirectional forward labeling algorithm (exact);
+- [X] Monodirectional backward labeling algorithm (exact);
+- [X] Bidirectional labeling algorithm with static halfway point (exact);
+- [X] Bidirectional labeling algorithm with dynamic halfway point (exact) [Tilk et al. (2017)](@tilk);
+- [X] Heuristic Tabu search (metaheuristic);
+- [X] Greedy elimination procedure (metaheuristic);
+- [X] Greedy Randomised Adaptive Search Procedure (GRASP) (metaheuristic). Adapted from [Ferone et al. (2019)](@ferone);
+- [X] Particle Swarm Optimization with combined Local and Global Expanding Neighborhood Topology (PSOLGENT) (metaheuristic) [Marinakis et al. (2017)](@marinakis).
 
 ## Getting Started
 
@@ -105,7 +105,7 @@ After that feel free to send a pull request.
 #### Pull Request Process
  
  - If necessary, please perform documentation updates where appropriate (e.g. README.md, docs and [CHANGELOG.md](CHANGELOG.md)).
- - Increase the version numbers and reference the changes appropriately. Note that the versioning scheme used is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
+ - Increase the version numbers and reference the changes appropriately. Note that the versioning scheme used is based on [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
  - Wait for approval for merging.
 
 ### Seeking Support
