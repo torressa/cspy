@@ -1,5 +1,6 @@
+from networkx import (DiGraph, NetworkXException, NetworkXUnbounded, has_path,
+                      negative_edge_cycle)
 from numpy import ndarray
-from networkx import DiGraph, NetworkXException, has_path
 
 __all__ = [
     "_check_res", "_check_direction", "_check_graph_attr", "_check_edge_attr",
@@ -62,10 +63,15 @@ def _check_edge_attr(G, max_res, min_res, direction, algorithm):
 
 
 def _check_path(G, max_res, min_res, direction, algorithm):
-    """Checks whether a 'Source' -> 'Sink' path exists.
-    Also covers nodes missing and other standard networkx exceptions"""
+    """Checks whether a 'Source' -> 'Sink' path exists and if there are
+    negative edge cycles in the graph.
+    Also covers nodes missing and other standard networkx exceptions."""
     try:
         has_path(G, 'Source', 'Sink')
+        if negative_edge_cycle(G):
+            raise NetworkXUnbounded
+    except NetworkXUnbounded:
+        raise Exception("A negative cost cycle was found.")
     except NetworkXException as e:
         raise Exception("An error occurred: {}".format(e))
 
