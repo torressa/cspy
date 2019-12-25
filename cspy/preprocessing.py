@@ -147,11 +147,12 @@ def check_and_preprocess(preprocess,
         exceptions are raised, otherwise doesn't return anything.
 
     :raises: Raises exceptions if incorrect input is given.
-        If multiple exceptions are raised, and exception with a list of
+        If multiple exceptions are raised, an exception with a list of
         exceptions is raised.
     """
     check(G, max_res, min_res, direction, algorithm)
     if REF_forward or REF_backward:
+        # Cannot apply pruning with custom REFs
         _check_REFs(REF_forward, REF_backward)
         return G
     if preprocess:

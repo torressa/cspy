@@ -24,7 +24,6 @@ Currently, the exact and metaheuristic algorithms implemented include:
 
 - [X] Monodirectional forward labeling algorithm (exact);
 - [X] Monodirectional backward labeling algorithm (exact);
-- [X] Bidirectional labeling algorithm with static halfway point (exact);
 - [X] Bidirectional labeling algorithm with dynamic halfway point (exact) [Tilk et al. (2017)](@tilk);
 - [X] Heuristic Tabu search (metaheuristic);
 - [X] Greedy elimination procedure (metaheuristic);
@@ -92,10 +91,6 @@ This project is licensed under the MIT License - see the [LICENSE.txt](LICENSE.t
 ### Issues
 
 If you find a bug or there are some improvements you'd like to see (e.g. more algorithms), please raise a new issue with a clear explanation. 
-
-See [feature_request.md](/.github/ISSUE_TEMPLATE/feature_request.md) for a template.
-
-See [bug_report.md](/.github/ISSUE_TEMPLATE/bug_report.md) for a template.
 
 ### Contributing to the Software
 

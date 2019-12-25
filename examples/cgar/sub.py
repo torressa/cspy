@@ -1,13 +1,19 @@
 import copy
-import cspy
 import logging
-from numpy import array
+import sys
 from abc import ABCMeta
+
+from numpy import array
+
 # Local imports
 from classes import Flight
+from constants import (AIRLINES_DATA, CREW_COST, CREW_REST, MAX_CREWD1,
+                       MAX_CREWD2, MIN_MAINT, PENALTY)
 from time_space_network import TSN
-from constants import (CREW_COST, CREW_REST, MAX_CREWD1, MAX_CREWD2,
-                       AIRLINES_DATA, PENALTY, MIN_MAINT)
+
+sys.path.append("../../../cspy")
+
+from cspy.algorithms.bidirectional import BiDirectional
 
 log = logging.getLogger(__name__)
 
@@ -97,7 +103,7 @@ class Subproblem:
         Custom resource extension function that uses a cumulative resource
         vector ``res`` and the extension through ``edge`` to update the
         cumulative resource vector.
-x        """
+        """
 
         def _check_hub(airport, airline):
             return any(

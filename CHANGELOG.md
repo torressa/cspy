@@ -5,10 +5,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.0.9] - 25/12/2019
+## Added
+
+- Added example directory with column generation example.
+- Check for negative cost cycles.
+
 ### Changed
 
 - PSOLGENT seed handling.
-- Added example in paper.
+- Improved documentation.
 
 ## [0.0.8] - 15/07/2019
 ### Added
@@ -55,7 +61,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Updated README.
 
 
-[Unreleased]: https://github.com/torressa/cspy/compare/v0.0.8...HEAD
+[Unreleased]: https://github.com/torressa/cspy/compare/v0.0.9...HEAD
+[0.0.9]: https://github.com/torressa/cspy/compare/v0.0.8...v0.0.9
 [0.0.8]: https://github.com/torressa/cspy/compare/0.0.5...v0.0.8
 [0.0.5]: https://github.com/torressa/cspy/compare/0.0.3...0.0.5
 [0.0.3]: https://github.com/torressa/cspy/compare/0.0.1...0.0.3

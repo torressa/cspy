@@ -67,7 +67,8 @@ def _check_path(G, max_res, min_res, direction, algorithm):
     negative edge cycles in the graph.
     Also covers nodes missing and other standard networkx exceptions."""
     try:
-        has_path(G, 'Source', 'Sink')
+        if not has_path(G, 'Source', 'Sink'):
+            raise NetworkXException("Disconnected Graph")
         if negative_edge_cycle(G):
             raise NetworkXUnbounded
     except NetworkXUnbounded:

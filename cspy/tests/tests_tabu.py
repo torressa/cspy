@@ -43,6 +43,10 @@ class TestsTabu(unittest.TestCase):
         path = Tabu(self.G, self.max_res, self.min_res).run()
         self.assertEqual(path, ['Source', 'A', 'C', 'D', 'E', 'Sink'])
 
+    def testInputExceptions(self):
+        # Check whether wrong input raises exceptions
+        self.assertRaises(Exception, Tabu, self.G, 'x', [1, 'foo'], 'up')
+
 
 if __name__ == '__main__':
     unittest.main()

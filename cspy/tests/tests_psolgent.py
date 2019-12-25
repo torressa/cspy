@@ -47,6 +47,10 @@ class TestsPSOLGENT(unittest.TestCase):
                         seed=RandomState(123)).run()
         self.assertEqual(path, ['Source', 'A', 'C', 'D', 'E', 'Sink'])
 
+    def testInputExceptions(self):
+        # Check whether wrong input raises exceptions
+        self.assertRaises(Exception, PSOLGENT, self.G, 'x', [1, 'foo'], 'up')
+
 
 if __name__ == '__main__':
     unittest.main()

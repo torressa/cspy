@@ -1,16 +1,17 @@
 from __future__ import absolute_import
-from __future__ import print_function
 
 import random
-import logging
-import numpy as np
-from itertools import repeat
 from collections import OrderedDict
+from itertools import repeat
+from logging import getLogger
+
+import numpy as np
+
 # Local module imports
 from cspy.label import Label
 from cspy.preprocessing import check_and_preprocess
 
-log = logging.getLogger(__name__)
+log = getLogger(__name__)
 
 
 class BiDirectional:
@@ -45,7 +46,7 @@ class BiDirectional:
 
     direction : string, optional
         preferred search direction.
-        Either 'both', 'forward', or, 'backward'. Default : 'both'.
+        Either "both", "forward", or, "backward". Default : "both".
 
     .. _REFs : https://cspy.readthedocs.io/en/latest/how_to.html#refs
 
@@ -60,28 +61,16 @@ class BiDirectional:
     :math:`\geq 2`. The edges in the graph must all have a ``res_cost``
     attribute.
 
-    According to the inputs, four different algorithms can be implemented,
-    if you'd like to check which algorithm your running given your resource
-    limits, run ``.name_algorithm(U, L)`` for a log with the classification.
-    If ``direction`` is not given the absolute resource limits have to be
-    given:
+    According to the inputs, four different algorithms can be used.
+    If you'd like to check which algorithm is running given the resource
+    limits, call the method :func:`BiDirectional.name_algorithm()`
+    for a log with the classification.
 
-    :func:`BiDirectional.name_algorithm(U, L)`
-
-    U : float, optional
-        Upper bound for monotone resource
-        (for algorithm classification purposes see Notes).
-
-    L : float, optional
-        Lower bound for monotone resource
-        (for algorithm classification purposes see Notes).
-
-    According to these, we have,
-
-    -  :math:`H_F = H_B > U` or ``direction`` = 'forward': Monodirectional forward labeling algorithm
-    -  :math:`L < H_F = H_B < U`: Bidirectional labeling algorithm with static halfway point
-    -  :math:`H_F = H_B < L` or ``direction`` = 'backward': Monodirectional backward labeling algorithm
-    -  :math:`U = H_F > H_B = L`: Bidirectional labeling algorithm with dynamic halfway point.
+    - ``direction`` = "forward": Monodirectional forward labeling algorithm
+    - :math:`H_F == H_B`: Bidirectional labeling algorithm with static halfway point.
+    - ``direction`` = "backward": Monodirectional backward labeling algorithm
+    - :math:`H_F > H_B`: Bidirectional labeling algorithm with dynamic halfway point.
+    - :math:`H_F < H_B`: The algorithm won't go anywhere!
 
     Example
     -------
@@ -94,16 +83,16 @@ class BiDirectional:
         >>> from networkx import DiGraph
         >>> from numpy import array
         >>> G = DiGraph(directed=True, n_res=2)
-        >>> G.add_edge('Source', 'A', res_cost=array([1, 2]), weight=0)
-        >>> G.add_edge('A', 'B', res_cost=array([1, 0.3]), weight=0)
-        >>> G.add_edge('A', 'C', res_cost=array([1, 0.1]), weight=0)
-        >>> G.add_edge('B', 'C', res_cost=array([1, 3]), weight=-10)
-        >>> G.add_edge('B', 'Sink', res_cost=array([1, 2]), weight=10)
-        >>> G.add_edge('C', 'Sink', res_cost=array([1, 10]), weight=0)
+        >>> G.add_edge("Source", "A", res_cost=array([1, 2]), weight=0)
+        >>> G.add_edge("A", "B", res_cost=array([1, 0.3]), weight=0)
+        >>> G.add_edge("A", "C", res_cost=array([1, 0.1]), weight=0)
+        >>> G.add_edge("B", "C", res_cost=array([1, 3]), weight=-10)
+        >>> G.add_edge("B", "Sink", res_cost=array([1, 2]), weight=10)
+        >>> G.add_edge("C", "Sink", res_cost=array([1, 10]), weight=0)
         >>> max_res, min_res = [4, 20], [1, 0]
-        >>> path = BiDirectional(G, max_res, min_res, direction='both').run()
+        >>> path = BiDirectional(G, max_res, min_res, direction="both").run()
         >>> print(path)
-        ['Source', 'A', 'B', 'C', 'Sink']
+        ["Source", "A", "B", "C", "Sink"]
 
     .. _Tilk 2017: https://www.sciencedirect.com/science/article/pii/S0377221717302035
     """
@@ -115,7 +104,7 @@ class BiDirectional:
                  REF_forward=None,
                  REF_backward=None,
                  preprocess=False,
-                 direction='both'):
+                 direction="both"):
         # Check inputs and preprocess G unless option disabled
         self.G = check_and_preprocess(preprocess, G, max_res, min_res,
                                       REF_forward, REF_backward, direction,
@@ -124,14 +113,15 @@ class BiDirectional:
         self.max_res, self.min_res = max_res, min_res
         # init current forward and backward labels
         self.Label = {
-            'forward': Label(0, 'Source', np.zeros(G.graph['n_res']),
-                             ['Source']),
-            'backward': Label(0, 'Sink', max_res, ['Sink'])
+            "forward":
+                Label(0, "Source", np.zeros(G.graph["n_res"]), ["Source"]),
+            "backward":
+                Label(0, "Sink", max_res, ["Sink"])
         }
         # init forward and backward unprocessed labels
-        self.unprocessed = {'forward': {}, 'backward': {}}
+        self.unprocessed = {"forward": {}, "backward": {}}
         # init final path
-        self.finalpath = {'forward': ["Source"], 'backward': ["Sink"]}
+        self.finalpath = {"forward": ["Source"], "backward": ["Sink"]}
 
         # If given, set REFs for dominance relations and feasibility checks
         if REF_forward and REF_backward:
@@ -139,30 +129,50 @@ class BiDirectional:
             Label._REF_backward = REF_backward
 
     def run(self):
-        while self.Label['forward'] or self.Label['backward']:
-            direc = self.get_direction()
+        while self.Label["forward"] or self.Label["backward"]:
+            direc = self._get_direction()
+            log.info(" Direction {} \t HF={} \t HB={}".format(direc, self.max_res[0],
+                                                      self.min_res[0]))
             if direc:
-                self.algorithm(direc)
+                self._algorithm(direc)
                 self._check_dominance(direc)
             elif not direc or self._terminate(direc):
                 break
         return self._join_paths()
 
+    ###########################
+    # Classify Algorithm Type #
+    ###########################
+    def name_algorithm(self):
+        """
+        Determine which algorithm is running.
+        """
+        HF, HB = self.max_res[0], self.min_res[0]
+        if self.direc_in == "forward":
+            log.info("Monodirectional forward labeling algorithm")
+        elif self.direc_in == "backward":
+            log.info("Monodirectional backward labeling algorithm")
+        elif HF > HB:
+            log.info("Bidirectional labeling algorithm with" +
+                     " dynamic halfway point")
+        else:
+            log.info("The algorithm can't move in either direction!")
+
     #############
     # DIRECTION #
     #############
-    def get_direction(self):
-        if self.direc_in == 'both':
-            if self.Label['forward'] and not self.Label['backward']:
-                return 'forward'
-            elif not self.Label['forward'] and self.Label['backward']:
-                return 'backward'
-            elif self.Label['forward'] and self.Label['backward']:
-                return random.choice(['forward', 'backward'])
+    def _get_direction(self):
+        if self.direc_in == "both":
+            if self.Label["forward"] and not self.Label["backward"]:
+                return "forward"
+            elif not self.Label["forward"] and self.Label["backward"]:
+                return "backward"
+            elif self.Label["forward"] and self.Label["backward"]:
+                return random.choice(["forward", "backward"])
             else:  # if both are empty
                 return
         else:
-            if not self.Label['forward'] and not self.Label['backward']:
+            if not self.Label["forward"] and not self.Label["backward"]:
                 return
             elif not self.Label[self.direc_in]:
                 return
@@ -172,13 +182,15 @@ class BiDirectional:
     #############
     # ALGORITHM #
     #############
-    def algorithm(self, direc):
-        if direc == 'forward':  # forward
+    def _algorithm(self, direc):
+        if direc == "forward":  # forward
             idx = 0  # index for head node
+            # Update backwards half-way point
             self.min_res[0] = max(
                 self.min_res[0], min(self.Label[direc].res[0], self.max_res[0]))
-        else:
+        else:  # backwards
             idx = 1  # index for tail node
+            # Update forwards half-way point
             self.max_res[0] = min(
                 self.max_res[0], max(self.Label[direc].res[0], self.min_res[0]))
         # Select edges with the same head/tail node as the current label node.
@@ -194,7 +206,7 @@ class BiDirectional:
 
     def _propagate_label(self, edge, direc):
         # Label propagation #
-        weight, res_cost = edge[2]['weight'], edge[2]['res_cost']
+        weight, res_cost = edge[2]["weight"], edge[2]["res_cost"]
         new_label = self.Label[direc].get_new_label(edge, direc, weight,
                                                     res_cost)
         if new_label.feasibility_check(self.max_res, self.min_res):
@@ -240,16 +252,16 @@ class BiDirectional:
     ###############
     def _terminate(self, direc):
         if self.direc_in == "both":
-            if (self.finalpath['forward'] and self.finalpath['backward'] and
-                (self.finalpath['forward'][-1] == self.finalpath['backward'][-1]
+            if (self.finalpath["forward"] and self.finalpath["backward"] and
+                (self.finalpath["forward"][-1] == self.finalpath["backward"][-1]
                 )):
                 return True
         else:
-            if (self.finalpath['forward'][-1] == "Sink" and
-                    not self.unprocessed['forward']):
+            if (self.finalpath["forward"][-1] == "Sink" and
+                    not self.unprocessed["forward"]):
                 return True
-            elif (self.finalpath['backward'][-1] == "Source" and
-                  not self.unprocessed['backward']):
+            elif (self.finalpath["backward"][-1] == "Source" and
+                  not self.unprocessed["backward"]):
                 return True
             if not self.Label[self.direc_in] and not self.G.edges():
                 return True
@@ -258,9 +270,11 @@ class BiDirectional:
     # DOMINANCE #
     #############
     def _check_dominance(self, direc):
-        """ For all labels, check if it is dominated, or itself dominates other
+        """
+        For all labels, check if it is dominated, or itself dominates other
         labels. If this is found to be the case, the dominated label is
-        removed """
+        removed.
+        """
         for sub_dict in ({k: v} for k, v in self.unprocessed[direc].items()):
             k = list(sub_dict.keys())[0]  # call dict_keys object as a list
             for label in [key for v in sub_dict.values() for key in v.keys()]:
@@ -277,49 +291,32 @@ class BiDirectional:
     #################
     def _join_paths(self):
         # check if paths are eligible to be joined
-        if self.direc_in == 'both' and (self.finalpath['forward'] and
-                                        self.finalpath['backward']):
+        if self.direc_in == "both" and (self.finalpath["forward"] and
+                                        self.finalpath["backward"]):
             # reverse order for backward path
-            self.finalpath['backward'].reverse()
+            self.finalpath["backward"].reverse()
             return self._check_paths()
         else:
-            if self.direc_in == 'backward':
+            if self.direc_in == "backward":
                 self.finalpath[self.direc_in].reverse()
             return self.finalpath[self.direc_in]
 
     def _check_paths(self):
-        if (self.finalpath['forward'][-1] == 'Sink' and
-                self.finalpath['backward'][0] != 'Source'):
+        if (self.finalpath["forward"][-1] == "Sink" and
+                self.finalpath["backward"][0] != "Source"):
             # if only forward path
-            return self.finalpath['forward']
-        elif (self.finalpath['backward'][0] == 'Source' and
-              self.finalpath['forward'][-1] != 'Sink'):
+            return self.finalpath["forward"]
+        elif (self.finalpath["backward"][0] == "Source" and
+              self.finalpath["forward"][-1] != "Sink"):
             # if only backward path
-            return self.finalpath['backward']
-        elif (self.finalpath['backward'][0] == 'Source' and
-              self.finalpath['forward'][-1] == 'Sink'):
+            return self.finalpath["backward"]
+        elif (self.finalpath["backward"][0] == "Source" and
+              self.finalpath["forward"][-1] == "Sink"):
             # if both full paths
             return random.choice(
-                [self.finalpath['forward'], self.finalpath['backward']])
+                [self.finalpath["forward"], self.finalpath["backward"]])
         else:
             # if combination of the two is required
             return list(
-                OrderedDict.fromkeys(self.finalpath['forward'] +
-                                     self.finalpath['backward']))
-
-    ###########################
-    # Classify Algorithm Type #
-    ###########################
-    def name_algorithm(self, U=None, L=None):
-        if (U and L) or self.direc_in != "both":
-            HF, HB = self.max_res[0], self.min_res[0]
-            if HF == HB > U or self.direc_in == 'forward':
-                log.info('Monodirectional forward labeling algorithm')
-            elif HF == HB < L or self.direc_in == 'backward':
-                log.info('Monodirectional backward labeling algorithm')
-            elif L < HF == HB < U:
-                log.info('Bidirectional labeling algorithm with' +
-                         ' static halfway point')
-            elif U == HF > HB == L:
-                log.info('Bidirectional labeling algorithm with' +
-                         ' dynamic halfway point.')
+                OrderedDict.fromkeys(self.finalpath["forward"] +
+                                     self.finalpath["backward"]))

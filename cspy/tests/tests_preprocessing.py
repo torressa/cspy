@@ -3,7 +3,6 @@ import unittest
 
 from networkx import DiGraph
 from numpy import array
-from numpy.random import RandomState
 
 sys.path.append("../")
 from cspy.preprocessing import check_and_preprocess
