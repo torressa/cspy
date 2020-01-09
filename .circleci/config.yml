@@ -54,7 +54,7 @@ jobs:
             python3 -m unittest
             cd ~/cspy/cspy
             ls
-            python3 -m coverage run --source=tests/ -m unittest discover -s tests/
+            python3 -m coverage run -m unittest
             codecov
 
       - store_artifacts:
