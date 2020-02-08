@@ -42,24 +42,24 @@ def algorithm(Data, n_runs, airline):
         for k in Data.aircraft:  # for each aircraft
             if red_cost_k[k] == 0:  # if reduced cost not positive
                 # Solve corresponding subproblem
-                cost = 0
-                while cost >= 0:
-                    SP = Subproblem(k, iteration, duals, Data, airline)
-                    shortest_path = SP._solve_cspy()
-
-                    # only aircraft left it stops is getting stuck.
-                    MasterObj, data, cost = update(k, iteration, shortest_path,
-                                                   Data, MasterObj)
-                    if float(cost) < 0:
-                        col_count += 1
-                    elif float(cost) >= 0:
-                        # if reduced cost of the col is +ve and exact algorithm
-                        log.info("Solved and produced +ve reduced cost")
-                        red_cost_k[k] += 1
-                    relax, duals = MasterObj._solve_relax()
-                    red_cost_count = sum(
-                        [min(1, val) for val in red_cost_k.values()])
+                SP = Subproblem(k, iteration, duals, Data, airline)
+                shortest_path = SP._solve_cspy()
+                MasterObj, data, cost = update(k, iteration, shortest_path,
+                                               Data, MasterObj)
+                if float(cost) < 0:
+                    log.info(" Added a column with cost : {}".format(cost))
+                    col_count += 1
+                elif float(cost) >= 0:
+                    log.info(" Solved and produced +ve reduced cost")
+                    red_cost_k[k] += 1
+                relax, duals = MasterObj._solve_relax()
+                log.info(" Linear relaxation objective value : {}".format(
+                    relax.objVal))
+                red_cost_count = sum(
+                    [min(1, val) for val in red_cost_k.values()])
         iteration += 1
 
     MasterObj.master.optimize()
+    log.info(" Final objective value with integer variables : {}".format(
+        MasterObj.master.objVal))
     return MasterObj.master, data

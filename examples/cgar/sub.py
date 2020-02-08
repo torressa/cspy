@@ -11,7 +11,7 @@ from constants import (AIRLINES_DATA, CREW_COST, CREW_REST, MAX_CREWD1,
                        MAX_CREWD2, MIN_MAINT, PENALTY)
 from time_space_network import TSN
 
-sys.path.append("../../../cspy")
+sys.path.append("../../cspy")
 
 from cspy.algorithms.bidirectional import BiDirectional
 
@@ -86,13 +86,13 @@ class Subproblem:
             n_edges, 0.0, self.max_FH, crew_ub, MAX_CREWD1, MAX_CREWD2, 0.0, 1.0
         ]
         min_res = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-        path = cspy.BiDirectional(G,
-                                  max_res,
-                                  min_res,
-                                  direction='both',
-                                  preprocess=True,
-                                  REF_forward=self.REF,
-                                  REF_backward=self.REF_backward).run()
+        path = BiDirectional(G,
+                             max_res,
+                             min_res,
+                             direction='both',
+                             preprocess=True,
+                             REF_forward=self.REF,
+                             REF_backward=self.REF_backward).run()
         self.shortest_path = [(edge[2]['data'], edge[2]['weight'])
                               for edge in G.edges(data=True)
                               if edge[0:2] in zip(path, path[1:])]

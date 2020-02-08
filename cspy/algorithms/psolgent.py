@@ -196,7 +196,7 @@ class PSOLGENT(StandardGraph):
         >>> G.add_edge('D', 'Sink', res_cost=array([10, 10]), weight=10)
         >>> G.add_edge('F', 'Sink', res_cost=array([10, 1]), weight=1)
         >>> G.add_edge('E', 'Sink', res_cost=array([1, 1]), weight=1)
-        >>> n_nodes = len(self.J.nodes())
+        >>> n_nodes = len(G.nodes())
         >>> path = PSOLGENT(G, [5, 5], [0, 0],
                             max_iter=200,
                             swarm_size=50,

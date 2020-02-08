@@ -79,7 +79,7 @@ class BiDirectional:
 
     .. code-block:: python
 
-        >>> import cspy
+        >>> from cspy import BiDirectional
         >>> from networkx import DiGraph
         >>> from numpy import array
         >>> G = DiGraph(directed=True, n_res=2)
@@ -113,10 +113,9 @@ class BiDirectional:
         self.max_res, self.min_res = max_res, min_res
         # init current forward and backward labels
         self.Label = {
-            "forward":
-                Label(0, "Source", np.zeros(G.graph["n_res"]), ["Source"]),
-            "backward":
-                Label(0, "Sink", max_res, ["Sink"])
+            "forward": Label(0, "Source", np.zeros(G.graph["n_res"]),
+                             ["Source"]),
+            "backward": Label(0, "Sink", max_res, ["Sink"])
         }
         # init forward and backward unprocessed labels
         self.unprocessed = {"forward": {}, "backward": {}}
@@ -131,8 +130,6 @@ class BiDirectional:
     def run(self):
         while self.Label["forward"] or self.Label["backward"]:
             direc = self._get_direction()
-            log.info(" Direction {} \t HF={} \t HB={}".format(direc, self.max_res[0],
-                                                      self.min_res[0]))
             if direc:
                 self._algorithm(direc)
                 self._check_dominance(direc)

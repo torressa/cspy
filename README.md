@@ -12,7 +12,7 @@
 
 A collection of algorithms for the (resource) Constrained Shortest Path (CSP) problem. 
 
-The CSP problem was popularised by [Inrich and Desaulniers (2005)](@inrich). It was initially introduced as a subproblem for the bus driver scheduling problem, and has since then widely studied in a variety of different settings including: the vehicle routing problem with time windows (VRPTW), the technician routing and scheduling problem, the capacitated arc-routing problem, on-demand transportation systems, and, airport ground movement; among others.
+The CSP problem was popularised by [Inrich and Desaulniers (2005)](https://www.researchgate.net/publication/227142556_Shortest_Path_Problems_with_Resource_Constraints). It was initially introduced as a subproblem for the bus driver scheduling problem, and has since then widely studied in a variety of different settings including: the vehicle routing problem with time windows (VRPTW), the technician routing and scheduling problem, the capacitated arc-routing problem, on-demand transportation systems, and, airport ground movement; among others.
 
 More generally, in the applied column generation framework, particularly in the scheduling related literature, the CSP problem is commonly employed to generate columns.
 
@@ -24,11 +24,11 @@ Currently, the exact and metaheuristic algorithms implemented include:
 
 - [X] Monodirectional forward labeling algorithm (exact);
 - [X] Monodirectional backward labeling algorithm (exact);
-- [X] Bidirectional labeling algorithm with dynamic halfway point (exact) [Tilk et al. (2017)](@tilk);
+- [X] Bidirectional labeling algorithm with dynamic halfway point (exact) [Tilk et al. (2017)](https://www.sciencedirect.com/science/article/pii/S0377221717302035);
 - [X] Heuristic Tabu search (metaheuristic);
 - [X] Greedy elimination procedure (metaheuristic);
-- [X] Greedy Randomised Adaptive Search Procedure (GRASP) (metaheuristic). Adapted from [Ferone et al. (2019)](@ferone);
-- [X] Particle Swarm Optimization with combined Local and Global Expanding Neighborhood Topology (PSOLGENT) (metaheuristic) [Marinakis et al. (2017)](@marinakis).
+- [X] Greedy Randomised Adaptive Search Procedure (GRASP) (metaheuristic). Adapted from [Ferone et al. (2019)](https://www.tandfonline.com/doi/full/10.1080/10556788.2018.1548015);
+- [X] Particle Swarm Optimization with combined Local and Global Expanding Neighborhood Topology (PSOLGENT) (metaheuristic) [Marinakis et al. (2017)](https://www.sciencedirect.com/science/article/pii/S0377221717302357).
 
 ## Getting Started
 
@@ -121,11 +121,3 @@ If you'd like to cite this package, please use the following bib format:
   url = {\url{https://github.com/torressa/cspy}}
 }
 ```
-
-[@inrich]: https://www.researchgate.net/publication/227142556_Shortest_Path_Problems_with_Resource_Constraints
-
-[@tilk]: https://www.sciencedirect.com/science/article/pii/S0377221717302035
-
-[@marinakis]: https://www.sciencedirect.com/science/article/pii/S0377221717302357
-
-[@ferone]: https://www.tandfonline.com/doi/full/10.1080/10556788.2018.1548015
