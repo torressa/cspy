@@ -3,8 +3,8 @@ import logging
 import numpy as np
 from networkx import DiGraph, has_path, astar_path, NetworkXNoPath
 # Local imports
-from classes import Expand, Flight
-from constants import OPERATING_COSTS
+from cgar.classes import Expand, Flight
+from cgar.constants import OPERATING_COSTS
 
 log = logging.getLogger(__name__)
 

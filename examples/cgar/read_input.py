@@ -1,17 +1,23 @@
 import os
 import logging
 from pandas import read_csv
-from classes import Flight
-from time_space_network import TSN
+# local imports
+from cgar.classes import Flight, Data, Schedule
+from cgar.time_space_network import TSN
 
 log = logging.getLogger(__name__)
 
 
 def load_df(airline):
-    ''' Loads csv file using pandas
-    RETURNS
-        csv :: object, pandas.DataFrame'''
-    work_dir = './input/'
+    """
+    Loads csv file using pandas
+
+    Returns
+    -------
+    csv : object,
+        pandas.DataFrame
+    """
+    work_dir = '../examples/cgar/input/'
     prefixed = [
         filename for filename in os.listdir(work_dir)
         if filename.startswith(airline)
@@ -21,24 +27,41 @@ def load_df(airline):
 
 
 def get_aircraft(csv):
-    ''' Loads aircraft list and removes duplicates
-    INPUTS
-        csv :: object, pandas.DataFrame
-    RETURNS
-        aircraft :: list, list of strings with aircraft ids'''
+    """
+    Loads aircraft list and removes duplicates
+
+    Parameters
+    ----------
+    csv : object,
+        pandas.DataFrame
+
+    Returns
+    -------
+    aircraft : list,
+        list of strings with aircraft ids
+    """
     aircraft = list(set(csv['aircraft']))
     return aircraft
 
 
 def get_flights(df):
-    ''' Generates a list of Flight objects from the csv file to then
+    """
+    Generates a list of Flight objects from the csv file to then
     populate the TSN network.
-    INPUTS
-        df :: object, pandas.DataFrame
-    RETURNS
-        flights    :: list of classes.Flight objects;
-        TSN_object :: object, classes.TSN; initial TSN'''
 
+    Parameters
+    ----------
+    df : object,
+        pandas.DataFrame
+
+    Returns
+    -------
+    flights : list,
+        list of classes.Flight objects;
+
+    TSN_object : object,
+        classes.TSN; initial TSN
+    """
     # Create a list of Flight objects, one per row in the df
     flights = list(
         Flight(idx, 0, row['aircraft'], row['type'], row['origin'].replace(
@@ -77,15 +100,23 @@ def get_ground_connections(aircraft_list, flights):
 
 
 def get_scheds(aircraft_list, flights):
-    ''' Generates a list of Schedule objects with the appropriate attributes
-    INPUTS
-        aircraft_list :: list, aircrafts in plan
-        flights       :: list of classes.Flight objects
-    OUTPUTS
-        schedules     :: list of classes.Schedule objects'''
-    from classes import Schedule
+    """
+    Generates a list of Schedule objects with the appropriate attributes
+
+    Parameters
+    ----------
+    aircraft_list : list,
+        aircrafts in plan
+
+    flights : list,
+        list of classes.Flight objects
+
+    Returns
+    -------
+    schedules : list,
+        list of classes.Schedule objects
+    """
     schedules = {}
-    # logging.info('[%s] Initial flight assignment' % __name__)
     for k in aircraft_list:
         schedule = Schedule()
         schedule.label = (0, k, 's_0_%s' % k)
@@ -93,17 +124,23 @@ def get_scheds(aircraft_list, flights):
         schedule.cost = 10000
         schedule.aircraft = k
         schedules[schedule.label] = schedule
-        # logging.info("    %s %s" % (k, schedule.flights))
     return schedules
 
 
 def preprocess(df):
-    '''Gathers all information in a Data object.
-    INPUTS
-        csv :: object, pandas.DataFrame
-    RETURNS
-        data :: object, classes.Data'''
-    from classes import Data
+    """
+    Gathers all information in a Data object.
+
+    Parameters
+    ----------
+    csv : object,
+        pandas.DataFrame
+
+    Returns
+    -------
+    data : object,
+        classes.Data
+    """
     data = Data()
     data.aircraft = get_aircraft(df)
     data.flights = get_flights(df)

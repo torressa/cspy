@@ -6,10 +6,10 @@ from abc import ABCMeta
 from numpy import array
 
 # Local imports
-from classes import Flight
-from constants import (AIRLINES_DATA, CREW_COST, CREW_REST, MAX_CREWD1,
-                       MAX_CREWD2, MIN_MAINT, PENALTY)
-from time_space_network import TSN
+from cgar.classes import Flight
+from cgar.constants import (AIRLINES_DATA, CREW_COST, CREW_REST, MAX_CREWD1,
+                            MAX_CREWD2, MIN_MAINT, PENALTY)
+from cgar.time_space_network import TSN
 
 sys.path.append("../../cspy")
 
@@ -77,8 +77,7 @@ class Subproblem:
 
     def _solve_cspy(self):
         # Solve subproblem with exact algorithm
-        log.info("{} Solving subproblem exactly Using 'BiDirectional'".format(
-            self.k))
+        log.info(" Solving subproblem for aircraft {}".format(self.k))
         G = copy.deepcopy(self.G_pre)
         n_edges = len(G.edges())
         crew_ub = AIRLINES_DATA[self.airline]['crew_budget']

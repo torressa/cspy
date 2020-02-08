@@ -1,8 +1,9 @@
 import logging
+from pulp import value
 # Local imports
-from master import Master
-from sub import Subproblem
-from updater import update
+from cgar.master import Master
+from cgar.sub import Subproblem
+from cgar.updater import update
 
 log = logging.getLogger(__name__)
 
@@ -23,19 +24,11 @@ def algorithm(Data, n_runs, airline):
 
     airline : string,
         name of airline under consideration
-
-    Returns
-    -------
-    master_mdl : object,
-        gurobipy.Model; final master model with all columns and final solution
-
-    data : object,
-        classes.Data; updated data
     """
 
     MasterObj = Master(Data)  # formulate master problem
     relax, duals = MasterObj._solve_relax()  # solve relaxed version
-    iteration, red_cost_count, col_count = 1, 0, 0  # init parameters
+    iteration, red_cost_count, col_count = 1, 0, 0  # init algorithm parameters
 
     red_cost_k = {k: 0 for k in Data.aircraft}
     while red_cost_count < len(Data.aircraft) and iteration < n_runs:
@@ -54,12 +47,12 @@ def algorithm(Data, n_runs, airline):
                     red_cost_k[k] += 1
                 relax, duals = MasterObj._solve_relax()
                 log.info(" Linear relaxation objective value : {}".format(
-                    relax.objVal))
+                    value(relax.model.objective)))
                 red_cost_count = sum(
                     [min(1, val) for val in red_cost_k.values()])
         iteration += 1
 
-    MasterObj.master.optimize()
+    MasterObj.master.model.solve()
     log.info(" Final objective value with integer variables : {}".format(
-        MasterObj.master.objVal))
-    return MasterObj.master, data
+        value(MasterObj.master.model.objective)))
+    return

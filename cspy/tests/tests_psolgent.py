@@ -11,7 +11,7 @@ from cspy.algorithms.psolgent import PSOLGENT
 
 class TestsPSOLGENT(unittest.TestCase):
     """ Tests for finding the resource constrained shortest
-    path of simple DiGraph using the BiDirectional algorithm."""
+    path of simple DiGraph using the PSOLGENT algorithm."""
 
     def setUp(self):
         self.max_res, self.min_res = [5, 5], [0, 0]

@@ -1,5 +1,3 @@
-from collections import OrderedDict
-
 AIRLINES = ['Finnair']
 
 AIRLINES_DATA = {'Finnair': {'crew_budget': 1e10, 'hub': ['Helsinki']}}
