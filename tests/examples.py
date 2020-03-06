@@ -1,10 +1,9 @@
 import sys
 import unittest
 
-sys.path.append("../examples/")
-
-from cgar.read_input import read_input
-from cgar.algorithm import algorithm
+sys.path.append("../")
+from examples.cgar.read_input import read_input
+from examples.cgar.algorithm import algorithm
 
 
 class TestsExamples(unittest.TestCase):
@@ -19,11 +18,11 @@ class TestsExamples(unittest.TestCase):
     def testCGAR(self):
         """
         Tests for the column generation example.
-        Dummy test to ensure that the example runs correctly.
+        Dummy test to test that the example runs correctly.
         """
         self.assertEqual(
             algorithm(self.DataObj, n_runs=50, airline=self.airline), None)
 
 
 if __name__ == '__main__':
-    unittest.main()
+    unittest.main(TestsExamples())

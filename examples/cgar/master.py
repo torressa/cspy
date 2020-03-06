@@ -1,9 +1,9 @@
-import logging
+from logging import getLogger
 from pulp import (LpProblem, LpConstraintVar, LpVariable, LpMinimize, lpSum,
                   LpBinary, LpContinuous, LpConstraintGE, LpConstraintLE)
-from cgar.classes import Expand
+from examples.cgar.classes import Expand
 
-log = logging.getLogger(__name__)
+log = getLogger(__name__)
 
 
 class Master:

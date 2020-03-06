@@ -6,7 +6,7 @@ from numpy import array
 
 sys.path.append("../")
 from cspy.algorithms.bidirectional import BiDirectional
-from cspy.label import Label
+from cspy.algorithms.label import Label
 
 
 class TestsBiDirectional(unittest.TestCase):
@@ -26,13 +26,17 @@ class TestsBiDirectional(unittest.TestCase):
         self.G.add_edge('B', 'C', res_cost=array([1, 3]), weight=-10)
         self.G.add_edge('B', 'Sink', res_cost=array([1, 2]), weight=10)
         self.G.add_edge('C', 'Sink', res_cost=array([1, 10]), weight=-1)
+        self.test_seed = 1000
 
     def testBiDirectionalBothDynamic(self):
         """
         Find shortest path of simple test digraph using the BiDirectional
         algorithm with dynamic halfway point.
         """
-        alg_obj = BiDirectional(self.G, self.max_res, self.min_res)
+        alg_obj = BiDirectional(self.G,
+                                self.max_res,
+                                self.min_res,
+                                seed=self.test_seed)
         # Check classification
         with self.assertLogs('cspy.algorithms.bidirectional') as cm:
             alg_obj.name_algorithm()
@@ -83,9 +87,9 @@ class TestsBiDirectional(unittest.TestCase):
         L3 = Label(-10, 'A', array([3, -8.3]), [])
         L4 = Label(-9, 'A', array([4, -6.3]), [])
         L5 = Label(0, 'A', array([4, -5.1]), [])
-        self.assertTrue(L2.dominates(L1))
-        self.assertTrue(L3.dominates(L4))
-        self.assertTrue(L3.dominates(L5))
+        self.assertTrue(L2.dominates(L1, "forward"))
+        self.assertTrue(L3.dominates(L4, "forward"))
+        self.assertTrue(L3.dominates(L5, "forward"))
 
     def testInputExceptions(self):
         # Check whether wrong input raises exceptions
@@ -94,4 +98,4 @@ class TestsBiDirectional(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main()
+    unittest.main(TestsBiDirectional())

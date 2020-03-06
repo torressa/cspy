@@ -5,17 +5,17 @@ Adapted from https://github.com/100/Solid/blob/master/Solid/ParticleSwarm.py
 from __future__ import absolute_import
 from __future__ import print_function
 
-import logging
-from abc import ABCMeta
 from math import sqrt
+from abc import ABCMeta
+from logging import getLogger
+from numpy.random import RandomState
 from numpy import (argmin, array, copy, diag_indices_from, exp, dot, zeros,
                    ones, where)
-from numpy.random import RandomState
 
-from cspy.path import Path
+from cspy.algorithms.path import Path
 from cspy.preprocessing import check_and_preprocess
 
-log = logging.getLogger(__name__)
+log = getLogger(__name__)
 
 
 class StandardGraph:
@@ -63,7 +63,7 @@ class StandardGraph:
                 if Path(self.G, self.path, self.max_res,
                         self.min_res)._check_feasibility() is True:
                     self.best_path = self.path
-                    log.info("Resource feasible path found")
+                    log.debug("Resource feasible path found")
                     return base_cost
                 else:
                     # penalty for resource infeasible valid path

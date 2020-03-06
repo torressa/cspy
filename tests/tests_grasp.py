@@ -1,20 +1,18 @@
-import sys
 import unittest
 
 from networkx import DiGraph
 from numpy import array
-from numpy.random import RandomState
 
-sys.path.append("../")
-from cspy.algorithms.psolgent import PSOLGENT
+from cspy.algorithms.grasp import GRASP
 
 
-class TestsPSOLGENT(unittest.TestCase):
+class TestsGRASP(unittest.TestCase):
     """ Tests for finding the resource constrained shortest
-    path of simple DiGraph using the PSOLGENT algorithm."""
+    path of simple DiGraph using the GRASP algorithm."""
 
     def setUp(self):
         self.max_res, self.min_res = [5, 5], [0, 0]
+
         # Create digraph with a resource infeasible minimum cost path
         self.G = DiGraph(directed=True, n_res=2)
         self.G.add_edge('Source', 'A', res_cost=array([1, 1]), weight=1)
@@ -40,16 +38,18 @@ class TestsPSOLGENT(unittest.TestCase):
         self.G.add_edge('F', 'Sink', res_cost=array([10, 1]), weight=1)
         self.G.add_edge('E', 'Sink', res_cost=array([1, 1]), weight=1)
 
-    def testPSOLGENT(self):
-        path = PSOLGENT(self.G,
-                        self.max_res,
-                        self.min_res,
-                        seed=RandomState(123)).run()
+    def testGRASP(self):
+        path = GRASP(self.G,
+                     self.max_res,
+                     self.min_res,
+                     max_iter=50,
+                     max_localiter=10).run()
         self.assertEqual(path, ['Source', 'A', 'C', 'D', 'E', 'Sink'])
 
     def testInputExceptions(self):
         # Check whether wrong input raises exceptions
-        self.assertRaises(Exception, PSOLGENT, self.G, 'x', [1, 'foo'], 'up')
+        self.assertRaises(Exception, GRASP, self.G, 'x', [1, 'foo'],
+                          'maxnumber')
 
 
 if __name__ == '__main__':

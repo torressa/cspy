@@ -1,9 +1,9 @@
 import logging
 from pulp import value
 # Local imports
-from cgar.master import Master
-from cgar.sub import Subproblem
-from cgar.updater import update
+from examples.cgar.master import Master
+from examples.cgar.sub import Subproblem
+from examples.cgar.updater import update
 
 log = logging.getLogger(__name__)
 

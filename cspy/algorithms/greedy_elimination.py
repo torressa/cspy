@@ -4,7 +4,7 @@ from __future__ import print_function
 import logging
 from numpy import array
 from networkx import astar_path, NetworkXException
-from cspy.path import Path
+from cspy.algorithms.path import Path
 from cspy.preprocessing import check_and_preprocess
 
 log = logging.getLogger(__name__)
@@ -71,16 +71,17 @@ class GreedyElim:
 
         >>> from cspy import GreedyElim
         >>> from networkx import DiGraph
+        >>> from numpy import array
         >>> G = DiGraph(directed=True, n_res=2)
-        >>> G.add_edge('Source', 'A', res_cost=[1, 1], weight=1)
-        >>> G.add_edge('Source', 'B', res_cost=[1, 1], weight=1)
-        >>> G.add_edge('A', 'C', res_cost=[1, 1], weight=1)
-        >>> G.add_edge('B', 'C', res_cost=[2, 1], weight=-1)
-        >>> G.add_edge('C', 'D', res_cost=[1, 1], weight=-1)
-        >>> G.add_edge('D', 'E', res_cost=[1, 1], weight=1)
-        >>> G.add_edge('D', 'F', res_cost=[1, 1], weight=1)
-        >>> G.add_edge('F', 'Sink', res_cost=[1, 1], weight=1)
-        >>> G.add_edge('E', 'Sink', res_cost=[1, 1], weight=1)
+        >>> G.add_edge('Source', 'A', res_cost=array([1, 1]), weight=1)
+        >>> G.add_edge('Source', 'B', res_cost=array([1, 1]), weight=1)
+        >>> G.add_edge('A', 'C', res_cost=array([1, 1]), weight=1)
+        >>> G.add_edge('B', 'C', res_cost=array([2, 1]), weight=-1)
+        >>> G.add_edge('C', 'D', res_cost=array([1, 1]), weight=-1)
+        >>> G.add_edge('D', 'E', res_cost=array([1, 1]), weight=1)
+        >>> G.add_edge('D', 'F', res_cost=array([1, 1]), weight=1)
+        >>> G.add_edge('F', 'Sink', res_cost=array([1, 1]), weight=1)
+        >>> G.add_edge('E', 'Sink', res_cost=array([1, 1]), weight=1)
         >>> max_res, min_res = [5, 5], [0, 0]
         >>> path = GreedyElim(G, max_res, min_res).run()
         >>> print(path)

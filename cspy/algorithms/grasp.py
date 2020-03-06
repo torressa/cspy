@@ -10,7 +10,7 @@ from random import sample, randint
 from itertools import permutations, repeat
 # from networkx import astar_path, NetworkXException
 from cspy.preprocessing import check_and_preprocess
-from cspy.path import Path
+from cspy.algorithms.path import Path
 
 log = logging.getLogger(__name__)
 

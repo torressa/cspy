@@ -4,13 +4,12 @@ from cspy.algorithms.greedy_elimination import GreedyElim
 from cspy.algorithms.psolgent import PSOLGENT
 from cspy.algorithms.grasp import GRASP
 from cspy.preprocessing import check_and_preprocess
-from cspy.label import Label
 
 name = "cspy"
 
 __all__ = [
     'BiDirectional', 'Tabu', 'GreedyElim', 'PSOLGENT', 'GRASP',
-    'check_and_preprocess', 'Label'
+    'check_and_preprocess'
 ]
 
-__version__ = '0.0.8'
+__version__ = '0.0.10'

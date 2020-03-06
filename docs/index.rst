@@ -2,7 +2,14 @@
 ====================
 
 `cspy` is an open source Python package that gathers some algorithms to solve
-the (resource) Constrained Shortest Path (CSP) problem.
+the (resource) Constrained Shortest Path (CSP) problem. The CSP problem has been studied in the 
+mathematical optimisation literature as allows the modelling of a wide range of problems.
+They have proven useful in a wide variety of problems including: 
+the vehicle routing problem with time windows, 
+the technician routing and scheduling problem, 
+the capacitated arc-routing problem, 
+on-demand transportation systems, aircraft scheduling, 
+and, airport ground movement.
 
 By setting different options when calling the algorithms,
 one can have up to five different algorithms (exact and metaheuristic).

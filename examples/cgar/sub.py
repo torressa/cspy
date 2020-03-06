@@ -1,21 +1,21 @@
-import copy
-import logging
 import sys
 from abc import ABCMeta
+from copy import deepcopy
+from logging import getLogger
 
 from numpy import array
 
 # Local imports
-from cgar.classes import Flight
-from cgar.constants import (AIRLINES_DATA, CREW_COST, CREW_REST, MAX_CREWD1,
-                            MAX_CREWD2, MIN_MAINT, PENALTY)
-from cgar.time_space_network import TSN
+from examples.cgar.classes import Flight
+from examples.cgar.constants import (AIRLINES_DATA, CREW_COST, CREW_REST,
+                                     MAX_CREWD1, MAX_CREWD2, MIN_MAINT, PENALTY)
+from examples.cgar.time_space_network import TSN
 
 sys.path.append("../../cspy")
 
 from cspy.algorithms.bidirectional import BiDirectional
 
-log = logging.getLogger(__name__)
+log = getLogger(__name__)
 
 
 class Subproblem:
@@ -62,7 +62,7 @@ class Subproblem:
         self._get_flight_copy = TSN._get_flight_copy
 
         TSNObj = Data.graph
-        G = copy.deepcopy(TSNObj.G)
+        G = deepcopy(TSNObj.G)
         self.G_pre = TSNObj._update_TSN(G, self.it, self.k_type, self.k_make,
                                         self.airline, self.duals,
                                         self.first_flight, False)
@@ -78,7 +78,7 @@ class Subproblem:
     def _solve_cspy(self):
         # Solve subproblem with exact algorithm
         log.info(" Solving subproblem for aircraft {}".format(self.k))
-        G = copy.deepcopy(self.G_pre)
+        G = deepcopy(self.G_pre)
         n_edges = len(G.edges())
         crew_ub = AIRLINES_DATA[self.airline]['crew_budget']
         max_res = [

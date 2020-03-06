@@ -1,4 +1,4 @@
-from cgar.classes import Schedule
+from examples.cgar.classes import Schedule
 
 
 def update(k, it, path, Data, Master, stop=False):

@@ -1,11 +1,11 @@
 import os
-import logging
+from logging import getLogger
 from pandas import read_csv
 # local imports
-from cgar.classes import Flight, Data, Schedule
-from cgar.time_space_network import TSN
+from examples.cgar.time_space_network import TSN
+from examples.cgar.classes import Flight, Data, Schedule
 
-log = logging.getLogger(__name__)
+log = getLogger(__name__)
 
 
 def load_df(airline):
@@ -17,7 +17,10 @@ def load_df(airline):
     csv : object,
         pandas.DataFrame
     """
-    work_dir = '../examples/cgar/input/'
+    work_dir = 'examples/cgar/input/'
+    # Working directory with respect to test runner.
+    # i.e. if want to run tests locally from tests/,
+    # this needs to be changed to '../examples/cgar/input/'
     prefixed = [
         filename for filename in os.listdir(work_dir)
         if filename.startswith(airline)

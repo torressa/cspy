@@ -1,14 +1,14 @@
 from __future__ import absolute_import
 
-import random
-from collections import OrderedDict
 from itertools import repeat
 from logging import getLogger
+from collections import OrderedDict, deque
 
-import numpy as np
+from numpy import zeros
+from numpy.random import RandomState
 
 # Local module imports
-from cspy.label import Label
+from cspy.algorithms.label import Label
 from cspy.preprocessing import check_and_preprocess
 
 log = getLogger(__name__)
@@ -47,6 +47,10 @@ class BiDirectional:
     direction : string, optional
         preferred search direction.
         Either "both", "forward", or, "backward". Default : "both".
+
+    seed : None or int or numpy.random.RandomState instance, optional
+        seed for PSOLGENT class. Default : None (which gives a single value
+        numpy.random.RandomState).
 
     .. _REFs : https://cspy.readthedocs.io/en/latest/how_to.html#refs
 
@@ -104,37 +108,63 @@ class BiDirectional:
                  REF_forward=None,
                  REF_backward=None,
                  preprocess=False,
-                 direction="both"):
+                 direction="both",
+                 seed=None):
         # Check inputs and preprocess G unless option disabled
         self.G = check_and_preprocess(preprocess, G, max_res, min_res,
                                       REF_forward, REF_backward, direction,
                                       __name__)
         self.direc_in = direction
-        self.max_res, self.min_res = max_res, min_res
-        # init current forward and backward labels
-        self.Label = {
-            "forward": Label(0, "Source", np.zeros(G.graph["n_res"]),
-                             ["Source"]),
-            "backward": Label(0, "Sink", max_res, ["Sink"])
-        }
-        # init forward and backward unprocessed labels
-        self.unprocessed = {"forward": {}, "backward": {}}
-        # init final path
-        self.finalpath = {"forward": ["Source"], "backward": ["Sink"]}
+        self.max_res, self.min_res = max_res.copy(), min_res.copy()
+        # Algorithm specific parameters #
+        # Current forward and backward labels
+        self.currentLabel = OrderedDict({
+            "forward":
+            Label(0, "Source", zeros(G.graph["n_res"]), ["Source"]),
+            "backward":
+            Label(0, "Sink", max_res, ["Sink"])
+        })
+        # Unprocessed labels dict (both directions)
+        self.unprocessedLabels = OrderedDict({
+            "forward": OrderedDict({}),
+            "backward": OrderedDict({})
+        })
+        # Processed labels dict
+        self.processedLabels = OrderedDict({
+            "forward": deque(),
+            "backward": deque()
+        })
+        # Final labels dict.
+        self.finalLabel = OrderedDict({
+            "forward": self.currentLabel["forward"],
+            "backward": self.currentLabel["backward"]
+        })
 
         # If given, set REFs for dominance relations and feasibility checks
         if REF_forward and REF_backward:
             Label._REF_forward = REF_forward
             Label._REF_backward = REF_backward
+        # Init with seed if given
+        if seed is None:
+            self.random_state = RandomState()
+        elif isinstance(seed, int):
+            self.random_state = RandomState(seed)
+        elif isinstance(seed, RandomState):
+            self.random_state = seed
+        else:
+            raise Exception(
+                '{} cannot be used to seed numpy.random.RandomState'.format(
+                    seed))
 
     def run(self):
-        while self.Label["forward"] or self.Label["backward"]:
+        while self.currentLabel["forward"] or self.currentLabel["backward"]:
             direc = self._get_direction()
             if direc:
                 self._algorithm(direc)
                 self._check_dominance(direc)
             elif not direc or self._terminate(direc):
                 break
+        # Otherwise return either path
         return self._join_paths()
 
     ###########################
@@ -160,18 +190,22 @@ class BiDirectional:
     #############
     def _get_direction(self):
         if self.direc_in == "both":
-            if self.Label["forward"] and not self.Label["backward"]:
+            if (self.currentLabel["forward"] and
+                    not self.currentLabel["backward"]):
                 return "forward"
-            elif not self.Label["forward"] and self.Label["backward"]:
+            elif (not self.currentLabel["forward"] and
+                  self.currentLabel["backward"]):
                 return "backward"
-            elif self.Label["forward"] and self.Label["backward"]:
-                return random.choice(["forward", "backward"])
+            elif (self.currentLabel["forward"] and
+                  self.currentLabel["backward"]):
+                return self.random_state.choice(["forward", "backward"])
             else:  # if both are empty
                 return
         else:
-            if not self.Label["forward"] and not self.Label["backward"]:
+            if (not self.currentLabel["forward"] and
+                    not self.currentLabel["backward"]):
                 return
-            elif not self.Label[self.direc_in]:
+            elif not self.currentLabel[self.direc_in]:
                 return
             else:
                 return self.direc_in
@@ -184,84 +218,94 @@ class BiDirectional:
             idx = 0  # index for head node
             # Update backwards half-way point
             self.min_res[0] = max(
-                self.min_res[0], min(self.Label[direc].res[0], self.max_res[0]))
-        else:  # backwards
+                self.min_res[0],
+                min(self.currentLabel[direc].res[0], self.max_res[0]))
+        else:  # backward
             idx = 1  # index for tail node
             # Update forwards half-way point
             self.max_res[0] = min(
-                self.max_res[0], max(self.Label[direc].res[0], self.min_res[0]))
+                self.max_res[0],
+                max(self.currentLabel[direc].res[0], self.min_res[0]))
         # Select edges with the same head/tail node as the current label node.
-        edges = list(e for e in self.G.edges(data=True)
-                     if e[idx] == self.Label[direc].node)
-        # If Label not been seen before, initialise a dict
-        if self.Label[direc] not in self.unprocessed[direc]:
-            self.unprocessed[direc][self.Label[direc]] = {}
+        edges = deque(e for e in self.G.edges(data=True)
+                      if e[idx] == self.currentLabel[direc].node)
+        # If Label not been seen before, initialise a list
+        if (self.currentLabel[direc] not in self.unprocessedLabels[direc] and
+                self.currentLabel[direc] not in self.processedLabels[direc]):
+            self.unprocessedLabels[direc][self.currentLabel[direc]] = deque()
         # Propagate current label along all suitable edges in current direction
         list(map(self._propagate_label, edges, repeat(direc, len(edges))))
         # Extend label
-        self._get_next_label(direc)
+        next_label = self._get_next_label(direc)
+        if next_label in self.processedLabels[direc]:
+            next_label = self._get_next_label(direc, next_label)
+        # Update current label
+        self.currentLabel[direc] = next_label
 
     def _propagate_label(self, edge, direc):
         # Label propagation #
         weight, res_cost = edge[2]["weight"], edge[2]["res_cost"]
-        new_label = self.Label[direc].get_new_label(edge, direc, weight,
-                                                    res_cost)
-        if new_label.feasibility_check(self.max_res, self.min_res):
-            self.unprocessed[direc][
-                self.Label[direc]][new_label] = new_label.path
+        # Get new label from current Label
+        new_label = self.currentLabel[direc].get_new_label(
+            edge, direc, weight, res_cost)
+        if new_label and new_label.feasibility_check(self.max_res,
+                                                     self.min_res):
+            # If label doesn't exist and is resource feasible
+            self.unprocessedLabels[direc][self.currentLabel[direc]].append(
+                new_label)
 
-    def _get_next_label(self, direc):
+    def _get_next_label(self, direc, exclude_label=None):
         # Label Extension #
-        keys_to_pop = []
-        for key, val in self.unprocessed[direc].items():
-            if val:
-                # Update next forward label with one with least weight
-                next_label = min(val.keys(), key=lambda x: x.weight)
-                # Remove it from the unprocessed labels
-                self.unprocessed[direc][key].pop(next_label)
-                self.Label[direc] = next_label
-                if not self.unprocessed[direc][key]:
-                    keys_to_pop.append(key)
-                break
+        try:
+            # Try to get labels create from the current one.
+            _labels = list(lab for lab in self.unprocessedLabels[direc][
+                self.currentLabel[direc]]
+                           if (lab not in self.processedLabels[direc] and
+                               lab != exclude_label))
+            return min(_labels, key=lambda x: x.weight)
+        except ValueError:
+            # No more keys to be processed under current label
+            self.processedLabels[direc].append(self.currentLabel[direc])
+            _labels = list(lab for lab in self.unprocessedLabels[direc].keys()
+                           if (lab not in self.processedLabels[direc] and
+                               lab != exclude_label))
+            if _labels:
+                return min(_labels, key=lambda x: x.weight)
             else:
-                keys_to_pop.extend([self.Label[direc], key])
-        else:  # if no break
-            next_label = min(self.unprocessed[direc].keys(),
-                             key=lambda x: x.weight)
-            # Remove it from the unprocessed labels
-            keys_to_pop.append(next_label)
-            if self.Label[direc] == next_label:
-                self._save_final_path(direc)
-                keys_to_pop.append(self.Label[direc])
-                self.Label[direc] = None
-            else:
-                self.Label[direc] = next_label
-        # Remove all processed labels from unprocessed dict
-        for k in list(set(keys_to_pop)):
-            self.unprocessed[direc].pop(k, None)
+                return None
+        except KeyError:
+            # No more keys to be processed.
+            return None
 
-    def _save_final_path(self, direc):
-        if self.Label[direc]:
-            self.finalpath[direc] = self.Label[direc].path
-
-    ###############
-    # TERMINATION #
-    ###############
-    def _terminate(self, direc):
-        if self.direc_in == "both":
-            if (self.finalpath["forward"] and self.finalpath["backward"] and
-                (self.finalpath["forward"][-1] == self.finalpath["backward"][-1]
-                )):
-                return True
-        else:
-            if (self.finalpath["forward"][-1] == "Sink" and
-                    not self.unprocessed["forward"]):
-                return True
-            elif (self.finalpath["backward"][-1] == "Source" and
-                  not self.unprocessed["backward"]):
-                return True
-            if not self.Label[self.direc_in] and not self.G.edges():
-                return True
+    def _save_current_best_label(self, direc):
+        try:
+            if self.currentLabel[direc].dominates(self.finalLabel[direc],
+                                                  direc):
+                log.debug("Saving {} as best, with path {}".format(
+                    self.currentLabel[direc], self.currentLabel[direc].path))
+                self.finalLabel[direc] = self.currentLabel[direc]
+        except Exception:
+            # Labels are not comparable
+            if (direc == "forward" and
+                ((self.currentLabel[direc].path[-1] == "Sink" or
+                  self.finalLabel[direc].node == "Source") or
+                 ((self.currentLabel[direc].node not in
+                   self.finalLabel[direc].path) and
+                  (self.currentLabel[direc].weight <=
+                   self.finalLabel[direc].weight)))):
+                log.debug("Saving {} as best, with path {}".format(
+                    self.currentLabel[direc], self.currentLabel[direc].path))
+                self.finalLabel[direc] = self.currentLabel[direc]
+            elif (direc == "backward" and
+                  ((self.currentLabel[direc].path[-1] == "Source" or
+                    self.finalLabel[direc].node == "Sink") or
+                   ((self.currentLabel[direc].node not in
+                     self.finalLabel[direc].path) and
+                    (self.currentLabel[direc].weight <=
+                     self.finalLabel[direc].weight)))):
+                log.debug("Saving {} as best, with path {}".format(
+                    self.currentLabel[direc], self.currentLabel[direc].path))
+                self.finalLabel[direc] = self.currentLabel[direc]
 
     #############
     # DOMINANCE #
@@ -272,48 +316,103 @@ class BiDirectional:
         labels. If this is found to be the case, the dominated label is
         removed.
         """
-        for sub_dict in ({k: v} for k, v in self.unprocessed[direc].items()):
-            k = list(sub_dict.keys())[0]  # call dict_keys object as a list
-            for label in [key for v in sub_dict.values() for key in v.keys()]:
-                if label.node == self.Label[direc].node:
-                    if self.Label[direc].dominates(label):
-                        self.unprocessed[direc][k].pop(label, None)
-                        self.unprocessed[direc].pop(label, None)
-                    elif label.dominates(self.Label[direc]):
-                        self.unprocessed[direc][k].pop(self.Label[direc], None)
-                        self.unprocessed[direc].pop(self.Label[direc], None)
+        if self.currentLabel[direc]:
+            keys_to_pop = deque()
+            all_labels = deque(
+                lab for lab in self.unprocessedLabels[direc].keys()
+                if lab.node == self.currentLabel[direc].node and
+                lab != self.currentLabel[direc])
+            all_labels.extend(
+                lab for k, v in self.unprocessedLabels[direc].items()
+                for lab in v if lab.node == self.currentLabel[direc].node and
+                lab != self.currentLabel[direc])
+            keys_to_pop.extend(
+                lab for lab in all_labels
+                if self.currentLabel[direc].dominates(lab, direc))
+            keys_to_pop.extend([
+                lab for lab in self.processedLabels[direc]
+                if lab != self.finalLabel[direc]
+            ])
+
+            if any(
+                    lab.dominates(self.currentLabel[direc], direc)
+                    for lab in all_labels):
+                keys_to_pop.append(self.currentLabel[direc])
+            else:
+                self._save_current_best_label(direc)
+            self._remove_unprocessed_labels(keys_to_pop, direc)
+
+    def _remove_unprocessed_labels(self, keys_to_pop, direc):
+        # Remove all processed labels from unprocessed dict
+        for key_to_pop in list(set(keys_to_pop)):
+            if key_to_pop in self.unprocessedLabels[direc]:
+                log.debug("Key {} removed".format(key_to_pop))
+                del self.unprocessedLabels[direc][key_to_pop]
+            for k, sub_dict in self.unprocessedLabels[direc].items():
+                if key_to_pop in sub_dict:
+                    _idx = sub_dict.index(key_to_pop)
+                    log.debug("Key {} removed from sub_dict".format(key_to_pop))
+                    del self.unprocessedLabels[direc][k][_idx]
+
+    ###############
+    # TERMINATION #
+    ###############
+    def _terminate(self, direc):
+        if self.direc_in == "both":
+            if (not self.unprocessedLabels["forward"] or
+                    not self.unprocessedLabels["backward"]):
+                return True
+        else:
+            if (self.direc_in == "forward" and
+                    self.finalLabel["forward"].path[-1] == "Sink" and
+                    not self.unprocessedLabels["forward"]):
+                return True
+            elif (self.direc_in == "backward" and
+                  self.finalLabel["backward"].path[-1] == "Source" and
+                  not self.unprocessedLabels["backward"]):
+                return True
 
     #################
     # PATH CHECKING #
     #################
     def _join_paths(self):
         # check if paths are eligible to be joined
-        if self.direc_in == "both" and (self.finalpath["forward"] and
-                                        self.finalpath["backward"]):
-            # reverse order for backward path
-            self.finalpath["backward"].reverse()
+        if self.direc_in == "both":
             return self._check_paths()
         else:
             if self.direc_in == "backward":
-                self.finalpath[self.direc_in].reverse()
-            return self.finalpath[self.direc_in]
+                self.finalLabel[self.direc_in].path.reverse()
+            return self.finalLabel[self.direc_in].path
 
     def _check_paths(self):
-        if (self.finalpath["forward"][-1] == "Sink" and
-                self.finalpath["backward"][0] != "Source"):
+        # Reverse backward path
+        self.finalLabel["backward"].path.reverse()
+        if (self.finalLabel["forward"].path[-1] == "Sink" and
+                self.finalLabel["backward"].path[0] != "Source"):
             # if only forward path
-            return self.finalpath["forward"]
-        elif (self.finalpath["backward"][0] == "Source" and
-              self.finalpath["forward"][-1] != "Sink"):
+            return self.finalLabel["forward"].path
+        elif (self.finalLabel["backward"].path[0] == "Source" and
+              self.finalLabel["forward"].path[-1] != "Sink"):
             # if only backward path
-            return self.finalpath["backward"]
-        elif (self.finalpath["backward"][0] == "Source" and
-              self.finalpath["forward"][-1] == "Sink"):
-            # if both full paths
-            return random.choice(
-                [self.finalpath["forward"], self.finalpath["backward"]])
+            return self.finalLabel["backward"].path
+        elif (self.finalLabel["backward"].path[0] == "Source" and
+              self.finalLabel["forward"].path[-1] == "Sink"):
+            # if both paths
+            if self.finalLabel["forward"].weight < self.finalLabel[
+                    "backward"].weight:
+                # if forward path has a lower weight
+                return self.finalLabel["forward"].path
+            elif self.finalLabel["backward"].weight < self.finalLabel[
+                    "forward"].weight:
+                # if backward path has a lower weight
+                return self.finalLabel["backward"].path
+            else:
+                # Otherwise (equal weight) return either path
+                return (self.finalLabel["forward"].path
+                        if self.random_state.random_sample() < 0.5 else
+                        self.finalLabel["backward"].path)
         else:
             # if combination of the two is required
             return list(
-                OrderedDict.fromkeys(self.finalpath["forward"] +
-                                     self.finalpath["backward"]))
+                OrderedDict.fromkeys(self.finalLabel["forward"].path +
+                                     self.finalLabel["backward"].path))

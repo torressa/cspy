@@ -1,10 +1,8 @@
-import sys
 import unittest
 
 from networkx import DiGraph
 from numpy import array
 
-sys.path.append("../")
 from cspy.preprocessing import check_and_preprocess
 
 
@@ -36,12 +34,7 @@ class TestsPreprocessing(unittest.TestCase):
         """
         Tests if the unreachable node 'B' is removed.
         """
-        self.G = check_and_preprocess(
-            True,
-            self.G,
-            [5, 20],
-            [0, 0],
-        )
+        self.G = check_and_preprocess(True, self.G, [5, 20], [0, 0],)
         self.assertTrue('B' not in self.G.nodes())
 
     def testNegativeCostCycle(self):
@@ -55,7 +48,7 @@ class TestsPreprocessing(unittest.TestCase):
             check_and_preprocess(False, self.H)
         str(context.exception)
         self.assertTrue(
-            str(context.exception) in "A negative cost cycle was found.")
+            "A negative cost cycle was found." in str(context.exception))
 
 
 if __name__ == '__main__':

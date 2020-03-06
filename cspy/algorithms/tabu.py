@@ -1,10 +1,9 @@
 from __future__ import absolute_import
 from __future__ import print_function
 
-import logging
 from numpy import array
 from networkx import astar_path, NetworkXException
-from cspy.path import Path
+from cspy.algorithms.path import Path
 from cspy.preprocessing import check_and_preprocess
 
 
@@ -83,11 +82,12 @@ class Tabu:
         self.max_res = max_res
         self.min_res = min_res
         # Algorithm specific parameters
-        self.it = 0
-        self.path = []
+        self.iteration = 0
+        self.current_path = list()
+        self.best_path = list()
         self.stop = False
         self.neighbour = 'Source'
-        self.neighbourhood = []
+        self.neighbourhood = list()
         self.tabu_edge = None
         self.edges_to_check = dict(self.G.edges())
 
@@ -100,11 +100,10 @@ class Tabu:
         """
         while self.stop is False:
             self.algorithm()
-            self.it += 1
+            self.iteration += 1
 
-        if self.path:
-            logging.debug(self.path)
-            return self.path
+        if self.best_path:
+            return self.best_path
         else:
             raise Exception("No resource feasible path has been found")
 
@@ -119,10 +118,11 @@ class Tabu:
             pass
         if path:
             self._update_path(path)
-            edge_or_true = Path(self.G, self.path, self.max_res,
+            edge_or_true = Path(self.G, self.current_path, self.max_res,
                                 self.min_res)._check_feasibility()
             if edge_or_true is True:
                 self.stop = True
+                self.best_path = self.current_path
             else:
                 self._get_neighbour(edge_or_true)
         else:
@@ -130,25 +130,21 @@ class Tabu:
 
     def _update_path(self, path):
         # Joins path using previous path and [neighbour, ..., sink] path
-        if self.it == 0:
-            self.path = path
-        if self.neighbour in self.path:
-            self.path = [
-                node for node in self.path
-                if (node != self.neighbour and
-                    self.path.index(node) < self.path.index(self.neighbour))
-            ] + path
+        if self.iteration == 0:
+            self.current_path = path
+        if self.neighbour in self.current_path:
+            self.current_path = list(node for node in self.current_path if (
+                node != self.neighbour and self.current_path.index(
+                    node) < self.current_path.index(self.neighbour))) + path
         else:
             self._merge_paths(path)
 
     def _merge_paths(self, path):
-        branch_path = [n for n in self.path if n not in path]
+        branch_path = [n for n in self.current_path if n not in path]
         for node in reversed(branch_path):
             if (node, self.neighbour) in self.G.edges():
-                self.path = [
-                    n for n in branch_path
-                    if (branch_path.index(n) <= branch_path.index(node))
-                ] + path
+                self.current_path = list(n for n in branch_path if (
+                    branch_path.index(n) <= branch_path.index(node))) + path
                 break
 
     def _get_neighbour(self, edge=None):
@@ -175,11 +171,9 @@ class Tabu:
             if node == "Source":
                 self.stop = True
                 return edge
-            self.neighbourhood = [
-                e for e in self.G.edges(self.G.nbunch_iter(
-                    [node] + list(self.G.predecessors(node))),
-                                        data=True) if e[1] == node and e != edge
-            ]
+            self.neighbourhood = list(e for e in self.G.edges(
+                self.G.nbunch_iter([node] + list(self.G.predecessors(node))),
+                data=True) if e[1] == node and e != edge)
             self.neighbourhood.sort(key=lambda x: x[2]['weight'])
         next_edge = self.neighbourhood[-1]
         self.neighbourhood.pop(-1)
@@ -187,11 +181,7 @@ class Tabu:
 
     def _heuristic(self, i, j):
         # Given a node pair returns a weight to apply
-        if (i, j) == self.tabu_edge or not (i, j) in self.G.edges():
+        if (i, j) == self.tabu_edge:
             return 1e7
         else:
-            return self.G.get_edge_data(i, j)['weight']
-
-    @staticmethod
-    def _edge_extract(edge):
-        return array(edge[2]['res_cost'])
+            return 0
