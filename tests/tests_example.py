@@ -20,8 +20,8 @@ class TestsExamples(unittest.TestCase):
         Tests for the column generation example.
         Dummy test to test that the example runs correctly.
         """
-        self.assertEqual(
-            algorithm(self.DataObj, n_runs=50, airline=self.airline), None)
+        _ = algorithm(self.DataObj, n_runs=50, airline=self.airline)
+        self.assertEqual(_, None)
 
 
 if __name__ == '__main__':

@@ -256,9 +256,7 @@ class PSOLGENT(StandardGraph):
         elif isinstance(seed, RandomState):
             self.random_state = seed
         else:
-            raise Exception(
-                '{} cannot be used to seed numpy.random.RandomState'.format(
-                    seed))
+            raise Exception("{} cannot be used to seed".format(seed))
 
     def run(self):
         self._init_swarm()

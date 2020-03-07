@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 
 from itertools import repeat
+from operator import add, sub
 from logging import getLogger
 from collections import OrderedDict, deque
 
@@ -144,6 +145,9 @@ class BiDirectional:
         if REF_forward and REF_backward:
             Label._REF_forward = REF_forward
             Label._REF_backward = REF_backward
+        else:
+            Label._REF_forward = add
+            Label._REF_backward = sub
         # Init with seed if given
         if seed is None:
             self.random_state = RandomState()
@@ -152,9 +156,7 @@ class BiDirectional:
         elif isinstance(seed, RandomState):
             self.random_state = seed
         else:
-            raise Exception(
-                '{} cannot be used to seed numpy.random.RandomState'.format(
-                    seed))
+            raise Exception("{} cannot be used to seed".format(seed))
 
     def run(self):
         while self.currentLabel["forward"] or self.currentLabel["backward"]:
@@ -162,10 +164,9 @@ class BiDirectional:
             if direc:
                 self._algorithm(direc)
                 self._check_dominance(direc)
-            elif not direc or self._terminate(direc):
+            else:
                 break
-        # Otherwise return either path
-        return self._join_paths()
+        return self._process_paths()
 
     ###########################
     # Classify Algorithm Type #
@@ -237,10 +238,12 @@ class BiDirectional:
         list(map(self._propagate_label, edges, repeat(direc, len(edges))))
         # Extend label
         next_label = self._get_next_label(direc)
+        # If next label already been processed get another one.
         if next_label in self.processedLabels[direc]:
             next_label = self._get_next_label(direc, next_label)
         # Update current label
         self.currentLabel[direc] = next_label
+        log.debug("current label = {}".format(next_label))
 
     def _propagate_label(self, edge, direc):
         # Label propagation #
@@ -345,74 +348,102 @@ class BiDirectional:
     def _remove_unprocessed_labels(self, keys_to_pop, direc):
         # Remove all processed labels from unprocessed dict
         for key_to_pop in list(set(keys_to_pop)):
-            if key_to_pop in self.unprocessedLabels[direc]:
-                log.debug("Key {} removed".format(key_to_pop))
-                del self.unprocessedLabels[direc][key_to_pop]
             for k, sub_dict in self.unprocessedLabels[direc].items():
                 if key_to_pop in sub_dict:
                     _idx = sub_dict.index(key_to_pop)
                     log.debug("Key {} removed from sub_dict".format(key_to_pop))
                     del self.unprocessedLabels[direc][k][_idx]
 
-    ###############
-    # TERMINATION #
-    ###############
-    def _terminate(self, direc):
+    ###################
+    # PATH PROCESSING #
+    ###################
+    def _process_paths(self):
+        # Processing of output path.
         if self.direc_in == "both":
-            if (not self.unprocessedLabels["forward"] or
-                    not self.unprocessedLabels["backward"]):
-                return True
-        else:
-            if (self.direc_in == "forward" and
-                    self.finalLabel["forward"].path[-1] == "Sink" and
-                    not self.unprocessedLabels["forward"]):
-                return True
-            elif (self.direc_in == "backward" and
-                  self.finalLabel["backward"].path[-1] == "Source" and
-                  not self.unprocessedLabels["backward"]):
-                return True
-
-    #################
-    # PATH CHECKING #
-    #################
-    def _join_paths(self):
-        # check if paths are eligible to be joined
-        if self.direc_in == "both":
+            # If bi-directional algorithm used, run halfway procedure.
             return self._check_paths()
         else:
+            # If mono-directional algorithm used, return the appropriate path
             if self.direc_in == "backward":
                 self.finalLabel[self.direc_in].path.reverse()
             return self.finalLabel[self.direc_in].path
 
     def _check_paths(self):
-        # Reverse backward path
-        self.finalLabel["backward"].path.reverse()
+        # if only forward path is source - sink
         if (self.finalLabel["forward"].path[-1] == "Sink" and
                 self.finalLabel["backward"].path[0] != "Source"):
-            # if only forward path
             return self.finalLabel["forward"].path
-        elif (self.finalLabel["backward"].path[0] == "Source" and
+        # if only backward path is source - sink
+        elif (self.finalLabel["backward"].path[-1] == "Source" and
               self.finalLabel["forward"].path[-1] != "Sink"):
-            # if only backward path
+            # Reverse backward path
+            self.finalLabel["backward"].path.reverse()
             return self.finalLabel["backward"].path
-        elif (self.finalLabel["backward"].path[0] == "Source" and
+        # if both paths are source - sink
+        elif (self.finalLabel["backward"].path[-1] == "Source" and
               self.finalLabel["forward"].path[-1] == "Sink"):
-            # if both paths
+            # if forward path has a lower weight
             if self.finalLabel["forward"].weight < self.finalLabel[
                     "backward"].weight:
-                # if forward path has a lower weight
                 return self.finalLabel["forward"].path
+            # if backward path has a lower weight
             elif self.finalLabel["backward"].weight < self.finalLabel[
                     "forward"].weight:
-                # if backward path has a lower weight
+                # Reverse backward path
+                self.finalLabel["backward"].path.reverse()
                 return self.finalLabel["backward"].path
+            # Otherwise (equal weight) return either path randomly
             else:
-                # Otherwise (equal weight) return either path
                 return (self.finalLabel["forward"].path
                         if self.random_state.random_sample() < 0.5 else
                         self.finalLabel["backward"].path)
+        # if combination of the two is required
         else:
-            # if combination of the two is required
-            return list(
-                OrderedDict.fromkeys(self.finalLabel["forward"].path +
-                                     self.finalLabel["backward"].path))
+            return self._half_way()
+
+    def _half_way(self):
+        """
+        Path joining algorithm from `Righini and Salani (2006)`_.
+        Checks if the two
+
+        :return: list with the final path.
+
+        .. _Righini and Salani (2006): https://www.sciencedirect.com/science/article/pii/S1572528606000417
+
+        """
+        # Rename best forward and backward labels.
+        fwd_best = self.finalLabel["forward"]
+        bwd_best = self.finalLabel["backward"]
+        # Get nodes associated with forward labels (to join with bwd_best)
+        fwd_nodes = deque(self.G.predecessors(self.finalLabel["forward"].node))
+        # Get nodes associated with backward labels (to join with fwd_best)
+        bwd_nodes = deque(self.G.successors(self.finalLabel["forward"].node))
+        # Get forward label with minimum "phi" w.r.t bwd_best
+        # phi = difference in the mono resource
+        fwd_min = min(list(lab for lab in self.unprocessedLabels["forward"]
+                           if lab.node in fwd_nodes),
+                      key=lambda x: abs(x.res[0] - bwd_best.res[0]))
+        # Record the value of phi for
+        phi_fwd_bwd = abs(fwd_min.res[0] - bwd_best.res[0])
+        # Get backward label with minimum "phi" w.r.t fwd_best
+        bwd_min = min(list(lab for lab in self.unprocessedLabels["backward"]
+                           if lab.node in bwd_nodes),
+                      key=lambda x: abs(fwd_best.res[0] - x.res[0]))
+        phi_bwd_fwd = abs(fwd_best.res[0] - bwd_min.res[0])
+
+        log.debug("{} with phi = {}".format(bwd_min, phi_bwd_fwd))
+
+        if phi_fwd_bwd == phi_bwd_fwd:
+            return (self._join_labels(fwd_min, bwd_best)
+                    if fwd_min.res[0] > bwd_best.res[0] else self._join_labels(
+                        fwd_best, bwd_min))
+        else:
+            return (self._join_labels(fwd_min, self.finalLabel["backward"])
+                    if phi_fwd_bwd < phi_bwd_fwd else self._join_labels(
+                        fwd_best, bwd_min))
+
+    def _join_labels(self, fwd_label, bwd_label):
+        # Join path produced by a backward and forward label.
+        bwd_label.path.reverse()
+        final_path = fwd_label.path + bwd_label.path
+        return final_path

@@ -1,6 +1,5 @@
 import types
 from numpy import equal
-from operator import add, sub
 
 
 class Label(object):
@@ -22,7 +21,7 @@ class Label(object):
         all nodes in the path
     """
 
-    _REF_forward, _REF_backward = add, sub
+    _REF_forward, _REF_backward = None, None
 
     def __init__(self, weight, node, res, path):
         self.weight = weight
