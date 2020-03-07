@@ -6,10 +6,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Changed
+
+- Documentation.
+- BiDirectional algorithm:
+	- **Removed** termination criteria.
+	- Implemented half way procedure from [Righini and Salani (2006)](https://www.sciencedirect.com/science/article/pii/S1572528606000417) in ``self._half_way`` (Closes #21).
+
+## [0.0.11] 06/03/2020
+
 ## Fixed
 
-- BiDirectional algorithm (#17).
-- Heuristic used in Tabu for input in the networkx.astar_path algorithm (#20).
+- BiDirectional algorithm: returning path with edge not in graph (Closes #17 :pray:).
+- Heuristic used in Tabu for input in the networkx.astar_path algorithm (Closes #20).
 
 ### Changed
 
@@ -26,6 +35,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 	- logs for debugging in BiDirectional.
 	- added `_save_current_best_label`.
 	- Changed type of `self.finalLabel["direction"]` from list to `Label`. 
+	- **Removed** termination criteria.
+	- Implemented half way procedure from [Righini and Salani (2006)](https://www.sciencedirect.com/science/article/pii/S1572528606000417) in ``self._half_way`` (Closes #21).
 
 - Re-organised. Moved `label.py` and `path.py` into `algorithms/`.
 
@@ -103,6 +114,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Updated README.
 
 [unreleased]: https://github.com/torressa/cspy/compare/v0.0.10...HEAD
+[0.0.11]: https://github.com/torressa/cspy/compare/v0.0.10...v0.0.11
 [0.0.10]: https://github.com/torressa/cspy/compare/v0.0.9...v0.0.10
 [0.0.9]: https://github.com/torressa/cspy/compare/v0.0.8...v0.0.9
 [0.0.8]: https://github.com/torressa/cspy/compare/0.0.5...v0.0.8
