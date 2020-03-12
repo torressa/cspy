@@ -39,10 +39,6 @@ jobs:
             . venv/bin/activate
             cd ~/cspy/
             python3 -m unittest
-            codecov
-      - store_artifacts:
-          path: test-reports
-          destination: test-reports
   "python-3.7":
     docker:
       - image: circleci/python:3.7
@@ -75,10 +71,6 @@ jobs:
             . venv/bin/activate
             cd ~/cspy/
             python3 -m unittest
-            codecov
-      - store_artifacts:
-          path: test-reports
-          destination: test-reports
   "python-3.6":
     docker:
       - image: circleci/python:3.6
@@ -111,6 +103,7 @@ jobs:
             . venv/bin/activate
             cd ~/cspy/
             python3 -m coverage run -m unittest
+            codecov
       - store_artifacts:
           path: test-reports
           destination: test-reports
@@ -146,9 +139,6 @@ jobs:
             . venv/bin/activate
             cd ~/cspy/
             python3 -m unittest
-      - store_artifacts:
-          path: test-reports
-          destination: test-reports
   "python-3.4":
     docker:
       - image: circleci/python:3.4
