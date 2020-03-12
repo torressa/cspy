@@ -43,7 +43,6 @@ jobs:
             python3 -m venv venv
             . venv/bin/activate
             cd ~/cspy/
-            python3 -m unittest
             python3 -m coverage run -m unittest
             codecov
 
