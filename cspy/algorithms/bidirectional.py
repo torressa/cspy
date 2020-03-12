@@ -18,9 +18,12 @@ log = getLogger(__name__)
 class BiDirectional:
     """
     Implementation of the bidirectional labeling algorithm with dynamic
-    half-way point (`Tilk 2017`_).
+    half-way point (`Tilk 2017`_). 
+    This requires the half-way procedure from `Righini and Salani (2006)`_,
+    also implemented.
     Depending on the range of values for U, L, we get
     four different algorithms. See self.name_algorithm and Notes.
+
 
     Parameters
     ----------
@@ -100,8 +103,8 @@ class BiDirectional:
         ["Source", "A", "B", "C", "Sink"]
 
     .. _Tilk 2017: https://www.sciencedirect.com/science/article/pii/S0377221717302035
+    .. _Righini and Salani (2006): https://www.sciencedirect.com/science/article/pii/S1572528606000417
     """
-
     def __init__(self,
                  G,
                  max_res,
@@ -191,20 +194,20 @@ class BiDirectional:
     #############
     def _get_direction(self):
         if self.direc_in == "both":
-            if (self.currentLabel["forward"] and
-                    not self.currentLabel["backward"]):
+            if (self.currentLabel["forward"]
+                    and not self.currentLabel["backward"]):
                 return "forward"
-            elif (not self.currentLabel["forward"] and
-                  self.currentLabel["backward"]):
+            elif (not self.currentLabel["forward"]
+                  and self.currentLabel["backward"]):
                 return "backward"
-            elif (self.currentLabel["forward"] and
-                  self.currentLabel["backward"]):
+            elif (self.currentLabel["forward"]
+                  and self.currentLabel["backward"]):
                 return self.random_state.choice(["forward", "backward"])
             else:  # if both are empty
                 return
         else:
-            if (not self.currentLabel["forward"] and
-                    not self.currentLabel["backward"]):
+            if (not self.currentLabel["forward"]
+                    and not self.currentLabel["backward"]):
                 return
             elif not self.currentLabel[self.direc_in]:
                 return
@@ -263,15 +266,15 @@ class BiDirectional:
             # Try to get labels create from the current one.
             _labels = list(lab for lab in self.unprocessedLabels[direc][
                 self.currentLabel[direc]]
-                           if (lab not in self.processedLabels[direc] and
-                               lab != exclude_label))
+                           if (lab not in self.processedLabels[direc]
+                               and lab != exclude_label))
             return min(_labels, key=lambda x: x.weight)
         except ValueError:
             # No more keys to be processed under current label
             self.processedLabels[direc].append(self.currentLabel[direc])
             _labels = list(lab for lab in self.unprocessedLabels[direc].keys()
-                           if (lab not in self.processedLabels[direc] and
-                               lab != exclude_label))
+                           if (lab not in self.processedLabels[direc]
+                               and lab != exclude_label))
             if _labels:
                 return min(_labels, key=lambda x: x.weight)
             else:
@@ -281,34 +284,37 @@ class BiDirectional:
             return None
 
     def _save_current_best_label(self, direc):
+        current_label = self.currentLabel[direc]
+        final_label = self.finalLabel[direc]
         try:
-            if self.currentLabel[direc].dominates(self.finalLabel[direc],
-                                                  direc):
+            current_label_dominates = current_label.dominates(
+                final_label, direc)
+            final_label_dominates = final_label.dominates(current_label, direc)
+            # Current label dominates final
+            if current_label_dominates:
                 log.debug("Saving {} as best, with path {}".format(
-                    self.currentLabel[direc], self.currentLabel[direc].path))
-                self.finalLabel[direc] = self.currentLabel[direc]
+                    current_label, current_label.path))
+                self.finalLabel[direc] = current_label
+            # Both non-dominated labels in this direction.
+            elif (not current_label_dominates and not final_label_dominates):
+                # flip directions
+                flip_direc = "forward" if direc == "backward" else "backward"
+                current_label_dominates_flipped = current_label.dominates(
+                    final_label, flip_direc)
+                if current_label_dominates_flipped:
+                    self.finalLabel[direc] = current_label
         except Exception:
-            # Labels are not comparable
-            if (direc == "forward" and
-                ((self.currentLabel[direc].path[-1] == "Sink" or
-                  self.finalLabel[direc].node == "Source") or
-                 ((self.currentLabel[direc].node not in
-                   self.finalLabel[direc].path) and
-                  (self.currentLabel[direc].weight <=
-                   self.finalLabel[direc].weight)))):
+            # Labels are not comparable i.e. Belong to different nodes
+            if (direc == "forward" and (current_label.path[-1] == "Sink"
+                                        or final_label.node == "Source")):
                 log.debug("Saving {} as best, with path {}".format(
-                    self.currentLabel[direc], self.currentLabel[direc].path))
-                self.finalLabel[direc] = self.currentLabel[direc]
-            elif (direc == "backward" and
-                  ((self.currentLabel[direc].path[-1] == "Source" or
-                    self.finalLabel[direc].node == "Sink") or
-                   ((self.currentLabel[direc].node not in
-                     self.finalLabel[direc].path) and
-                    (self.currentLabel[direc].weight <=
-                     self.finalLabel[direc].weight)))):
+                    current_label, self.currentLabel[direc].path))
+                self.finalLabel[direc] = current_label
+            elif (direc == "backward" and (current_label.path[-1] == "Source"
+                                           or final_label.node == "Sink")):
                 log.debug("Saving {} as best, with path {}".format(
-                    self.currentLabel[direc], self.currentLabel[direc].path))
-                self.finalLabel[direc] = self.currentLabel[direc]
+                    current_label, current_label.path))
+                self.finalLabel[direc] = current_label
 
     #############
     # DOMINANCE #
@@ -321,14 +327,14 @@ class BiDirectional:
         """
         if self.currentLabel[direc]:
             keys_to_pop = deque()
-            all_labels = deque(
-                lab for lab in self.unprocessedLabels[direc].keys()
-                if lab.node == self.currentLabel[direc].node and
-                lab != self.currentLabel[direc])
+            all_labels = deque(lab
+                               for lab in self.unprocessedLabels[direc].keys()
+                               if lab.node == self.currentLabel[direc].node
+                               and lab != self.currentLabel[direc])
             all_labels.extend(
                 lab for k, v in self.unprocessedLabels[direc].items()
-                for lab in v if lab.node == self.currentLabel[direc].node and
-                lab != self.currentLabel[direc])
+                for lab in v if lab.node == self.currentLabel[direc].node
+                and lab != self.currentLabel[direc])
             keys_to_pop.extend(
                 lab for lab in all_labels
                 if self.currentLabel[direc].dominates(lab, direc))
@@ -351,7 +357,8 @@ class BiDirectional:
             for k, sub_dict in self.unprocessedLabels[direc].items():
                 if key_to_pop in sub_dict:
                     _idx = sub_dict.index(key_to_pop)
-                    log.debug("Key {} removed from sub_dict".format(key_to_pop))
+                    log.debug(
+                        "Key {} removed from sub_dict".format(key_to_pop))
                     del self.unprocessedLabels[direc][k][_idx]
 
     ###################
@@ -370,18 +377,18 @@ class BiDirectional:
 
     def _check_paths(self):
         # if only forward path is source - sink
-        if (self.finalLabel["forward"].path[-1] == "Sink" and
-                self.finalLabel["backward"].path[0] != "Source"):
+        if (self.finalLabel["forward"].path[-1] == "Sink"
+                and self.finalLabel["backward"].path[0] != "Source"):
             return self.finalLabel["forward"].path
         # if only backward path is source - sink
-        elif (self.finalLabel["backward"].path[-1] == "Source" and
-              self.finalLabel["forward"].path[-1] != "Sink"):
+        elif (self.finalLabel["backward"].path[-1] == "Source"
+              and self.finalLabel["forward"].path[-1] != "Sink"):
             # Reverse backward path
             self.finalLabel["backward"].path.reverse()
             return self.finalLabel["backward"].path
         # if both paths are source - sink
-        elif (self.finalLabel["backward"].path[-1] == "Source" and
-              self.finalLabel["forward"].path[-1] == "Sink"):
+        elif (self.finalLabel["backward"].path[-1] == "Source"
+              and self.finalLabel["forward"].path[-1] == "Sink"):
             # if forward path has a lower weight
             if self.finalLabel["forward"].weight < self.finalLabel[
                     "backward"].weight:
@@ -403,8 +410,7 @@ class BiDirectional:
 
     def _half_way(self):
         """
-        Path joining algorithm from `Righini and Salani (2006)`_.
-        Checks if the two
+        Half-way procedure from `Righini and Salani (2006)`_.
 
         :return: list with the final path.
 

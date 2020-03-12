@@ -12,6 +12,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - BiDirectional algorithm:
 	- **Removed** termination criteria.
 	- Implemented half way procedure from [Righini and Salani (2006)](https://www.sciencedirect.com/science/article/pii/S1572528606000417) in ``self._half_way`` (Closes #21).
+	- Changed label dominance to an equivalent but more elegant function.
+	- Changed final label saving to account for when two label do not dominate each other.
 
 ## [0.0.11] 06/03/2020
 

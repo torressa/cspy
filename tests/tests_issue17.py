@@ -13,8 +13,8 @@ from cspy.algorithms.bidirectional import BiDirectional
 class TestsIssue17(unittest.TestCase):
     """
     Tests for issue #17
+    https://github.com/torressa/cspy/issues/17
     """
-
     def setUp(self):
         # Create simple digraph with appropriate attributes
         self.G = DiGraph(directed=True, n_res=2)
@@ -49,8 +49,7 @@ class TestsIssue17(unittest.TestCase):
         # Check path
         path = alg_obj.run()
         cost = sum([
-            edge[2]['weight']
-            for edge in self.G.edges(data=True)
+            edge[2]['weight'] for edge in self.G.edges(data=True)
             if edge[0:2] in zip(path, path[1:])
         ])
         self.assertEqual(path, ['Source', 2, 5, 'Sink'])
@@ -76,8 +75,7 @@ class TestsIssue17(unittest.TestCase):
         # Check path
         path = alg_obj.run()
         cost = sum([
-            edge[2]['weight']
-            for edge in self.G.edges(data=True)
+            edge[2]['weight'] for edge in self.G.edges(data=True)
             if edge[0:2] in zip(path, path[1:])
         ])
         self.assertEqual(cost, 1)
@@ -103,8 +101,7 @@ class TestsIssue17(unittest.TestCase):
         # Check path
         path = alg_obj.run()
         cost = sum([
-            edge[2]['weight']
-            for edge in self.G.edges(data=True)
+            edge[2]['weight'] for edge in self.G.edges(data=True)
             if edge[0:2] in zip(path, path[1:])
         ])
         self.assertEqual(cost, 1)
@@ -131,8 +128,7 @@ class TestsIssue17(unittest.TestCase):
     def testTabu(self):
         path = Tabu(self.G, self.max_res, self.min_res).run()
         cost = sum([
-            edge[2]['weight']
-            for edge in self.G.edges(data=True)
+            edge[2]['weight'] for edge in self.G.edges(data=True)
             if edge[0:2] in zip(path, path[1:])
         ])
         self.assertEqual(cost, 1)

@@ -8,13 +8,11 @@ sys.path.append("../")
 from cspy.algorithms.tabu import Tabu
 
 
-class TestsIssue19(unittest.TestCase):
+class TestsIssue20(unittest.TestCase):
     """
-    Tests for finding the resource constrained shortest
-    path of simple DiGraph using the BiDirectional algorithm.
-    Includes algorithm classification, and some exception handling.
+    Tests for issue #20 
+    https://github.com/torressa/cspy/issues/20
     """
-
     def setUp(self):
         # Create simple digraph with appropriate attributes
         self.G = DiGraph(directed=True, n_res=2)
@@ -31,8 +29,7 @@ class TestsIssue19(unittest.TestCase):
 
     def testTabu(self):
         """
-        Find shortest path of simple test digraph using the BiDirectional
-        algorithm with dynamic halfway point.
+        Find shortest path of simple test digraph using Tabu
         """
         path = Tabu(self.G, self.max_res, self.min_res).run()
         self.assertEqual(path, ['Source', 1, 'Sink'])
@@ -40,4 +37,4 @@ class TestsIssue19(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main()
+    unittest.main(TestsIssue20())

@@ -48,8 +48,9 @@ class Label(object):
     def __eq__(self, other):
         # Equality operator for two Label objects
         if other:
-            return (self.weight == other.weight and
-                    all(equal(self.res, other.res)) and self.node == other.node)
+            return (self.weight == other.weight
+                    and all(equal(self.res, other.res))
+                    and self.node == other.node)
         else:
             return False
 
@@ -58,29 +59,25 @@ class Label(object):
         return id(self)
 
     def dominates(self, other, direction):
-        # Return whether self dominates other.
+        # Determine whether self dominates other. Returns bool
         if self.node != other.node:
             raise Exception("Non-comparable labels given")
         else:
+            # Assume self dominates other
+            if self.weight > other.weight:
+                return False
             if direction == "forward":
-                return (((self.weight < other.weight and
-                          all(self.res <= other.res)) or
-                         (self.weight <= other.weight and
-                          (all(self.res <= other.res) and
-                           any(self.res < other.res)))))
+                if any(self.res > other.res):
+                    return False
             elif direction == "backward":
-                return (((self.weight < other.weight and
-                          all(self.res >= other.res)) or
-                         (self.weight <= other.weight and
-                          (all(self.res >= other.res) and
-                           any(self.res > other.res)))))
+                if any(self.res < other.res):
+                    return False
             else:
                 raise Exception(
                     "{} cannot be used as a direction".format(direction))
+            return True
 
-    # @staticmethod
     def get_new_label(self, edge, direction, weight, res):
-        # self = copy(self)
         path = list(self.path)
         node = edge[1] if direction == "forward" else edge[0]
         if node in path:  # If node already visited.
