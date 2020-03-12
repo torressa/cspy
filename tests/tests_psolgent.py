@@ -8,9 +8,10 @@ from cspy.algorithms.psolgent import PSOLGENT
 
 
 class TestsPSOLGENT(unittest.TestCase):
-    """ Tests for finding the resource constrained shortest
-    path of simple DiGraph using the PSOLGENT algorithm."""
-
+    """
+    Tests for finding the resource constrained shortest
+    path of simple DiGraph using the PSOLGENT algorithm.
+    """
     def setUp(self):
         self.max_res, self.min_res = [5, 5], [0, 0]
         # Create digraph with a resource infeasible minimum cost path
@@ -39,11 +40,17 @@ class TestsPSOLGENT(unittest.TestCase):
         self.G.add_edge('E', 'Sink', res_cost=array([1, 1]), weight=1)
 
     def testPSOLGENT(self):
-        path = PSOLGENT(self.G,
-                        self.max_res,
-                        self.min_res,
-                        seed=RandomState(123)).run()
+        psolgent = PSOLGENT(self.G,
+                            self.max_res,
+                            self.min_res,
+                            seed=RandomState(123))
+        psolgent.run()
+        path = psolgent.path
+        cost = psolgent.total_cost
+        total_res = psolgent.consumed_resources
         self.assertEqual(path, ['Source', 'A', 'C', 'D', 'E', 'Sink'])
+        self.assertEqual(cost, 3)
+        self.assertTrue(all(total_res == [5, 5]))
 
     def testInputExceptions(self):
         # Check whether wrong input raises exceptions

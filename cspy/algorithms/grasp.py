@@ -4,13 +4,13 @@ from __future__ import absolute_import
 from __future__ import print_function
 
 import logging
-from numpy.random import choice
+from operator import add
 from math import factorial
+from numpy.random import choice
 from random import sample, randint
-from itertools import permutations, repeat
-# from networkx import astar_path, NetworkXException
-from cspy.preprocessing import check_and_preprocess
 from cspy.algorithms.path import Path
+from itertools import permutations, repeat
+from cspy.preprocessing import check_and_preprocess
 
 log = logging.getLogger(__name__)
 
@@ -98,15 +98,16 @@ class GRASP:
         >>> G.add_edge('D', 'Sink', res_cost=array([10, 10]), weight=10)
         >>> G.add_edge('F', 'Sink', res_cost=array([10, 1]), weight=1)
         >>> G.add_edge('E', 'Sink', res_cost=array([1, 1]), weight=1)
-        >>> path = GRASP(G, [5, 5], [0, 0], max_iter=50,
-                         max_localiter=10).run()
+        >>> grasp = GRASP(G, [5, 5], [0, 0], max_iter=50,
+                         max_localiter=10)
+        >>> grasp.run()
+        >>> path = grasp.path
         >>> print(path)
         ['Source', 'A', 'C', 'D', 'E', 'Sink']
 
     .. _Ferone et al 2019: https://www.tandfonline.com/doi/full/10.1080/10556788.2018.1548015
 
     """
-
     def __init__(self,
                  G,
                  max_res,
@@ -125,24 +126,52 @@ class GRASP:
         self.max_iter = max_iter
         self.max_localiter = max_localiter
         self.alpha = alpha
-        if REF:
-            Path._REF = REF
         # Algorithm specific parameters
         self.it = 0
-        self.best = None
         self.stop = False
+        self.best_path = None
+        self.best_solution = None
         self.nodes = self.G.nodes()
+        # Set path class attribute
+        if REF:
+            Path._REF = REF
+        else:
+            Path._REF = add
 
     def run(self):
+        """
+        Calculate shortest path with resource constraints.
+        """
         while self.it < self.max_iter and not self.stop:
-            self.algorithm()
+            self._algorithm()
             self.it += 1
-        if self.best.path:
-            return self.best.path
+        if self.best_solution.path:
+            pass
         else:
             raise Exception("No resource feasible path has been found")
 
-    def algorithm(self):
+    @property
+    def path(self):
+        """
+        Get list with nodes in calculated path.
+        """
+        return self.best_path.path
+
+    @property
+    def total_cost(self):
+        """
+        Get accumulated cost along the path.
+        """
+        return self.best_path.cost
+
+    @property
+    def consumed_resources(self):
+        """
+        Get accumulated resources consumed along the path.
+        """
+        return self.best_path.total_res
+
+    def _algorithm(self):
         solution = self._construct()
         solution = self._local_search(solution)
         self._update_best(solution)
@@ -156,8 +185,7 @@ class GRASP:
                 map(self._heuristic, repeat(solution.path[-1]), candidates))
             # Build Restricted Candidiate List (RCL)
             restriced_candidates = [
-                candidates[i]
-                for i, c in enumerate(weights)
+                candidates[i] for i, c in enumerate(weights)
                 if c <= (min(weights) + self.alpha *
                          (max(weights) - min(weights)))
             ]
@@ -175,15 +203,15 @@ class GRASP:
             # evaluate candidate solution
             candidate.cost = self._cost_solution(candidate)
             # Update solution with candidate if lower cost and resource feasible
-            if (candidate.path and candidate.cost < solution.cost and
-                    self._check_path(candidate)):
+            if (candidate.path and candidate.cost < solution.cost
+                    and self._check_path(candidate)):
                 solution = candidate
             it += 1
         return solution
 
     def _update_best(self, solution):
-        if not self.best or solution.cost < self.best.cost:
-            self.best = solution
+        if not self.best_solution or solution.cost < self.best_solution.cost:
+            self.best_solution = solution
 
     def _heuristic(self, i, j):
         # Given a node pair returns a weight to apply
@@ -197,13 +225,16 @@ class GRASP:
 
     @staticmethod
     def _find_alternative_paths(G, path):
-        """ Static Method used in local search to randomly generate valid paths.
+        """
+        Static Method used in local search to randomly generate valid paths.
         Using a subset of edges, it generates a connected path starting at
-        the source node. """
+        the source node.
+        """
         n_permutations = int(factorial(len(path)) / factorial(len(path) - 2))
         sample_size = randint(3, n_permutations)
         selection = sample(list(permutations(path, 2)), sample_size)
-        path_edges = dict(list(edge for edge in selection if edge in G.edges()))
+        path_edges = dict(list(edge for edge in selection
+                               if edge in G.edges()))
         elem = 'Source'  # start point in the new list
         new_list = []
         for _ in range(len(path_edges)):
@@ -234,10 +265,11 @@ class GRASP:
         """
         if solution:
             path, cost = solution.path, solution.cost
-            if (len(path) > 2 and cost < 1e10 and path[0] == 'Source' and
-                    path[-1] == 'Sink'):
-                if Path(self.G, path, self.max_res,
-                        self.min_res)._check_feasibility() is True:
+            if (len(path) > 2 and cost < 1e10 and path[0] == 'Source'
+                    and path[-1] == 'Sink'):
+                _path = Path(self.G, path, self.max_res, self.min_res)
+                if _path.check_feasibility() is True:
+                    self.best_path = _path
                     return True
                 else:
                     return False
@@ -260,7 +292,6 @@ class Solution(object):
     cost : float
         cost of solution
     """
-
     def __init__(self, path, cost):
         self.path = path
         self.cost = cost

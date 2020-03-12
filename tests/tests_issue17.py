@@ -37,23 +37,24 @@ class TestsIssue17(unittest.TestCase):
         """
         Find shortest path of simple test digraph using the BiDirectional.
         """
-        alg_obj = BiDirectional(self.G,
+        bidirec = BiDirectional(self.G,
                                 self.max_res,
                                 self.min_res,
                                 seed=self.test_seed)
         # Check classification
         with self.assertLogs('cspy.algorithms.bidirectional') as cm:
-            alg_obj.name_algorithm()
+            bidirec.name_algorithm()
         # Log should contain the word 'dynamic'
         self.assertRegex(cm.output[0], 'dynamic')
-        # Check path
-        path = alg_obj.run()
-        cost = sum([
-            edge[2]['weight'] for edge in self.G.edges(data=True)
-            if edge[0:2] in zip(path, path[1:])
-        ])
+
+        bidirec.run()
+        path = bidirec.path
+        cost = bidirec.total_cost
+        total_res = bidirec.consumed_resources
+        # Check path and other attributes
         self.assertEqual(path, ['Source', 2, 5, 'Sink'])
         self.assertEqual(cost, 1)
+        self.assertTrue(all(total_res == [3, 3]))
         self.assertTrue(all(e in self.G.edges() for e in zip(path, path[1:])))
         self.assertEqual(self.max_res, [len(self.G.edges()), 6])
         self.assertEqual(self.min_res, [0, 0])
@@ -63,23 +64,24 @@ class TestsIssue17(unittest.TestCase):
         Find shortest path of simple test digraph using the BiDirectional
         algorithm with only forward direction.
         """
-        alg_obj = BiDirectional(self.G,
+        bidirec = BiDirectional(self.G,
                                 self.max_res,
                                 self.min_res,
                                 direction='forward')
         # Check classification
         with self.assertLogs('cspy.algorithms.bidirectional') as cm:
-            alg_obj.name_algorithm()
+            bidirec.name_algorithm()
         # Log should contain the word 'forward'
         self.assertRegex(cm.output[0], 'forward')
-        # Check path
-        path = alg_obj.run()
-        cost = sum([
-            edge[2]['weight'] for edge in self.G.edges(data=True)
-            if edge[0:2] in zip(path, path[1:])
-        ])
-        self.assertEqual(cost, 1)
+
+        bidirec.run()
+        path = bidirec.path
+        cost = bidirec.total_cost
+        total_res = bidirec.consumed_resources
+        # Check path and other attributes
         self.assertEqual(path, ['Source', 2, 5, 'Sink'])
+        self.assertEqual(cost, 1)
+        self.assertTrue(all(total_res == [3, 3]))
         self.assertTrue(all(e in self.G.edges() for e in zip(path, path[1:])))
         self.assertEqual(self.max_res, [len(self.G.edges()), 6])
         self.assertEqual(self.min_res, [0, 0])
@@ -89,23 +91,25 @@ class TestsIssue17(unittest.TestCase):
         Find shortest path of simple test digraph using the BiDirectional
         algorithm with only backward direction.
         """
-        alg_obj = BiDirectional(self.G,
+        bidirec = BiDirectional(self.G,
                                 self.max_res,
                                 self.min_res,
                                 direction='backward')
         # Check classification
         with self.assertLogs('cspy.algorithms.bidirectional') as cm:
-            alg_obj.name_algorithm()
+            bidirec.name_algorithm()
         # Log should contain the word 'backward'
         self.assertRegex(cm.output[0], 'backward')
-        # Check path
-        path = alg_obj.run()
-        cost = sum([
-            edge[2]['weight'] for edge in self.G.edges(data=True)
-            if edge[0:2] in zip(path, path[1:])
-        ])
-        self.assertEqual(cost, 1)
+
+        bidirec.run()
+        path = bidirec.path
+        cost = bidirec.total_cost
+        total_res = bidirec.consumed_resources
+        # Check path and other attributes
         self.assertEqual(path, ['Source', 2, 5, 'Sink'])
+        self.assertEqual(cost, 1)
+        print(total_res)
+        self.assertTrue(all(total_res == [3, 3]))
         self.assertTrue(all(e in self.G.edges() for e in zip(path, path[1:])))
         self.assertEqual(self.max_res, [len(self.G.edges()), 6])
         self.assertEqual(self.min_res, [0, 0])
@@ -126,12 +130,18 @@ class TestsIssue17(unittest.TestCase):
         self.assertRaises(Exception, L3.dominates, L5, "")
 
     def testTabu(self):
-        path = Tabu(self.G, self.max_res, self.min_res).run()
+        tabu = Tabu(self.G, self.max_res, self.min_res)
+        tabu.run()
+        path = tabu.path
+        cost_tabu = tabu.total_cost
+        total_res = tabu.consumed_resources
         cost = sum([
             edge[2]['weight'] for edge in self.G.edges(data=True)
             if edge[0:2] in zip(path, path[1:])
         ])
-        self.assertEqual(cost, 1)
+        # Check new cost attribute
+        self.assertEqual(cost, cost_tabu)
+        self.assertTrue(all(total_res == [3, 3]))
         self.assertEqual(path, ['Source', 2, 5, 'Sink'])
         self.assertTrue(all(e in self.G.edges() for e in zip(path, path[1:])))
         self.assertEqual(self.max_res, [len(self.G.edges()), 6])

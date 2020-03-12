@@ -9,7 +9,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 
 - Documentation.
-- BiDirectional algorithm: - **Removed** termination criteria. - Implemented half way procedure from [Righini and Salani (2006)](https://www.sciencedirect.com/science/article/pii/S1572528606000417) in `self._half_way` (Closes #21). - Changed label dominance to an equivalent but more elegant function. - Changed final label saving to account for when two label do not dominate each other.
+- BiDirectional algorithm:
+  - **Removed** termination criteria.
+  - Implemented half way procedure from [Righini and Salani (2006)](https://www.sciencedirect.com/science/article/pii/S1572528606000417) in `self._half_way` (Closes #21).
+  - Changed label dominance to an equivalent but more elegant function.
+  - Changed final label saving to account for when neither of two labels dominate.
+- Backwards incompatible path, cost and total_resource feature.
 
 ## [v0.0.11] 06/03/2020
 
@@ -21,7 +26,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 
 - Documentation.
-- BiDirectional algorithm: - Final label comparisons. - Seed handling for testing. - Renamed variables to avoid confusion. - Avoiding getting stuck processing cycles of input graphs. - Ensuring that edges in path correspond to an edge in the input graph. - Avoid overwriting inputs (`max_res` and `min_res`). - Removed loops in `_get_next_label` and `_check_dominance` in favour of list comprehensions. - Use of `collections`. - logs for debugging in BiDirectional. - added `_save_current_best_label`. - Changed type of `self.finalLabel["direction"]` from list to `Label`.
+- BiDirectional algorithm:
+
+  - Final label comparisons.
+  - Seed handling for testing.
+  - Renamed variables to avoid confusion. - Avoiding getting stuck processing cycles of input graphs. - Ensuring that edges in path correspond to an edge in the input graph. - Avoid overwriting inputs (`max_res` and `min_res`). - Removed loops in `_get_next_label` and `_check_dominance` in favour of list comprehensions. - Use of `collections`. - logs for debugging in BiDirectional.
+  - added `_save_current_best_label`.
+  - Changed type of `self.finalLabel["direction"]` from list to `Label`.
 
 - Re-organised. Moved `label.py` and `path.py` into `algorithms/`.
 
@@ -98,7 +109,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Docstring modifications to include maths.
 - Updated README.
 
-[unreleased]: https://github.com/torressa/cspy/compare/v0.0.12...HEAD
+[unreleased]: https://github.com/torressa/cspy/compare/v0.0.11...HEAD
 [v0.0.12]: https://github.com/torressa/cspy/compare/v0.0.11...v0.0.12
 [v0.0.11]: https://github.com/torressa/cspy/compare/v0.0.10...v0.0.11
 [v0.0.11]: https://github.com/torressa/cspy/compare/v0.0.10...v0.0.11

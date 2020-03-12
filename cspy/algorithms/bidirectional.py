@@ -58,11 +58,6 @@ class BiDirectional:
 
     .. _REFs : https://cspy.readthedocs.io/en/latest/how_to.html#refs
 
-    Returns
-    -------
-    list
-        nodes in shortest path obtained.
-
     Notes
     -----
     The input graph must have a ``n_res`` attribute which must be
@@ -120,6 +115,7 @@ class BiDirectional:
                                       __name__)
         self.direc_in = direction
         self.max_res, self.min_res = max_res.copy(), min_res.copy()
+        self.max_res_og, self.min_res_og = max_res.copy(), min_res.copy()
         # Algorithm specific parameters #
         # Current forward and backward labels
         self.currentLabel = OrderedDict({
@@ -162,6 +158,9 @@ class BiDirectional:
             raise Exception("{} cannot be used to seed".format(seed))
 
     def run(self):
+        """
+        Calculate shortest path with resource constraints.
+        """
         while self.currentLabel["forward"] or self.currentLabel["backward"]:
             direc = self._get_direction()
             if direc:
@@ -170,6 +169,27 @@ class BiDirectional:
             else:
                 break
         return self._process_paths()
+
+    @property
+    def path(self):
+        """
+        Get list with nodes in calculated path.
+        """
+        return self.best_path.path
+
+    @property
+    def total_cost(self):
+        """
+        Get accumulated cost along the path.
+        """
+        return self.best_path.weight
+
+    @property
+    def consumed_resources(self):
+        """
+        Get accumulated resources consumed along the path.
+        """
+        return self.best_path.res
 
     ###########################
     # Classify Algorithm Type #
@@ -250,10 +270,8 @@ class BiDirectional:
 
     def _propagate_label(self, edge, direc):
         # Label propagation #
-        weight, res_cost = edge[2]["weight"], edge[2]["res_cost"]
         # Get new label from current Label
-        new_label = self.currentLabel[direc].get_new_label(
-            edge, direc, weight, res_cost)
+        new_label = self.currentLabel[direc].get_new_label(edge, direc)
         if new_label and new_label.feasibility_check(self.max_res,
                                                      self.min_res):
             # If label doesn't exist and is resource feasible
@@ -371,42 +389,44 @@ class BiDirectional:
             return self._check_paths()
         else:
             # If mono-directional algorithm used, return the appropriate path
-            if self.direc_in == "backward":
-                self.finalLabel[self.direc_in].path.reverse()
-            return self.finalLabel[self.direc_in].path
+            if self.direc_in == "forward":
+                self.best_path = self.finalLabel["forward"]
+            else:
+                self.best_path = self._process_final_bwd_label()
 
     def _check_paths(self):
         # if only forward path is source - sink
         if (self.finalLabel["forward"].path[-1] == "Sink"
                 and self.finalLabel["backward"].path[0] != "Source"):
-            return self.finalLabel["forward"].path
+            self.best_path = self.finalLabel["forward"]
         # if only backward path is source - sink
         elif (self.finalLabel["backward"].path[-1] == "Source"
               and self.finalLabel["forward"].path[-1] != "Sink"):
-            # Reverse backward path
-            self.finalLabel["backward"].path.reverse()
-            return self.finalLabel["backward"].path
+            self.best_path = self._process_final_bwd_label()
         # if both paths are source - sink
         elif (self.finalLabel["backward"].path[-1] == "Source"
               and self.finalLabel["forward"].path[-1] == "Sink"):
             # if forward path has a lower weight
-            if self.finalLabel["forward"].weight < self.finalLabel[
-                    "backward"].weight:
-                return self.finalLabel["forward"].path
+            if (self.finalLabel["forward"].weight <
+                    self.finalLabel["backward"].weight):
+                self.best_path = self.finalLabel["forward"]
             # if backward path has a lower weight
-            elif self.finalLabel["backward"].weight < self.finalLabel[
-                    "forward"].weight:
-                # Reverse backward path
-                self.finalLabel["backward"].path.reverse()
-                return self.finalLabel["backward"].path
-            # Otherwise (equal weight) return either path randomly
+            elif (self.finalLabel["backward"].weight <
+                  self.finalLabel["forward"].weight):
+                self.best_path = self._process_final_bwd_label()
+            # Otherwise (equal weight) save forward path
             else:
-                return (self.finalLabel["forward"].path
-                        if self.random_state.random_sample() < 0.5 else
-                        self.finalLabel["backward"].path)
+                self.best_path = self.finalLabel["forward"]
         # if combination of the two is required
         else:
             return self._half_way()
+
+    def _process_final_bwd_label(self):
+        # Reverse backward path
+        label = self.finalLabel["backward"]
+        label.path.reverse()
+        label.res = self.max_res_og - label.res
+        return label
 
     def _half_way(self):
         """
@@ -449,7 +469,19 @@ class BiDirectional:
                         fwd_best, bwd_min))
 
     def _join_labels(self, fwd_label, bwd_label):
-        # Join path produced by a backward and forward label.
+        # Join labels produced by a backward and forward label
         bwd_label.path.reverse()
+        # Reconstruct edge with edge data
+        edge = (fwd_label.node, bwd_label.node,
+                self.G[fwd_label.node][bwd_label.node])
+        _label = fwd_label.get_new_label(edge, "forward")
+
+        weight = fwd_label.weight + edge[2]['weight'] + bwd_label.weight
+        total_res = _label.res + (self.max_res_og - bwd_label.res)
         final_path = fwd_label.path + bwd_label.path
-        return final_path
+        _path = Label(weight, "Sink", total_res, final_path)
+        # Check resource feasibility
+        if _path.feasibility_check(self.max_res_og, self.min_res_og):
+            self.best_path = _path
+        else:
+            raise Exception("Final path not resource feasible!")

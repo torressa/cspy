@@ -7,6 +7,7 @@ from __future__ import print_function
 
 from math import sqrt
 from abc import ABCMeta
+from operator import add
 from logging import getLogger
 from numpy.random import RandomState
 from numpy import (argmin, array, copy, diag_indices_from, exp, dot, zeros,
@@ -19,7 +20,6 @@ log = getLogger(__name__)
 
 
 class StandardGraph:
-
     def __init__(self, G, max_res, min_res, REF, preprocess):
         # Check input graph and parameters
         G = check_and_preprocess(preprocess, G, max_res, min_res, REF)
@@ -27,12 +27,14 @@ class StandardGraph:
         self.G = G
         self.max_res = max_res
         self.min_res = min_res
-        self.path = None
+        self.path_list = None
         self.best_path = None
         self.path_edges = None
-
+        # Set path class attribute
         if REF:
             Path._REF = REF
+        else:
+            Path._REF = add
 
     def _get_path_edges(self, nodes):
         # Creates a list of edges given the nodes selected
@@ -46,23 +48,24 @@ class StandardGraph:
         Returns whether the path is disconnected or not
         """
         if self.path_edges:
-            self.path = [edge[0] for edge in self.path_edges]
-            self.path.append(self.path_edges[-1][1])
-            return any(edge[1] not in self.path for edge in self.path_edges)
+            self.path_list = [edge[0] for edge in self.path_edges]
+            self.path_list.append(self.path_edges[-1][1])
+            return any(edge[1] not in self.path_list
+                       for edge in self.path_edges)
 
     def _check_path(self):
         """
         Returns False if path is not valid
         Penalty otherwise
         """
-        if self.path:
-            if len(self.path) > 2 and (self.path[0] == 'Source' and
-                                       self.path[-1] == 'Sink'):
+        if self.path_list:
+            if len(self.path_list) > 2 and (self.path_list[0] == 'Source'
+                                            and self.path_list[-1] == 'Sink'):
                 base_cost = sum(edge[2]['weight'] for edge in self.path_edges)
                 # if self.path[0] == 'Source' and self.path[-1] == 'Sink':
-                if Path(self.G, self.path, self.max_res,
-                        self.min_res)._check_feasibility() is True:
-                    self.best_path = self.path
+                path = Path(self.G, self.path_list, self.max_res, self.min_res)
+                if path.check_feasibility() is True:
+                    self.best_path = path
                     log.debug("Resource feasible path found")
                     return base_cost
                 else:
@@ -197,15 +200,15 @@ class PSOLGENT(StandardGraph):
         >>> G.add_edge('F', 'Sink', res_cost=array([10, 1]), weight=1)
         >>> G.add_edge('E', 'Sink', res_cost=array([1, 1]), weight=1)
         >>> n_nodes = len(G.nodes())
-        >>> path = PSOLGENT(G, [5, 5], [0, 0],
+        >>> psolgent = PSOLGENT(G, [5, 5], [0, 0],
                             max_iter=200,
                             swarm_size=50,
                             member_size=n_nodes,
-                            neighbourhood_size=50).run()
-        >>> print(path)
+                            neighbourhood_size=50)
+        >>> psolgent.run()
+        >>> print(psolgent.path)
         ['Source', 'A', 'C', 'D', 'E', 'Sink']
-
-
+        
     """
 
     __metaclass__ = ABCMeta
@@ -259,6 +262,9 @@ class PSOLGENT(StandardGraph):
             raise Exception("{} cannot be used to seed".format(seed))
 
     def run(self):
+        """
+        Calculate shortest path with resource constraints.
+        """
         self._init_swarm()
         while self.iter < self.max_iter:
             pos_new = self.pos + self._get_vel()
@@ -272,9 +278,30 @@ class PSOLGENT(StandardGraph):
                     self.iter, self.best_fit))
             self.iter += 1
         if self.best_path:
-            return self.best_path
+            pass
         else:
             raise Exception("No resource feasible path has been found")
+
+    @property
+    def path(self):
+        """
+        Get list with nodes in calculated path.
+        """
+        return self.best_path.path
+
+    @property
+    def total_cost(self):
+        """
+        Get accumulated cost along the path.
+        """
+        return self.best_path.cost
+
+    @property
+    def consumed_resources(self):
+        """
+        Get accumulated resources consumed along the path.
+        """
+        return self.best_path.total_res
 
     def _init_swarm(self):
         # Initialises the variables that are altered during the algorithm
@@ -368,8 +395,8 @@ class PSOLGENT(StandardGraph):
         """ Saves binary representation of nodes in path.
         0 not present, 1 present. """
         nodes = self._sort_nodes(list(self.G.nodes()))
-        self.current_nodes = list(
-            nodes[i] for i in range(len(nodes)) if arr[i] == 1)
+        self.current_nodes = list(nodes[i] for i in range(len(nodes))
+                                  if arr[i] == 1)
 
     def _get_fitness_member(self):
         # Returns the objective for a given path

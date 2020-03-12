@@ -7,9 +7,10 @@ from cspy.algorithms.grasp import GRASP
 
 
 class TestsGRASP(unittest.TestCase):
-    """ Tests for finding the resource constrained shortest
-    path of simple DiGraph using the GRASP algorithm."""
-
+    """
+    Tests for finding the resource constrained shortest
+    path of simple DiGraph using the GRASP algorithm.
+    """
     def setUp(self):
         self.max_res, self.min_res = [5, 5], [0, 0]
 
@@ -39,12 +40,18 @@ class TestsGRASP(unittest.TestCase):
         self.G.add_edge('E', 'Sink', res_cost=array([1, 1]), weight=1)
 
     def testGRASP(self):
-        path = GRASP(self.G,
-                     self.max_res,
-                     self.min_res,
-                     max_iter=50,
-                     max_localiter=10).run()
+        grasp = GRASP(self.G,
+                      self.max_res,
+                      self.min_res,
+                      max_iter=50,
+                      max_localiter=10)
+        grasp.run()
+        path = grasp.path
+        cost = grasp.total_cost
+        total_res = grasp.consumed_resources
         self.assertEqual(path, ['Source', 'A', 'C', 'D', 'E', 'Sink'])
+        self.assertEqual(cost, 3)
+        self.assertTrue(all(total_res == [5, 5]))
 
     def testInputExceptions(self):
         # Check whether wrong input raises exceptions

@@ -83,12 +83,12 @@ class GreedyElim:
         >>> G.add_edge('F', 'Sink', res_cost=array([1, 1]), weight=1)
         >>> G.add_edge('E', 'Sink', res_cost=array([1, 1]), weight=1)
         >>> max_res, min_res = [5, 5], [0, 0]
-        >>> path = GreedyElim(G, max_res, min_res).run()
-        >>> print(path)
+        >>> greedelim = GreedyElim(G, max_res, min_res)
+        >>> greedelim.run()
+        >>> print(greedelim.path)
         ['Source', 'A', 'C', 'D', 'E', 'Sink']
 
     """
-
     def __init__(self,
                  G,
                  max_res,
@@ -101,42 +101,63 @@ class GreedyElim:
         # Input parameters
         self.max_res = max_res
         self.min_res = min_res
-        self.return_G = return_G
         # Algorithm specific parameters
         self.it = 0
-        self.path = []
         self.stop = False
         self.predecessor_edges = []
         self.last_edge_removed = None
         self.edges_to_remove = dict(self.G.edges())
+        # To return
+        self.best_path = []
 
         if REF:
             Path._REF = REF
 
     def run(self):
+        """
+        Calculate shortest path with resource constraints.
+        """
         while self.stop is False:
-            self.algorithm()
+            self._algorithm()
             self.it += 1
 
-        if self.path:
-            if self.return_G:
-                return self.G, self.path
-            else:
-                return self.path
+        if self.best_path:
+            pass
         else:
             raise Exception("No resource feasible path has been found")
 
-    def algorithm(self):
+    @property
+    def path(self):
+        """
+        Get list with nodes in calculated path.
+        """
+        return self.best_path.path
+
+    @property
+    def total_cost(self):
+        """
+        Get accumulated cost along the path.
+        """
+        return self.best_path.cost
+
+    @property
+    def consumed_resources(self):
+        """
+        Get accumulated resources consumed along the path.
+        """
+        return self.best_path.total_res
+
+    def _algorithm(self):
         path = []
         try:
             path = astar_path(self.G, 'Source', 'Sink')
         except NetworkXException:
             pass
         if path:
-            edge_or_true = Path(self.G, path, self.max_res,
-                                self.min_res)._check_feasibility()
+            _path = Path(self.G, path, self.max_res, self.min_res)
+            edge_or_true = _path.check_feasibility()
             if edge_or_true is True:
-                self.path = path
+                self.best_path = _path
                 self.stop = True
             else:
                 self._update_graph(edge_or_true)
@@ -160,7 +181,8 @@ class GreedyElim:
             self.predecessor_edges = [
                 e for e in self.G.edges(self.G.nbunch_iter(
                     [node] + list(self.G.predecessors(node))),
-                                        data=True) if e[1] == node and e != edge
+                                        data=True)
+                if e[1] == node and e != edge
             ]
             self.predecessor_edges.sort(key=lambda x: x[2]['weight'])
         next_edge = self.predecessor_edges[-1]
