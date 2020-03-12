@@ -108,7 +108,6 @@ class TestsIssue17(unittest.TestCase):
         # Check path and other attributes
         self.assertEqual(path, ['Source', 2, 5, 'Sink'])
         self.assertEqual(cost, 1)
-        print(total_res)
         self.assertTrue(all(total_res == [3, 3]))
         self.assertTrue(all(e in self.G.edges() for e in zip(path, path[1:])))
         self.assertEqual(self.max_res, [len(self.G.edges()), 6])

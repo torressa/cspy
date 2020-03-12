@@ -30,7 +30,6 @@ class TestsIssue22(unittest.TestCase):
 
         self.max_res, self.min_res = [len(self.G.edges()), 2], [0, 0]
         self.test_seed = randint(1000, 10000000)
-        print("Seed = ", self.test_seed)
 
     def testDominance(self):
         # Check forward and backward label dominance
