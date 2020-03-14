@@ -45,6 +45,11 @@ class TestsGRASP(unittest.TestCase):
                       self.min_res,
                       max_iter=50,
                       max_localiter=10)
+        # Check exception for not running first
+        with self.assertRaises(Exception) as context:
+            grasp.path
+        self.assertTrue("run()" in str(context.exception))
+        # Run and test results
         grasp.run()
         path = grasp.path
         cost = grasp.total_cost

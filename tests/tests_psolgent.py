@@ -44,6 +44,11 @@ class TestsPSOLGENT(unittest.TestCase):
                             self.max_res,
                             self.min_res,
                             seed=RandomState(123))
+        # Check exception for not running first
+        with self.assertRaises(Exception) as context:
+            psolgent.path
+        self.assertTrue("run()" in str(context.exception))
+        # Run and test results
         psolgent.run()
         path = psolgent.path
         cost = psolgent.total_cost

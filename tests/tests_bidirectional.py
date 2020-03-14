@@ -41,7 +41,11 @@ class TestsBiDirectional(unittest.TestCase):
             bidirec.name_algorithm()
         # Log should contain the word 'dynamic'
         self.assertRegex(cm.output[0], 'dynamic')
-        # Check path
+        # Check exception for not running first
+        with self.assertRaises(Exception) as context:
+            bidirec.path
+        self.assertTrue("run()" in str(context.exception))
+        # Run and test results
         bidirec.run()
         path = bidirec.path
         cost = bidirec.total_cost

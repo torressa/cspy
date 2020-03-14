@@ -42,6 +42,11 @@ class TestsTabu(unittest.TestCase):
 
     def testTabu(self):
         tabu = Tabu(self.G, self.max_res, self.min_res)
+        # Check exception for not running first
+        with self.assertRaises(Exception) as context:
+            tabu.path
+        self.assertTrue("run()" in str(context.exception))
+        # Run and test results
         tabu.run()
         path = tabu.path
         cost = tabu.total_cost

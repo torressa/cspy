@@ -9,8 +9,9 @@ from numpy import zeros
 from numpy.random import RandomState
 
 # Local module imports
+from cspy.checking import check
 from cspy.algorithms.label import Label
-from cspy.preprocessing import check_and_preprocess
+from cspy.preprocessing import preprocess_graph
 
 log = getLogger(__name__)
 
@@ -110,12 +111,16 @@ class BiDirectional:
                  direction="both",
                  seed=None):
         # Check inputs and preprocess G unless option disabled
-        self.G = check_and_preprocess(preprocess, G, max_res, min_res,
-                                      REF_forward, REF_backward, direction,
-                                      __name__)
+        check(G, max_res, min_res, REF_forward, REF_backward, direction,
+              __name__)
+        # Preprocess graph
+        self.G = preprocess_graph(G, max_res, min_res, preprocess,
+                                  REF_backward)
         self.direc_in = direction
         self.max_res, self.min_res = max_res.copy(), min_res.copy()
-        self.max_res_og, self.min_res_og = max_res.copy(), min_res.copy()
+        self.max_res_in, self.min_res_in = max_res.copy(), min_res.copy()
+        # To expose results
+        self.best_label = None
         # Algorithm specific parameters #
         # Current forward and backward labels
         self.currentLabel = OrderedDict({
@@ -170,26 +175,34 @@ class BiDirectional:
                 break
         return self._process_paths()
 
+    # Return
+
     @property
     def path(self):
         """
         Get list with nodes in calculated path.
         """
-        return self.best_path.path
+        if not self.best_label:
+            raise Exception("Please call the .run() method first")
+        return self.best_label.path
 
     @property
     def total_cost(self):
         """
         Get accumulated cost along the path.
         """
-        return self.best_path.weight
+        if not self.best_label:
+            raise Exception("Please call the .run() method first")
+        return self.best_label.weight
 
     @property
     def consumed_resources(self):
         """
         Get accumulated resources consumed along the path.
         """
-        return self.best_path.res
+        if not self.best_label:
+            raise Exception("Please call the .run() method first")
+        return self.best_label.res
 
     ###########################
     # Classify Algorithm Type #
@@ -390,33 +403,33 @@ class BiDirectional:
         else:
             # If mono-directional algorithm used, return the appropriate path
             if self.direc_in == "forward":
-                self.best_path = self.finalLabel["forward"]
+                self.best_label = self.finalLabel["forward"]
             else:
-                self.best_path = self._process_final_bwd_label()
+                self.best_label = self._process_final_bwd_label()
 
     def _check_paths(self):
         # if only forward path is source - sink
         if (self.finalLabel["forward"].path[-1] == "Sink"
                 and self.finalLabel["backward"].path[0] != "Source"):
-            self.best_path = self.finalLabel["forward"]
+            self.best_label = self.finalLabel["forward"]
         # if only backward path is source - sink
         elif (self.finalLabel["backward"].path[-1] == "Source"
               and self.finalLabel["forward"].path[-1] != "Sink"):
-            self.best_path = self._process_final_bwd_label()
+            self.best_label = self._process_final_bwd_label()
         # if both paths are source - sink
         elif (self.finalLabel["backward"].path[-1] == "Source"
               and self.finalLabel["forward"].path[-1] == "Sink"):
             # if forward path has a lower weight
             if (self.finalLabel["forward"].weight <
                     self.finalLabel["backward"].weight):
-                self.best_path = self.finalLabel["forward"]
+                self.best_label = self.finalLabel["forward"]
             # if backward path has a lower weight
             elif (self.finalLabel["backward"].weight <
                   self.finalLabel["forward"].weight):
-                self.best_path = self._process_final_bwd_label()
+                self.best_label = self._process_final_bwd_label()
             # Otherwise (equal weight) save forward path
             else:
-                self.best_path = self.finalLabel["forward"]
+                self.best_label = self.finalLabel["forward"]
         # if combination of the two is required
         else:
             return self._half_way()
@@ -425,7 +438,7 @@ class BiDirectional:
         # Reverse backward path
         label = self.finalLabel["backward"]
         label.path.reverse()
-        label.res = self.max_res_og - label.res
+        label.res = self._invert_bwd_res(label)
         return label
 
     def _half_way(self):
@@ -469,19 +482,58 @@ class BiDirectional:
                         fwd_best, bwd_min))
 
     def _join_labels(self, fwd_label, bwd_label):
-        # Join labels produced by a backward and forward label
+        """
+        Join labels produced by a backward and forward label.
+        
+        Paramaters
+        ----------
+        fwd_label : label.Label object
+        bwd_label : label.Label object
+        """
+        # reverse backward path
         bwd_label.path.reverse()
         # Reconstruct edge with edge data
         edge = (fwd_label.node, bwd_label.node,
                 self.G[fwd_label.node][bwd_label.node])
-        _label = fwd_label.get_new_label(edge, "forward")
-
+        # Extend forward label along joining edge
+        label = fwd_label.get_new_label(edge, "forward")
+        # Get total consumed resources (inverted)
+        total_res_bwd = self._invert_bwd_res(bwd_label)
+        # Record total weight, total_res and final path
         weight = fwd_label.weight + edge[2]['weight'] + bwd_label.weight
-        total_res = _label.res + (self.max_res_og - bwd_label.res)
+        total_res = label.res + total_res_bwd
         final_path = fwd_label.path + bwd_label.path
-        _path = Label(weight, "Sink", total_res, final_path)
+        best_label = Label(weight, "Sink", total_res, final_path)
         # Check resource feasibility
-        if _path.feasibility_check(self.max_res_og, self.min_res_og):
-            self.best_path = _path
+        if best_label.feasibility_check(self.max_res_in, self.min_res_in):
+            self.best_label = best_label
         else:
             raise Exception("Final path not resource feasible!")
+
+    def _invert_bwd_res(self, label_to_invert):
+        """
+        Invert total backward resource to make it forward compatible.
+        In the case when no REFs are provided, then this is simply the
+        difference between the input maximum resource limit and the resources
+        consumed by the backward path.
+        However, if custom REFs are provided we have to ensure we apply it to
+        obtain the inversion.
+
+        Parameters
+        ----------
+        label_to_invert : label.Label object
+
+        Returns
+        -------
+        array with forward compatible total resources consumed
+        """
+        if Label._REF_backward == sub:
+            return self.max_res_in - label_to_invert.res
+        # Otherwise:
+        # Create dummy edge with 'res_cost' attribute of the input label
+        edge = (0, 0, {'weight': 0, 'res_cost': label_to_invert.res})
+        # Create dummy label with maximum resource
+        label = Label(0, label_to_invert.node, self.max_res_in, [])
+        # Extend the dummy along the dummy edge to apply the custom REF
+        label_inverted = label.get_new_label(edge, "backward")
+        return label_inverted.res

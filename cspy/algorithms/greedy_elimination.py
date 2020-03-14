@@ -4,8 +4,11 @@ from __future__ import print_function
 import logging
 from numpy import array
 from networkx import astar_path, NetworkXException
+
+# Local imports
+from cspy.checking import check
 from cspy.algorithms.path import Path
-from cspy.preprocessing import check_and_preprocess
+from cspy.preprocessing import preprocess_graph
 
 log = logging.getLogger(__name__)
 
@@ -96,8 +99,10 @@ class GreedyElim:
                  REF=None,
                  preprocess=False,
                  return_G=False):
-        # Check input graph and parameters
-        self.G = check_and_preprocess(preprocess, G, max_res, min_res, REF)
+        # Check inputs
+        check(G, max_res, min_res, REF)
+        # Preprocess graph
+        self.G = preprocess_graph(G, max_res, min_res, preprocess, REF)
         # Input parameters
         self.max_res = max_res
         self.min_res = min_res
@@ -131,6 +136,8 @@ class GreedyElim:
         """
         Get list with nodes in calculated path.
         """
+        if not self.best_path:
+            raise Exception("Please call the .run() method first")
         return self.best_path.path
 
     @property
@@ -138,6 +145,8 @@ class GreedyElim:
         """
         Get accumulated cost along the path.
         """
+        if not self.best_path:
+            raise Exception("Please call the .run() method first")
         return self.best_path.cost
 
     @property
@@ -145,6 +154,8 @@ class GreedyElim:
         """
         Get accumulated resources consumed along the path.
         """
+        if not self.best_path:
+            raise Exception("Please call the .run() method first")
         return self.best_path.total_res
 
     def _algorithm(self):
