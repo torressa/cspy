@@ -54,7 +54,8 @@ and, increased efficiency
    api/cspy.GreedyElim
    api/cspy.GRASP
    api/cspy.PSOLGENT
-   api/cspy.check_and_preprocess
+   api/cspy.preprocess_graph
+   api/cspy.check
    api/cspy.Label
 
     
