@@ -13,7 +13,7 @@ setuptools.setup(
         "bidirectional algorithm", "tabu search"
     ],
     long_description_content_type="text/x-rst",
-    long_description=open("README.rst", "r").read(),
+    long_description=open("README.md", "r").read(),
     url="https://github.com/torressa/cspy",
     packages=setuptools.find_packages(),
     install_requires=['networkx', 'numpy'],
