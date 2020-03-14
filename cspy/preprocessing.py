@@ -1,41 +1,13 @@
 from logging import getLogger
 from networkx import single_source_bellman_ford
-from cspy.checks import (_check_res, _check_direction, _check_graph_attr,
-                         _check_edge_attr, _check_path, _check_REFs)
+from cspy.checking import check
 
 log = getLogger(__name__)
 
 
-def check(G, max_res=None, min_res=None, direction=None, algorithm=None):
-    """Check whether inputs have the appropriate attributes and
-    are of the appropriate types."""
-
-    errors = []
-    # Select checks to perform based on the input provided
-    if max_res and min_res and direction:
-        check_funcs = [
-            _check_res, _check_direction, _check_graph_attr, _check_edge_attr,
-            _check_path
-        ]
-    elif max_res and min_res:
-        check_funcs = [
-            _check_res, _check_graph_attr, _check_edge_attr, _check_path
-        ]
-    else:
-        check_funcs = [_check_path]
-    # Check all functions in check_funcs
-    for func in check_funcs:
-        try:
-            func(G, max_res, min_res, direction, algorithm)
-        except Exception as e:
-            errors.append(e)  # if check fails save error message
-    if errors:
-        # if any check has failed raise an exception with all the errors
-        raise Exception('\n'.join('{}'.format(item) for item in errors))
-
-
 def prune_graph(G, max_res, min_res):
-    """Removes nodes that cannot be reached due to resource limits.
+    """
+    Graph pruning to remove unreachable nodes.
 
     Note
     -----
@@ -46,7 +18,6 @@ def prune_graph(G, max_res, min_res):
     because of node_k, therefore, we add path[key][-2] = node_k to
     the dictionary of nodes to remove.
     """
-
     def _check_resource(r):
         # check resource r's feasibility along a path
 
@@ -103,25 +74,20 @@ def prune_graph(G, max_res, min_res):
     return G
 
 
-def check_and_preprocess(preprocess,
-                         G,
-                         max_res=None,
-                         min_res=None,
-                         REF_forward=None,
-                         REF_backward=None,
-                         direction=None,
-                         algorithm=None):
+def preprocess_graph(
+    G,
+    max_res,
+    min_res,
+    preprocess,
+    REF_forward=None,
+    REF_backward=None,
+):
     """
-    Checks whether inputs and the graph are of the appropriate types and
-    have the required properties.
-    For non-specified REFs, removes nodes that cannot be reached due to
+    Applies preprocessing that removes nodes that cannot be reached due to
     resource limits.
 
     Parameters
     ----------
-    preprocess : bool
-        enables preprocessing routine.
-
     G : object instance :class:`nx.Digraph()`
         must have ``n_res`` graph attribute and all edges must have
         ``res_cost`` attribute.
@@ -135,27 +101,15 @@ def check_and_preprocess(preprocess,
         :math:`[U, L_1, L_2, ..., L_{nres}]` lower bounds for resource usage.
         We must have ``len(min_res)`` :math:`=` ``len(max_res)`` :math:`\geq 2`
 
-    REF_forward, REF_backward : function, optional
-        Custom resource extension function. See `REFs`_ for more details.
-        Default: additive, subtractive.
+    preprocess : bool
+        enables preprocessing routine.
 
-    direction : string, optional
-        preferred search direction. Either 'both','forward', or, 'backward'.
-        Default : 'both'.
+    :return: If ``preprocess`` is True, returns the preprocessed graph if no
+        exceptions are raised.
 
-    .. _REFs : https://cspy.readthedocs.io/en/latest/how_to.html#refs
-
-    :return: If ``preprocess``, returns preprocessed graph ``G`` if no
-        exceptions are raised, otherwise doesn't return anything.
-
-    :raises: Raises exceptions if incorrect input is given.
-        If multiple exceptions are raised, an exception with a list of
-        exceptions is raised.
     """
-    check(G, max_res, min_res, direction, algorithm)
     if REF_forward or REF_backward:
         # Cannot apply pruning with custom REFs
-        _check_REFs(REF_forward, REF_backward)
         return G
     if preprocess:
         G = prune_graph(G, max_res, min_res)

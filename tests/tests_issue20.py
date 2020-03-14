@@ -31,7 +31,15 @@ class TestsIssue20(unittest.TestCase):
         """
         Find shortest path of simple test digraph using Tabu
         """
-        path = Tabu(self.G, self.max_res, self.min_res).run()
+        tabu = Tabu(self.G, self.max_res, self.min_res)
+        tabu.run()
+        path = tabu.path
+        cost = tabu.total_cost
+        total_res = tabu.consumed_resources
+        # Check attributes
+        self.assertEqual(cost, 0)
+        self.assertTrue(all(total_res == [2, 1]))
+        # Check path
         self.assertEqual(path, ['Source', 1, 'Sink'])
         self.assertTrue(all(e in self.G.edges() for e in zip(path, path[1:])))
 

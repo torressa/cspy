@@ -2,9 +2,13 @@ from __future__ import absolute_import
 from __future__ import print_function
 
 from numpy import array
+from operator import add
 from networkx import astar_path, NetworkXException
+
+# Local imports
+from cspy.checking import check
 from cspy.algorithms.path import Path
-from cspy.preprocessing import check_and_preprocess
+from cspy.preprocessing import preprocess_graph
 
 
 class Tabu:
@@ -69,15 +73,17 @@ class Tabu:
         >>> G.add_edge('F', 'Sink', res_cost=array([1, 1]), weight=1)
         >>> G.add_edge('E', 'Sink', res_cost=array([1, 1]), weight=1)
         >>> max_res, min_res = [5, 5], [0, 0]
-        >>> path = Tabu(G, max_res, min_res).run()
-        >>> print(path)
+        >>> tabu = Tabu(G, max_res, min_res)
+        >>> tabu.run()
+        >>> print(tabu.path)
         ['Source', 'A', 'C', 'D', 'E', 'Sink']
 
     """
-
     def __init__(self, G, max_res, min_res, REF=None, preprocess=False):
-        # Check input graph and parameters
-        self.G = check_and_preprocess(preprocess, G, max_res, min_res, REF)
+        # Check inputs
+        check(G, max_res, min_res, REF)
+        # Preprocess graph
+        self.G = preprocess_graph(G, max_res, min_res, preprocess, REF)
         # Input parameters
         self.max_res = max_res
         self.min_res = min_res
@@ -90,24 +96,55 @@ class Tabu:
         self.neighbourhood = list()
         self.tabu_edge = None
         self.edges_to_check = dict(self.G.edges())
-
+        # To return
+        self.best_path = None
+        # Set path class attribute
         if REF:
             Path._REF = REF
+        else:
+            Path._REF = add
 
     def run(self):
         """
-        Runs Tabu Search with resource constraints for the input graph
+        Calculate shortest path with resource constraints.
         """
         while self.stop is False:
-            self.algorithm()
+            self._algorithm()
             self.iteration += 1
 
         if self.best_path:
-            return self.best_path
+            pass
         else:
             raise Exception("No resource feasible path has been found")
 
-    def algorithm(self):
+    @property
+    def path(self):
+        """
+        Get list with nodes in calculated path.
+        """
+        if not self.best_path:
+            raise Exception("Please call the .run() method first")
+        return self.best_path.path
+
+    @property
+    def total_cost(self):
+        """
+        Get accumulated cost along the path.
+        """
+        if not self.best_path:
+            raise Exception("Please call the .run() method first")
+        return self.best_path.cost
+
+    @property
+    def consumed_resources(self):
+        """
+        Get accumulated resources consumed along the path.
+        """
+        if not self.best_path:
+            raise Exception("Please call the .run() method first")
+        return self.best_path.total_res
+
+    def _algorithm(self):
         path = []
         try:
             path = astar_path(self.G,
@@ -118,11 +155,12 @@ class Tabu:
             pass
         if path:
             self._update_path(path)
-            edge_or_true = Path(self.G, self.current_path, self.max_res,
-                                self.min_res)._check_feasibility()
+            # Create path object
+            _path = Path(self.G, self.current_path, self.max_res, self.min_res)
+            edge_or_true = _path.check_feasibility()
             if edge_or_true is True:
                 self.stop = True
-                self.best_path = self.current_path
+                self.best_path = _path
             else:
                 self._get_neighbour(edge_or_true)
         else:
@@ -133,6 +171,7 @@ class Tabu:
         if self.iteration == 0:
             self.current_path = path
         if self.neighbour in self.current_path:
+            # Update current_path attribute
             self.current_path = list(node for node in self.current_path if (
                 node != self.neighbour and self.current_path.index(
                     node) < self.current_path.index(self.neighbour))) + path

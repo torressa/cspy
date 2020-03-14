@@ -59,6 +59,14 @@ python3 -m pip install cspy
 
 ### Usage Examples
 
+The generic gist to run the algorithms on a specific graph is to load the
+algorithm of choice, say `alg`, call the `alg.run()` method, and query the
+relevant result attributes,
+
+- `alg.path` for a list with the nodes in the path;
+- `alg.total_cost` for the accumulated cost of the path;
+- `alg.consumed_resources` for the accumulated resource usage of the path.
+
 Please see the individual algorithms API Documentation for specific examples and more details:
 
 - [Bidirectional and monodirectional algorithms](https://cspy.readthedocs.io/en/latest/api/cspy.BiDirectional.html)

@@ -8,7 +8,8 @@ from numpy import array
 # Local imports
 from examples.cgar.classes import Flight
 from examples.cgar.constants import (AIRLINES_DATA, CREW_COST, CREW_REST,
-                                     MAX_CREWD1, MAX_CREWD2, MIN_MAINT, PENALTY)
+                                     MAX_CREWD1, MAX_CREWD2, MIN_MAINT,
+                                     PENALTY)
 from examples.cgar.time_space_network import TSN
 
 sys.path.append("../../cspy")
@@ -57,7 +58,8 @@ class Subproblem:
         # Get first flight for aircraft
         self.first_flight, self.max_FH = self._get_first_flight()
         # Classify aircraft
-        self.k_type = Flight._classify_aircraft(self.first_flight.aircraft.type)
+        self.k_type = Flight._classify_aircraft(
+            self.first_flight.aircraft.type)
         self.k_make = self.first_flight.aircraft.type
         self._get_flight_copy = TSN._get_flight_copy
 
@@ -82,16 +84,19 @@ class Subproblem:
         n_edges = len(G.edges())
         crew_ub = AIRLINES_DATA[self.airline]['crew_budget']
         max_res = [
-            n_edges, 0.0, self.max_FH, crew_ub, MAX_CREWD1, MAX_CREWD2, 0.0, 1.0
+            n_edges, 0.0, self.max_FH, crew_ub, MAX_CREWD1, MAX_CREWD2, 0.0,
+            1.0
         ]
         min_res = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-        path = BiDirectional(G,
-                             max_res,
-                             min_res,
-                             direction='both',
-                             preprocess=True,
-                             REF_forward=self.REF,
-                             REF_backward=self.REF_backward).run()
+        bidirec = BiDirectional(G,
+                                max_res,
+                                min_res,
+                                direction='both',
+                                preprocess=True,
+                                REF_forward=self.REF,
+                                REF_backward=self.REF_backward)
+        bidirec.run()
+        path = bidirec.path
         self.shortest_path = [(edge[2]['data'], edge[2]['weight'])
                               for edge in G.edges(data=True)
                               if edge[0:2] in zip(path, path[1:])]
@@ -103,10 +108,9 @@ class Subproblem:
         vector ``res`` and the extension through ``edge`` to update the
         cumulative resource vector.
         """
-
         def _check_hub(airport, airline):
-            return any(
-                base in airport for base in AIRLINES_DATA[airline]['hub'])
+            return any(base in airport
+                       for base in AIRLINES_DATA[airline]['hub'])
 
         def _check_flight(flight, penalty=False):
             """
@@ -128,13 +132,15 @@ class Subproblem:
                 closest_flight = self._get_flight_copy(self.Data.flights,
                                                        edge_data)
                 # Find original flight
-                if closest_flight and (
-                    (closest_flight.type == 0 and edge_data['data']['departure']
-                     - closest_flight.departure >= 2) or
-                    (closest_flight.type == 1 and edge_data['data']['departure']
-                     - closest_flight.departure >= 3) or
-                    (closest_flight.type == 2 and edge_data['data']['departure']
-                     - closest_flight.departure) >= 4):
+                if closest_flight and ((closest_flight.type == 0
+                                        and edge_data['data']['departure'] -
+                                        closest_flight.departure >= 2) or
+                                       (closest_flight.type == 1
+                                        and edge_data['data']['departure'] -
+                                        closest_flight.departure >= 3) or
+                                       (closest_flight.type == 2
+                                        and edge_data['data']['departure'] -
+                                        closest_flight.departure) >= 4):
                     # If delay wrt original flight exceeds regulations
                     pasg = 1
 
@@ -154,9 +160,9 @@ class Subproblem:
                     crewd2 = 0  # crew duty 2 reset regardless of airport
             else:
                 # Flight (deadhead or not)
-                if ((self.k_type == 1 and flight.type > self.k_type) or
-                    ((self.k_type == 2 or self.k_type == 0) and
-                     flight.type != self.k_type)):
+                if ((self.k_type == 1 and flight.type > self.k_type)
+                        or ((self.k_type == 2 or self.k_type == 0)
+                            and flight.type != self.k_type)):
                     # If flight doesn't match aircraft type
                     air = 1
                 maint += duration  # maintenance
@@ -192,8 +198,8 @@ class Subproblem:
                 # Retrieve potential flight
                 dummy_list = list(
                     f for f in self.Data.flights
-                    if f.origin == i_airport and f.destination == j_airport and
-                    f.departure - f.arrival == j_time - i_time)
+                    if f.origin == i_airport and f.destination == j_airport
+                    and f.departure - f.arrival == j_time - i_time)
                 if dummy_list:
                     dummy_f = dummy_list[0]
                 else:
@@ -208,10 +214,9 @@ class Subproblem:
         cumulative resource vector ``res`` and the extension through
         ``edge`` to update the cumulative resource vector.
         """
-
         def _check_hub(airport, airline):
-            return any(
-                base in airport for base in AIRLINES_DATA[airline]['hub'])
+            return any(base in airport
+                       for base in AIRLINES_DATA[airline]['hub'])
 
         def _check_flight(flight, penalty=False):
             """
@@ -233,13 +238,15 @@ class Subproblem:
                 closest_flight = self._get_flight_copy(self.Data.flights,
                                                        edge_data)
                 # Find original flight
-                if closest_flight and (
-                    (closest_flight.type == 0 and edge_data['data']['departure']
-                     - closest_flight.departure >= 2) or
-                    (closest_flight.type == 1 and edge_data['data']['departure']
-                     - closest_flight.departure >= 3) or
-                    (closest_flight.type == 2 and edge_data['data']['departure']
-                     - closest_flight.departure) >= 4):
+                if closest_flight and ((closest_flight.type == 0
+                                        and edge_data['data']['departure'] -
+                                        closest_flight.departure >= 2) or
+                                       (closest_flight.type == 1
+                                        and edge_data['data']['departure'] -
+                                        closest_flight.departure >= 3) or
+                                       (closest_flight.type == 2
+                                        and edge_data['data']['departure'] -
+                                        closest_flight.departure) >= 4):
                     # If delay wrt original flight exceeds regulations
                     pasg = 1
 
@@ -259,9 +266,9 @@ class Subproblem:
                     crewd2 = MAX_CREWD2  # crew duty 2 reset
             else:
                 # Flight (deadhead or not)
-                if ((self.k_type == 1 and flight.type > self.k_type) or
-                    ((self.k_type == 2 or self.k_type == 0) and
-                     flight.type != self.k_type)):
+                if ((self.k_type == 1 and flight.type > self.k_type)
+                        or ((self.k_type == 2 or self.k_type == 0)
+                            and flight.type != self.k_type)):
                     # If flight doesn't match aircraft type
                     air = 1
                 maint += duration  # maintenance
@@ -297,8 +304,8 @@ class Subproblem:
                 # Retrieve potential flight
                 dummy_list = list(
                     f for f in self.Data.flights
-                    if f.origin == i_airport and f.destination == j_airport and
-                    f.departure - f.arrival == j_time - i_time)
+                    if f.origin == i_airport and f.destination == j_airport
+                    and f.departure - f.arrival == j_time - i_time)
                 if dummy_list:
                     dummy_f = dummy_list[0]
                 else:

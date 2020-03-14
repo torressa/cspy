@@ -48,7 +48,15 @@ class TestsIssue22(unittest.TestCase):
         """
         Find shortest path of simple test digraph using Tabu.
         """
-        path = Tabu(self.G, self.max_res, self.min_res).run()
+        tabu = Tabu(self.G, self.max_res, self.min_res)
+        tabu.run()
+        path = tabu.path
+        cost = tabu.total_cost
+        total_res = tabu.consumed_resources
+        # Check attributes
+        self.assertEqual(cost, 0)
+        self.assertTrue(all(total_res == [2, 1]))
+        # Check path
         self.assertEqual(path, ['Source', 1, 'Sink'])
         self.assertTrue(all(e in self.G.edges() for e in zip(path, path[1:])))
         # Check if networkx's astar_path gives the same path
@@ -59,54 +67,72 @@ class TestsIssue22(unittest.TestCase):
         """
         Find shortest path of simple test digraph using BiDirectional.
         """
-        alg_obj = BiDirectional(self.G,
+        bidirec = BiDirectional(self.G,
                                 self.max_res,
                                 self.min_res,
                                 seed=self.test_seed)
         # Check classification
         with self.assertLogs('cspy.algorithms.bidirectional') as cm:
-            alg_obj.name_algorithm()
+            bidirec.name_algorithm()
         # Log should contain the word 'dynamic'
         self.assertRegex(cm.output[0], 'dynamic')
-        # Check path
-        path = alg_obj.run()
+
+        bidirec.run()
+        path = bidirec.path
+        cost = bidirec.total_cost
+        total_res = bidirec.consumed_resources
+        # Check path and other attributes
         self.assertEqual(path, ['Source', 2, 1, 'Sink'])
+        self.assertEqual(cost, -10)
+        self.assertTrue(all(total_res == [3, 2]))
 
     def testBiDirectionalForward(self):
         """
         Find shortest path of simple test digraph using BiDirectional
         algorithm with only forward direction.
         """
-        alg_obj = BiDirectional(self.G,
+        bidirec = BiDirectional(self.G,
                                 self.max_res,
                                 self.min_res,
                                 direction='forward')
         # Check classification
         with self.assertLogs('cspy.algorithms.bidirectional') as cm:
-            alg_obj.name_algorithm()
+            bidirec.name_algorithm()
         # Log should contain the word 'forward'
         self.assertRegex(cm.output[0], 'forward')
-        # Check path
-        path = alg_obj.run()
+
+        bidirec.run()
+        path = bidirec.path
+        cost = bidirec.total_cost
+        total_res = bidirec.consumed_resources
+        # Check path and other attributes
         self.assertEqual(path, ['Source', 2, 1, 'Sink'])
+        self.assertEqual(cost, -10)
+        self.assertTrue(all(total_res == [3, 2]))
 
     def testBiDirectionalBackward(self):
         """
         Find shortest path of simple test digraph using BiDirectional
         algorithm with only backward direction.
         """
-        alg_obj = BiDirectional(self.G,
+        bidirec = BiDirectional(self.G,
                                 self.max_res,
                                 self.min_res,
                                 direction='backward')
         # Check classification
         with self.assertLogs('cspy.algorithms.bidirectional') as cm:
-            alg_obj.name_algorithm()
-        # Log should contain the word 'backward'
+            bidirec.name_algorithm()
+        # Log should contain the word 'forward'
         self.assertRegex(cm.output[0], 'backward')
-        # Check path
-        path = alg_obj.run()
+
+        bidirec.run()
+        path = bidirec.path
+        cost = bidirec.total_cost
+        total_res = bidirec.consumed_resources
+        # Check path and other attributes
         self.assertEqual(path, ['Source', 2, 1, 'Sink'])
+        self.assertEqual(cost, -10)
+        self.assertTrue(all(total_res == [3, 2]))
 
 
 if __name__ == '__main__':

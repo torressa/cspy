@@ -42,9 +42,12 @@ Algorithms
 ~~~~~~~~~~
 
 Have a look and choose which algorithm you'd like to use. 
-In order to run the algorithms create a appropriate algorithm instance 
-(with the appropriate inputs) and call ``run()``.
-
+In order to run the algorithms create a appropriate algorithm instance, say ``alg``,
+(with the appropriate inputs), call ``alg.run()``, and then access the different elements from the solution.
+Attributes include ``alg.path`` for a list with the nodes in the path, 
+``alg.total_cost`` for the accumulated cost of the path,
+and ``alg.consumed_resources`` for the accumulated resource usage of the path.
+ 
 - :class:`BiDirectional`: `Bidirectional and monodirectional algorithms`_
 - :class:`Tabu` `Heuristic Tabu Search`_
 - :class:`GreedyElim` `Greedy Elimination Procedure`_

@@ -77,8 +77,9 @@ class Label(object):
                     "{} cannot be used as a direction".format(direction))
             return True
 
-    def get_new_label(self, edge, direction, weight, res):
+    def get_new_label(self, edge, direction):
         path = list(self.path)
+        weight, res = edge[2]["weight"], edge[2]["res_cost"]
         node = edge[1] if direction == "forward" else edge[0]
         if node in path:  # If node already visited.
             return None
