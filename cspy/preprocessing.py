@@ -100,7 +100,7 @@ def preprocess_graph(
     min_res : list of floats, optional
         :math:`[U, L_1, L_2, ..., L_{nres}]` lower bounds for resource usage.
         We must have ``len(min_res)`` :math:`=` ``len(max_res)`` :math:`\geq 2`
-    
+
     preprocess : bool
         enables preprocessing routine.
 

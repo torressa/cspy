@@ -96,7 +96,6 @@ class Subproblem:
                                 REF_forward=self.REF,
                                 REF_backward=self.REF_backward)
         bidirec.run()
-        bidirec.path
         path = bidirec.path
         self.shortest_path = [(edge[2]['data'], edge[2]['weight'])
                               for edge in G.edges(data=True)
