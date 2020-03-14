@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v0.0.12] - 14/03/2020
+
 ### Changed
 
 - Documentation.
@@ -18,7 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Backwards incompatible path, cost and total_resource feature.
 - Preprocessing functions.
 
-## [v0.0.11] 06/03/2020
+## [v0.0.11] - 06/03/2020
 
 ## Fixed
 
@@ -111,7 +113,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Docstring modifications to include maths.
 - Updated README.
 
-[unreleased]: https://github.com/torressa/cspy/compare/v0.0.11...HEAD
+[unreleased]: https://github.com/torressa/cspy/compare/v0.0.12...HEAD
 [v0.0.12]: https://github.com/torressa/cspy/compare/v0.0.11...v0.0.12
 [v0.0.11]: https://github.com/torressa/cspy/compare/v0.0.10...v0.0.11
 [v0.0.11]: https://github.com/torressa/cspy/compare/v0.0.10...v0.0.11

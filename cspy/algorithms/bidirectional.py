@@ -94,8 +94,9 @@ class BiDirectional:
         >>> G.add_edge("B", "Sink", res_cost=array([1, 2]), weight=10)
         >>> G.add_edge("C", "Sink", res_cost=array([1, 10]), weight=0)
         >>> max_res, min_res = [4, 20], [1, 0]
-        >>> path = BiDirectional(G, max_res, min_res, direction="both").run()
-        >>> print(path)
+        >>> bidirec = BiDirectional(G, max_res, min_res, direction="both")
+        >>> bidirec.run()
+        >>> print(bidirec.path)
         ["Source", "A", "B", "C", "Sink"]
 
     .. _Tilk 2017: https://www.sciencedirect.com/science/article/pii/S0377221717302035
@@ -174,8 +175,6 @@ class BiDirectional:
             else:
                 break
         return self._process_paths()
-
-    # Return
 
     @property
     def path(self):

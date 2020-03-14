@@ -3,7 +3,9 @@ from numpy import equal
 
 
 class Label(object):
-    """Label object that allows comparison and the modelling of dominance relations
+    """
+    Label object that allows comparison and the modelling of dominance
+    relations.
 
     Parameters
     -----------
