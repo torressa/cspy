@@ -1,4 +1,4 @@
-from networkx import (DiGraph, NetworkXException, NetworkXUnbounded, has_path,
+from networkx import (DiGraph, NetworkXException, has_path,
                       negative_edge_cycle)
 from numpy import ndarray
 

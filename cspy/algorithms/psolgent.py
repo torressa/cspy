@@ -210,7 +210,7 @@ class PSOLGENT(StandardGraph):
         >>> psolgent.run()
         >>> print(psolgent.path)
         ['Source', 'A', 'C', 'D', 'E', 'Sink']
-        
+
     """
 
     __metaclass__ = ABCMeta

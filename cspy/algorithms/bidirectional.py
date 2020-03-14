@@ -484,7 +484,7 @@ class BiDirectional:
     def _join_labels(self, fwd_label, bwd_label):
         """
         Join labels produced by a backward and forward label.
-        
+
         Paramaters
         ----------
         fwd_label : label.Label object

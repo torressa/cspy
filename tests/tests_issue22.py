@@ -122,6 +122,9 @@ class TestsIssue22(unittest.TestCase):
         # Check classification
         with self.assertLogs('cspy.algorithms.bidirectional') as cm:
             bidirec.name_algorithm()
+        # Log should contain the word 'forward'
+        self.assertRegex(cm.output[0], 'backward')
+
         bidirec.run()
         path = bidirec.path
         cost = bidirec.total_cost
