@@ -6,6 +6,7 @@ from networkx import DiGraph
 
 sys.path.append("../")
 from cspy.algorithms.tabu import Tabu
+from cspy.algorithms.bidirectional import BiDirectional
 
 
 class TestsIssue20(unittest.TestCase):
@@ -26,6 +27,22 @@ class TestsIssue20(unittest.TestCase):
         self.G.add_edge(2, 1, weight=-10, res_cost=array([1, 1]))
 
         self.max_res, self.min_res = [len(self.G.edges()), 2], [0, 0]
+
+    def testBiDirectional(self):
+        """
+        Find shortest path of simple test digraph using BiDirectional
+        """
+        bidirec = BiDirectional(self.G, self.max_res, self.min_res)
+        bidirec.run()
+        path = bidirec.path
+        cost = bidirec.total_cost
+        total_res = bidirec.consumed_resources
+        # Check path
+        self.assertEqual(path, ['Source', 2, 1, 'Sink'])
+        # Check attributes
+        self.assertEqual(cost, -10)
+        self.assertTrue(all(total_res == [2, 1]))
+        self.assertTrue(all(e in self.G.edges() for e in zip(path, path[1:])))
 
     def testTabu(self):
         """

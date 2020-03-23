@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- dev requirements file
+
+### Changed
+
+- Bidirections:
+  - Resource based comparisons for label extension
+  - Simplified attributes.
+  - Implemented full path joining procedure from [Righini and Salani (2006)](https://www.sciencedirect.com/science/article/pii/S1572528606000417).
+- parameterized some tests.
+
 ## [v0.0.12] - 14/03/2020
 
 ### Changed
