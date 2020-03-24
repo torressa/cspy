@@ -105,7 +105,7 @@ class Subproblem:
     def REF(self, res, edge):
         """
         Custom resource extension function that uses a cumulative resource
-        vector ``res`` and the extension through ``edge`` to update the
+        vector `res` and the extension through `edge` to update the
         cumulative resource vector.
         """
         def _check_hub(airport, airline):

@@ -4,6 +4,8 @@ import unittest
 from networkx import DiGraph
 from numpy import array
 
+from parameterized import parameterized
+
 sys.path.append("../")
 from cspy.algorithms.tabu import Tabu
 from cspy.algorithms.label import Label
@@ -31,16 +33,15 @@ class TestsIssue17(unittest.TestCase):
         self.G.add_edge(4, "Sink", weight=3, res_cost=array([1, 1]))
         # Maximum and minimum resource arrays
         self.max_res, self.min_res = [len(self.G.edges()), 6], [0, 0]
-        self.test_seed = 1000
 
-    def testBiDirectionalBothDynamic(self):
+    @parameterized.expand(zip(range(100), range(100)))
+    def testBiDirectionalBothDynamic(self, _, seed):
         """
-        Find shortest path of simple test digraph using the BiDirectional.
+        Find shortest path of simple test digraph using the BiDirectional
+        algorithm for a range of seeds.
+        Note the first argument is required to work using parameterized and unittest.
         """
-        bidirec = BiDirectional(self.G,
-                                self.max_res,
-                                self.min_res,
-                                seed=self.test_seed)
+        bidirec = BiDirectional(self.G, self.max_res, self.min_res, seed=seed)
         # Check classification
         with self.assertLogs('cspy.algorithms.bidirectional') as cm:
             bidirec.name_algorithm()

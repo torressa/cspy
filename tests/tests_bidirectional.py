@@ -16,26 +16,22 @@ class TestsBiDirectional(unittest.TestCase):
     Includes algorithm classification, and some exception handling.
     """
     def setUp(self):
-        # Maximum and mimum resource arrays
+        # Maximum and minimum resource arrays
         self.max_res, self.min_res = [4, 20], [1, 0]
-        # Create simple digraph with approrpiate attributes
+        # Create simple digraph with appropriate attributes
         self.G = DiGraph(directed=True, n_res=2)
         self.G.add_edge('Source', 'A', res_cost=array([1, 2]), weight=-1)
         self.G.add_edge('A', 'B', res_cost=array([1, 0.3]), weight=-1)
         self.G.add_edge('B', 'C', res_cost=array([1, 3]), weight=-10)
         self.G.add_edge('B', 'Sink', res_cost=array([1, 2]), weight=10)
         self.G.add_edge('C', 'Sink', res_cost=array([1, 10]), weight=-1)
-        self.test_seed = 1000
 
     def testBiDirectionalBothDynamic(self):
         """
         Find shortest path of simple test digraph using the BiDirectional
         algorithm with dynamic halfway point.
         """
-        bidirec = BiDirectional(self.G,
-                                self.max_res,
-                                self.min_res,
-                                seed=self.test_seed)
+        bidirec = BiDirectional(self.G, self.max_res, self.min_res)
         # Check classification
         with self.assertLogs('cspy.algorithms.bidirectional') as cm:
             bidirec.name_algorithm()

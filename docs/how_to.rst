@@ -70,7 +70,7 @@ Please see individual algorithm documentation for simple examples.
 .. _Particle Swarm Optimization with combined Local and Global Expanding Neighbourhood Topology: https://cspy.readthedocs.io/en/latest/api/cspy.PSOLGENT.html
 .. _GRASP: https://cspy.readthedocs.io/en/latest/api/cspy.GRASP.html
 .. _Marinakis et al 2017: https://www.sciencedirect.com/science/article/pii/S0377221717302357z
-.. _examples: https://github.com/torressa/cspy/examples/
+.. _examples: https://github.com/torressa/cspy/tree/master/examples/
 
 Pre-requirements
 ~~~~~~~~~~~~~~~~

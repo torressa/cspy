@@ -18,7 +18,7 @@ jobs:
           command: |
             python3 -m venv venv
             . venv/bin/activate
-            pip install -r requirements.txt
+            pip install -r requirements.dev.txt
             pip install -r examples/cgar/requirements.txt
       - run:
           name: run tests
@@ -38,7 +38,7 @@ jobs:
           command: |
             python3 -m venv venv
             . venv/bin/activate
-            pip install -r requirements.txt
+            pip install -r requirements.dev.txt
             pip install -r examples/cgar/requirements.txt
       - run:
           name: run tests
@@ -58,7 +58,7 @@ jobs:
           command: |
             python3 -m venv venv
             . venv/bin/activate
-            pip install -r requirements.txt
+            pip install -r requirements.dev.txt
             pip install -r examples/cgar/requirements.txt
             pip install codecov
       - run:

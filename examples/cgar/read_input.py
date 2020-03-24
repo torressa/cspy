@@ -81,8 +81,7 @@ def get_ground_connections(aircraft_list, flights):
     """
     ground = list(
         f._instance_from(f.destination, f_n.origin, f.arrival, f_n.departure)
-        for k in aircraft_list
-        for f, f_n in zip(
+        for k in aircraft_list for f, f_n in zip(
             sorted([f for f in flights if f.aircraft.tail == k],
                    key=lambda x: x.departure),
             sorted([f for f in flights if f.aircraft.tail == k],
