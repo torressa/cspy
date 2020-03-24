@@ -34,10 +34,12 @@ class TestsIssue17(unittest.TestCase):
         # Maximum and minimum resource arrays
         self.max_res, self.min_res = [len(self.G.edges()), 6], [0, 0]
 
-    @parameterized.expand(zip(range(1000), range(1000)))
+    @parameterized.expand(zip(range(100), range(100)))
     def testBiDirectionalBothDynamic(self, _, seed):
         """
-        Find shortest path of simple test digraph using the BiDirectional.
+        Find shortest path of simple test digraph using the BiDirectional
+        algorithm for a range of seeds.
+        Note the first argument is required to work using parameterized and unittest.
         """
         bidirec = BiDirectional(self.G, self.max_res, self.min_res, seed=seed)
         # Check classification

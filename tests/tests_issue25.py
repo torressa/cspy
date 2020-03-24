@@ -28,13 +28,14 @@ class TestsIssue25(unittest.TestCase):
         self.G.add_edge('B', 'Sink', res_cost=array([1, 2]), weight=10)
         self.G.add_edge('C', 'Sink', res_cost=array([1, 10]), weight=-1)
 
-    @parameterized.expand(zip(range(1000), range(1000)))
+    @parameterized.expand(zip(range(100), range(100)))
     def testBiDirectionalBothDynamic(self, _, seed):
         """
         Find shortest path of simple test digraph using the BiDirectional
-        algorithm with dynamic halfway point.
+        algorithm for a range of seeds.
+        Note the first argument is required to work using parameterized and unittest.
         """
-        bidirec = BiDirectional(self.G, self.max_res, self.min_res, seed=seed)
+        bidirec = BiDirectional(self.G, self.max_res, self.min_res, seed=13)
         # Check classification
         with self.assertLogs('cspy.algorithms.bidirectional') as cm:
             bidirec.name_algorithm()

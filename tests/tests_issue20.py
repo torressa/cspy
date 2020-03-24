@@ -41,7 +41,7 @@ class TestsIssue20(unittest.TestCase):
         self.assertEqual(path, ['Source', 2, 1, 'Sink'])
         # Check attributes
         self.assertEqual(cost, -10)
-        self.assertTrue(all(total_res == [2, 1]))
+        self.assertTrue(all(total_res == [3, 2]))
         self.assertTrue(all(e in self.G.edges() for e in zip(path, path[1:])))
 
     def testTabu(self):

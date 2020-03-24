@@ -9,14 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- dev requirements file
+- Included dev requirements file with new package for testing and examples requirements.
 
 ### Changed
 
-- Bidirections:
+- BiDirectional algorithm:
   - Resource based comparisons for label extension
   - Simplified attributes.
   - Implemented full path joining procedure from [Righini and Salani (2006)](https://www.sciencedirect.com/science/article/pii/S1572528606000417).
+  - Rectified half-way check.
 - parameterized some tests.
 
 ## [v0.0.12] - 14/03/2020

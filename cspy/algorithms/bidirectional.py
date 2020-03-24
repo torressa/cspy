@@ -127,24 +127,24 @@ class BiDirectional:
 
         # Algorithm specific parameters #
         # Current forward and backward labels
-        self.currentLabel = OrderedDict({
+        self.current_label = OrderedDict({
             "forward":
             Label(0, "Source", zeros(G.graph["n_res"]), ["Source"]),
             "backward":
             Label(0, "Sink", max_res, ["Sink"])
         })
         # Unprocessed labels dict (both directions)
-        self.unprocessedLabels = OrderedDict({
+        self.unprocessed_labels = OrderedDict({
             "forward": deque(),
             "backward": deque()
         })
         # Processed labels dict
-        self.processedLabels = OrderedDict({
+        self.processed_labels = OrderedDict({
             "forward": deque(),
             "backward": deque()
         })
         # Final labels dicts for unidirectional search
-        self.finalLabel = None
+        self.final_label = None
 
         # If given, set REFs for dominance relations and feasibility checks
         if REF_forward and REF_backward:
@@ -167,7 +167,7 @@ class BiDirectional:
         """
         Calculate shortest path with resource constraints.
         """
-        while self.currentLabel["forward"] or self.currentLabel["backward"]:
+        while self.current_label["forward"] or self.current_label["backward"]:
             direc = self._get_direction()
             if direc:
                 self._algorithm(direc)
@@ -226,22 +226,22 @@ class BiDirectional:
     #############
     def _get_direction(self):
         if self.direc_in == "both":
-            if (self.currentLabel["forward"]
-                    and not self.currentLabel["backward"]):
+            if (self.current_label["forward"]
+                    and not self.current_label["backward"]):
                 return "forward"
-            elif (not self.currentLabel["forward"]
-                  and self.currentLabel["backward"]):
+            elif (not self.current_label["forward"]
+                  and self.current_label["backward"]):
                 return "backward"
-            elif (self.currentLabel["forward"]
-                  and self.currentLabel["backward"]):
+            elif (self.current_label["forward"]
+                  and self.current_label["backward"]):
                 return self.random_state.choice(["forward", "backward"])
             else:  # if both are empty
                 return
         else:
-            if (not self.currentLabel["forward"]
-                    and not self.currentLabel["backward"]):
+            if (not self.current_label["forward"]
+                    and not self.current_label["backward"]):
                 return
-            elif not self.currentLabel[self.direc_in]:
+            elif not self.current_label[self.direc_in]:
                 return
             else:
                 return self.direc_in
@@ -250,56 +250,55 @@ class BiDirectional:
     # ALGORITHM #
     #############
     def _algorithm(self, direc):
-        log.debug("Direction = {}".format(direc))
         if direc == "forward":  # forward
             idx = 0  # index for head node
             # Update backwards half-way point
             self.min_res[0] = max(
                 self.min_res[0],
-                min(self.currentLabel[direc].res[0], self.max_res[0]))
+                min(self.current_label[direc].res[0], self.max_res[0]))
         else:  # backward
             idx = 1  # index for tail node
             # Update forwards half-way point
             self.max_res[0] = min(
                 self.max_res[0],
-                max(self.currentLabel[direc].res[0], self.min_res[0]))
+                max(self.current_label[direc].res[0], self.min_res[0]))
         # Select edges with the same head/tail node as the current label node.
         edges = deque(e for e in self.G.edges(data=True)
-                      if e[idx] == self.currentLabel[direc].node)
+                      if e[idx] == self.current_label[direc].node)
         # If Label not been seen before, initialise a list
         # Propagate current label along all suitable edges in current direction
         list(map(self._propagate_label, edges, repeat(direc, len(edges))))
         # Extend label
         next_label = self._get_next_label(direc)
         # Update current label
-        self.currentLabel[direc] = next_label
-        log.debug("current label = {}".format(next_label))
+        self.current_label[direc] = next_label
 
     def _propagate_label(self, edge, direc):
         # Label propagation #
         # Get new label from current Label
-        new_label = self.currentLabel[direc].get_new_label(edge, direc)
+        new_label = self.current_label[direc].get_new_label(edge, direc)
         # If the new label is resource feasible
         if new_label and new_label.feasibility_check(self.max_res,
                                                      self.min_res):
             # And is not already in the unprocessed labels list
-            if (new_label not in self.unprocessedLabels[direc]
-                    and new_label not in self.processedLabels[direc]):
-                self.unprocessedLabels[direc].append(new_label)
+            if (new_label not in self.unprocessed_labels[direc]
+                    and new_label not in self.processed_labels[direc]):
+                self.unprocessed_labels[direc].append(new_label)
 
     def _get_next_label(self, direc, exclude_label=None):
         # Label Extension #
         # Add current label to processed list.
-        current_label = self.currentLabel[direc]
-        unproc_labels = self.unprocessedLabels[direc]
-        self.processedLabels[direc].append(current_label)
+        current_label = self.current_label[direc]
+        unproc_labels = self.unprocessed_labels[direc]
+        self.processed_labels[direc].append(current_label)
         self._remove_unprocessed_labels([current_label], direc)
         # Return label with minimum monotone resource for the forward search
         # and the maximum monotone resource for the backward search
         if unproc_labels:
-            return (min(unproc_labels, key=lambda x: x.res[0])
-                    if direc == "forward" else max(unproc_labels,
-                                                   key=lambda x: x.res[0]))
+            if direc == "forward":
+                return min(unproc_labels, key=lambda x: x.res[0])
+            else:
+                return max(unproc_labels, key=lambda x: x.res[0])
         else:
             return None
 
@@ -313,8 +312,8 @@ class BiDirectional:
         removed.
         """
         # Reference attributes
-        current_label = self.currentLabel[direc]
-        unproc_labels = self.unprocessedLabels[direc]
+        current_label = self.current_label[direc]
+        unproc_labels = self.unprocessed_labels[direc]
         # If current label is not None (at termination)
         if current_label:
             keys_to_pop = deque()
@@ -336,50 +335,57 @@ class BiDirectional:
     def _remove_unprocessed_labels(self, keys_to_pop, direc):
         # Remove all processed labels from unprocessed dict
         for key_to_pop in list(set(keys_to_pop)):
-            if key_to_pop in self.unprocessedLabels[direc]:
-                log.debug("Key {} removed".format(key_to_pop))
-                idx = self.unprocessedLabels[direc].index(key_to_pop)
-                del self.unprocessedLabels[direc][idx]
+            if key_to_pop in self.unprocessed_labels[direc]:
+                idx = self.unprocessed_labels[direc].index(key_to_pop)
+                del self.unprocessed_labels[direc][idx]
 
     def _save_current_best_label(self, direc):
         """
         Label saving for unidirectional searches
         """
-        current_label = self.currentLabel[direc]
-        final_label = self.finalLabel
+        current_label = self.current_label[direc]
+        final_label = self.final_label
         # If first label
         if not final_label:
-            self.finalLabel = self.currentLabel[direc]
+            self.final_label = current_label
             return
         try:
-            current_label_dominates = current_label.dominates(
-                final_label, direc)
-            final_label_dominates = final_label.dominates(current_label, direc)
-            # Current label dominates final
-            if current_label_dominates:
+            if self._full_dominance_check(current_label, final_label, direc):
                 log.debug("Saving {} as best, with path {}".format(
                     current_label, current_label.path))
-                self.finalLabel = current_label
-            # Both non-dominated labels in this direction.
-            elif (not current_label_dominates and not final_label_dominates):
-                # flip directions
-                flip_direc = "forward" if direc == "backward" else "backward"
-                current_label_dominates_flipped = current_label.dominates(
-                    final_label, flip_direc)
-                if current_label_dominates_flipped:
-                    self.finalLabel = current_label
+                self.final_label = current_label
         except Exception:
             # Labels are not comparable i.e. Belong to different nodes
             if (direc == "forward" and (current_label.path[-1] == "Sink"
                                         or final_label.node == "Source")):
                 log.debug("Saving {} as best, with path {}".format(
-                    current_label, self.currentLabel[direc].path))
-                self.finalLabel = current_label
+                    current_label, current_label.path))
+                self.final_label = current_label
             elif (direc == "backward" and (current_label.path[-1] == "Source"
                                            or final_label.node == "Sink")):
                 log.debug("Saving {} as best, with path {}".format(
                     current_label, current_label.path))
-                self.finalLabel = current_label
+                self.final_label = current_label
+
+    def _full_dominance_check(self, label1, label2, direc):
+        """
+        Checks whether label 1 dominates label 2 for the input direction.
+        In the case when both labels are non-dominated,
+        the direction is flipped labels are compared again.
+        """
+        label1_dominates = label1.dominates(label2, direc)
+        label2_dominates = label2.dominates(label1, direc)
+        # label1 dominates label2 for the input direction
+        if label1_dominates:
+            return True
+        # Both non-dominated labels in this direction.
+        elif (not label1_dominates and not label2_dominates):
+            # flip directions
+            flip_direc = "forward" if direc == "backward" else "backward"
+            label1_dominates_flipped = label1.dominates(label2, flip_direc)
+            # label 1 dominates label2 in the flipped direction
+            if label1_dominates_flipped:
+                return True
 
     ###################
     # PATH PROCESSING #
@@ -387,14 +393,20 @@ class BiDirectional:
     def _process_paths(self):
         # Processing of output path.
         if self.direc_in == "both":
-            # If bi-directional algorithm used, run halfway procedure.
-            return self._join_paths()
+            # If bi-directional algorithm used, run path joining procedure.
+            self._join_paths()
         else:
             # If mono-directional algorithm used, return the appropriate path
             if self.direc_in == "forward":
-                self.best_label = self.finalLabel
+                self.best_label = self.final_label
             else:
-                self.best_label = self._process_bwd_label(self.finalLabel)
+                self.best_label = self._process_bwd_label(self.final_label)
+
+    def _process_bwd_label(self, label):
+        # Reverse backward path and inverts resource consumption
+        label.path.reverse()
+        label.res = self._invert_bwd_res(label)
+        return label
 
     def _join_paths(self):
         """
@@ -404,66 +416,41 @@ class BiDirectional:
 
         .. _Righini and Salani (2006): https://www.sciencedirect.com/science/article/pii/S1572528606000417
         """
+        # Parameter required for the Half-way procedure
+        difference = 1  # difference in the monotone resource of any pair of labels
         for i in self.G.nodes():
-            for fwd_label in (_ for _ in self.processedLabels["forward"]
-                              if _.node == i):
+            for fwd_label in (l for l in self.processed_labels["forward"]
+                              if l.node == i and l.res[0] <= self.max_res[0]):
                 for j in self.G.nodes():
-                    for bwd_label in (_
-                                      for _ in self.processedLabels["backward"]
-                                      if _.node == j):
-                        log.debug("Trying to merge {} with {}".format(
-                            fwd_label.path, bwd_label.path))
-                        try:
-                            # Half-way producer for two labels to merge
-                            _fwd_label, _bwd_label = self._half_way(
-                                fwd_label, bwd_label)
-                            # Merge two labels
-                            merged_label = self._merge_labels(
-                                _fwd_label, _bwd_label)
-                            # Check resource feasibility
-                            if merged_label.feasibility_check(
-                                    self.max_res_in, self.min_res_in):
-                                # Save label
-                                self._save(merged_label)
-                        except Exception:
-                            pass
+                    for bwd_label in (
+                            l for l in self.processed_labels["backward"]
+                            if l.node == j and l.res[0] >= self.min_res[0]):
+                        # Merge two labels
+                        merged_label = self._merge_labels(fwd_label, bwd_label)
+                        # Check resource feasibility
+                        if (merged_label and merged_label.feasibility_check(
+                                self.max_res_in, self.min_res_in)
+                                and self._half_way(fwd_label, bwd_label,
+                                                   difference)):
+                            # Save label
+                            self._save(merged_label)
 
-    def _half_way(self, fwd_label, bwd_label):
+    def _half_way(self, fwd_label, bwd_label, difference):
         """
         Half-way check from `Righini and Salani (2006)`_.
+        Checks if a pair of labels is closest to the half-way point.
 
-        :return: Two labels to merge with valid s-t path.
+        :return: bool. True if the half-way check passes, false otherwise.
 
         .. _Righini and Salani (2006): https://www.sciencedirect.com/science/article/pii/S1572528606000417
 
         """
-        # Get nodes associated with forward labels (to join with bwd_label)
-        fwd_nodes = deque(self.G.predecessors(fwd_label.node))
-        # Get nodes associated with backward labels (to join with fwd_label)
-        bwd_nodes = deque(self.G.successors(fwd_label.node))
-        # Get forward label with minimum "phi" w.r.t bwd_label
-        # phi = difference in the mono resource
-        fwd_min = min(list(lab for lab in self.processedLabels["forward"]
-                           if lab.node in fwd_nodes),
-                      key=lambda x: abs(x.res[0] - bwd_label.res[0]))
-        # Record the value of phi for
-        phi_fwd_bwd = abs(fwd_min.res[0] - bwd_label.res[0])
-        # Get backward label with minimum "phi" w.r.t fwd_label
-        bwd_min = min(list(lab for lab in self.processedLabels["backward"]
-                           if lab.node in bwd_nodes),
-                      key=lambda x: abs(fwd_label.res[0] - x.res[0]))
-        phi_bwd_fwd = abs(fwd_label.res[0] - bwd_min.res[0])
-
-        if phi_fwd_bwd == phi_bwd_fwd:
-            if fwd_min.res[0] > bwd_label.res[0]:
-                return fwd_min, bwd_label
-            else:
-                return fwd_label, bwd_min
+        _difference = fwd_label.res[0] - bwd_label.res[0]
+        if difference > 0 and _difference < 0:
+            return True
         else:
-            if phi_fwd_bwd < phi_bwd_fwd:
-                return fwd_min, bwd_label
-            else:
-                return fwd_label, bwd_min
+            difference = _difference
+            return False
 
     def _merge_labels(self, fwd_label, bwd_label):
         """
@@ -473,16 +460,31 @@ class BiDirectional:
         ----------
         fwd_label : label.Label object
         bwd_label : label.Label object
+
+        Returns
+        -------
+        merged_label : label.Label object 
+            If an s-t compatible path can be obtained the appropriately
+            extended and merged label is returned
+        
+        None 
+            Otherwise.
         """
         # Make a copy of the backward label
         _bwd_label = deepcopy(bwd_label)
         # Process backward label
         self._process_bwd_label(_bwd_label)
         # Reconstruct edge with edge data
-        edge = (fwd_label.node, _bwd_label.node,
-                self.G[fwd_label.node][_bwd_label.node])
-        # Extend forward label along joining edge
-        label = fwd_label.get_new_label(edge, "forward")
+        try:
+            edge = (fwd_label.node, _bwd_label.node,
+                    self.G[fwd_label.node][_bwd_label.node])
+            # Extend forward label along joining edge
+            label = fwd_label.get_new_label(edge, "forward")
+            if not label:
+                return
+        # Catch when an edge (fwd_label.node, _bwd_label.node) doesn't exist
+        except KeyError:
+            return
         # Get total consumed resources (inverted)
         total_res_bwd = _bwd_label.res
         # Record total weight, total_res and final path
@@ -493,14 +495,10 @@ class BiDirectional:
         return merged_label
 
     def _save(self, label):
-        if not self.best_label or label.weight < self.best_label.weight:
+        # Saves a label for exposure
+        if not self.best_label or self._full_dominance_check(
+                label, self.best_label, "forward"):
             self.best_label = label
-
-    def _process_bwd_label(self, label):
-        # Reverse backward path and inverts resource consumption
-        label.path.reverse()
-        label.res = self._invert_bwd_res(label)
-        return label
 
     def _invert_bwd_res(self, label_to_invert):
         """
