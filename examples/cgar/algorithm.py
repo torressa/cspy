@@ -37,8 +37,8 @@ def algorithm(Data, n_runs, airline):
                 # Solve corresponding subproblem
                 SP = Subproblem(k, iteration, duals, Data, airline)
                 shortest_path = SP._solve_cspy()
-                MasterObj, data, cost = update(k, iteration, shortest_path,
-                                               Data, MasterObj)
+                MasterObj, _, cost = update(k, iteration, shortest_path, Data,
+                                            MasterObj)
                 if float(cost) < 0:
                     log.info(" Added a column with cost : {}".format(cost))
                     col_count += 1

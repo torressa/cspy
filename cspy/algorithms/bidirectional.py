@@ -20,7 +20,7 @@ log = getLogger(__name__)
 class BiDirectional:
     """
     Implementation of the bidirectional labeling algorithm with dynamic
-    half-way point (`Tilk 2017`_). 
+    half-way point (`Tilk 2017`_).
     This requires the half-way procedure from `Righini and Salani (2006)`_,
     also implemented.
     Depending on the range of values for U, L, we get
@@ -367,7 +367,8 @@ class BiDirectional:
                     current_label, current_label.path))
                 self.final_label = current_label
 
-    def _full_dominance_check(self, label1, label2, direc):
+    @staticmethod
+    def _full_dominance_check(label1, label2, direc):
         """
         Checks whether label 1 dominates label 2 for the input direction.
         In the case when both labels are non-dominated,
@@ -435,7 +436,8 @@ class BiDirectional:
                             # Save label
                             self._save(merged_label)
 
-    def _half_way(self, fwd_label, bwd_label, difference):
+    @staticmethod
+    def _half_way(fwd_label, bwd_label, difference):
         """
         Half-way check from `Righini and Salani (2006)`_.
         Checks if a pair of labels is closest to the half-way point.
@@ -463,11 +465,11 @@ class BiDirectional:
 
         Returns
         -------
-        merged_label : label.Label object 
+        merged_label : label.Label object
             If an s-t compatible path can be obtained the appropriately
             extended and merged label is returned
-        
-        None 
+
+        None
             Otherwise.
         """
         # Make a copy of the backward label
