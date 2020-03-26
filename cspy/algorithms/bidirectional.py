@@ -411,23 +411,29 @@ class BiDirectional:
 
     def _join_paths(self):
         """
-        Path joining algorithm from `Righini and Salani (2006)`_.
+        The procedure "Join" or Algorithm 3 from `Righini and Salani (2006)`_.
 
         :return: list with the final path.
 
         .. _Righini and Salani (2006): https://www.sciencedirect.com/science/article/pii/S1572528606000417
         """
+        halfway = (self.max_res[0] - self.min_res[0]) / 2
         # Parameter required for the Half-way procedure
         difference = 1  # difference in the monotone resource of any pair of labels
         for i in self.G.nodes():
             for fwd_label in (l for l in self.processed_labels["forward"]
-                              if l.node == i and l.res[0] <= self.max_res[0]):
+                              if l.node == i and l.res[0] > halfway):
                 for j in self.G.nodes():
-                    for bwd_label in (
-                            l for l in self.processed_labels["backward"]
-                            if l.node == j and l.res[0] >= self.min_res[0]):
+                    bwd_labels_sorted = sorted(deque(
+                        l for l in self.processed_labels["backward"]
+                        if l.node == j),
+                                               key=lambda x: x.weight)
+                    for bwd_label in bwd_labels_sorted:
                         # Merge two labels
                         merged_label = self._merge_labels(fwd_label, bwd_label)
+                        if ((self.best_label and merged_label) and
+                                merged_label.weight > self.best_label.weight):
+                            break
                         # Check resource feasibility
                         if (merged_label and merged_label.feasibility_check(
                                 self.max_res_in, self.min_res_in)
