@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v0.0.13]
+
 ### Added
 
 - Included dev requirements file with new package for testing and examples requirements.
@@ -126,7 +128,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Docstring modifications to include maths.
 - Updated README.
 
-[unreleased]: https://github.com/torressa/cspy/compare/v0.0.12...HEAD
+[unreleased]: https://github.com/torressa/cspy/compare/v0.0.13...HEAD
+[v0.0.13]: https://github.com/torressa/cspy/compare/v0.0.12...v0.0.13
 [v0.0.12]: https://github.com/torressa/cspy/compare/v0.0.11...v0.0.12
 [v0.0.11]: https://github.com/torressa/cspy/compare/v0.0.10...v0.0.11
 [v0.0.11]: https://github.com/torressa/cspy/compare/v0.0.10...v0.0.11
