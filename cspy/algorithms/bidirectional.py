@@ -275,7 +275,6 @@ class BiDirectional:
 
     def _propagate_label(self, edge, direc):
         # Label propagation #
-        # Get new label from current Label
         new_label = self.current_label[direc].get_new_label(edge, direc)
         # If the new label is resource feasible
         if new_label and new_label.feasibility_check(self.max_res,
@@ -413,34 +412,39 @@ class BiDirectional:
         """
         The procedure "Join" or Algorithm 3 from `Righini and Salani (2006)`_.
 
+        Modified to get rid of nested for loops, added breaks.
+        
         :return: list with the final path.
 
         .. _Righini and Salani (2006): https://www.sciencedirect.com/science/article/pii/S1572528606000417
         """
+        log.debug("joining")
+        # TODO use halway point in to reduce number of checks!!
         halfway = (self.max_res[0] - self.min_res[0]) / 2
         # Parameter required for the Half-way procedure
         difference = 1  # difference in the monotone resource of any pair of labels
-        for i in self.G.nodes():
-            for fwd_label in (l for l in self.processed_labels["forward"]
-                              if l.node == i and l.res[0] > halfway):
-                for j in self.G.nodes():
-                    bwd_labels_sorted = sorted(deque(
-                        l for l in self.processed_labels["backward"]
-                        if l.node == j),
-                                               key=lambda x: x.weight)
-                    for bwd_label in bwd_labels_sorted:
-                        # Merge two labels
-                        merged_label = self._merge_labels(fwd_label, bwd_label)
-                        if ((self.best_label and merged_label) and
-                                merged_label.weight > self.best_label.weight):
-                            break
-                        # Check resource feasibility
-                        if (merged_label and merged_label.feasibility_check(
-                                self.max_res_in, self.min_res_in)
-                                and self._half_way(fwd_label, bwd_label,
-                                                   difference)):
-                            # Save label
-                            self._save(merged_label)
+        for fwd_label in sorted(deque(
+                l for l in self.processed_labels["forward"]),
+                                key=lambda x: x.weight):
+            if self.best_label and fwd_label.weight > self.best_label.weight:
+                break
+            bwd_labels_sorted = sorted(deque(
+                l for l in self.processed_labels["backward"]),
+                                       key=lambda x: x.weight)
+            for bwd_label in bwd_labels_sorted:
+                # Merge two labels
+                if self.best_label and bwd_label.weight > self.best_label.weight:
+                    break
+                merged_label = self._merge_labels(fwd_label, bwd_label)
+                if ((self.best_label and merged_label)
+                        and merged_label.weight > self.best_label.weight):
+                    break
+                # Check resource feasibility
+                if (merged_label and merged_label.feasibility_check(
+                        self.max_res_in, self.min_res_in)
+                        and self._half_way(fwd_label, bwd_label, difference)):
+                    # Save label
+                    self._save(merged_label)
 
     @staticmethod
     def _half_way(fwd_label, bwd_label, difference):
@@ -506,6 +510,8 @@ class BiDirectional:
         # Saves a label for exposure
         if not self.best_label or self._full_dominance_check(
                 label, self.best_label, "forward"):
+            log.debug("Saving label {} as best".format(label))
+            log.debug("With path {}".format(label.path))
             self.best_label = label
 
     def _invert_bwd_res(self, label_to_invert):
@@ -528,10 +534,6 @@ class BiDirectional:
         if Label._REF_backward == sub:
             return self.max_res_in - label_to_invert.res
         # Otherwise:
-        # Create dummy edge with 'res_cost' attribute of the input label
-        edge = (0, 0, {'weight': 0, 'res_cost': label_to_invert.res})
-        # Create dummy label with maximum resource
-        label = Label(0, label_to_invert.node, self.max_res_in, [])
-        # Extend the dummy along the dummy edge to apply the custom REF
-        label_inverted = label.get_new_label(edge, "backward")
-        return label_inverted.res
+        monotone = self.max_res_in[0] - label_to_invert.res[0]
+        label_to_invert.res[0] = monotone
+        return label_to_invert.res
