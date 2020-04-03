@@ -437,7 +437,7 @@ class BiDirectional:
         .. _Righini and Salani (2006): https://www.sciencedirect.com/science/article/pii/S1572528606000417
         """
         log.debug("joining")
-        # TODO use halifway point in to reduce number of checks!!
+        # TODO use halfway point in to reduce number of checks!!
         halfway = (self.max_res[0] - self.min_res[0]) / 2
         # Parameter required for the Half-way procedure
         difference = 1  # difference in the monotone resource of any pair of labels
