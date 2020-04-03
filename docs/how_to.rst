@@ -60,7 +60,14 @@ For this reason, it sometimes takes longer than the others.
 The remaining algorithms are metaheuristics,
 i.e. they provide fast and approximate solutions to the CSP problem.
 
-Please see the `examples`_ for more in-depth usage.
+Examples
+~~~~~~~~
+
+The following examples are included in the `examples`_ for more in-depth usage.
+
+- `jpath`_ : Simple example showing the necessary graph adptations and the use of custom resource extension functions. Also discussed below.
+- `vrpy`_: (under development) external vehicle routing framework which uses ``cspy`` to solve different variants of the vehicle routing problem using column generation.
+- `cgar`_: Complex example using ``cspy`` for column generation applied to the aircraft recovery problem.
 
 Please see individual algorithm documentation for simple examples.
 
@@ -71,9 +78,13 @@ Please see individual algorithm documentation for simple examples.
 .. _GRASP: https://cspy.readthedocs.io/en/latest/api/cspy.GRASP.html
 .. _Marinakis et al 2017: https://www.sciencedirect.com/science/article/pii/S0377221717302357z
 .. _examples: https://github.com/torressa/cspy/tree/master/examples/
+.. _vrpy: https://github.com/Kuifje02/vrpy
+
+REFs
+~~~~
 
 Pre-requirements
-~~~~~~~~~~~~~~~~
+****************
 
 For the :class:`BiDirectional` algorithm, there is a number of assumptions required by definition (`Tilk et al 2017`_).
 
@@ -102,9 +113,6 @@ For assumption 2, if resource extension functions are additive, these are easily
 However, when using custom resource extension functions (discussed below),
 it is up to the user to define them appropriately!
 
-REFs
-~~~~
-
 Additive REFs
 *************
 
@@ -129,8 +137,7 @@ However, it is up the users to ensure that the custom REFs are well defined,
 it may be the case that the algorithm fails to find a feasible path, or gets stuck.
 
 For theoretical information on what REFs are we refer you to the paper by `Inrich 2005`_.
-For a brief overview with a practical implementation see the `examples`_ and 
-the pdf document `cgar`_.
+For a brief overview with a practical implementation see any of the `examples`_.
 
 Custom REF template
 *******************
@@ -155,7 +162,123 @@ As an example, suppose the 2nd resource represents travel time (``res[1]``). Sup
 
 Your custom REF can then be passed with this format, into the algorithm of choice using the ``REF`` argument (see individual algorithms for details). Note that for the :class:`BiDirectional` algorithm, due to the properties of the algorithm, if you want to use this feature, you have to pass two custom REFs: one for the forward search and one for the backward search. Where the backward REF has to be the inverse of the forward REF, otherwise the algorithm will not return a meaningful path (`Tilk et al 2017`_). It is up to the user to ensure this is the case.
 
-.. _cgar: https://github.com/torressa/cspy/examples/cgar/cgar.pdf
+
+Simple Example
+~~~~~~~~~~~~~~
+
+For illustration of most of the things discussed above, consider the following example.
+
+Jane is part-time postwoman working in Delft, Netherlands. However, she is assigned a small area (the Indische Buurt neighbourhood) so when planning her daily route she wants to make it as long and exciting as possible. 
+That is, when planning her routes she has to consider the total shift time, sights visited, travel time, and delivery time. Her shift has to be at most 5 hours.
+
+
+This problem can easily be modelled as a CSP problem. 
+With the description above, the set of resources can be defined as,
+
+```python
+R = ['sights', 'shift', 'travel-time', 'delivery-time'] 
+# len(R) = 4
+```
+
+Let ``G`` denote a directed graph with edges to/from all streets of the Indische Buurt 
+neighbourhood. 
+Each edge has an attribute ``weight`` and an attribute ``res_cost`` which is an array (specifically, a ``numpy.array``)
+with length ``len(R)``. 
+The entries of ``res_cost`` have the same order as the entries in ``R``.
+The first entry of this array, corresponds to the ``'sights'`` resource, i.e. how many sights there are along a specific edge. The last entry of this array, corresponds to the ``'delivery-time'`` resource, i.e. time taken to deliver post along a specific edge. The remaining entries can be initialised to be 0.
+Also, when defining ``G``, one has to specify the number of resources ``n_res``, which also has to be equal to ``len(R)``.
+
+```python
+from networkx import DiGraph
+G = DiGraph(directed=True, n_res=4)  # init network
+```
+
+Now, using the open source package OSMnx, we can easily generate a network for Jane's neighbourhood
+
+```python
+from osmnx import graph_from_address, plot_graph
+
+M = graph_from_address('Ceramstraat, Delft, Netherlands',
+                           distance=1600,
+                           network_type='walk',
+                           simplify=False)
+```
+
+We have to transform the network for one compatible with cspy.
+To do this suppose we have two functions from ``jpath_preprocessing`` 
+that perform all the changes required 
+(for more details, see `jpath`_)
+
+```python
+from networkx import DiGraph
+from jpath_preprocessing import relabel_source_sink, add_cspy_edge_attributes
+
+# Transform M to comply with cspy's prerequirements
+# Convert MultiGraph into a Digraph with attribute 'n_res'
+G = DiGraph(M, directed=True, n_res=5)
+# Relabel source node to "Source" and sink node to "Sink" (see function for more details)
+G = relabel_source_sink(G)
+# Add res_cost and other resource attributes (see function for more details)
+G = add_cspy_edge_attributes(G)
+
+n_edges = len(G.edges())  # number of edges in network
+```
+
+To define the custom REFs,  ``jane_REF``, that controls how resources evolve throughout the path,
+we require two inputs: an array of current cumulative resource values ``res``, 
+and the edge that is being considered for an extension of a path ``edge``
+(which consists of two nodes and the edge data).
+
+```python
+from numpy import array
+def jane_REF(res, edge):
+    arr = array(res)  # local array
+    i, j, edge_data = edge[:]  # unpack edge
+    # i, j : string, edge_data : dict
+    # Update 'sights' resource
+    arr[0] += edge_data['res_cost'][0]
+    # Update 'travel-time' resource (distance/speed)
+    arr[2] += - edge_data['weight'] / float(WALKING_SPEED)
+    # Update 'delivery-time' resource
+    arr[3] += edge_data['res_cost'][3]
+    # Update 'shift' resource
+    arr[1] += (arr[2] + arr[3])  # travel-time + delivery-time
+    return arr
+```
+
+Hence, each resource is restricted and updated as follows:
+
+
+- ``'sights'`` : the cumulative number of sights visited has a dummy upper bound equal to the number of edges in the graph as there is no restriction to as how many sights Jane visits. Additionally, the value of this resource in the final path, will provide us with the accumulated number of sights in the path;
+- ``'shift'`` : the cumulative shift time is updated as the travel time along the edge plus the delivery time, the upper bound of ``SHIFT_DURATION`` ensures that Jane doesn't exceed her part-time hours;
+- ``'travel-time'`` : the cumulative travel time is updated using the positive distance travelled (``-edge_data['weight']``) over an average walking speed. Given the relationship between this resource and 
+- ``'shift'`` : a maximum of the shift duration provides no restriction.
+- ``'delivery-time'`` : the cumulative delivery time is simply updated using edge data. Similarly as for the previous resource, a maximum of the shift duration provides no restriction.
+
+
+Using ``cspy``, Jane can obtain a route ``path`` and subject to her constraints as,
+
+```python
+from cspy import Tabu
+SHIFT_DURATION = 5
+# Maximum resources
+max_res = [n_edges, SHIFT_DURATION, SHIFT_DURATION, SHIFT_DURATION]
+# Minimum resources
+min_res = [0, 0, 0, 0]
+# Use Tabu Algorithm
+tabu = Tabu(G, max_res, min_res, REF=jane_REF).run()
+print(tabu.path)  # print route
+```
+
+Additionally, we can query other useful attributes as
+
+```python
+tabu.total_cost
+tabu.consumed_resources
+```
+
+.. _jpath: https://github.com/torressa/cspy/tree/master/examples/jpath
+.. _cgar: https://github.com/torressa/cspy/blob/master/examples/cgar/cgar.pdf
 .. _Tilk et al 2017: https://www.sciencedirect.com/science/article/pii/S0377221717302035
 .. _Inrich 2005: https://www.researchgate.net/publication/227142556_Shortest_Path_Problems_with_Resource_Constraints
 

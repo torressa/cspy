@@ -58,7 +58,7 @@ or
 python3 -m pip install cspy
 ```
 
-### Usage Examples
+### Examples
 
 The generic gist to run the algorithms on a specific graph is to load the
 algorithm of choice, say `alg`, call the `alg.run()` method, and query the
@@ -68,7 +68,13 @@ relevant result attributes,
 - `alg.total_cost` for the accumulated cost of the path;
 - `alg.consumed_resources` for the accumulated resource usage of the path.
 
-Please see the individual algorithms API Documentation for specific examples and more details:
+I have included a few examples:
+
+- [`jpath`](examples/jpath) : Simple example showing the necessary graph adptations and the use of custom resource extension functions.
+- [`cgar`](examples/cgar) : Complex example use of `cspy` in a column generation example applied to the aircraft recovery problem.
+- [`vrpy`](https://github.com/Kuifje02/vrpy) : (under development) external vehicle routing framework which uses `cspy` to solve different variants of the vehicle routing problem using column generation.
+
+Please see the individual algorithms API Documentation for some toy examples and more details:
 
 - [Bidirectional and monodirectional algorithms](https://cspy.readthedocs.io/en/latest/api/cspy.BiDirectional.html)
 - [Heuristic Tabu Search](https://cspy.readthedocs.io/en/latest/api/cspy.Tabu.html)
