@@ -175,16 +175,9 @@ That is, when planning her routes she has to consider the total shift time, sigh
 This problem can easily be modelled as a CSP problem. 
 With the description above, the set of resources can be defined as,
 
-<<<<<<< HEAD
 .. code-block:: python
     R = ['sights', 'shift', 'travel-time', 'delivery-time'] 
     # len(R) = 4
-=======
-```python
-R = ['sights', 'shift', 'travel-time', 'delivery-time'] 
-# len(R) = 4
-```
->>>>>>> 627d41b447fcae3995ee6edc5373c9deb5eecd80
 
 Let ``G`` denote a directed graph with edges to/from all streets of the Indische Buurt 
 neighbourhood. 
@@ -194,7 +187,6 @@ The entries of ``res_cost`` have the same order as the entries in ``R``.
 The first entry of this array, corresponds to the ``'sights'`` resource, i.e. how many sights there are along a specific edge. The last entry of this array, corresponds to the ``'delivery-time'`` resource, i.e. time taken to deliver post along a specific edge. The remaining entries can be initialised to be 0.
 Also, when defining ``G``, one has to specify the number of resources ``n_res``, which also has to be equal to ``len(R)``.
 
-<<<<<<< HEAD
 .. code-block:: python
     from networkx import DiGraph
     G = DiGraph(directed=True, n_res=4)  # init network
@@ -208,30 +200,12 @@ Now, using the open source package OSMnx, we can easily generate a network for J
                                distance=1600,
                                network_type='walk',
                                simplify=False)
-=======
-```python
-from networkx import DiGraph
-G = DiGraph(directed=True, n_res=4)  # init network
-```
-
-Now, using the open source package OSMnx, we can easily generate a network for Jane's neighbourhood
-
-```python
-from osmnx import graph_from_address, plot_graph
-
-M = graph_from_address('Ceramstraat, Delft, Netherlands',
-                           distance=1600,
-                           network_type='walk',
-                           simplify=False)
-```
->>>>>>> 627d41b447fcae3995ee6edc5373c9deb5eecd80
 
 We have to transform the network for one compatible with cspy.
 To do this suppose we have two functions from ``jpath_preprocessing`` 
 that perform all the changes required 
 (for more details, see `jpath`_)
 
-<<<<<<< HEAD
 .. code-block:: python
     from networkx import DiGraph
     from jpath_preprocessing import relabel_source_sink, add_cspy_edge_attributes
@@ -245,29 +219,12 @@ that perform all the changes required
     G = add_cspy_edge_attributes(G)
 
     n_edges = len(G.edges())  # number of edges in network
-=======
-```python
-from networkx import DiGraph
-from jpath_preprocessing import relabel_source_sink, add_cspy_edge_attributes
-
-# Transform M to comply with cspy's prerequirements
-# Convert MultiGraph into a Digraph with attribute 'n_res'
-G = DiGraph(M, directed=True, n_res=5)
-# Relabel source node to "Source" and sink node to "Sink" (see function for more details)
-G = relabel_source_sink(G)
-# Add res_cost and other resource attributes (see function for more details)
-G = add_cspy_edge_attributes(G)
-
-n_edges = len(G.edges())  # number of edges in network
-```
->>>>>>> 627d41b447fcae3995ee6edc5373c9deb5eecd80
 
 To define the custom REFs,  ``jane_REF``, that controls how resources evolve throughout the path,
 we require two inputs: an array of current cumulative resource values ``res``, 
 and the edge that is being considered for an extension of a path ``edge``
 (which consists of two nodes and the edge data).
 
-<<<<<<< HEAD
 .. code-block:: python
     from numpy import array
     def jane_REF(res, edge):
@@ -284,24 +241,6 @@ and the edge that is being considered for an extension of a path ``edge``
         arr[1] += (arr[2] + arr[3])  # travel-time + delivery-time
         return arr
 
-=======
-```python
-from numpy import array
-def jane_REF(res, edge):
-    arr = array(res)  # local array
-    i, j, edge_data = edge[:]  # unpack edge
-    # i, j : string, edge_data : dict
-    # Update 'sights' resource
-    arr[0] += edge_data['res_cost'][0]
-    # Update 'travel-time' resource (distance/speed)
-    arr[2] += - edge_data['weight'] / float(WALKING_SPEED)
-    # Update 'delivery-time' resource
-    arr[3] += edge_data['res_cost'][3]
-    # Update 'shift' resource
-    arr[1] += (arr[2] + arr[3])  # travel-time + delivery-time
-    return arr
-```
->>>>>>> 627d41b447fcae3995ee6edc5373c9deb5eecd80
 
 Hence, each resource is restricted and updated as follows:
 
@@ -315,7 +254,6 @@ Hence, each resource is restricted and updated as follows:
 
 Using ``cspy``, Jane can obtain a route ``path`` and subject to her constraints as,
 
-<<<<<<< HEAD
 .. code-block:: python
     from cspy import Tabu
     SHIFT_DURATION = 5
@@ -334,26 +272,6 @@ Additionally, we can query other useful attributes as
     tabu.total_cost
     tabu.consumed_resources
 
-=======
-```python
-from cspy import Tabu
-SHIFT_DURATION = 5
-# Maximum resources
-max_res = [n_edges, SHIFT_DURATION, SHIFT_DURATION, SHIFT_DURATION]
-# Minimum resources
-min_res = [0, 0, 0, 0]
-# Use Tabu Algorithm
-tabu = Tabu(G, max_res, min_res, REF=jane_REF).run()
-print(tabu.path)  # print route
-```
-
-Additionally, we can query other useful attributes as
-
-```python
-tabu.total_cost
-tabu.consumed_resources
-```
->>>>>>> 627d41b447fcae3995ee6edc5373c9deb5eecd80
 
 .. _jpath: https://github.com/torressa/cspy/tree/master/examples/jpath
 .. _cgar: https://github.com/torressa/cspy/blob/master/examples/cgar/cgar.pdf
