@@ -150,11 +150,13 @@ class BiDirectional:
         self.final_label = None
 
         # If given, set REFs for dominance relations and feasibility checks
-        if REF_forward and REF_backward:
+        if REF_forward:
             Label._REF_forward = REF_forward
-            Label._REF_backward = REF_backward
         else:
             Label._REF_forward = add
+        if REF_backward:
+            Label._REF_backward = REF_backward
+        else:
             Label._REF_backward = sub
         # Init with seed if given
         if seed is None:
