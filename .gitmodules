@@ -1,0 +1,3 @@
+[submodule "examples/vrpy"]
+	path = examples/vrpy
+	url = https://github.com/Kuifje02/vrpy.git
