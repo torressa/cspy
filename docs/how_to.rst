@@ -180,6 +180,7 @@ With the description above, the set of resources can be defined as,
         R = ['sights', 'shift', 'travel-time', 'delivery-time'] 
         # len(R) = 4
 
+
 Let ``G`` denote a directed graph with edges to/from all streets of the Indische Buurt 
 neighbourhood. 
 Each edge has an attribute ``weight`` and an attribute ``res_cost`` which is an array (specifically, a ``numpy.array``)
@@ -187,6 +188,7 @@ with length ``len(R)``.
 The entries of ``res_cost`` have the same order as the entries in ``R``.
 The first entry of this array, corresponds to the ``'sights'`` resource, i.e. how many sights there are along a specific edge. The last entry of this array, corresponds to the ``'delivery-time'`` resource, i.e. time taken to deliver post along a specific edge. The remaining entries can be initialised to be 0.
 Also, when defining ``G``, one has to specify the number of resources ``n_res``, which also has to be equal to ``len(R)``.
+
 
 .. code-block:: python
 
@@ -209,6 +211,7 @@ To do this suppose we have two functions from ``jpath_preprocessing``
 that perform all the changes required 
 (for more details, see `jpath`_)
 
+
 .. code-block:: python
 
         from networkx import DiGraph
@@ -224,10 +227,12 @@ that perform all the changes required
 
         n_edges = len(G.edges())  # number of edges in network
 
+
 To define the custom REFs,  ``jane_REF``, that controls how resources evolve throughout the path,
 we require two inputs: an array of current cumulative resource values ``res``, 
 and the edge that is being considered for an extension of a path ``edge``
 (which consists of two nodes and the edge data).
+
 
 .. code-block:: python
 
@@ -278,6 +283,7 @@ Additionally, we can query other useful attributes as
 
         tabu.total_cost
         tabu.consumed_resources
+
 
 
 .. _jpath: https://github.com/torressa/cspy/tree/master/examples/jpath
