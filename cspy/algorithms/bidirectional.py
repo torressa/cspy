@@ -141,8 +141,8 @@ class BiDirectional:
             "forward": deque(),
             "backward": deque()
         })
-        # Non-dominated labels
-        self.nondominated_labels = OrderedDict({
+        # To save all best labels
+        self.best_labels = OrderedDict({
             "forward": deque(),
             "backward": deque()
         })
@@ -176,7 +176,6 @@ class BiDirectional:
             direc = self._get_direction()
             if direc:
                 self._algorithm(direc)
-                self._check_dominance(direc)
             else:
                 break
         return self._process_paths()
@@ -239,6 +238,7 @@ class BiDirectional:
                 return "backward"
             elif (self.current_label["forward"] and
                   self.current_label["backward"]):
+                # TODO implement choices based on number of labels
                 return self.random_state.choice(["forward", "backward"])
             else:  # if both are empty
                 return
@@ -277,6 +277,8 @@ class BiDirectional:
         next_label = self._get_next_label(direc)
         # Update current label
         self.current_label[direc] = next_label
+        # Dominance checks
+        self._check_dominance(next_label, direc)
 
     def _propagate_label(self, edge, direc):
         # Label propagation #
@@ -295,7 +297,7 @@ class BiDirectional:
         current_label = self.current_label[direc]
         unproc_labels = self.unprocessed_labels[direc]
         self.generated_labels[direc].append(current_label)
-        self._remove_unprocessed_labels([current_label], direc)
+        self._remove_labels([current_label], direc, unproc=True)
         # Return label with minimum monotone resource for the forward search
         # and the maximum monotone resource for the backward search
         if unproc_labels:
@@ -309,42 +311,55 @@ class BiDirectional:
     #############
     # DOMINANCE #
     #############
-    def _check_dominance(self, direc):
+    def _check_dominance(self, label_to_check, direc, unproc=True, best=False):
         """
-        For all labels, check if it is dominated, or itself dominates other
-        labels. If this is found to be the case, the dominated label is
-        removed.
+        For all labels, checks if ``label_to_check`` is dominated,
+        or itself dominates any other label in either the unprocessed_labels
+        list or the non-dominated labels list.
+        If this is found to be the case, the dominated label(s) is(are)
+        removed from the appropriate list.
         """
-        # Reference attributes
-        current_label = self.current_label[direc]
-        unproc_labels = self.unprocessed_labels[direc]
-        # If current label is not None (at termination)
-        if current_label:
-            keys_to_pop = deque()
+        # Select appropriate list to check
+        if unproc:
+            labels_to_check = self.unprocessed_labels[direc]
+        elif best:
+            labels_to_check = self.best_labels[direc]
+        # If label is not None (at termination)
+        if label_to_check:
+            labels_to_pop = deque()
             # Gather all comparable labels (same node)
             all_labels = deque(
-                lab for lab in unproc_labels
-                if lab.node == current_label.node and lab != current_label)
+                l for l in labels_to_check
+                if l.node == label_to_check.node and l != label_to_check)
             # Add to list for removal if they are dominated
-            keys_to_pop.extend(lab for lab in all_labels
-                               if current_label.dominates(lab, direc))
-            # Add current label for removal if itself is dominated
-            if any(lab.dominates(current_label, direc) for lab in all_labels):
-                keys_to_pop.append(current_label)
-            # If not bidirectional algorithm, check and save current label
-            else:
+            labels_to_pop.extend(
+                l for l in all_labels if label_to_check.dominates(l, direc))
+            # Add input label for removal if itself is dominated
+            if any(l.dominates(label_to_check, direc) for l in all_labels):
+                labels_to_pop.append(label_to_check)
+            elif unproc:
+                # check and save current label
                 self._save_current_best_label(direc)
-            self._remove_unprocessed_labels(keys_to_pop, direc)
+            # if unprocessed labels checked then remove labels_to_pop
+            if unproc:
+                self._remove_labels(labels_to_pop, direc, unproc, best)
+            # Otherwise, return labels_to_pop for later removal
+            elif best:
+                return labels_to_pop
 
-    def _remove_unprocessed_labels(self, keys_to_pop, direc):
+    def _remove_labels(self, labels_to_pop, direc, unproc=True, best=False):
+        """
+        Remove all labels in ``labels_to_pop`` from either the array of
+        unprocessed labels or the array of non-dominated labels
+        """
         # Remove all processed labels from unprocessed dict
-        for key_to_pop in list(set(keys_to_pop)):
-            if key_to_pop in self.unprocessed_labels[direc]:
-                idx = self.unprocessed_labels[direc].index(key_to_pop)
+        for label_to_pop in list(set(labels_to_pop)):
+            if unproc and label_to_pop in self.unprocessed_labels[direc]:
+                idx = self.unprocessed_labels[direc].index(label_to_pop)
                 del self.unprocessed_labels[direc][idx]
-            # if key_to_pop in self.nondominated_labels[direc]:
-            #     idx = self.nondominated_labels[direc].index(key_to_pop)
-            #     del self.nondominated_labels[direc][idx]
+            elif best and label_to_pop in self.best_labels[direc]:
+                idx = self.best_labels[direc].index(label_to_pop)
+                del self.best_labels[direc][idx]
 
     def _save_current_best_label(self, direc):
         """
@@ -353,10 +368,10 @@ class BiDirectional:
         current_label = self.current_label[direc]
         final_label = self.final_label
         if self.direc_in == "both":
-            self.nondominated_labels[direc].append(current_label)
+            self.best_labels[direc].append(current_label)
             flip_direc = "forward" if direc == "backward" else "backward"
             # Check if other direction traversed
-            if self.nondominated_labels[flip_direc]:
+            if self.best_labels[flip_direc]:
                 return
         # If first label
         if not final_label:
@@ -384,7 +399,7 @@ class BiDirectional:
     def _full_dominance_check(label1, label2, direc):
         """
         Checks whether label 1 dominates label 2 for the input direction.
-        In the case when both labels are non-dominated,
+        In the case when neither dominates , i.e. they are non-dominated,
         the direction is flipped labels are compared again.
         """
         label1_dominates = label1.dominates(label2, direc)
@@ -406,16 +421,16 @@ class BiDirectional:
     ###################
     def _process_paths(self):
         # Processing of output path.
-        if (self.direc_in == "both" and self.nondominated_labels["forward"] and
-                self.nondominated_labels["backward"]):
+        if (self.direc_in == "both" and self.best_labels["forward"] and
+                self.best_labels["backward"]):
             # If bi-directional algorithm used, run path joining procedure.
+            self._clean_up_best_labels()
             self._join_paths()
         else:
             # If mono-directional algorithm used or both directions not traversed,
             # return the appropriate path
             if (self.direc_in == "forward" or
-                (self.direc_in == "both" and
-                 not self.nondominated_labels["backward"])):
+                (self.direc_in == "both" and not self.best_labels["backward"])):
                 self.best_label = self.final_label
             else:
                 self.best_label = self._process_bwd_label(self.final_label)
@@ -426,60 +441,64 @@ class BiDirectional:
         label.res = self._invert_bwd_res(label)
         return label
 
+    def _clean_up_best_labels(self):
+        del self.generated_labels
+        del self.unprocessed_labels
+        # Removed all dominated labels in best_labels
+        for direc in ["forward", "backward"]:
+            labels_to_pop = deque()
+            for l in self.best_labels[direc]:
+                labels_to_pop.extend(
+                    self._check_dominance(l, direc, unproc=False, best=True))
+            self._remove_labels(labels_to_pop, direc, unproc=False, best=True)
+
     def _join_paths(self):
         """
         The procedure "Join" or Algorithm 3 from `Righini and Salani (2006)`_.
 
-        Modified to get rid of nested for loops, added breaks.
+        Modified to get rid of nested for loops and reduced search.
 
         :return: list with the final path.
 
         .. _Righini and Salani (2006): https://www.sciencedirect.com/science/article/pii/S1572528606000417
         """
+
         log.debug("joining")
-        # TODO use halfway point in to reduce number of checks!!
-        halfway = (self.max_res[0] - self.min_res[0]) / 2
-        # Parameter required for the Half-way procedure
-        difference = 1  # difference in the monotone resource of any pair of labels
-        for fwd_label in sorted(deque(
-                l for l in self.nondominated_labels["forward"]),
-                                key=lambda x: x.weight):
-            # if self.best_label and fwd_label.weight > self.best_label.weight:
-            #     break
-            bwd_labels_sorted = sorted(deque(
-                l for l in self.nondominated_labels["backward"]),
-                                       key=lambda x: x.weight)
-            for bwd_label in bwd_labels_sorted:
+
+        for fwd_label in self.best_labels["forward"]:
+            # Create generator for backward labels for current forward label.
+            # Excludes those that:
+            # 1. Paths can't be joined
+            # 2. Same node
+            # 3. Pair of labels doesn't satisfy the halfway check
+            bwd_labels = (
+                l for l in self.best_labels["backward"]
+                if l.node != fwd_label.node and
+                (fwd_label.node,
+                 l.node) in self.G.edges() and self._half_way(fwd_label, l))
+            for bwd_label in bwd_labels:
                 # Merge two labels
-                # if self.best_label and bwd_label.weight > self.best_label.weight:
-                #     break
                 merged_label = self._merge_labels(fwd_label, bwd_label)
-                # if ((self.best_label and merged_label) and
-                #         merged_label.weight > self.best_label.weight):
-                #     break
-                # Check resource feasibility
+                # Check resource feasibility and halfway check
                 if (merged_label and merged_label.feasibility_check(
-                        self.max_res_in, self.min_res_in) and
-                        self._half_way(fwd_label, bwd_label, difference)):
+                        self.max_res_in, self.min_res_in)):
                     # Save label
                     self._save(merged_label)
 
-    @staticmethod
-    def _half_way(fwd_label, bwd_label, difference):
+    def _half_way(self, fwd_label, bwd_label):
         """
         Half-way check from `Righini and Salani (2006)`_.
-        Checks if a pair of labels is closest to the half-way point.
+        Checks if a pair of labels is closes to the half-way point.
 
         :return: bool. True if the half-way check passes, false otherwise.
 
         .. _Righini and Salani (2006): https://www.sciencedirect.com/science/article/pii/S1572528606000417
 
         """
-        _difference = fwd_label.res[0] - bwd_label.res[0]
-        if difference > 0 and _difference < 0:
+        _difference = fwd_label.res[0] - (self.max_res_in[0] - bwd_label.res[0])
+        if _difference >= 0:
             return True
         else:
-            difference = _difference
             return False
 
     def _merge_labels(self, fwd_label, bwd_label):
@@ -505,15 +524,11 @@ class BiDirectional:
         # Process backward label
         self._process_bwd_label(_bwd_label)
         # Reconstruct edge with edge data
-        try:
-            edge = (fwd_label.node, _bwd_label.node,
-                    self.G[fwd_label.node][_bwd_label.node])
-            # Extend forward label along joining edge
-            label = fwd_label.get_new_label(edge, "forward")
-            if not label:
-                return
-        # Catch when an edge (fwd_label.node, _bwd_label.node) doesn't exist
-        except KeyError:
+        edge = (fwd_label.node, _bwd_label.node,
+                self.G[fwd_label.node][_bwd_label.node])
+        # Extend forward label along joining edge
+        label = fwd_label.get_new_label(edge, "forward")
+        if not label:
             return
         # Get total consumed resources (inverted)
         total_res_bwd = _bwd_label.res
