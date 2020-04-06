@@ -431,14 +431,21 @@ class BiDirectional:
             # return the appropriate path
             if (self.direc_in == "forward" or
                 (self.direc_in == "both" and not self.best_labels["backward"])):
+                # Forward
                 self.best_label = self.final_label
             else:
-                self.best_label = self._process_bwd_label(self.final_label)
+                # Backward
+                self.best_label = self._process_bwd_label(
+                    self.final_label, self.min_res_in)
 
-    def _process_bwd_label(self, label):
+    def _process_bwd_label(self, label, cumulative_res):
         # Reverse backward path and inverts resource consumption
         label.path.reverse()
-        label.res = self._invert_bwd_res(label)
+        if Label._REF_backward == sub:
+            label.res = self.max_res_in - label.res
+        else:
+            # Custom REF
+            label.res = self._invert_bwd_res(label, cumulative_res)
         return label
 
     def _clean_up_best_labels(self):
@@ -493,7 +500,6 @@ class BiDirectional:
         :return: bool. True if the half-way check passes, false otherwise.
 
         .. _Righini and Salani (2006): https://www.sciencedirect.com/science/article/pii/S1572528606000417
-
         """
         _difference = fwd_label.res[0] - (self.max_res_in[0] - bwd_label.res[0])
         if _difference >= 0:
@@ -521,20 +527,25 @@ class BiDirectional:
         """
         # Make a copy of the backward label
         _bwd_label = deepcopy(bwd_label)
-        # Process backward label
-        self._process_bwd_label(_bwd_label)
         # Reconstruct edge with edge data
         edge = (fwd_label.node, _bwd_label.node,
                 self.G[fwd_label.node][_bwd_label.node])
         # Extend forward label along joining edge
         label = fwd_label.get_new_label(edge, "forward")
+
         if not label:
             return
+        # Process backward label
+        self._process_bwd_label(_bwd_label, label.res)
         # Get total consumed resources (inverted)
         total_res_bwd = _bwd_label.res
         # Record total weight, total_res and final path
         weight = fwd_label.weight + edge[2]['weight'] + _bwd_label.weight
-        total_res = label.res + total_res_bwd
+        # If
+        if Label._REF_backward == sub:
+            total_res = label.res + total_res_bwd
+        else:
+            total_res = _bwd_label.res
         final_path = fwd_label.path + _bwd_label.path
         merged_label = Label(weight, "Sink", total_res, final_path)
         return merged_label
@@ -547,14 +558,10 @@ class BiDirectional:
             log.debug("With path {}".format(label.path))
             self.best_label = label
 
-    def _invert_bwd_res(self, label_to_invert):
+    def _invert_bwd_res(self, label_to_invert, cumulative_res):
         """
         Invert total backward resource to make it forward compatible.
-        In the case when no REFs are provided, then this is simply the
-        difference between the input maximum resource limit and the resources
-        consumed by the backward path.
-        However, if custom REFs are provided we have to ensure we apply it to
-        obtain the inversion.
+        To do this, we traverse the path forwards appling the forward REF.
 
         Parameters
         ----------
@@ -562,11 +569,12 @@ class BiDirectional:
 
         Returns
         -------
-        array with forward compatible total resources consumed
+        array with total resources consumed
         """
-        if Label._REF_backward == sub:
-            return self.max_res_in - label_to_invert.res
-        # Otherwise:
-        monotone = self.max_res_in[0] - label_to_invert.res[0]
-        label_to_invert.res[0] = monotone
-        return label_to_invert.res
+        edges = (
+            e for e in self.G.edges(data=True)
+            if e[:2] in zip(label_to_invert.path, label_to_invert.path[1:]))
+        fwd_dummy = Label(0, label_to_invert.node, cumulative_res, [])
+        for e in edges:
+            fwd_dummy.res = Label._REF_forward(fwd_dummy.res, e)
+        return fwd_dummy.res
