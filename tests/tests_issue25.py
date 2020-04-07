@@ -17,9 +17,10 @@ class TestsIssue25(unittest.TestCase):
     Tests for issue #25
     https://github.com/torressa/cspy/issues/25
     """
+
     def setUp(self):
         # Maximum and minimum resource arrays
-        self.max_res, self.min_res = [4, 20], [1, 0]
+        self.max_res, self.min_res = [4, 20], [0, 0]
         # Create simple digraph with appropriate attributes
         self.G = DiGraph(directed=True, n_res=2)
         self.G.add_edge('Source', 'A', res_cost=array([1, 2]), weight=-1)
@@ -35,7 +36,7 @@ class TestsIssue25(unittest.TestCase):
         algorithm for a range of seeds.
         Note the first argument is required to work using parameterized and unittest.
         """
-        bidirec = BiDirectional(self.G, self.max_res, self.min_res, seed=13)
+        bidirec = BiDirectional(self.G, self.max_res, self.min_res, seed=seed)
         # Check classification
         with self.assertLogs('cspy.algorithms.bidirectional') as cm:
             bidirec.name_algorithm()

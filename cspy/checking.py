@@ -1,13 +1,11 @@
-from networkx import (DiGraph, NetworkXException, has_path,
-                      negative_edge_cycle)
+from networkx import (DiGraph, NetworkXException, has_path, negative_edge_cycle)
 from numpy import ndarray
 
 
 def check(G,
           max_res=None,
           min_res=None,
-          REF_forward=None,
-          REF_backward=None,
+          REF=None,
           direction=None,
           algorithm=None):
     """
@@ -31,9 +29,9 @@ def check(G,
         :math:`[U, L_1, L_2, ..., L_{nres}]` lower bounds for resource usage.
         We must have ``len(min_res)`` :math:`=` ``len(max_res)`` :math:`\geq 2`
 
-    REF_forward, REF_backward : function, optional
+    REF : function, optional
         Custom resource extension function. See `REFs`_ for more details.
-        Default: additive, subtractive.
+        Default: additive.
 
     direction : string, optional
         preferred search direction. Either 'both','forward', or, 'backward'.
@@ -46,10 +44,10 @@ def check(G,
         errors is raised.
     """
     errors = []
-    if REF_forward or REF_backward:
+    if REF:
         # Cannot apply pruning with custom REFs
         try:
-            _check_REFs(REF_forward, REF_backward)
+            _check_REFs(REF)
         except Exception as e:
             errors.append(e)
     # Select checks to perform based on the input provided
@@ -78,11 +76,11 @@ def check(G,
 def _check_res(G, max_res, min_res, direction, algorithm):
     if isinstance(max_res, list) and isinstance(min_res, list):
         if len(max_res) == len(min_res):
-            if (algorithm and 'bidirectional' in algorithm
-                    and len(max_res) < 2):
+            if (algorithm and 'bidirectional' in algorithm and
+                    len(max_res) < 2):
                 raise TypeError("Resources must be of length >= 2")
-            if (all(isinstance(i, (float, int)) for i in max_res)
-                    and all(isinstance(i, (float, int)) for i in min_res)):
+            if (all(isinstance(i, (float, int)) for i in max_res) and
+                    all(isinstance(i, (float, int)) for i in min_res)):
                 pass
             else:
                 raise TypeError("Elements of input lists must be numbers")
@@ -110,14 +108,12 @@ def _check_graph_attr(G, max_res, min_res, direction, algorithm):
 def _check_edge_attr(G, max_res, min_res, direction, algorithm):
     """Checks whether edges in input graph have res_cost attribute"""
     if not all('res_cost' in edge[2] for edge in G.edges(data=True)):
-        raise TypeError(
-            "Input graph must have edges with 'res_cost' attribute")
+        raise TypeError("Input graph must have edges with 'res_cost' attribute")
     if not all(
             len(edge[2]['res_cost']) == G.graph['n_res']
             for edge in G.edges(data=True)):
         raise TypeError(
-            "Edges must have 'res_cost' attribute with length equal to 'n_res'"
-        )
+            "Edges must have 'res_cost' attribute with length equal to 'n_res'")
     if not all(
             len(edge[2]['res_cost']) == len(max_res) == len(min_res)
             for edge in G.edges(data=True)):
@@ -143,9 +139,6 @@ def _check_path(G, max_res, min_res, direction, algorithm):
         raise Exception("An error occurred: {}".format(e))
 
 
-def _check_REFs(REF_forward, REF_backward):
-    if ((REF_forward and not callable(REF_forward))
-            or (REF_backward and not callable(REF_backward))
-            or (REF_forward and REF_backward and not callable(REF_forward)
-                and not callable(REF_backward))):
+def _check_REFs(REF):
+    if REF and not callable(REF):
         raise TypeError("REF functions must be callable")

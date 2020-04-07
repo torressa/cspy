@@ -65,8 +65,8 @@ Examples
 
 The following examples are included in the `examples`_ for more in-depth usage.
 
-- `jpath`_ : Simple example showing the necessary graph adptations and the use of custom resource extension functions. Also discussed below.
 - `vrpy`_: (under development) external vehicle routing framework which uses ``cspy`` to solve different variants of the vehicle routing problem using column generation.
+- `jpath`_ : Simple example showing the necessary graph adptations and the use of custom resource extension functions. Also discussed below.
 - `cgar`_: Complex example using ``cspy`` for column generation applied to the aircraft recovery problem.
 
 Please see individual algorithm documentation for simple examples.
@@ -160,7 +160,19 @@ As an example, suppose the 2nd resource represents travel time (``res[1]``). Sup
         	new_res[1] += edge_data['weight']
         	return new_res
 
-Your custom REF can then be passed with this format, into the algorithm of choice using the ``REF`` argument (see individual algorithms for details). Note that for the :class:`BiDirectional` algorithm, due to the properties of the algorithm, if you want to use this feature, you have to pass two custom REFs: one for the forward search and one for the backward search. Where the backward REF has to be the inverse of the forward REF, otherwise the algorithm will not return a meaningful path (`Tilk et al 2017`_). It is up to the user to ensure this is the case.
+Your custom REF can then be passed with this format, into the algorithm of choice using the ``REF`` 
+argument (see individual algorithms for details). 
+
+As a word of warning, it is up to the user to ensure the custom REF behaves appropriately.
+Otherwise, you will most likely either stall the algorithms, get an exception saying that a resource
+feasible path could not be found, or get a path that's not very meaningfull. 
+
+For a simple example of custom REFs, please see the `unittest`_.
+
+For an intermediate example, see below.
+
+For more advanced examples, see the `examples`_ folder.
+
 
 
 Simple Example
@@ -290,4 +302,4 @@ Additionally, we can query other useful attributes as
 .. _cgar: https://github.com/torressa/cspy/blob/master/examples/cgar/cgar.pdf
 .. _Tilk et al 2017: https://www.sciencedirect.com/science/article/pii/S0377221717302035
 .. _Inrich 2005: https://www.researchgate.net/publication/227142556_Shortest_Path_Problems_with_Resource_Constraints
-
+.. _unittest: https://github.com/torressa/cspy/tree/master/tests/tests_issue32.py

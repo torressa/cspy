@@ -17,6 +17,7 @@ class TestsIssue17(unittest.TestCase):
     Tests for issue #17
     https://github.com/torressa/cspy/issues/17
     """
+
     def setUp(self):
         # Create simple digraph with appropriate attributes
         self.G = DiGraph(directed=True, n_res=2)
@@ -126,8 +127,6 @@ class TestsIssue17(unittest.TestCase):
         self.assertFalse(L3.dominates(L4, "forward"))
         self.assertTrue(L4.dominates(L3, "forward"))
         self.assertTrue(L3.dominates(L5, "forward"))
-        # Test exception raiser for wrong direction
-        self.assertRaises(Exception, L3.dominates, L5, "")
 
     def testTabu(self):
         tabu = Tabu(self.G, self.max_res, self.min_res)
@@ -136,7 +135,8 @@ class TestsIssue17(unittest.TestCase):
         cost_tabu = tabu.total_cost
         total_res = tabu.consumed_resources
         cost = sum([
-            edge[2]['weight'] for edge in self.G.edges(data=True)
+            edge[2]['weight']
+            for edge in self.G.edges(data=True)
             if edge[0:2] in zip(path, path[1:])
         ])
         # Check new cost attribute

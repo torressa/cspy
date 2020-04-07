@@ -2,11 +2,11 @@ from __future__ import absolute_import
 
 from copy import deepcopy
 from itertools import repeat
-from operator import add, sub
+from operator import add
 from logging import getLogger
 from collections import OrderedDict, deque
 
-from numpy import zeros, array
+from numpy import array
 from numpy.random import RandomState
 
 # Local module imports
@@ -26,7 +26,6 @@ class BiDirectional:
     Depending on the range of values for U, L, we get
     four different algorithms. See self.name_algorithm and Notes.
 
-
     Parameters
     ----------
     G : object instance :class:`nx.Digraph()`
@@ -43,9 +42,9 @@ class BiDirectional:
         usage (including initial backward stopping point).
         We must have ``len(min_res)`` :math:`=` ``len(max_res)`` :math:`\geq 2`
 
-    REF_forward REF_backward : function, optional
+    REF_forward : function, optional
         Custom resource extension function. See `REFs`_ for more details.
-        Default : additive, subtractive.
+        Default : additive.
 
     preprocess : bool, optional
         enables preprocessing routine. Default : False.
@@ -108,16 +107,14 @@ class BiDirectional:
                  G,
                  max_res,
                  min_res,
-                 REF_forward=None,
-                 REF_backward=None,
+                 REF=None,
                  preprocess=False,
                  direction="both",
                  seed=None):
         # Check inputs and preprocess G unless option disabled
-        check(G, max_res, min_res, REF_forward, REF_backward, direction,
-              __name__)
+        check(G, max_res, min_res, REF, direction, __name__)
         # Preprocess graph
-        self.G = preprocess_graph(G, max_res, min_res, preprocess, REF_backward)
+        self.G = preprocess_graph(G, max_res, min_res, preprocess, REF)
         self.direc_in = direction
         self.max_res, self.min_res = max_res.copy(), min_res.copy()
         self.max_res_in, self.min_res_in = array(max_res.copy()), array(
@@ -126,10 +123,13 @@ class BiDirectional:
         self.best_label = None
 
         # Algorithm specific parameters #
+        # set bounds for bacward search
+        bwd_start = deepcopy(min_res)
+        bwd_start[0] = max_res[0]
         # Current forward and backward labels
         self.current_label = OrderedDict({
-            "forward": Label(0, "Source", zeros(G.graph["n_res"]), ["Source"]),
-            "backward": Label(0, "Sink", max_res, ["Sink"])
+            "forward": Label(0, "Source", min_res, ["Source"]),
+            "backward": Label(0, "Sink", bwd_start, ["Sink"])
         })
         # Unprocessed labels dict (both directions)
         self.unprocessed_labels = OrderedDict({
@@ -150,14 +150,10 @@ class BiDirectional:
         self.final_label = None
 
         # If given, set REFs for dominance relations and feasibility checks
-        if REF_forward:
-            Label._REF_forward = REF_forward
+        if REF:
+            Label._REF = REF
         else:
-            Label._REF_forward = add
-        if REF_backward:
-            Label._REF_backward = REF_backward
-        else:
-            Label._REF_backward = sub
+            Label._REF = add
         # Init with seed if given
         if seed is None:
             self.random_state = RandomState()
@@ -272,7 +268,7 @@ class BiDirectional:
                       if e[idx] == self.current_label[direc].node)
         # If Label not been seen before, initialise a list
         # Propagate current label along all suitable edges in current direction
-        list(map(self._propagate_label, edges, repeat(direc, len(edges))))
+        deque(map(self._propagate_label, edges, repeat(direc, len(edges))))
         # Extend label
         next_label = self._get_next_label(direc)
         # Update current label
@@ -291,11 +287,12 @@ class BiDirectional:
                     new_label not in self.generated_labels[direc]):
                 self.unprocessed_labels[direc].append(new_label)
 
-    def _get_next_label(self, direc, exclude_label=None):
+    def _get_next_label(self, direc):
         # Label Extension #
         # Add current label to processed list.
         current_label = self.current_label[direc]
         unproc_labels = self.unprocessed_labels[direc]
+
         self.generated_labels[direc].append(current_label)
         self._remove_labels([current_label], direc, unproc=True)
         # Return label with minimum monotone resource for the forward search
@@ -353,7 +350,7 @@ class BiDirectional:
         unprocessed labels or the array of non-dominated labels
         """
         # Remove all processed labels from unprocessed dict
-        for label_to_pop in list(set(labels_to_pop)):
+        for label_to_pop in deque(set(labels_to_pop)):
             if unproc and label_to_pop in self.unprocessed_labels[direc]:
                 idx = self.unprocessed_labels[direc].index(label_to_pop)
                 del self.unprocessed_labels[direc][idx]
@@ -363,10 +360,11 @@ class BiDirectional:
 
     def _save_current_best_label(self, direc):
         """
-        Label saving for unidirectional searches
+        Label saving
         """
         current_label = self.current_label[direc]
         final_label = self.final_label
+
         if self.direc_in == "both":
             self.best_labels[direc].append(current_label)
             flip_direc = "forward" if direc == "backward" else "backward"
@@ -377,6 +375,7 @@ class BiDirectional:
         if not final_label:
             self.final_label = current_label
             return
+        # Otherwise, check dominance and replace
         try:
             if self._full_dominance_check(current_label, final_label, direc):
                 log.debug("Saving {} as best, with path {}".format(
@@ -415,6 +414,8 @@ class BiDirectional:
             # label 1 dominates label2 in the flipped direction
             if label1_dominates_flipped:
                 return True
+            elif label1.weight < label2.weight:
+                return True
 
     ###################
     # PATH PROCESSING #
@@ -441,11 +442,8 @@ class BiDirectional:
     def _process_bwd_label(self, label, cumulative_res):
         # Reverse backward path and inverts resource consumption
         label.path.reverse()
-        if Label._REF_backward == sub:
-            label.res = self.max_res_in - label.res
-        else:
-            # Custom REF
-            label.res = self._invert_bwd_res(label, cumulative_res)
+        label.res[0] = self.max_res_in[0] - label.res[0]
+        label.res = label.res + cumulative_res
         return label
 
     def _clean_up_best_labels(self):
@@ -469,9 +467,7 @@ class BiDirectional:
 
         .. _Righini and Salani (2006): https://www.sciencedirect.com/science/article/pii/S1572528606000417
         """
-
         log.debug("joining")
-
         for fwd_label in self.best_labels["forward"]:
             # Create generator for backward labels for current forward label.
             # Excludes those that:
@@ -501,8 +497,8 @@ class BiDirectional:
 
         .. _Righini and Salani (2006): https://www.sciencedirect.com/science/article/pii/S1572528606000417
         """
-        _difference = fwd_label.res[0] - (self.max_res_in[0] - bwd_label.res[0])
-        if _difference >= 0:
+        phi = abs(fwd_label.res[0] - (self.max_res_in[0] - bwd_label.res[0]))
+        if phi >= 0:
             return True
         else:
             return False
@@ -537,15 +533,10 @@ class BiDirectional:
             return
         # Process backward label
         self._process_bwd_label(_bwd_label, label.res)
-        # Get total consumed resources (inverted)
-        total_res_bwd = _bwd_label.res
         # Record total weight, total_res and final path
         weight = fwd_label.weight + edge[2]['weight'] + _bwd_label.weight
-        # If
-        if Label._REF_backward == sub:
-            total_res = label.res + total_res_bwd
-        else:
-            total_res = _bwd_label.res
+        # Get total consumed resources (inverted)
+        total_res = _bwd_label.res
         final_path = fwd_label.path + _bwd_label.path
         merged_label = Label(weight, "Sink", total_res, final_path)
         return merged_label
@@ -557,24 +548,3 @@ class BiDirectional:
             log.debug("Saving label {} as best".format(label))
             log.debug("With path {}".format(label.path))
             self.best_label = label
-
-    def _invert_bwd_res(self, label_to_invert, cumulative_res):
-        """
-        Invert total backward resource to make it forward compatible.
-        To do this, we traverse the path forwards appling the forward REF.
-
-        Parameters
-        ----------
-        label_to_invert : label.Label object
-
-        Returns
-        -------
-        array with total resources consumed
-        """
-        edges = (
-            e for e in self.G.edges(data=True)
-            if e[:2] in zip(label_to_invert.path, label_to_invert.path[1:]))
-        fwd_dummy = Label(0, label_to_invert.node, cumulative_res, [])
-        for e in edges:
-            fwd_dummy.res = Label._REF_forward(fwd_dummy.res, e)
-        return fwd_dummy.res

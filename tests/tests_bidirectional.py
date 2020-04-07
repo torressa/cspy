@@ -15,9 +15,10 @@ class TestsBiDirectional(unittest.TestCase):
     path of simple DiGraph using the BiDirectional algorithm.
     Includes algorithm classification, and some exception handling.
     """
+
     def setUp(self):
         # Maximum and minimum resource arrays
-        self.max_res, self.min_res = [4, 20], [1, 0]
+        self.max_res, self.min_res = [4, 20], [0, 0]
         # Create simple digraph with appropriate attributes
         self.G = DiGraph(directed=True, n_res=2)
         self.G.add_edge('Source', 'A', res_cost=array([1, 2]), weight=-1)
@@ -55,7 +56,8 @@ class TestsBiDirectional(unittest.TestCase):
         Find shortest path of simple test digraph using the BiDirectional
         algorithm with only forward direction.
         """
-        bidirec = BiDirectional(self.G, [200, 20],
+        bidirec = BiDirectional(self.G,
+                                self.max_res,
                                 self.min_res,
                                 direction='forward')
         # Check classification
@@ -77,7 +79,8 @@ class TestsBiDirectional(unittest.TestCase):
         algorithm with only backward direction.
         """
         bidirec = BiDirectional(self.G,
-                                self.max_res, [-1, 0],
+                                self.max_res,
+                                self.min_res,
                                 direction='backward')
         # Check classification
         with self.assertLogs('cspy.algorithms.bidirectional') as cm:
@@ -97,12 +100,10 @@ class TestsBiDirectional(unittest.TestCase):
         # Check forward and backward label dominance
         L1 = Label(10, 'B', array([6, 5]), [])
         L2 = Label(1, 'B', array([6, -3]), [])
-        L3 = Label(-10, 'A', array([3, -8.3]), [])
-        L4 = Label(-9, 'A', array([4, -6.3]), [])
-        L5 = Label(0, 'A', array([4, -5.1]), [])
+        L3 = Label(-10, 'A', array([3, -8]), [])
+        L4 = Label(-10, 'A', array([4, -6]), [])
         self.assertTrue(L2.dominates(L1, "forward"))
         self.assertTrue(L3.dominates(L4, "forward"))
-        self.assertTrue(L3.dominates(L5, "forward"))
 
     def testInputExceptions(self):
         # Check whether wrong input raises exceptions

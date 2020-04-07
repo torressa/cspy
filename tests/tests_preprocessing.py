@@ -15,6 +15,7 @@ class TestsPreprocessing(unittest.TestCase):
     Tests for finding the resource constrained shortest
     path of simple DiGraph using the BiDirectional algorithm.
     """
+
     def setUp(self):
         # Create digraph with negative resource costs with unreachable node 'B'
         self.G = DiGraph(directed=True, n_res=2)
@@ -49,8 +50,8 @@ class TestsPreprocessing(unittest.TestCase):
         generated/networkx.algorithms.shortest_paths.weighted.negative_edge_cycle.html
         """
         with self.assertRaises(Exception) as context:
-            check(self.H, self.max_res, self.min_res, 1, "foo", "bar",
-                  "bidirectional")
+            check(self.H, self.max_res, self.min_res, 1, "foo", "bidirectional")
+
         self.assertTrue(
             "A negative cost cycle was found" in str(context.exception))
         self.assertTrue(
@@ -58,24 +59,24 @@ class TestsPreprocessing(unittest.TestCase):
         self.assertTrue(
             "Input must be a nx.Digraph()" in str(context.exception))
         self.assertTrue(
-            "Input direction has to be 'forward', 'backward', or 'both'" in
-            str(context.exception))
+            "Input direction has to be 'forward', 'backward', or 'both'" in str(
+                context.exception))
         self.assertTrue(
             "Resources must be of length >= 2" in str(context.exception))
         # Turn MultiGraph into DiGraph
         self.H = DiGraph(self.H)
         with self.assertRaises(Exception) as context:
             check(self.H, self.max_res, [1, 2])
-        self.assertTrue("Input graph must have 'n_res' attribute" in str(
-            context.exception))
+        self.assertTrue(
+            "Input graph must have 'n_res' attribute" in str(context.exception))
         self.assertTrue("Input graph must have edges with 'res_cost' attribute"
                         in str(context.exception))
         self.assertTrue(
             "Input lists have to be equal length" in str(context.exception))
         with self.assertRaises(Exception) as context:
             check(self.H, self.max_res, [2], 1)
-        self.assertTrue("Elements of input lists must be numbers" in str(
-            context.exception))
+        self.assertTrue(
+            "Elements of input lists must be numbers" in str(context.exception))
 
 
 if __name__ == '__main__':
