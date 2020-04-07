@@ -42,7 +42,7 @@ class BiDirectional:
         usage (including initial backward stopping point).
         We must have ``len(min_res)`` :math:`=` ``len(max_res)`` :math:`\geq 2`
 
-    REF_forward : function, optional
+    REF : function, optional
         Custom resource extension function. See `REFs`_ for more details.
         Default : additive.
 
