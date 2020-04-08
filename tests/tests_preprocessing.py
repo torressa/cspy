@@ -50,7 +50,8 @@ class TestsPreprocessing(unittest.TestCase):
         generated/networkx.algorithms.shortest_paths.weighted.negative_edge_cycle.html
         """
         with self.assertRaises(Exception) as context:
-            check(self.H, self.max_res, self.min_res, 1, "foo", "bidirectional")
+            check(self.H, self.max_res, self.min_res, 1, "foo", "tabu")
+
 
         self.assertTrue(
             "A negative cost cycle was found" in str(context.exception))
@@ -61,8 +62,7 @@ class TestsPreprocessing(unittest.TestCase):
         self.assertTrue(
             "Input direction has to be 'forward', 'backward', or 'both'" in str(
                 context.exception))
-        self.assertTrue(
-            "Resources must be of length >= 2" in str(context.exception))
+
         # Turn MultiGraph into DiGraph
         self.H = DiGraph(self.H)
         with self.assertRaises(Exception) as context:
