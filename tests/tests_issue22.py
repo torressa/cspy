@@ -16,6 +16,7 @@ class TestsIssue22(unittest.TestCase):
     Tests for issue #22
     https://github.com/torressa/cspy/issues/22
     """
+
     def setUp(self):
         # Create simple digraph with appropriate attributes
         self.G = DiGraph(directed=True, n_res=2)
@@ -33,7 +34,7 @@ class TestsIssue22(unittest.TestCase):
 
     def testDominance(self):
         # Check forward and backward label dominance
-        L1 = Label(-10, "Sink", array([3, 2]), [])
+        L1 = Label(-10, "Sink", array([3, 0]), [])
         L2 = Label(0, "Sink", array([1, 0]), [])
 
         self.assertFalse(L1.dominates(L2, "forward"))

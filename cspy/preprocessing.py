@@ -18,6 +18,7 @@ def prune_graph(G, max_res, min_res):
     because of node_k, therefore, we add path[key][-2] = node_k to
     the dictionary of nodes to remove.
     """
+
     def _check_resource(r):
         # check resource r's feasibility along a path
 
@@ -79,8 +80,7 @@ def preprocess_graph(
     max_res,
     min_res,
     preprocess,
-    REF_forward=None,
-    REF_backward=None,
+    REF=None,
 ):
     """
     Applies preprocessing that removes nodes that cannot be reached due to
@@ -108,7 +108,7 @@ def preprocess_graph(
         exceptions are raised.
 
     """
-    if REF_forward or REF_backward:
+    if REF:
         # Cannot apply pruning with custom REFs
         return G
     if preprocess:

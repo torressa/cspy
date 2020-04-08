@@ -1,7 +1,5 @@
 from __future__ import absolute_import, print_function
 
-import logging
-
 from numpy import array
 from numpy.random import RandomState
 from networkx import relabel_nodes, set_edge_attributes

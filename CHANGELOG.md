@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed 
+
+- BiDirectional
+  - Label storage, divided into unprocessed, generated and non-dominated labels
+  - Restricted join algorithm to non-dominated labels 
+  - Changed backward resource extensions to avoid complex and computationally costly inversion. Additionally, it removes the requirement of an explicit backward REF.
+
+
+## [v0.0.14]
+
+### Removed
+
+- Bidirectional
+  - Removed use of halway point filtering for labels
+
 ## [v0.0.13]
 
 ### Added
@@ -128,7 +143,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Docstring modifications to include maths.
 - Updated README.
 
-[unreleased]: https://github.com/torressa/cspy/compare/v0.0.13...HEAD
+[unreleased]: https://github.com/torressa/cspy/compare/v0.0.14...HEAD
+[v0.0.14]: https://github.com/torressa/cspy/compare/v0.0.13...v0.0.14
 [v0.0.13]: https://github.com/torressa/cspy/compare/v0.0.12...v0.0.13
 [v0.0.12]: https://github.com/torressa/cspy/compare/v0.0.11...v0.0.12
 [v0.0.11]: https://github.com/torressa/cspy/compare/v0.0.10...v0.0.11
