@@ -61,8 +61,6 @@ class TestsPreprocessing(unittest.TestCase):
         self.assertTrue(
             "Input direction has to be 'forward', 'backward', or 'both'" in str(
                 context.exception))
-        self.assertTrue(
-            "Resources must be of length >= 2" in str(context.exception))
         # Turn MultiGraph into DiGraph
         self.H = DiGraph(self.H)
         with self.assertRaises(Exception) as context:
