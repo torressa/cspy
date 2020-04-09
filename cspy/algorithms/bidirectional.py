@@ -470,19 +470,18 @@ class BiDirectional:
         log.debug("joining")
         for fwd_label in self.best_labels["forward"]:
             # Create generator for backward labels for current forward label.
-            # Excludes those that:
-            # 1. Paths can't be joined
-            # 2. Same node
-            # 3. Pair of labels doesn't satisfy the halfway check
-            bwd_labels = (
-                l for l in self.best_labels["backward"]
-                if l.node != fwd_label.node and
-                (fwd_label.node,
-                 l.node) in self.G.edges() and self._half_way(fwd_label, l))
+            # Includes only those that:
+            # 1. Paths can be joined (exists a connecting edge)
+            # 2. Introduces no cycles
+            # 3. When combined with the forward label, they satisfy the halfway check
+            bwd_labels = (l for l in self.best_labels["backward"] if (
+                (fwd_label.node, l.node) in self.G.edges() and \
+                not any(n in fwd_label.path for n in l.path) and
+                self._half_way(fwd_label, l)))
             for bwd_label in bwd_labels:
                 # Merge two labels
                 merged_label = self._merge_labels(fwd_label, bwd_label)
-                # Check resource feasibility and halfway check
+                # Check resource feasibility
                 if (merged_label and merged_label.feasibility_check(
                         self.max_res_in, self.min_res_in)):
                     # Save label
