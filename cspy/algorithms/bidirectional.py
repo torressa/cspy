@@ -53,6 +53,13 @@ class BiDirectional:
         preferred search direction.
         Either "both", "forward", or, "backward". Default : "both".
 
+    method : string, optional
+        preferred method for determining search direction.
+        Either "random", "generated" (direction with least number of generated labels),
+        "processed" (direction with least number of processed labels), or,
+        "unprocessed" (direction with least number of unprocessed labels).
+        Default: "random".
+
     seed : None or int or numpy.random.RandomState instance, optional
         seed for PSOLGENT class. Default : None (which gives a single value
         numpy.random.RandomState).
@@ -110,6 +117,7 @@ class BiDirectional:
                  REF=None,
                  preprocess=False,
                  direction="both",
+                 method="random",
                  seed=None):
         # Check inputs and preprocess G unless option disabled
         check(G, max_res, min_res, REF, direction, __name__)
@@ -119,6 +127,7 @@ class BiDirectional:
         self.max_res, self.min_res = max_res.copy(), min_res.copy()
         self.max_res_in, self.min_res_in = array(max_res.copy()), array(
             min_res.copy())
+        self.method = method
         # To expose results
         self.best_label = None
 
@@ -137,10 +146,7 @@ class BiDirectional:
             "backward": deque()
         })
         # All generated label
-        self.generated_labels = OrderedDict({
-            "forward": deque(),
-            "backward": deque()
-        })
+        self.generated_labels = OrderedDict({"forward": 0, "backward": 0})
         # To save all best labels
         self.best_labels = OrderedDict({
             "forward": deque(),
@@ -234,8 +240,22 @@ class BiDirectional:
                 return "backward"
             elif (self.current_label["forward"] and
                   self.current_label["backward"]):
-                # TODO implement choices based on number of labels
-                return self.random_state.choice(["forward", "backward"])
+                if self.method == "random":
+                    # return a random direction
+                    return self.random_state.choice(["forward", "backward"])
+                elif self.method == "generated":
+                    # return direction with least number of generated labels
+                    return ("forward" if self.generated_labels["forward"] <
+                            self.generated_labels["backward"] else "backward")
+                elif self.method == "processed":
+                    # return direction with least number of "processed" labels
+                    return ("forward" if len(self.best_labels["forward"]) < len(
+                        self.best_labels["backward"]) else "backward")
+                elif self.method == "unprocessed":
+                    # return direction with least number of unprocessed_labels labels
+                    return ("forward" if len(self.unprocessed_labels["forward"])
+                            < len(self.unprocessed_labels["backward"]) else
+                            "backward")
             else:  # if both are empty
                 return
         else:
@@ -283,8 +303,7 @@ class BiDirectional:
         if new_label and new_label.feasibility_check(self.max_res,
                                                      self.min_res):
             # And is not already in the unprocessed labels list
-            if (new_label not in self.unprocessed_labels[direc] and
-                    new_label not in self.generated_labels[direc]):
+            if (new_label not in self.unprocessed_labels[direc]):
                 self.unprocessed_labels[direc].append(new_label)
 
     def _get_next_label(self, direc):
@@ -293,7 +312,8 @@ class BiDirectional:
         current_label = self.current_label[direc]
         unproc_labels = self.unprocessed_labels[direc]
 
-        self.generated_labels[direc].append(current_label)
+        # Add 1 to count of generated_labels
+        self.generated_labels[direc] += 1
         self._remove_labels([current_label], direc, unproc=True)
         # Return label with minimum monotone resource for the forward search
         # and the maximum monotone resource for the backward search
@@ -447,8 +467,6 @@ class BiDirectional:
         return label
 
     def _clean_up_best_labels(self):
-        del self.generated_labels
-        del self.unprocessed_labels
         # Removed all dominated labels in best_labels
         for direc in ["forward", "backward"]:
             labels_to_pop = deque()

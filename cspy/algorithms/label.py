@@ -37,28 +37,6 @@ class Label(object):
     def __str__(self):  # for printing purposes
         return "Label({0},{1},{2})".format(self.weight, self.node, self.res)
 
-    def __lt__(self, other):
-        # Less than operator for two Label objects
-        return (self.weight < other.weight and all(self.res <= other.res)) or (
-            self.weight <= other.weight and
-            (all(self.res <= other.res) and any(self.res < other.res)))
-
-    def __le__(self, other):
-        # Less than or equal to operator for two Label objects
-        return self.weight <= other.weight and all(self.res <= other.res)
-
-    def __eq__(self, other):
-        # Equality operator for two Label objects
-        if other:
-            return (self.weight == other.weight and
-                    all(equal(self.res, other.res)) and self.node == other.node)
-        else:
-            return False
-
-    def __hash__(self):
-        # Redefinition of hash to avoid TypeError due to the __eq__ definition
-        return id(self)
-
     def dominates(self, other, direction):
         # Determine whether self dominates other. Returns bool
         if self.node != other.node:
