@@ -3,7 +3,6 @@
 from __future__ import absolute_import
 from __future__ import print_function
 
-from operator import add
 from math import factorial
 from logging import getLogger
 from collections import deque

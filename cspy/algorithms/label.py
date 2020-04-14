@@ -1,5 +1,4 @@
 import types
-from numpy import equal
 
 
 class Label(object):

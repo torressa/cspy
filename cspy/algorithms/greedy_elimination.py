@@ -3,12 +3,10 @@ from __future__ import print_function
 
 import logging
 from numpy import array
-from networkx import astar_path, NetworkXException
+from networkx import NetworkXException
 
 # Local imports
-from cspy.checking import check
 from cspy.algorithms.path_base import PathBase
-from cspy.preprocessing import preprocess_graph
 
 log = logging.getLogger(__name__)
 

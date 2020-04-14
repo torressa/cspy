@@ -7,16 +7,13 @@ from __future__ import print_function
 
 from math import sqrt
 from abc import ABCMeta
-from operator import add
 from logging import getLogger
 from numpy.random import RandomState
 from numpy import (argmin, array, copy, diag_indices_from, exp, dot, zeros,
                    ones, where)
 
 # Local imports
-from cspy.checking import check
 from cspy.algorithms.path_base import PathBase
-from cspy.preprocessing import preprocess_graph
 
 log = getLogger(__name__)
 
@@ -344,7 +341,8 @@ class PSOLGENT(PathBase):
             edge for edge in self.G.edges(self.G.nbunch_iter(nodes), data=True)
             if edge[0:2] in zip(nodes, nodes[1:]))
 
-    def _check_edges(self, edges):
+    @staticmethod
+    def _check_edges(edges):
         """
         If edges given, saves the path provided.
         Returns whether the path is disconnected or not
