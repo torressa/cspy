@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [v0.1.0] - 14/04/2020
 
 ### Added 
 
@@ -32,14 +32,14 @@ path using `networkx.shortest_simple_paths`.
 
 - Negative edge cycle assumption
 
-## [v0.0.14]
+## [v0.0.14] - 01/04/2020
 
 ### Removed
 
 - Bidirectional
   - Removed use of halway point filtering for labels
 
-## [v0.0.13]
+## [v0.0.13] - 26/03/2020
 
 ### Added
 
@@ -160,7 +160,9 @@ path using `networkx.shortest_simple_paths`.
 - Docstring modifications to include maths.
 - Updated README.
 
-[unreleased]: https://github.com/torressa/cspy/compare/v0.0.13...HEAD
+[unreleased]: https://github.com/torressa/cspy/compare/v0.1.0...HEAD
+[v0.1.0]: https://github.com/torressa/cspy/compare/v0.0.14...v0.1.0
+[v0.0.14]: https://github.com/torressa/cspy/compare/v0.0.13...v0.0.14
 [v0.0.13]: https://github.com/torressa/cspy/compare/v0.0.12...v0.0.13
 [v0.0.12]: https://github.com/torressa/cspy/compare/v0.0.11...v0.0.12
 [v0.0.11]: https://github.com/torressa/cspy/compare/v0.0.10...v0.0.11
