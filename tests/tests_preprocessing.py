@@ -42,19 +42,14 @@ class TestsPreprocessing(unittest.TestCase):
         self.G = preprocess_graph(self.G, [5, 20], [0, 0], True)
         self.assertTrue('B' not in self.G.nodes())
 
-    def testNegativeCostCycle(self):
+    def testFormatting(self):
         """
-        Tests if the right type of exception is raise for a network with a
-        negative cost cycle.
-        See: https://networkx.github.io/documentation/networkx-1.10/reference/
-        generated/networkx.algorithms.shortest_paths.weighted.negative_edge_cycle.html
+        Check if wrong formatting ang graph attributes raise appropriate error
+        messages.
         """
         with self.assertRaises(Exception) as context:
-            check(self.H, self.max_res, self.min_res, 1, "foo", "tabu")
+            check(self.H, self.max_res, self.min_res, 1, "foo", "alg")
 
-
-        self.assertTrue(
-            "A negative cost cycle was found" in str(context.exception))
         self.assertTrue(
             "REF functions must be callable" in str(context.exception))
         self.assertTrue(

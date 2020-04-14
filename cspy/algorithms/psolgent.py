@@ -15,76 +15,17 @@ from numpy import (argmin, array, copy, diag_indices_from, exp, dot, zeros,
 
 # Local imports
 from cspy.checking import check
-from cspy.algorithms.path import Path
+from cspy.algorithms.path_base import PathBase
 from cspy.preprocessing import preprocess_graph
 
 log = getLogger(__name__)
 
 
-class StandardGraph:
-    def __init__(self, G, max_res, min_res, REF, preprocess):
-        # Check inputs
-        check(G, max_res, min_res, REF)
-        # Preprocess graph
-        self.G = preprocess_graph(G, max_res, min_res, preprocess, REF)
-        self.max_res = max_res
-        self.min_res = min_res
-        self.path_list = None
-        self.best_path = None
-        self.path_edges = None
-        # Set path class attribute
-        if REF:
-            Path._REF = REF
-        else:
-            Path._REF = add
-
-    def _get_path_edges(self, nodes):
-        # Creates a list of edges given the nodes selected
-        self.path_edges = list(
-            edge for edge in self.G.edges(self.G.nbunch_iter(nodes), data=True)
-            if edge[0:2] in zip(nodes, nodes[1:]))
-
-    def _save_shortest_path(self):
-        """
-        If edges given, saves the path provided.
-        Returns whether the path is disconnected or not
-        """
-        if self.path_edges:
-            self.path_list = [edge[0] for edge in self.path_edges]
-            self.path_list.append(self.path_edges[-1][1])
-            return any(edge[1] not in self.path_list
-                       for edge in self.path_edges)
-
-    def _check_path(self):
-        """
-        Returns False if path is not valid
-        Penalty otherwise
-        """
-        if self.path_list:
-            if len(self.path_list) > 2 and (self.path_list[0] == 'Source'
-                                            and self.path_list[-1] == 'Sink'):
-                base_cost = sum(edge[2]['weight'] for edge in self.path_edges)
-                # if self.path[0] == 'Source' and self.path[-1] == 'Sink':
-                path = Path(self.G, self.path_list, self.max_res, self.min_res)
-                if path.check_feasibility() is True:
-                    self.best_path = path
-                    log.debug("Resource feasible path found")
-                    return base_cost
-                else:
-                    # penalty for resource infeasible valid path
-                    return 1e5 + base_cost
-            else:
-                return False
-        else:
-            return False
-
-
-class PSOLGENT(StandardGraph):
+class PSOLGENT(PathBase):
     """
     Particle Swarm Optimization with combined Local and Global Expanding
     Neighborhood Topology (PSOLGENT) algorithm for the (resource)
     constrained shortest path problem (`Marinakis et al 2017`_).
-
 
     Given the nature of our problem we have set the default parameters of
     the algorithm as suggested in the paper mentioned.
@@ -178,8 +119,6 @@ class PSOLGENT(StandardGraph):
 
     Example
     -------
-    To run the algorithm, create a :class:`PSOLGENT` instance and call `run`.
-
     .. code-block:: python
 
         >>> from cspy import PSOLGENT
@@ -231,8 +170,8 @@ class PSOLGENT(StandardGraph):
                  c2=1.35,
                  c3=1.4,
                  seed=None):
-        # Init graph
-        StandardGraph.__init__(self, G, max_res, min_res, REF, preprocess)
+        # Pass arguments to parent class
+        super().__init__(G, max_res, min_res, REF, preprocess)
         # Inputs
         self.swarm_size = swarm_size
         self.member_size = member_size if member_size else len(G.nodes())
@@ -283,33 +222,6 @@ class PSOLGENT(StandardGraph):
             pass
         else:
             raise Exception("No resource feasible path has been found")
-
-    @property
-    def path(self):
-        """
-        Get list with nodes in calculated path.
-        """
-        if not self.best_path:
-            raise Exception("Please call the .run() method first")
-        return self.best_path.path
-
-    @property
-    def total_cost(self):
-        """
-        Get accumulated cost along the path.
-        """
-        if not self.best_path:
-            raise Exception("Please call the .run() method first")
-        return self.best_path.cost
-
-    @property
-    def consumed_resources(self):
-        """
-        Get accumulated resources consumed along the path.
-        """
-        if not self.best_path:
-            raise Exception("Please call the .run() method first")
-        return self.best_path.total_res
 
     def _init_swarm(self):
         # Initialises the variables that are altered during the algorithm
@@ -381,9 +293,7 @@ class PSOLGENT(StandardGraph):
         self.local_best = array([self.pos[argmin(self.fitness[bottom:top])]] *
                                 self.swarm_size)
 
-    ###########
     # Fitness #
-    ###########
     # Fitness conversion to path representation of solutions and evaluation
     def _get_fitness(self, pos):
         # Applies objective function to all members of swarm
@@ -400,20 +310,25 @@ class PSOLGENT(StandardGraph):
         return array([1 if s < rand else 0 for s in sig])
 
     def _update_current_nodes(self, arr):
-        """ Saves binary representation of nodes in path.
-        0 not present, 1 present. """
+        """
+        Saves binary representation of nodes in path.
+        0 not present, 1 present.
+        """
         nodes = self._sort_nodes(list(self.G.nodes()))
-        self.current_nodes = list(nodes[i] for i in range(len(nodes))
-                                  if arr[i] == 1)
+        self.current_nodes = list(
+            nodes[i] for i in range(len(nodes)) if arr[i] == 1)
 
     def _get_fitness_member(self):
         # Returns the objective for a given path
-        self._get_path_edges(self.current_nodes)
-        disconnected = self._save_shortest_path()
-        if self.path_edges:
+        return self._fitness(self.current_nodes)
+
+    def _fitness(self, nodes):
+        edges = self._get_edges(nodes)
+        disconnected, path = self._check_edges(edges)
+        if edges:
             if disconnected:
                 return 1e7  # disconnected path
-            cost = self._check_path()
+            cost = self._check_path(path, edges)
             if cost is not False:
                 # Valid path with penalty
                 return cost
@@ -422,11 +337,52 @@ class PSOLGENT(StandardGraph):
         else:
             return 1e6  # no path
 
+    # Path-related methods #
+    def _get_edges(self, nodes):
+        # Creates a list of edges given the nodes selected
+        return list(
+            edge for edge in self.G.edges(self.G.nbunch_iter(nodes), data=True)
+            if edge[0:2] in zip(nodes, nodes[1:]))
+
+    def _check_edges(self, edges):
+        """
+        If edges given, saves the path provided.
+        Returns whether the path is disconnected or not
+        """
+        if edges:
+            path = [edge[0] for edge in edges]
+            path.append(edges[-1][1])
+            return any(edge[1] not in path for edge in edges), path
+        else:
+            return None, None
+
+    def _check_path(self, path, edges):
+        """
+        Returns False if path is not valid
+        Penalty/cost otherwise
+        """
+        if path:
+            if len(path) > 2 and (path[0] == 'Source' and path[-1] == 'Sink'):
+                base_cost = sum(edge[2]['weight'] for edge in edges)
+                self.st_path = path
+                if self.check_feasibility() is True:
+                    log.debug("Resource feasible path found")
+                    return base_cost
+                else:
+                    # penalty for resource infeasible valid path
+                    return 1e5 + base_cost
+            else:
+                return False
+        else:
+            return False
+
     @staticmethod
     def _sort_nodes(nodes):
-        """ Sort nodes between Source and Sink. If node data allows sorting,
-        edit line 327 to pass `list(self.G.nodes(data=True))` and used that
+        """
+        Sort nodes between Source and Sink. If node data allows sorting,
+        edit the line below to pass `list(self.G.nodes(data=True))` and used that
         in the sorting function below.
+
         For example, if nodes have an attribute `pos` a tuple that contains
         the position of a node in space (x, y), replace the return with:
         `return sorted(nodes, key=lambda n: n[1]['pos'][0])`

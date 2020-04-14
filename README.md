@@ -31,6 +31,13 @@ Currently, the exact and metaheuristic algorithms implemented include:
 - [x] Greedy Randomised Adaptive Search Procedure (GRASP) (metaheuristic). Adapted from [Ferone et al. (2019)](https://www.tandfonline.com/doi/full/10.1080/10556788.2018.1548015);
 - [x] Particle Swarm Optimization with combined Local and Global Expanding Neighborhood Topology (PSOLGENT) (metaheuristic) [Marinakis et al. (2017)](https://www.sciencedirect.com/science/article/pii/S0377221717302357).
 
+Please see the individual algorithms API Documentation for some toy examples and more details:
+
+- [Bidirectional and monodirectional algorithms](https://cspy.readthedocs.io/en/latest/api/cspy.BiDirectional.html)
+- [Heuristic Tabu Search](https://cspy.readthedocs.io/en/latest/api/cspy.Tabu.html)
+- [Greedy Elimination Procedure](https://cspy.readthedocs.io/en/latest/api/cspy.GreedyElim.html)
+- [GRASP](https://cspy.readthedocs.io/en/latest/api/cspy.GRASP.html)
+- [PSOLGENT](https://cspy.readthedocs.io/en/latest/api/cspy.PSOLGENT.html)
 ## Getting Started
 
 ### Prerequisites
@@ -74,13 +81,6 @@ I have included a few examples:
 - [`cgar`](examples/cgar) : Complex example use of `cspy` in a column generation example applied to the aircraft recovery problem.
 - [`vrpy`](https://github.com/Kuifje02/vrpy) : (under development) external vehicle routing framework which uses `cspy` to solve different variants of the vehicle routing problem using column generation.
 
-Please see the individual algorithms API Documentation for some toy examples and more details:
-
-- [Bidirectional and monodirectional algorithms](https://cspy.readthedocs.io/en/latest/api/cspy.BiDirectional.html)
-- [Heuristic Tabu Search](https://cspy.readthedocs.io/en/latest/api/cspy.Tabu.html)
-- [Greedy Elimination Procedure](https://cspy.readthedocs.io/en/latest/api/cspy.GreedyElim.html)
-- [GRASP](https://cspy.readthedocs.io/en/latest/api/cspy.GRASP.html)
-- [PSOLGENT](https://cspy.readthedocs.io/en/latest/api/cspy.PSOLGENT.html)
 
 ## Running the tests
 

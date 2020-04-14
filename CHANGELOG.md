@@ -24,6 +24,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Removed costly comparison in `_propagate_label`.
   - Changed generated labels attributes from dict of deques to dict of int with count.
 
+- Rework of path and algorithm attributes to avoid duplication
+- Replaced `networkx.astar` algorithm with a procedure that finds a short simple
+path using `networkx.shortest_simple_paths`.
+
+### Removed
+
+- Negative edge cycle assumption
+
 ## [v0.0.14]
 
 ### Removed

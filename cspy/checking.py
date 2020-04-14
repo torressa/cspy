@@ -1,4 +1,4 @@
-from networkx import (DiGraph, NetworkXException, has_path, negative_edge_cycle)
+from networkx import DiGraph, NetworkXException, has_path
 from numpy import ndarray
 
 
@@ -133,8 +133,6 @@ def _check_path(G, max_res, min_res, direction, algorithm):
     try:
         if not has_path(G, 'Source', 'Sink'):
             raise NetworkXException("Disconnected Graph")
-        if negative_edge_cycle(G) and "bidirectional" not in algorithm:
-            raise NetworkXException("A negative cost cycle was found")
     except NetworkXException as e:
         raise Exception("An error occurred: {}".format(e))
 

@@ -3,22 +3,21 @@
 from __future__ import absolute_import
 from __future__ import print_function
 
-import logging
 from operator import add
 from math import factorial
+from logging import getLogger
+from collections import deque
 from numpy.random import choice
 from random import sample, randint
-from cspy.algorithms.path import Path
 from itertools import permutations, repeat
 
 # Local imports
-from cspy.checking import check
-from cspy.preprocessing import preprocess_graph
+from cspy.algorithms.path_base import PathBase
 
-log = logging.getLogger(__name__)
+log = getLogger(__name__)
 
 
-class GRASP:
+class GRASP(PathBase):
     """
     Greedy Randomised Adaptive Search Procedure for the (resource) constrained
     shortest path problem. Adapted from `Ferone et al 2019`_.
@@ -111,6 +110,7 @@ class GRASP:
     .. _Ferone et al 2019: https://www.tandfonline.com/doi/full/10.1080/10556788.2018.1548015
 
     """
+
     def __init__(self,
                  G,
                  max_res,
@@ -120,12 +120,9 @@ class GRASP:
                  max_iter=100,
                  max_localiter=10,
                  alpha=0.2):
-        # Check inputs
-        check(G, max_res, min_res, REF)
-        # Preprocess graph
-        self.G = preprocess_graph(G, max_res, min_res, preprocess, REF)
-        self.max_res = max_res
-        self.min_res = min_res
+        # Pass arguments to parent class
+        super().__init__(G, max_res, min_res, REF, preprocess)
+        # Algorithm specific attributes
         self.max_iter = max_iter
         self.max_localiter = max_localiter
         self.alpha = alpha
@@ -135,11 +132,6 @@ class GRASP:
         self.best_path = None
         self.best_solution = None
         self.nodes = self.G.nodes()
-        # Set path class attribute
-        if REF:
-            Path._REF = REF
-        else:
-            Path._REF = add
 
     def run(self):
         """
@@ -153,33 +145,6 @@ class GRASP:
         else:
             raise Exception("No resource feasible path has been found")
 
-    @property
-    def path(self):
-        """
-        Get list with nodes in calculated path.
-        """
-        if not self.best_path:
-            raise Exception("Please call the .run() method first")
-        return self.best_path.path
-
-    @property
-    def total_cost(self):
-        """
-        Get accumulated cost along the path.
-        """
-        if not self.best_path:
-            raise Exception("Please call the .run() method first")
-        return self.best_path.cost
-
-    @property
-    def consumed_resources(self):
-        """
-        Get accumulated resources consumed along the path.
-        """
-        if not self.best_path:
-            raise Exception("Please call the .run() method first")
-        return self.best_path.total_res
-
     def _algorithm(self):
         solution = self._construct()
         solution = self._local_search(solution)
@@ -190,11 +155,12 @@ class GRASP:
         # Construction phase
         while len(solution.path) < len(self.nodes):
             candidates = [i for i in self.nodes if i not in solution.path]
-            weights = list(
+            weights = deque(
                 map(self._heuristic, repeat(solution.path[-1]), candidates))
             # Build Restricted Candidiate List (RCL)
             restriced_candidates = [
-                candidates[i] for i, c in enumerate(weights)
+                candidates[i]
+                for i, c in enumerate(weights)
                 if c <= (min(weights) + self.alpha *
                          (max(weights) - min(weights)))
             ]
@@ -212,8 +178,8 @@ class GRASP:
             # evaluate candidate solution
             candidate.cost = self._cost_solution(candidate)
             # Update solution with candidate if lower cost and resource feasible
-            if (candidate.path and candidate.cost < solution.cost
-                    and self._check_path(candidate)):
+            if (candidate.path and candidate.cost < solution.cost and
+                    self._check_path(candidate)):
                 solution = candidate
             it += 1
         return solution
@@ -232,33 +198,6 @@ class GRASP:
         else:
             return 1e10
 
-    @staticmethod
-    def _find_alternative_paths(G, path):
-        """
-        Static Method used in local search to randomly generate valid paths.
-        Using a subset of edges, it generates a connected path starting at
-        the source node.
-        """
-        n_permutations = int(factorial(len(path)) / factorial(len(path) - 2))
-        sample_size = randint(3, n_permutations)
-        selection = sample(list(permutations(path, 2)), sample_size)
-        path_edges = dict(list(edge for edge in selection
-                               if edge in G.edges()))
-        elem = 'Source'  # start point in the new list
-        new_list = []
-        for _ in range(len(path_edges)):
-            try:
-                new_list.append((elem, path_edges[elem]))
-                elem = path_edges[elem]
-            except KeyError:
-                pass
-        if new_list:
-            nodes_to_keep = [t[0] for t in new_list]
-            nodes_to_keep.append(new_list[-1][1])
-        else:
-            nodes_to_keep = []
-        return nodes_to_keep
-
     def _cost_solution(self, solution=None):
         if solution:
             return sum(
@@ -274,18 +213,40 @@ class GRASP:
         """
         if solution:
             path, cost = solution.path, solution.cost
-            if (len(path) > 2 and cost < 1e10 and path[0] == 'Source'
-                    and path[-1] == 'Sink'):
-                _path = Path(self.G, path, self.max_res, self.min_res)
-                if _path.check_feasibility() is True:
-                    self.best_path = _path
-                    return True
-                else:
-                    return False
+            if (len(path) > 2 and cost < 1e10 and path[0] == 'Source' and
+                    path[-1] == 'Sink'):
+                self.st_path = path
+                return self.check_feasibility(return_edge=False)
             else:
                 return False
         else:
             return False
+
+    @staticmethod
+    def _find_alternative_paths(G, path):
+        """
+        Static Method used in local search to randomly generate valid paths.
+        Using a subset of edges, it generates a connected path starting at
+        the source node.
+        """
+        n_permutations = int(factorial(len(path)) / factorial(len(path) - 2))
+        sample_size = randint(3, n_permutations)
+        selection = sample(deque(permutations(path, 2)), sample_size)
+        path_edges = dict(list(edge for edge in selection if edge in G.edges()))
+        elem = 'Source'  # start point in the new list
+        new_list = []
+        for _ in range(len(path_edges)):
+            try:
+                new_list.append((elem, path_edges[elem]))
+                elem = path_edges[elem]
+            except KeyError:
+                pass
+        if new_list:
+            nodes_to_keep = [t[0] for t in new_list]
+            nodes_to_keep.append(new_list[-1][1])
+        else:
+            nodes_to_keep = []
+        return nodes_to_keep
 
 
 class Solution(object):
@@ -301,12 +262,7 @@ class Solution(object):
     cost : float
         cost of solution
     """
+
     def __init__(self, path, cost):
         self.path = path
         self.cost = cost
-
-    def __repr__(self):
-        return str(self)
-
-    def __str__(self):  # for printing purposes
-        return "Solution({0},{1})".format(self.path, self.cost)

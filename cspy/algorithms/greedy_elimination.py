@@ -7,13 +7,13 @@ from networkx import astar_path, NetworkXException
 
 # Local imports
 from cspy.checking import check
-from cspy.algorithms.path import Path
+from cspy.algorithms.path_base import PathBase
 from cspy.preprocessing import preprocess_graph
 
 log = logging.getLogger(__name__)
 
 
-class GreedyElim:
+class GreedyElim(PathBase):
     """
     Simple Greedy elimination algorithm for the (resource) constrained shortest
     path problem. The algorithms solves a standard shortest path problem and
@@ -42,8 +42,10 @@ class GreedyElim:
     preprocess : bool, optional
         enables preprocessing routine. Default : False.
 
-    return_G : bool, optional
-        whether or not you'd like the resulting graph returned
+    max_depth : int, optional
+        depth for search of shortest simple path. Default : 1000.
+        If the total number of simple paths is less than max_depth,
+        then the shortest path is used.
 
     .. _REFs : https://cspy.readthedocs.io/en/latest/how_to.html#refs
 
@@ -92,22 +94,18 @@ class GreedyElim:
         ['Source', 'A', 'C', 'D', 'E', 'Sink']
 
     """
+
     def __init__(self,
                  G,
                  max_res,
                  min_res,
                  REF=None,
                  preprocess=False,
-                 return_G=False):
-        # Check inputs
-        check(G, max_res, min_res, REF)
-        # Preprocess graph
-        self.G = preprocess_graph(G, max_res, min_res, preprocess, REF)
-        # Input parameters
-        self.max_res = max_res
-        self.min_res = min_res
+                 max_depth=1000):
+        # Pass arguments to parent class
+        super().__init__(G, max_res, min_res, REF, preprocess)
         # Algorithm specific parameters
-        self.it = 0
+        self.max_depth = max_depth
         self.stop = False
         self.predecessor_edges = []
         self.last_edge_removed = None
@@ -115,73 +113,38 @@ class GreedyElim:
         # To return
         self.best_path = []
 
-        if REF:
-            Path._REF = REF
-
     def run(self):
         """
         Calculate shortest path with resource constraints.
         """
         while self.stop is False:
             self._algorithm()
-            self.it += 1
 
         if self.best_path:
             pass
         else:
             raise Exception("No resource feasible path has been found")
 
-    @property
-    def path(self):
-        """
-        Get list with nodes in calculated path.
-        """
-        if not self.best_path:
-            raise Exception("Please call the .run() method first")
-        return self.best_path.path
-
-    @property
-    def total_cost(self):
-        """
-        Get accumulated cost along the path.
-        """
-        if not self.best_path:
-            raise Exception("Please call the .run() method first")
-        return self.best_path.cost
-
-    @property
-    def consumed_resources(self):
-        """
-        Get accumulated resources consumed along the path.
-        """
-        if not self.best_path:
-            raise Exception("Please call the .run() method first")
-        return self.best_path.total_res
-
     def _algorithm(self):
         path = []
         try:
-            path = astar_path(self.G, 'Source', 'Sink')
+            path = self.update_simple_path("Source", self.max_depth)
         except NetworkXException:
             pass
         if path:
-            _path = Path(self.G, path, self.max_res, self.min_res)
-            edge_or_true = _path.check_feasibility()
+            self.st_path = path
+            edge_or_true = self.check_feasibility()
             if edge_or_true is True:
-                self.best_path = _path
                 self.stop = True
             else:
-                self._update_graph(edge_or_true)
+                self.remove_edge(edge_or_true)
         else:
-            self.G.add_edge(*self.last_edge_removed[:2],
-                            res_cost=self.last_edge_removed[2]['res_cost'],
-                            weight=self.last_edge_removed[2]['weight'])
-            self._update_graph(
-                self._get_predecessor_edges(self.last_edge_removed))
-
-    def _update_graph(self, edge=None):
-        self.G.remove_edge(*edge[:2])
-        self.last_edge_removed = edge
+            # no path has been found for current graph
+            # Add previously removed edge
+            self.add_edge_back(self.last_edge_removed)
+            # Remove a predecessor edge instead
+            self.remove_edge(self._get_predecessor_edges(
+                self.last_edge_removed))
 
     def _get_predecessor_edges(self, edge):
         if not self.predecessor_edges:
@@ -192,8 +155,7 @@ class GreedyElim:
             self.predecessor_edges = [
                 e for e in self.G.edges(self.G.nbunch_iter(
                     [node] + list(self.G.predecessors(node))),
-                                        data=True)
-                if e[1] == node and e != edge
+                                        data=True) if e[1] == node and e != edge
             ]
             self.predecessor_edges.sort(key=lambda x: x[2]['weight'])
         next_edge = self.predecessor_edges[-1]

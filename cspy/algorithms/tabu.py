@@ -1,16 +1,17 @@
 from __future__ import absolute_import
 from __future__ import print_function
 
-from operator import add
-from networkx import astar_path, NetworkXException
+from logging import getLogger
+from collections import deque
+from networkx import NetworkXException
 
 # Local imports
-from cspy.checking import check
-from cspy.algorithms.path import Path
-from cspy.preprocessing import preprocess_graph
+from cspy.algorithms.path_base import PathBase
+
+log = getLogger(__name__)
 
 
-class Tabu:
+class Tabu(PathBase):
     """
     Simple Tabu-esque algorithm for the (resource) constrained shortest
     path problem.
@@ -37,12 +38,13 @@ class Tabu:
     preprocess : bool, optional
         enables preprocessing routine. Default : False.
 
+    max_depth : int, optional
+        depth for search of shortest simple path. Default : 1000.
+        If the total number of simple paths is less than max_depth,
+        then the shortest path is used.
+
     .. _REFs : https://cspy.readthedocs.io/en/latest/how_to.html#refs
 
-    Returns
-    -------
-    path : list
-        nodes in shortest path obtained.
 
     Notes
     -----
@@ -54,7 +56,9 @@ class Tabu:
 
     Example
     -------
-    To run the algorithm, create a :class:`Tabu` instance and call `run`.
+    To run the algorithm, create a :class:`Tabu` instance, call `run`, and then
+    query the attributes of interest: `path`, `total_cost`, or
+    `consumed_resources`.
 
     .. code-block:: python
 
@@ -78,30 +82,24 @@ class Tabu:
         ['Source', 'A', 'C', 'D', 'E', 'Sink']
 
     """
-    def __init__(self, G, max_res, min_res, REF=None, preprocess=False):
-        # Check inputs
-        check(G, max_res, min_res, REF)
-        # Preprocess graph
-        self.G = preprocess_graph(G, max_res, min_res, preprocess, REF)
-        # Input parameters
-        self.max_res = max_res
-        self.min_res = min_res
+
+    def __init__(self,
+                 G,
+                 max_res,
+                 min_res,
+                 REF=None,
+                 preprocess=False,
+                 max_depth=1000):
+        # Pass arguments to SimplePath object
+        super().__init__(G, max_res, min_res, REF, preprocess)
         # Algorithm specific parameters
+        self.max_depth = max_depth
         self.iteration = 0
-        self.current_path = list()
-        self.best_path = list()
         self.stop = False
         self.neighbour = 'Source'
         self.neighbourhood = list()
         self.tabu_edge = None
         self.edges_to_check = dict(self.G.edges())
-        # To return
-        self.best_path = None
-        # Set path class attribute
-        if REF:
-            Path._REF = REF
-        else:
-            Path._REF = add
 
     def run(self):
         """
@@ -116,83 +114,65 @@ class Tabu:
         else:
             raise Exception("No resource feasible path has been found")
 
-    @property
-    def path(self):
-        """
-        Get list with nodes in calculated path.
-        """
-        if not self.best_path:
-            raise Exception("Please call the .run() method first")
-        return self.best_path.path
-
-    @property
-    def total_cost(self):
-        """
-        Get accumulated cost along the path.
-        """
-        if not self.best_path:
-            raise Exception("Please call the .run() method first")
-        return self.best_path.cost
-
-    @property
-    def consumed_resources(self):
-        """
-        Get accumulated resources consumed along the path.
-        """
-        if not self.best_path:
-            raise Exception("Please call the .run() method first")
-        return self.best_path.total_res
-
     def _algorithm(self):
         path = []
         try:
-            path = astar_path(self.G,
-                              self.neighbour,
-                              'Sink',
-                              heuristic=self._heuristic)
+            path = self.update_simple_path(self.neighbour, self.max_depth)
         except NetworkXException:
             pass
         if path:
-            self._update_path(path)
-            # Create path object
-            _path = Path(self.G, self.current_path, self.max_res, self.min_res)
-            edge_or_true = _path.check_feasibility()
+            self._update_path(self.neighbour, path)
+            edge_or_true = self.check_feasibility()
+            # If there is a resource feasible path
             if edge_or_true is True:
                 self.stop = True
-                self.best_path = _path
+            # Otherwise, use the infeasible edge as the next tabu edge
             else:
                 self._get_neighbour(edge_or_true)
         else:
+            log.debug("No path found")
             self._get_neighbour(self.tabu_edge)
 
-    def _update_path(self, path):
+    # Path-related methods #
+    def _update_path(self, neighbour, path):
         # Joins path using previous path and [neighbour, ..., sink] path
-        if self.iteration == 0:
-            self.current_path = path
-        if self.neighbour in self.current_path:
-            # Update current_path attribute
-            self.current_path = list(node for node in self.current_path if (
-                node != self.neighbour and self.current_path.index(
-                    node) < self.current_path.index(self.neighbour))) + path
+        if neighbour == "Source":
+            self.st_path = path
+        elif neighbour in self.st_path:
+            # Paths can be joined at neighbour
+            self.st_path = list(node for node in self.st_path if
+                                (node != neighbour and self.st_path.index(node)
+                                 < self.st_path.index(neighbour))) + path
         else:
-            self._merge_paths(path)
+            self._merge_paths(neighbour, path)
 
-    def _merge_paths(self, path):
-        branch_path = [n for n in self.current_path if n not in path]
+    def _merge_paths(self, neighbour, path):
+        branch_path = [n for n in self.st_path if n not in path]
         for node in reversed(branch_path):
-            if (node, self.neighbour) in self.G.edges():
-                self.current_path = list(n for n in branch_path if (
+            if (node, neighbour) in self.G.edges():
+                self.st_path = list(n for n in branch_path if (
                     branch_path.index(n) <= branch_path.index(node))) + path
                 break
 
+    # Algorithm-specific methods #
+    def _update_tabu_edge(self, edge):
+        # If a tabu edge has already been selected
+        if self.tabu_edge:
+            # Revert old tabu edge weight to original
+            self.add_edge_back(self.tabu_edge)
+        # Replace new tabu edge weight with large number
+        self.remove_edge(edge)
+        self.tabu_edge = edge
+
     def _get_neighbour(self, edge=None):
+        """
+        Get next neighbour to the resource infeasible edge.
+        Update the tabu edge.
+        """
         if self.edges_to_check:
             if edge and edge[:2] in self.edges_to_check:
                 # If edge not already been seen
                 current_edge = edge
-            elif edge[0] == "Source":
-                self.stop = True
-                return
             else:
                 current_edge = self._get_next_neighbour_edge(self.tabu_edge)
         else:
@@ -200,26 +180,23 @@ class Tabu:
             return
         self.edges_to_check.pop(current_edge[:2], None)
         self.neighbour = current_edge[0]
-        self.tabu_edge = current_edge
+        self._update_tabu_edge(current_edge)
 
     def _get_next_neighbour_edge(self, edge):
-        # Retrieves the edge adjacent to node with the least weight
+        # Retrieves the edge adjacent to node with the greatest weight
+        # If neighbourhood doesn't exist
         if not self.neighbourhood:
             node = edge[0]
             if node == "Source":
                 self.stop = True
                 return edge
-            self.neighbourhood = list(e for e in self.G.edges(
-                self.G.nbunch_iter([node] + list(self.G.predecessors(node))),
-                data=True) if e[1] == node and e != edge)
-            self.neighbourhood.sort(key=lambda x: x[2]['weight'])
-        next_edge = self.neighbourhood[-1]
-        self.neighbourhood.pop(-1)
+            else:
+                nodes_iter = self.G.predecessors(node)
+                self.neighbourhood = deque(e for e in self.G.edges(
+                    self.G.nbunch_iter(nodes_iter), data=True)
+                                           if e[1] == node and e != edge)
+        # Get the edge in the neighbourhood with greatest weight
+        next_edge = max(self.neighbourhood, key=lambda x: x[2]['weight'])
+        # delete edge from neighbourhood
+        del self.neighbourhood[self.neighbourhood.index(next_edge)]
         return next_edge
-
-    def _heuristic(self, i, j):
-        # Given a node pair returns a weight to apply
-        if (i, j) == self.tabu_edge:
-            return 1e7
-        else:
-            return 0

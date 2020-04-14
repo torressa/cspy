@@ -4,6 +4,7 @@ import unittest
 from numpy import array
 from random import randint
 from networkx import DiGraph, astar_path
+from parameterized import parameterized
 
 sys.path.append("../")
 from cspy.algorithms.tabu import Tabu
@@ -30,7 +31,6 @@ class TestsIssue22(unittest.TestCase):
         self.G.add_edge(2, 1, weight=-10, res_cost=array([1, 1]))
 
         self.max_res, self.min_res = [len(self.G.edges()), 2], [0, 0]
-        self.test_seed = randint(1000, 10000000)
 
     def testDominance(self):
         # Check forward and backward label dominance
@@ -55,23 +55,21 @@ class TestsIssue22(unittest.TestCase):
         cost = tabu.total_cost
         total_res = tabu.consumed_resources
         # Check attributes
-        self.assertEqual(cost, 0)
-        self.assertTrue(all(total_res == [2, 1]))
+        self.assertEqual(cost, -5)
+        self.assertTrue(all(total_res == [3, 2]))
         # Check path
-        self.assertEqual(path, ['Source', 1, 'Sink'])
+        self.assertEqual(path, ['Source', 3, 2, 'Sink'])
         self.assertTrue(all(e in self.G.edges() for e in zip(path, path[1:])))
         # Check if networkx's astar_path gives the same path
         path_star = astar_path(self.G, "Source", "Sink")
         self.assertEqual(path_star, ['Source', 1, 'Sink'])
 
-    def testBiDirectionalBothDynamic(self):
+    @parameterized.expand(zip(range(100), range(100)))
+    def testBiDirectionalBothDynamic(self, _, seed):
         """
         Find shortest path of simple test digraph using BiDirectional.
         """
-        bidirec = BiDirectional(self.G,
-                                self.max_res,
-                                self.min_res,
-                                seed=self.test_seed)
+        bidirec = BiDirectional(self.G, self.max_res, self.min_res, seed=seed)
         # Check classification
         with self.assertLogs('cspy.algorithms.bidirectional') as cm:
             bidirec.name_algorithm()

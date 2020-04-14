@@ -1,3 +1,4 @@
+from copy import deepcopy
 from logging import getLogger
 from networkx import single_source_bellman_ford
 from cspy.checking import check
@@ -110,8 +111,8 @@ def preprocess_graph(
     """
     if REF:
         # Cannot apply pruning with custom REFs
-        return G
+        return deepcopy(G.copy())
     if preprocess:
         G = prune_graph(G, max_res, min_res)
         check(G)
-    return G
+    return deepcopy(G.copy())
