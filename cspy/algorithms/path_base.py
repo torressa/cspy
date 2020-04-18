@@ -4,7 +4,8 @@ from logging import getLogger
 from numpy import zeros, array
 from types import BuiltinFunctionType
 from itertools import filterfalse, tee, chain
-from networkx import shortest_simple_paths, NetworkXException
+from networkx import (shortest_simple_paths, NetworkXException, astar_path,
+                      negative_edge_cycle)
 
 from cspy.checking import check
 from cspy.preprocessing import preprocess_graph
@@ -21,7 +22,7 @@ class PathBase(object):
     e.g. feasibility checks, compatible joining
     """
 
-    def __init__(self, G, max_res, min_res, REF=None, preprocess=False):
+    def __init__(self, G, max_res, min_res, REF, preprocess, algorithm=None):
         # Check inputs
         check(G, max_res, min_res, REF, algorithm=__name__)
         # Preprocess graph
@@ -34,6 +35,11 @@ class PathBase(object):
             self.REF = REF
         else:
             self.REF = add
+
+        if negative_edge_cycle(G) or algorithm == "simple":
+            self.algorithm = "simple"
+        else:
+            self.algorithm = "astar"
 
         # Attribute to hold source-sink path
         self.st_path = None
@@ -73,7 +79,14 @@ class PathBase(object):
             raise Exception("Please call the .run() method first")
         return self.best_path_total_res
 
-    def update_simple_path(self, source, max_depth):
+    def get_shortest_path(self, source, max_depth):
+        # Select appropriate shortest path algorithm
+        if self.algorithm == "simple":
+            return self.get_simple_path(source, max_depth)
+        else:
+            return astar_path(self.G, source, "Sink")
+
+    def get_simple_path(self, source, max_depth):
         depth = 0
 
         # Create two copies of the simple path generator

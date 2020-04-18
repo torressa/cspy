@@ -31,7 +31,6 @@ For example the following simple network fulfills all the requirements listed ab
 The algorithms have some common inputs and requirements,
 
  - Two lists ``max_res`` and ``min_res``, with lists of the maximum and minimum resource usage to be enforced for the resulting path; 
- - Input graphs must not contain any negative cost cycles.
 
 For former, the user must ensure consistency between the index in ``res_cost`` and
 the index in ``max_res``\``min_res``, such that it corresponds to the same resource.

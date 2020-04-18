@@ -40,17 +40,20 @@ class GreedyElim(PathBase):
     preprocess : bool, optional
         enables preprocessing routine. Default : False.
 
+    algorithm : string, optional
+        shortest path algorithm to use. Options are "`simple`_"
+        or "`astar`_".
+        If the input network has a negative cycle, the "`simple`_"
+        algorithm is automatically chosen (as the astar algorithm cannot cope).
+
     max_depth : int, optional
         depth for search of shortest simple path. Default : 1000.
         If the total number of simple paths is less than max_depth,
         then the shortest path is used.
 
     .. _REFs : https://cspy.readthedocs.io/en/latest/how_to.html#refs
-
-    Returns
-    -------
-    path : list
-        nodes in shortest path obtained.
+    .. _simple : https://networkx.github.io/documentation/stable/reference/algorithms/generated/networkx.algorithms.simple_paths.shortest_simple_paths.html#networkx.algorithms.simple_paths.shortest_simple_paths
+    .. _astar : https://networkx.github.io/documentation/stable/reference/algorithms/generated/networkx.algorithms.shortest_paths.astar.astar_path.html#networkx.algorithms.shortest_paths.astar.astar_path
 
     Raises
     ------
@@ -99,9 +102,10 @@ class GreedyElim(PathBase):
                  min_res,
                  REF=None,
                  preprocess=False,
+                 algorithm="simple",
                  max_depth=1000):
         # Pass arguments to parent class
-        super().__init__(G, max_res, min_res, REF, preprocess)
+        super().__init__(G, max_res, min_res, REF, preprocess, algorithm)
         # Algorithm specific parameters
         self.max_depth = max_depth
         self.stop = False
@@ -126,7 +130,7 @@ class GreedyElim(PathBase):
     def _algorithm(self):
         path = []
         try:
-            path = self.update_simple_path("Source", self.max_depth)
+            path = self.get_shortest_path("Source", self.max_depth)
         except NetworkXException:
             pass
         if path:
