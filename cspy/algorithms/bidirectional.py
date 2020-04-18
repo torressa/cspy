@@ -515,7 +515,7 @@ class BiDirectional:
         .. _Righini and Salani (2006): https://www.sciencedirect.com/science/article/pii/S1572528606000417
         """
         phi = abs(fwd_label.res[0] - (self.max_res_in[0] - bwd_label.res[0]))
-        if phi >= 0:
+        if 0 <= phi <= 2:
             return True
         else:
             return False
