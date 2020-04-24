@@ -2,7 +2,7 @@ from __future__ import absolute_import
 
 from copy import deepcopy
 from itertools import repeat
-from operator import add
+from operator import add, sub
 from logging import getLogger
 from collections import OrderedDict, deque
 
@@ -42,8 +42,8 @@ class BiDirectional:
         usage (including initial backward stopping point).
         We must have ``len(min_res)`` :math:`=` ``len(max_res)`` :math:`\geq 2`
 
-    REF : function, optional
-        Custom resource extension function. See `REFs`_ for more details.
+    REF_forward, REF_backward, REF_join : functions, optional
+        Custom resource extension functions. See `REFs`_ for more details.
         Default : additive.
 
     preprocess : bool, optional
@@ -114,15 +114,18 @@ class BiDirectional:
                  G,
                  max_res,
                  min_res,
-                 REF=None,
+                 REF_forward=None,
+                 REF_backward=None,
+                 REF_join=None,
                  preprocess=False,
                  direction="both",
                  method="random",
                  seed=None):
         # Check inputs and preprocess G unless option disabled
-        check(G, max_res, min_res, REF, direction, __name__)
+        check(G, max_res, min_res, direction=direction, algorithm=__name__)
         # Preprocess graph
-        self.G = preprocess_graph(G, max_res, min_res, preprocess, REF)
+        self.G = preprocess_graph(G, max_res, min_res, preprocess, REF_forward)
+        self.REF_join = REF_join
         self.direc_in = direction
         self.max_res, self.min_res = max_res.copy(), min_res.copy()
         self.max_res_in, self.min_res_in = array(max_res.copy()), array(
@@ -156,10 +159,14 @@ class BiDirectional:
         self.final_label = None
 
         # If given, set REFs for dominance relations and feasibility checks
-        if REF:
-            Label._REF = REF
+        if REF_forward:
+            Label._REF_forward = REF_forward
         else:
-            Label._REF = add
+            Label._REF_forward = add
+        if REF_backward:
+            Label._REF_backward = REF_backward
+        else:
+            Label._REF_backward = sub
         # Init with seed if given
         if seed is None:
             self.random_state = RandomState()
@@ -459,7 +466,7 @@ class BiDirectional:
                 self.best_label = self._process_bwd_label(
                     self.final_label, self.min_res_in)
 
-    def _process_bwd_label(self, label, cumulative_res):
+    def _process_bwd_label(self, label, cumulative_res, edge=None):
         # Reverse backward path and inverts resource consumption
         label.path.reverse()
         label.res[0] = self.max_res_in[0] - label.res[0]
@@ -543,19 +550,23 @@ class BiDirectional:
         # Reconstruct edge with edge data
         edge = (fwd_label.node, _bwd_label.node,
                 self.G[fwd_label.node][_bwd_label.node])
-        # Extend forward label along joining edge
-        label = fwd_label.get_new_label(edge, "forward")
-
-        if not label:
-            return
-        # Process backward label
-        self._process_bwd_label(_bwd_label, label.res)
+        # Custom resource merging function
+        if self.REF_join:
+            final_res = self.REF_join(fwd_label.res, _bwd_label.res, edge)
+            self._process_bwd_label(_bwd_label, self.min_res_in)
+        # Default resource merging
+        else:
+            # Extend forward label along joining edge
+            label = fwd_label.get_new_label(edge, "forward")
+            if not label:
+                return
+            # Process backward label
+            self._process_bwd_label(_bwd_label, label.res)
+            final_res = _bwd_label.res
         # Record total weight, total_res and final path
         weight = fwd_label.weight + edge[2]['weight'] + _bwd_label.weight
-        # Get total consumed resources (inverted)
-        total_res = _bwd_label.res
         final_path = fwd_label.path + _bwd_label.path
-        merged_label = Label(weight, "Sink", total_res, final_path)
+        merged_label = Label(weight, "Sink", final_res, final_path)
         return merged_label
 
     def _save(self, label):

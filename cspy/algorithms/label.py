@@ -22,7 +22,7 @@ class Label(object):
         all nodes in the path
     """
 
-    _REF = None
+    _REF_forward, _REF_backward = None, None
 
     def __init__(self, weight, node, res, path):
         self.weight = weight
@@ -64,13 +64,18 @@ class Label(object):
             return None
         else:
             path.append(node)
-        if isinstance(self._REF, types.BuiltinFunctionType):
-            res_new = self.res + res
-        else:
-            res_new = self._REF(self.res, edge)
-        if direction == "backward":
-            # Update monotone resource
-            res_new[0] = self.res[0] - 1
+        if direction == "forward":
+            if isinstance(self._REF_forward, types.BuiltinFunctionType):
+                res_new = self.res + res
+            else:
+                res_new = self._REF_forward(self.res, edge)
+        elif direction == "backward":
+            if isinstance(self._REF_backward, types.BuiltinFunctionType):
+                res_new = self.res + res
+                res_new[0] = self.res[0] - 1
+            else:
+                res_new = self._REF_backward(self.res, edge)
+
         _new_label = Label(weight + self.weight, node, res_new, path)
         if _new_label == self:
             # If resulting label is the same
