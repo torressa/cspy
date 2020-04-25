@@ -31,10 +31,6 @@ class Tabu(PathBase):
         usage (including initial backward stopping point).
         We must have ``len(min_res)`` :math:`=` ``len(max_res)``.
 
-    REF : function, optional
-        Custom resource extension function. See `REFs`_ for more details.
-        Default : additive.
-
     preprocess : bool, optional
         enables preprocessing routine. Default : False.
 
@@ -49,6 +45,10 @@ class Tabu(PathBase):
         If the total number of simple paths is less than max_depth,
         then the shortest path is used.
 
+    REF : function, optional
+        Custom resource extension function. See `REFs`_ for more details.
+        Default : additive.
+
     .. _REFs : https://cspy.readthedocs.io/en/latest/how_to.html#refs
     .. _simple : https://networkx.github.io/documentation/stable/reference/algorithms/generated/networkx.algorithms.simple_paths.shortest_simple_paths.html#networkx.algorithms.simple_paths.shortest_simple_paths
     .. _astar : https://networkx.github.io/documentation/stable/reference/algorithms/generated/networkx.algorithms.shortest_paths.astar.astar_path.html#networkx.algorithms.shortest_paths.astar.astar_path
@@ -58,53 +58,18 @@ class Tabu(PathBase):
     Exception
         if no resource feasible path is found
 
-    Notes
-    -----
-    The input graph must have a ``n_res`` attribute.
-    The edges in the graph must all have a ``res_cost`` attribute.
-    See `Using cspy`_
-
-    .. _Using cspy: https://cspy.readthedocs.io/en/latest/how_to.html
-
-    Example
-    -------
-    To run the algorithm, create a :class:`Tabu` instance, call `run`, and then
-    query the attributes of interest: `path`, `total_cost`, or
-    `consumed_resources`.
-
-    .. code-block:: python
-
-        >>> from cspy import Tabu
-        >>> from networkx import DiGraph
-        >>> from numpy import array
-        >>> G = DiGraph(directed=True, n_res=2)
-        >>> G.add_edge('Source', 'A', res_cost=array([1, 1]), weight=1)
-        >>> G.add_edge('Source', 'B', res_cost=array([1, 1]), weight=1)
-        >>> G.add_edge('A', 'C', res_cost=array([1, 1]), weight=1)
-        >>> G.add_edge('B', 'C', res_cost=array([2, 1]), weight=-1)
-        >>> G.add_edge('C', 'D', res_cost=array([1, 1]), weight=-1)
-        >>> G.add_edge('D', 'E', res_cost=array([1, 1]), weight=1)
-        >>> G.add_edge('D', 'F', res_cost=array([1, 1]), weight=1)
-        >>> G.add_edge('F', 'Sink', res_cost=array([1, 1]), weight=1)
-        >>> G.add_edge('E', 'Sink', res_cost=array([1, 1]), weight=1)
-        >>> max_res, min_res = [5, 5], [0, 0]
-        >>> tabu = Tabu(G, max_res, min_res)
-        >>> tabu.run()
-        >>> print(tabu.path)
-        ['Source', 'A', 'C', 'D', 'E', 'Sink']
-
     """
 
     def __init__(self,
                  G,
                  max_res,
                  min_res,
-                 REF=None,
                  preprocess=False,
                  algorithm="simple",
-                 max_depth=1000):
+                 max_depth=1000,
+                 REF=None):
         # Pass arguments to SimplePath object
-        super().__init__(G, max_res, min_res, REF, preprocess, algorithm)
+        super().__init__(G, max_res, min_res, preprocess, REF, algorithm)
         # Algorithm specific parameters
         self.max_depth = max_depth
         self.iteration = 0

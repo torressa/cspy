@@ -19,12 +19,12 @@ class PathBase(object):
     and :class:PSOLGENT.
 
     Contains path specific functionalitites.
-    e.g. feasibility checks, compatible joining
+    e.g. shortest path, feasibility checks, compatible joining
     """
 
-    def __init__(self, G, max_res, min_res, REF, preprocess, algorithm=None):
+    def __init__(self, G, max_res, min_res, preprocess, REF, algorithm=None):
         # Check inputs
-        check(G, max_res, min_res, REF, algorithm=__name__)
+        check(G, max_res, min_res, REF_forward=REF, algorithm=__name__)
         # Preprocess graph
         self.G = preprocess_graph(G, max_res, min_res, preprocess, REF)
 
