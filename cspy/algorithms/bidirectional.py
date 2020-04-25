@@ -470,8 +470,6 @@ class BiDirectional:
         .. _Righini and Salani (2006): https://www.sciencedirect.com/science/article/pii/S1572528606000417
         """
         log.debug("joining")
-        log.debug(self.best_labels["forward"])
-        log.debug(self.best_labels["backward"])
         for fwd_label in self.best_labels["forward"]:
             # Create generator for backward labels for current forward label.
             # Includes only those that:
