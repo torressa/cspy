@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [unreleased]
 
+### Changed
+- BiDirectional:
+  - Reverted backward REF as it is required for some problems.
+  - Added REF join parameter that is required when joining forward and backward labels using custom REFs.
+- Moved notes and examples from docstrings to the docs folder. 
+
 
 ## [v0.1.0] - 14/04/2020
 
