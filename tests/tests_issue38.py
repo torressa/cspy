@@ -7,10 +7,6 @@ from networkx import DiGraph
 sys.path.append("../")
 from cspy.algorithms.bidirectional import BiDirectional
 
-from logging import basicConfig, DEBUG
-
-basicConfig(level=DEBUG)
-
 
 class TestsIssue38(unittest.TestCase):
     """

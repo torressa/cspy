@@ -5,11 +5,11 @@ from numpy import ndarray
 def check(G,
           max_res=None,
           min_res=None,
+          direction=None,
+          algorithm=None,
           REF_forward=None,
           REF_backward=None,
-          REF_join=None,
-          direction=None,
-          algorithm=None):
+          REF_join=None):
     """
     Checks whether inputs and the graph are of the appropriate types and
     have the required properties.
@@ -31,12 +31,12 @@ def check(G,
         :math:`[L_1, L_2, ..., L_{nres}]` lower bounds for resource usage.
         We must have ``len(min_res)`` :math:`=` ``len(max_res)`` :math:`\geq 2`
 
-    REF : function, optional
-        Custom resource extension function. See `REFs`_ for more details.
-
     direction : string, optional
         preferred search direction. Either 'both','forward', or, 'backward'.
         Default : 'both'.
+
+    REF_forward, REF_backward, REF_join : functions, optional
+        Custom resource extension function. See `REFs`_ for more details.
 
     .. _REFs : https://cspy.readthedocs.io/en/latest/how_to.html#refs
 

@@ -54,9 +54,6 @@ class TestsPreprocessing(unittest.TestCase):
             "REF functions must be callable" in str(context.exception))
         self.assertTrue(
             "Input must be a nx.Digraph()" in str(context.exception))
-        self.assertTrue(
-            "Input direction has to be 'forward', 'backward', or 'both'" in str(
-                context.exception))
 
         # Turn MultiGraph into DiGraph
         self.H = DiGraph(self.H)
