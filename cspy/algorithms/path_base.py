@@ -4,8 +4,7 @@ from logging import getLogger
 from numpy import zeros, array
 from types import BuiltinFunctionType
 from itertools import filterfalse, tee, chain
-from networkx import (shortest_simple_paths, NetworkXException, astar_path,
-                      negative_edge_cycle)
+from networkx import (shortest_simple_paths, astar_path, negative_edge_cycle)
 
 from cspy.checking import check
 from cspy.preprocessing import preprocess_graph
@@ -93,6 +92,7 @@ class PathBase(object):
         paths, paths_backup = tee(shortest_simple_paths(self.G, source, 'Sink'),
                                   2)
 
+        # Select only paths with negative reduced cost if they exist
         try:
             cost_min = 0
             paths_backup = filterfalse(
@@ -115,9 +115,8 @@ class PathBase(object):
             if depth > max_depth:
                 return path
             depth += 1
-        # No break
-        else:
-            return path
+        # All paths consumed
+        return path
 
     def check_feasibility(self, return_edge=True):
         """
