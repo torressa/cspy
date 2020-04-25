@@ -5,9 +5,11 @@ from numpy import ndarray
 def check(G,
           max_res=None,
           min_res=None,
-          REF=None,
           direction=None,
-          algorithm=None):
+          algorithm=None,
+          REF_forward=None,
+          REF_backward=None,
+          REF_join=None):
     """
     Checks whether inputs and the graph are of the appropriate types and
     have the required properties.
@@ -21,21 +23,20 @@ def check(G,
         ``res_cost`` attribute.
 
     max_res : list of floats, optional
-        :math:`[L, M_1, M_2, ..., M_{n\_res}]`
+        :math:`[M_1, M_2, ..., M_{n\_res}]`
         upper bound for resource usage.
         We must have ``len(max_res)`` :math:`\geq 2`
 
     min_res : list of floats, optional
-        :math:`[U, L_1, L_2, ..., L_{nres}]` lower bounds for resource usage.
+        :math:`[L_1, L_2, ..., L_{nres}]` lower bounds for resource usage.
         We must have ``len(min_res)`` :math:`=` ``len(max_res)`` :math:`\geq 2`
-
-    REF : function, optional
-        Custom resource extension function. See `REFs`_ for more details.
-        Default: additive.
 
     direction : string, optional
         preferred search direction. Either 'both','forward', or, 'backward'.
         Default : 'both'.
+
+    REF_forward, REF_backward, REF_join : functions, optional
+        Custom resource extension function. See `REFs`_ for more details.
 
     .. _REFs : https://cspy.readthedocs.io/en/latest/how_to.html#refs
 
@@ -44,10 +45,10 @@ def check(G,
         errors is raised.
     """
     errors = []
-    if REF:
+    if REF_forward or REF_backward or REF_join:
         # Cannot apply pruning with custom REFs
         try:
-            _check_REFs(REF)
+            _check_REFs(REF_forward, REF_backward, REF_join)
         except Exception as e:
             errors.append(e)
     # Select checks to perform based on the input provided
@@ -137,6 +138,10 @@ def _check_path(G, max_res, min_res, direction, algorithm):
         raise Exception("An error occurred: {}".format(e))
 
 
-def _check_REFs(REF):
-    if REF and not callable(REF):
+def _check_REFs(REF_forward, REF_backward, REF_join):
+    if REF_forward and not callable(REF_forward):
+        raise TypeError("REF functions must be callable")
+    if REF_backward and not callable(REF_backward):
+        raise TypeError("REF functions must be callable")
+    if REF_join and not callable(REF_join):
         raise TypeError("REF functions must be callable")

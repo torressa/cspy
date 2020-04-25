@@ -36,10 +36,6 @@ class GRASP(PathBase):
         :math:`[L_1, L_2, ..., L_{n\_res}]` lower bounds for resource
         usage.
 
-    REF : function, optional
-        Custom resource extension function. See `REFs`_ for more details.
-        Default : additive.
-
     preprocess : bool, optional
         enables preprocessing routine. Default : False.
 
@@ -52,61 +48,17 @@ class GRASP(PathBase):
     alpha : float, optional
         Greediness factor 0 (random) --> 1 (greedy). Default : 0.2.
 
-    .. _REFs : https://cspy.readthedocs.io/en/latest/how_to.html#refs
+    REF : function, optional
+        Custom resource extension function. See `REFs`_ for more details.
+        Default : additive.
 
-    Returns
-    -------
-    path : list
-        nodes in resource feasible shortest path obtained.
+    .. _REFs : https://cspy.readthedocs.io/en/latest/how_to.html#refs
+    .. _Ferone et al 2019: https://www.tandfonline.com/doi/full/10.1080/10556788.2018.1548015
 
     Raises
     ------
     Exception
         if no resource feasible path is found
-
-    Notes
-    -----
-    The input graph must have a ``n_res`` attribute.
-    The edges in the graph must all have a ``res_cost`` attribute.
-    Also, we must have ``len(min_res)`` :math:`=` ``len(max_res)``.
-    See `Using cspy`_
-
-    .. _Using cspy: https://cspy.readthedocs.io/en/latest/how_to.html
-
-
-    Example
-    -------
-    To run the algorithm, create a :class:`GRASP` instance and call `run`.
-
-    .. code-block:: python
-
-        >>> from cspy import GRASP
-        >>> from networkx import DiGraph
-        >>> from numpy import array
-        >>> G = DiGraph(directed=True, n_res=2)
-        >>> G.add_edge('Source', 'A', res_cost=array([1, 1]), weight=1)
-        >>> G.add_edge('Source', 'B', res_cost=array([1, 1]), weight=1)
-        >>> G.add_edge('Source', 'C', res_cost=array([10, 1]), weight=10)
-        >>> G.add_edge('A', 'C', res_cost=array([1, 1]), weight=1)
-        >>> G.add_edge('A', 'E', res_cost=array([10, 1]), weight=10)
-        >>> G.add_edge('A', 'F', res_cost=array([10, 1]), weight=10)
-        >>> G.add_edge('B', 'C', res_cost=array([2, 1]), weight=-1)
-        >>> G.add_edge('B', 'F', res_cost=array([10, 1]), weight=10)
-        >>> G.add_edge('B', 'E', res_cost=array([10, 1]), weight=10)
-        >>> G.add_edge('C', 'D', res_cost=array([1, 1]), weight=-1)
-        >>> G.add_edge('D', 'E', res_cost=array([1, 1]), weight=1)
-        >>> G.add_edge('D', 'F', res_cost=array([1, 1]), weight=1)
-        >>> G.add_edge('D', 'Sink', res_cost=array([10, 10]), weight=10)
-        >>> G.add_edge('F', 'Sink', res_cost=array([10, 1]), weight=1)
-        >>> G.add_edge('E', 'Sink', res_cost=array([1, 1]), weight=1)
-        >>> grasp = GRASP(G, [5, 5], [0, 0], max_iter=50,
-                         max_localiter=10)
-        >>> grasp.run()
-        >>> path = grasp.path
-        >>> print(path)
-        ['Source', 'A', 'C', 'D', 'E', 'Sink']
-
-    .. _Ferone et al 2019: https://www.tandfonline.com/doi/full/10.1080/10556788.2018.1548015
 
     """
 
@@ -114,13 +66,13 @@ class GRASP(PathBase):
                  G,
                  max_res,
                  min_res,
-                 REF=None,
                  preprocess=False,
                  max_iter=100,
                  max_localiter=10,
-                 alpha=0.2):
+                 alpha=0.2,
+                 REF=None):
         # Pass arguments to parent class
-        super().__init__(G, max_res, min_res, REF, preprocess)
+        super().__init__(G, max_res, min_res, preprocess, REF)
         # Algorithm specific attributes
         self.max_iter = max_iter
         self.max_localiter = max_localiter

@@ -31,7 +31,7 @@ class TestsIssue32(unittest.TestCase):
         self.G.add_edge(3, 4, res_cost=array([0, 1, 0]), weight=-10)
         self.G.add_edge(4, 'Sink', res_cost=array([0, 0, 0]), weight=-1)
 
-    def custom_REF(self, cumulative_res, edge):
+    def custom_REF_forward(self, cumulative_res, edge):
         res_new = array(cumulative_res)
         # Unpack edge
         u, v, edge_data = edge[0:3]
@@ -44,7 +44,21 @@ class TestsIssue32(unittest.TestCase):
             res_new[1] += int(v)**2
         # Resource reset
         res_new[2] += edge_data["res_cost"][1]
+        return res_new
 
+    def custom_REF_backward(self, cumulative_res, edge):
+        res_new = array(cumulative_res)
+        # Unpack edge
+        u, v, edge_data = edge[0:3]
+        # Monotone resource
+        res_new[0] -= 1
+        # Increasing resource
+        if v == "Sink":
+            res_new[1] = res_new[1]
+        else:
+            res_new[1] -= int(v)**2
+        # Resource reset
+        res_new[2] -= edge_data["res_cost"][1]
         return res_new
 
     @parameterized.expand(zip(range(100), range(100)))
@@ -57,7 +71,8 @@ class TestsIssue32(unittest.TestCase):
         bidirec = BiDirectional(self.G,
                                 self.max_res,
                                 self.min_res,
-                                REF=self.custom_REF,
+                                REF_forward=self.custom_REF_forward,
+                                REF_backward=self.custom_REF_backward,
                                 seed=seed)
         # Check classification
         with self.assertLogs('cspy.algorithms.bidirectional') as cm:

@@ -47,10 +47,6 @@ class PSOLGENT(PathBase):
         :math:`[L_1, L_2, ..., L_{n\_res}]` lower bounds for resource
         usage.
 
-    REF : function, optional
-        Custom resource extension function. See `REFs`_ for more details.
-        Default : additive.
-
     preprocess : bool, optional
         enables preprocessing routine. Default : False.
 
@@ -90,62 +86,16 @@ class PSOLGENT(PathBase):
         seed for PSOLGENT class. Default : None (which gives a single value
         numpy.random.RandomState).
 
-    .. _REFs : https://cspy.readthedocs.io/en/latest/how_to.html#refs
+    REF : function, optional
+        Custom resource extension function. See `REFs`_ for more details.
+        Default : additive.
 
-    Returns
-    -------
-    path : list
-        nodes in resource feasible shortest path obtained.
+    .. _REFs : https://cspy.readthedocs.io/en/latest/how_to.html#refs
 
     Raises
     ------
     Exception
         if no resource feasible path is found
-
-    Notes
-    -----
-    The input graph must have a ``n_res`` attribute.
-    The edges in the graph must all have a ``res_cost`` attribute.
-    Also, we must have ``len(min_res)`` :math:`=` ``len(max_res)``.
-    See `Using cspy`_.
-
-    This algorithm requires a consistent sorting of the nodes in the graph.
-    Please see comments and edit the function ``_sort_nodes`` accordingly.
-
-    .. _Using cspy: https://cspy.readthedocs.io/en/latest/how_to.html
-
-    Example
-    -------
-    .. code-block:: python
-
-        >>> from cspy import PSOLGENT
-        >>> from networkx import DiGraph
-        >>> from numpy import zeros, ones, array
-        >>> G = DiGraph(directed=True, n_res=2)
-        >>> G.add_edge('Source', 'A', res_cost=array([1, 1]), weight=1)
-        >>> G.add_edge('Source', 'B', res_cost=array([1, 1]), weight=1)
-        >>> G.add_edge('Source', 'C', res_cost=array([10, 1]), weight=10)
-        >>> G.add_edge('A', 'C', res_cost=array([1, 1]), weight=1)
-        >>> G.add_edge('A', 'E', res_cost=array([10, 1]), weight=10)
-        >>> G.add_edge('A', 'F', res_cost=array([10, 1]), weight=10)
-        >>> G.add_edge('B', 'C', res_cost=array([2, 1]), weight=-1)
-        >>> G.add_edge('B', 'F', res_cost=array([10, 1]), weight=10)
-        >>> G.add_edge('B', 'E', res_cost=array([10, 1]), weight=10)
-        >>> G.add_edge('C', 'D', res_cost=array([1, 1]), weight=-1)
-        >>> G.add_edge('D', 'E', res_cost=array([1, 1]), weight=1)
-        >>> G.add_edge('D', 'F', res_cost=array([1, 1]), weight=1)
-        >>> G.add_edge('D', 'Sink', res_cost=array([10, 10]), weight=10)
-        >>> G.add_edge('F', 'Sink', res_cost=array([10, 1]), weight=1)
-        >>> G.add_edge('E', 'Sink', res_cost=array([1, 1]), weight=1)
-        >>> n_nodes = len(G.nodes())
-        >>> psolgent = PSOLGENT(G, [5, 5], [0, 0],
-                                max_iter=200,
-                                swarm_size=50,
-                                member_size=n_nodes,
-                                neighbourhood_size=50)
-        >>> psolgent.run()
-        >>> print(psolgent.path)
-        ['Source', 'A', 'C', 'D', 'E', 'Sink']
 
     """
 
@@ -155,7 +105,6 @@ class PSOLGENT(PathBase):
                  G,
                  max_res,
                  min_res,
-                 REF=None,
                  preprocess=False,
                  max_iter=100,
                  swarm_size=50,
@@ -166,9 +115,10 @@ class PSOLGENT(PathBase):
                  c1=1.35,
                  c2=1.35,
                  c3=1.4,
-                 seed=None):
+                 seed=None,
+                 REF=None):
         # Pass arguments to parent class
-        super().__init__(G, max_res, min_res, REF, preprocess)
+        super().__init__(G, max_res, min_res, preprocess, REF)
         # Inputs
         self.swarm_size = swarm_size
         self.member_size = member_size if member_size else len(G.nodes())
