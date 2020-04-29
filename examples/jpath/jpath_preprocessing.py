@@ -7,17 +7,32 @@ from networkx import relabel_nodes, set_edge_attributes
 WALKING_SPEED = 3  # km per hour
 
 
-def relabel_source_sink(G):
+def relabel_source_sink(G,
+                        nodes_to_relabel={
+                            "Source": "Ternatestraat",
+                            "Sink": "Delftweg"
+                        }):
     """
-    Identify and relabel source and sink nodes
+    Identify and relabel source and sink nodes.
+
+    Parameters
+    ----------
+    G : networkx.DiGraph,
+        Network to relabel
+
+    nodes_to_relabel : dict,
+        Desired nodes to relabel, in the form:
+        {"Source": my_source_node, "Sink": my_sink_node}
     """
     # Identify Source and Sink according to specifications
     # Source is the post office in Ternatestraat
-    source = list(e for e in G.edges(data=True)
-                  if 'name' in e[2] and 'Ternatestraat' in e[2]['name'])[-2][0]
+    source = list(
+        e for e in G.edges(data=True)
+        if 'name' in e[2] and nodes_to_relabel["Source"] in e[2]['name'])[-2][0]
     # Sink is Jane's home in Ceramstraat
-    sink = list(e for e in G.edges(data=True)
-                if 'name' in e[2] and 'Delftweg' in e[2]['name'])[0][1]
+    sink = list(
+        e for e in G.edges(data=True)
+        if 'name' in e[2] and nodes_to_relabel["Sink"] in e[2]['name'])[0][1]
     # Relabel nodes
     G = relabel_nodes(G, {source: 'Source', sink: 'Sink'})
     return G
