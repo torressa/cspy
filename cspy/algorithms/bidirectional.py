@@ -191,6 +191,7 @@ class BiDirectional:
     def name_algorithm(self):
         """
         Determine which algorithm is running.
+        Logs algorithm classification at INFO level.
         """
         HF, HB = self.max_res[0], self.min_res[0]
         if self.direc_in == "forward":
@@ -248,32 +249,29 @@ class BiDirectional:
     #############
     def _algorithm(self, direc):
         if direc == "forward":  # forward
-            idx = 0  # index for head node
+            idx = 0  # index for tail node
             # Update backwards half-way point
             self.min_res[0] = max(
                 self.min_res[0],
                 min(self.current_label[direc].res[0], self.max_res[0]))
         else:  # backward
-            idx = 1  # index for tail node
+            idx = 1  # index for head node
             # Update forwards half-way point
             self.max_res[0] = min(
                 self.max_res[0],
                 max(self.current_label[direc].res[0], self.min_res[0]))
-        # Select edges with the same head/tail node as the current label node.
+        # Select edges with the same tail/head node as the current label node.
         edges = deque(e for e in self.G.edges(data=True)
                       if e[idx] == self.current_label[direc].node)
-        # If Label not been seen before, initialise a list
         # Propagate current label along all suitable edges in current direction
-        deque(map(self._propagate_label, edges, repeat(direc, len(edges))))
+        for edge in edges:
+            self._propagate_label(edge, direc)
         # Extend label
         next_label = self._get_next_label(direc)
-        # Update current label
         self.current_label[direc] = next_label
-        # Dominance checks
         self._check_dominance(next_label, direc)
 
     def _propagate_label(self, edge, direc):
-        # Label propagation #
         new_label = self.current_label[direc].get_new_label(edge, direc)
         # If the new label is resource feasible
         if new_label and new_label.feasibility_check(self.max_res,
@@ -283,8 +281,6 @@ class BiDirectional:
                 self.unprocessed_labels[direc].append(new_label)
 
     def _get_next_label(self, direc):
-        # Label Extension #
-        # Add current label to processed list.
         current_label = self.current_label[direc]
         unproc_labels = self.unprocessed_labels[direc]
 
