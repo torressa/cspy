@@ -1,4 +1,4 @@
-import types
+from types import BuiltinFunctionType
 
 
 class Label(object):
@@ -65,12 +65,12 @@ class Label(object):
         else:
             path.append(node)
         if direction == "forward":
-            if isinstance(self._REF_forward, types.BuiltinFunctionType):
+            if isinstance(self._REF_forward, BuiltinFunctionType):
                 res_new = self.res + res
             else:
                 res_new = self._REF_forward(self.res, edge)
         elif direction == "backward":
-            if isinstance(self._REF_backward, types.BuiltinFunctionType):
+            if isinstance(self._REF_backward, BuiltinFunctionType):
                 res_new = self.res + res
                 res_new[0] = self.res[0] - 1
             else:

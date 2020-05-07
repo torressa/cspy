@@ -102,12 +102,15 @@ class BiDirectional:
         self.best_label = None
 
         # Algorithm specific parameters #
+        # Set minimum bounds if not all 0
+        if not all(m == 0 for m in self.min_res):
+            self.min_res = [0] * len(min_res)
         # set bounds for bacward search
-        bwd_start = deepcopy(min_res)
+        bwd_start = self.min_res.copy()
         bwd_start[0] = max_res[0]
         # Current forward and backward labels
         self.current_label = OrderedDict({
-            "forward": Label(0, "Source", min_res, ["Source"]),
+            "forward": Label(0, "Source", self.min_res, ["Source"]),
             "backward": Label(0, "Sink", bwd_start, ["Sink"])
         })
         # Unprocessed labels dict (both directions)
@@ -156,7 +159,9 @@ class BiDirectional:
                 self._algorithm(direc)
             else:
                 break
-        return self._process_paths()
+        self._process_paths()
+        if self.final_label is None:
+            raise Exception("No resource feasible path has been found")
 
     @property
     def path(self):
@@ -314,12 +319,23 @@ class BiDirectional:
         elif best:
             labels_to_check = self.best_labels[direc]
         # If label is not None (at termination)
-        if label_to_check:
-            labels_to_pop = deque()
+        if label_to_check and (label_to_check.feasibility_check(
+                self.max_res_in, self.min_res_in) or self.direc_in == "both"):
             # Gather all comparable labels (same node)
-            all_labels = deque(
-                l for l in labels_to_check
-                if l.node == label_to_check.node and l != label_to_check)
+            if not self._progress_flipped(direc):
+                # if not label_to_check.feasibility_check(self.max_res_in,
+                #                                         self.min_res_in):
+                #     return
+                all_labels = deque(
+                    l for l in labels_to_check
+                    if l.node == label_to_check.node and l != label_to_check and
+                    l.feasibility_check(self.max_res_in, self.min_res_in))
+            else:
+                all_labels = deque(
+                    l for l in labels_to_check
+                    if l.node == label_to_check.node and l != label_to_check)
+
+            labels_to_pop = deque()
             # Add to list for removal if they are dominated
             labels_to_pop.extend(
                 l for l in all_labels if label_to_check.dominates(l, direc))
@@ -350,6 +366,11 @@ class BiDirectional:
                 idx = self.best_labels[direc].index(label_to_pop)
                 del self.best_labels[direc][idx]
 
+    def _progress_flipped(self, direc):
+        # Returns True if the opposite direction has advanced
+        flip_direc = "forward" if direc == "backward" else "backward"
+        return len(self.best_labels[flip_direc]) > 1
+
     def _save_current_best_label(self, direc):
         """
         Label saving
@@ -359,11 +380,10 @@ class BiDirectional:
 
         if self.direc_in == "both":
             self.best_labels[direc].append(current_label)
-            flip_direc = "forward" if direc == "backward" else "backward"
             # Check if other direction traversed
             # (must contain more than just the initial label)
             # If it has, then we are done as labels will have to be joined
-            if len(self.best_labels[flip_direc]) > 1:
+            if self._progress_flipped(direc):
                 return
             # Otherwise save label as with the single direction case
 
@@ -436,13 +456,16 @@ class BiDirectional:
             # If backward direction specified or forward direction not traversed
             else:
                 # Backward
-                self.best_label = self._process_bwd_label(
-                    self.final_label, self.min_res_in)
+                self.best_label = self._process_bwd_label(self.final_label,
+                                                          self.min_res_in,
+                                                          invert_min_res=True)
 
-    def _process_bwd_label(self, label, cumulative_res, edge=None):
+    def _process_bwd_label(self, label, cumulative_res, invert_min_res=False):
         # Reverse backward path and inverts resource consumption
         label.path.reverse()
         label.res[0] = self.max_res_in[0] - label.res[0]
+        if invert_min_res:
+            label.res[1:] = label.res[1:] - self.min_res_in[1:]
         label.res = label.res + cumulative_res
         return label
 
@@ -451,8 +474,12 @@ class BiDirectional:
         for direc in ["forward", "backward"]:
             labels_to_pop = deque()
             for l in self.best_labels[direc]:
-                labels_to_pop.extend(
-                    self._check_dominance(l, direc, unproc=False, best=True))
+                _labels = self._check_dominance(l,
+                                                direc,
+                                                unproc=False,
+                                                best=True)
+                if _labels:
+                    labels_to_pop.extend(_labels)
             self._remove_labels(labels_to_pop, direc, unproc=False, best=True)
 
     def _join_paths(self):
