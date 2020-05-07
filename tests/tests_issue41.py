@@ -49,31 +49,31 @@ class TestsIssue41(unittest.TestCase):
         self.assertEqual(cost, 20)
         self.assertTrue(all(total_res == [3, 3]))
 
-    # def testBiDirectionalForward(self):
-    #     bidirec = BiDirectional(self.G,
-    #                             self.max_res,
-    #                             self.min_res,
-    #                             direction='forward')
-    #     bidirec.run()
-    #     path = bidirec.path
-    #     cost = bidirec.total_cost
-    #     total_res = bidirec.consumed_resources
-    #     self.assertEqual(path, ['Source', 'A', 'C', 'Sink'])
-    #     self.assertEqual(cost, 20)
-    #     self.assertTrue(all(total_res == [3, 3]))
+    def testBiDirectionalForward(self):
+        bidirec = BiDirectional(self.G,
+                                self.max_res,
+                                self.min_res,
+                                direction='forward')
+        bidirec.run()
+        path = bidirec.path
+        cost = bidirec.total_cost
+        total_res = bidirec.consumed_resources
+        self.assertEqual(path, ['Source', 'A', 'C', 'Sink'])
+        self.assertEqual(cost, 20)
+        self.assertTrue(all(total_res == [3, 3]))
 
-    # def testBiDirectionalBackward(self):
-    #     bidirec = BiDirectional(self.G,
-    #                             self.max_res,
-    #                             self.min_res,
-    #                             direction='backward')
-    #     bidirec.run()
-    #     path = bidirec.path
-    #     cost = bidirec.total_cost
-    #     total_res = bidirec.consumed_resources
-    #     self.assertEqual(path, ['Source', 'A', 'C', 'Sink'])
-    #     self.assertEqual(cost, 20)
-    #     self.assertTrue(all(total_res == [3, 3]))
+    def testBiDirectionalBackward(self):
+        bidirec = BiDirectional(self.G,
+                                self.max_res,
+                                self.min_res,
+                                direction='backward')
+        bidirec.run()
+        path = bidirec.path
+        cost = bidirec.total_cost
+        total_res = bidirec.consumed_resources
+        self.assertEqual(path, ['Source', 'A', 'C', 'Sink'])
+        self.assertEqual(cost, 20)
+        self.assertTrue(all(total_res == [3, 3]))
 
 
 if __name__ == '__main__':
