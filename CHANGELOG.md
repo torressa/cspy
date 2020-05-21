@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [unreleased]
 
+## [v0.1.1] - 21/05/2020
+
+### Changed
+- BiDirectional:
+  - Reverted backward REF as it is required for some problems.
+  - Added REF join parameter that is required when joining forward and backward labels using custom REFs.
+- Moved notes and examples from docstrings to the docs folder. 
+- Final JOSS paper changes
 
 ## [v0.1.0] - 14/04/2020
 
@@ -163,7 +171,8 @@ path using `networkx.shortest_simple_paths`.
 - Docstring modifications to include maths.
 - Updated README.
 
-[unreleased]: https://github.com/torressa/cspy/compare/v0.1.0...HEAD
+[unreleased]: https://github.com/torressa/cspy/compare/v0.1.1...HEAD
+[v0.1.1]: https://github.com/torressa/cspy/compare/v0.1.0...v0.1.1
 [v0.1.0]: https://github.com/torressa/cspy/compare/v0.0.14...v0.1.0
 [v0.0.14]: https://github.com/torressa/cspy/compare/v0.0.13...v0.0.14
 [v0.0.13]: https://github.com/torressa/cspy/compare/v0.0.12...v0.0.13

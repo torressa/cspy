@@ -56,15 +56,19 @@ A key component of a CSP problem is to define a set of resources and a function 
 
 ``cspy`` allows for custom and generic REFs to be used. Hence, allowing for a custom consumption of the resources through the graph.
 
-
 # Examples
 
-For some real-world examples, see the repository.
+The package has been used in the following examples:
 
-Currently included is an implementation of column generation for the aircraft recovery problem. 
+- [`vrpy`](https://github.com/Kuifje02/vrpy) : vehicle routing framework which solves different variants of the vehicle routing problem (including capacity constraints and time-windows) using column generation. The framework has been tested on standard vehicle routing instances.
+- [`cgar`](https://github.com/torressa/cspy/tree/master/examples/cgar) : Complex example using column generation applied to the aircraft recovery problem.
+- [`jpath`](https://github.com/torressa/cspy/tree/master/examples/jpath) : Simple example showing the necessary graph adaptations and the use of custom resource extension functions.
+
 
 # Acknowledgements
 
 The author gratefully acknowledges the support of the EPSRC funded EP/L015692/1 STOR-i Centre for Doctoral Training. 
+
+I would also like to thank Romain Montagné for his initiative and time invested to write [`vrpy`](https://github.com/Kuifje02/vrpy).
 
 # References

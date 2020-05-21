@@ -204,7 +204,7 @@ Also, when defining ``G``, one has to specify the number of resources ``n_res``,
 .. code-block:: python
 
         from networkx import DiGraph
-        G = DiGraph(directed=True, n_res=4)  # init network
+        G = DiGraph(directed=True, n_res=4)  # init network with 4 resources
 
 Now, using the open source package OSMnx, we can easily generate a network for Jane's neighbourhood
 
@@ -217,26 +217,29 @@ Now, using the open source package OSMnx, we can easily generate a network for J
                                    network_type='walk',
                                    simplify=False)
 
-We have to transform the network for one compatible with cspy.
-To do this suppose we have two functions from ``jpath_preprocessing`` 
-that perform all the changes required 
-(for more details, see `jpath`_)
 
+We have to transform the network for one compatible with ``cspy``, 
+as per the `Input Requirements`_. 
+The following code will convert a city map into a directed graph, 
+rename the start/end nodes of Janes walk to be ``Source`` and ``Sink`` (names which ``cspy`` uses), 
+and calculate the specifics of Jane's walk (figuring out travel time, adding buildings/sights, etc).
 
 .. code-block:: python
 
         from networkx import DiGraph
         from jpath_preprocessing import relabel_source_sink, add_cspy_edge_attributes
 
-        # Transform M to comply with cspy's prerequirements
-        # Convert MultiGraph into a Digraph with attribute 'n_res'
-        G = DiGraph(M, directed=True, n_res=5)
-        # Relabel source node to "Source" and sink node to "Sink" (see function for more details)
-        G = relabel_source_sink(G)
-        # Add res_cost and other resource attributes (see function for more details)
-        G = add_cspy_edge_attributes(G)
+        # Transform M from networkx.MultiGraph to networkx.DiGraph 
+        # This is requirement by the algorithms
+        G = DiGraph(M, directed=True, n_res=4)
 
-        n_edges = len(G.edges())  # number of edges in network
+        # Relabel nodes the start/end nodes as "Source"/"Sink"
+        # (The post-office is in Ternatestraat and Jane's home is in Delftweg)
+        G = relabel_source_sink(G, {"Source": "Ternatestraat", "Sink": "Delftweg"})
+
+        # Add Jane's specific resources to the edges
+        # (For each edge, adds a `res_cost` attribute with an array with the resources consumed along the specific edge)
+        G = add_cspy_edge_attributes(G)
 
 
 To define the custom REFs,  ``jane_REF``, that controls how resources evolve throughout the path,
@@ -279,6 +282,7 @@ Using ``cspy``, Jane can obtain a route ``path`` and subject to her constraints 
 
         from cspy import Tabu
         SHIFT_DURATION = 5
+        n_edges = len(G.edges())  # number of edges in network 
         # Maximum resources
         max_res = [n_edges, SHIFT_DURATION, SHIFT_DURATION, SHIFT_DURATION]
         # Minimum resources
@@ -302,3 +306,4 @@ Additionally, we can query other useful attributes as
 .. _Tilk et al 2017: https://www.sciencedirect.com/science/article/pii/S0377221717302035
 .. _Inrich 2005: https://www.researchgate.net/publication/227142556_Shortest_Path_Problems_with_Resource_Constraints
 .. _unittest: https://github.com/torressa/cspy/tree/master/tests/tests_issue32.py
+.. _Input Requirements: https://cspy.readthedocs.io/en/latest/how_to.html#input-requirements 
