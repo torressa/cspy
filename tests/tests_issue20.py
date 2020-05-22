@@ -6,6 +6,7 @@ from networkx import DiGraph
 from parameterized import parameterized
 
 sys.path.append("../")
+
 from cspy.algorithms.tabu import Tabu
 from cspy.algorithms.bidirectional import BiDirectional
 
