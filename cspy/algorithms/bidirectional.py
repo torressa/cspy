@@ -460,6 +460,7 @@ class BiDirectional:
                                                           self.min_res_in,
                                                           invert_min_res=True)
 
+
     def _process_bwd_label(self, label, cumulative_res, invert_min_res=False):
         # Reverse backward path and inverts resource consumption
         label.path.reverse()
