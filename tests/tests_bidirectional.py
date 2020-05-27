@@ -6,7 +6,7 @@ from numpy import array
 
 sys.path.append("../")
 from cspy.algorithms.bidirectional import BiDirectional
-from cspy.algorithms.label import Label
+from cspy.algorithms.bidirectional.label import Label
 
 
 class TestsBiDirectional(unittest.TestCase):
@@ -44,6 +44,21 @@ class TestsBiDirectional(unittest.TestCase):
         self.assertTrue("run()" in str(context.exception))
         # Run and test results
         bidirec.run()
+        path = bidirec.path
+        cost = bidirec.total_cost
+        total_res = bidirec.consumed_resources
+        self.assertEqual(path, ['Source', 'A', 'B', 'C', 'Sink'])
+        self.assertEqual(cost, -13)
+        self.assertTrue(all(total_res == [4, 15.3]))
+
+    def testBiDirectionalParallel(self):
+        """
+        Find shortest path of simple test digraph using the BiDirectional
+        algorithm with dynamic halfway point.
+        """
+        bidirec = BiDirectional(self.G, self.max_res, self.min_res)
+        # Run and test results
+        bidirec.run_parallel()
         path = bidirec.path
         cost = bidirec.total_cost
         total_res = bidirec.consumed_resources

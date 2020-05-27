@@ -131,10 +131,16 @@ Alternatively, email me at `d.torressanchez@lancs.ac.uk`.
 If you'd like to cite this package, please use the following bib format:
 
 ```none
-@Misc{cspy,
-  author = {Torres Sanchez, David},
-  title = {{cspy : A Python package with a collection of algorithms for the (Resource) Constrained Shortest Path problem}},
-  year = {2019},
-  url = {\url{https://github.com/torressa/cspy}}
+@article{torressa2020,
+  doi = {10.21105/joss.01655},
+  url = {https://doi.org/10.21105/joss.01655},
+  year = {2020},
+  publisher = {The Open Journal},
+  volume = {5},
+  number = {49},
+  pages = {1655},
+  author = {{Torres Sanchez}, David},
+  title = {cspy: A Python package with a collection of algorithms for the (Resource) Constrained Shortest Path problem},
+  journal = {Journal of Open Source Software}
 }
 ```

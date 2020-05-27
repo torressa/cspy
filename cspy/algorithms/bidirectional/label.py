@@ -1,4 +1,5 @@
 from types import BuiltinFunctionType
+from numpy import array_equal
 
 
 class Label(object):
@@ -30,10 +31,27 @@ class Label(object):
         self.res = res
         self.path = path
 
+    def __eq__(self, other):
+        if other:
+            if self.weight != other.weight:
+                return False
+            if self.node != other.node:
+                return False
+            if not array_equal(self.res, other.res):
+                return False
+            if self.path != other.path:
+                return False
+            return True
+        else:
+            return False
+
+    def __hash__(self):
+        return id(self)
+
     def __repr__(self):
         return str(self)
 
-    def __str__(self):  # for printing purposes
+    def __str__(self):
         return "Label({0},{1},{2})".format(self.weight, self.node, self.res)
 
     def dominates(self, other, direction):
@@ -55,6 +73,28 @@ class Label(object):
                 if any(self.res[1:] > other.res[1:]):
                     return False
             return True
+
+    def full_dominance(self, other, direction):
+        """
+        Checks whether self dominates other for the input direction.
+        In the case when neither dominates , i.e. they are non-dominated,
+        the direction is flipped labels are compared again.
+        """
+        self_dominates = self.dominates(other, direction)
+        other_dominates = other.dominates(self, direction)
+        # self dominates other for the input direction
+        if self_dominates:
+            return True
+        # Both non-dominated labels in this direction.
+        elif (not self_dominates and not other_dominates):
+            # flip directions
+            flip_direc = "forward" if direction == "backward" else "backward"
+            self_dominates_flipped = self.dominates(other, flip_direc)
+            # label 1 dominates other in the flipped direction
+            if self_dominates_flipped:
+                return True
+            elif self.weight < other.weight:
+                return True
 
     def get_new_label(self, edge, direction):
         path = list(self.path)
@@ -84,3 +124,8 @@ class Label(object):
 
     def feasibility_check(self, max_res, min_res):
         return all(max_res >= self.res) and all(min_res <= self.res)
+
+    def subset(self, other):
+        # Determine whether all the nodes in the path of other are contained
+        # in self
+        return all(n in self.path for n in other)
