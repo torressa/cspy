@@ -17,8 +17,7 @@ class Search:
     Helper class to advance the search in either direction.
     """
 
-    def __init__(self, G, max_res, min_res, direction, elementary, REF_forward,
-                 REF_backward):
+    def __init__(self, G, max_res, min_res, direction, elementary):
         self.G = G
         self.max_res, self.min_res = max_res.copy(), min_res.copy()
         self.max_res_in, self.min_res_in = array(max_res.copy()), array(

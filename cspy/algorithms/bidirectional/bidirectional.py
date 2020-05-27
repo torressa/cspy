@@ -45,7 +45,6 @@ class BiDirectional:
               algorithm=__name__)
         # Preprocess graph
         self.G = preprocess_graph(G, max_res, min_res, preprocess, REF_forward)
-        self.REF_join = REF_join
 
         self.max_res = max_res.copy()
         self.min_res = min_res.copy()
@@ -59,15 +58,16 @@ class BiDirectional:
         self.current_label = OrderedDict()
         # Initialise forward search
         self.fwd_search = Search(self.G, max_res, min_res, "forward",
-                                 elementary, REF_forward, REF_backward)
+                                 elementary)
         # initialise backward search
         self.bwd_search = Search(self.G, max_res, min_res, "backward",
-                                 elementary, REF_forward, REF_backward)
+                                 elementary)
         # To save all best labels
         self.best_labels = OrderedDict({
             "forward": deque(),
             "backward": deque()
         })
+        self.best_label = None
         # If given, set REFs for dominance relations and feasibility checks
         if REF_forward:
             Label._REF_forward = REF_forward
@@ -77,7 +77,7 @@ class BiDirectional:
             Label._REF_backward = REF_backward
         else:
             Label._REF_backward = sub
-        self.best_label = None
+            self.REF_join = REF_join
         # Init with seed if given
         if seed is None:
             self.random_state = RandomState()
