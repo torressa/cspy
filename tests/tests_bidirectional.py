@@ -3,10 +3,15 @@ import unittest
 
 from networkx import DiGraph
 from numpy import array
+from parameterized import parameterized
 
 sys.path.append("../")
 from cspy.algorithms.bidirectional import BiDirectional
 from cspy.algorithms.bidirectional.label import Label
+
+from logging import basicConfig, DEBUG
+
+basicConfig(level=DEBUG)
 
 
 class TestsBiDirectional(unittest.TestCase):
@@ -27,12 +32,17 @@ class TestsBiDirectional(unittest.TestCase):
         self.G.add_edge('B', 'Sink', res_cost=array([1, 2]), weight=10)
         self.G.add_edge('C', 'Sink', res_cost=array([1, 10]), weight=-1)
 
-    def testBiDirectionalBothDynamic(self):
+    @parameterized.expand(zip(range(100), range(100)))
+    def testBiDirectionalBothRandom(self, _, seed):
         """
         Find shortest path of simple test digraph using the BiDirectional
         algorithm with dynamic halfway point.
         """
-        bidirec = BiDirectional(self.G, self.max_res, self.min_res)
+        bidirec = BiDirectional(self.G,
+                                self.max_res,
+                                self.min_res,
+                                time_limit=0.2,
+                                seed=seed)
         # Check classification
         with self.assertLogs('cspy.algorithms.bidirectional') as cm:
             bidirec.name_algorithm()
@@ -43,6 +53,57 @@ class TestsBiDirectional(unittest.TestCase):
             bidirec.path
         self.assertTrue("run()" in str(context.exception))
         # Run and test results
+        bidirec.run()
+        path = bidirec.path
+        cost = bidirec.total_cost
+        total_res = bidirec.consumed_resources
+        self.assertEqual(path, ['Source', 'A', 'B', 'C', 'Sink'])
+        self.assertEqual(cost, -13)
+        self.assertTrue(all(total_res == [4, 15.3]))
+
+    def testBiDirectionalBothGenerated(self):
+        """
+        Find shortest path of simple test digraph using the BiDirectional
+        algorithm with dynamic halfway point.
+        """
+        bidirec = BiDirectional(self.G,
+                                self.max_res,
+                                self.min_res,
+                                method="generated")
+        bidirec.run()
+        path = bidirec.path
+        cost = bidirec.total_cost
+        total_res = bidirec.consumed_resources
+        self.assertEqual(path, ['Source', 'A', 'B', 'C', 'Sink'])
+        self.assertEqual(cost, -13)
+        self.assertTrue(all(total_res == [4, 15.3]))
+
+    def testBiDirectionalBothProcessed(self):
+        """
+        Find shortest path of simple test digraph using the BiDirectional
+        algorithm with dynamic halfway point.
+        """
+        bidirec = BiDirectional(self.G,
+                                self.max_res,
+                                self.min_res,
+                                method="unprocessed")
+        bidirec.run()
+        path = bidirec.path
+        cost = bidirec.total_cost
+        total_res = bidirec.consumed_resources
+        self.assertEqual(path, ['Source', 'A', 'B', 'C', 'Sink'])
+        self.assertEqual(cost, -13)
+        self.assertTrue(all(total_res == [4, 15.3]))
+
+    def testBiDirectionalBothUnprocessed(self):
+        """
+        Find shortest path of simple test digraph using the BiDirectional
+        algorithm with unprocessed guided search
+        """
+        bidirec = BiDirectional(self.G,
+                                self.max_res,
+                                self.min_res,
+                                method="unprocessed")
         bidirec.run()
         path = bidirec.path
         cost = bidirec.total_cost

@@ -165,9 +165,7 @@ class PSOLGENT(PathBase):
                 log.info("Iteration: {0}. Current best fit: {1}".format(
                     self.iter, self.best_fit))
             self.iter += 1
-        if self.best_path:
-            pass
-        else:
+        if not self.best_path:
             raise Exception("No resource feasible path has been found")
 
     def _init_swarm(self):
@@ -188,14 +186,20 @@ class PSOLGENT(PathBase):
     def _get_vel(self):
         # Generate random numbers
         u1 = zeros((self.swarm_size, self.swarm_size))
-        u1[diag_indices_from(u1)] = list(
-            self.random_state.uniform(0, 1) for _ in range(self.swarm_size))
+        u1[diag_indices_from(u1)] = [
+            self.random_state.uniform(0, 1) for _ in range(self.swarm_size)
+        ]
+
         u2 = zeros((self.swarm_size, self.swarm_size))
-        u2[diag_indices_from(u2)] = list(
-            self.random_state.uniform(0, 1) for _ in range(self.swarm_size))
+        u2[diag_indices_from(u2)] = [
+            self.random_state.uniform(0, 1) for _ in range(self.swarm_size)
+        ]
+
         u3 = zeros((self.swarm_size, self.swarm_size))
-        u3[diag_indices_from(u2)] = list(
-            self.random_state.uniform(0, 1) for _ in range(self.swarm_size))
+        u3[diag_indices_from(u2)] = [
+            self.random_state.uniform(0, 1) for _ in range(self.swarm_size)
+        ]
+
         # Coefficients
         c = self.c1 + self.c2 + self.c3
         chi_1 = 2 / abs(2 - c - sqrt(pow(c, 2) - 4 * c))
@@ -212,9 +216,8 @@ class PSOLGENT(PathBase):
         best = zeros(shape=old.shape)
         if any(of < nf for of, nf in zip(old_fitness, new_fitness)):
             # replace indices in best with old members if lower fitness
-            idx_old = list(
-                idx for idx, val in enumerate(zip(old_fitness, new_fitness))
-                if val[0] < val[1])
+            idx_old = [idx for idx, val in enumerate(zip(old_fitness, new_fitness))
+                        if val[0] < val[1]]
             best[idx_old] = old[idx_old]
             idx_new = where(best == 0)
             # replace indices in best with new members if lower fitness
@@ -262,8 +265,7 @@ class PSOLGENT(PathBase):
         0 not present, 1 present.
         """
         nodes = self._sort_nodes(list(self.G.nodes()))
-        self.current_nodes = list(
-            nodes[i] for i in range(len(nodes)) if arr[i] == 1)
+        self.current_nodes = [nodes[i] for i in range(len(nodes)) if arr[i] == 1]
 
     def _get_fitness_member(self):
         # Returns the objective for a given path
@@ -287,9 +289,8 @@ class PSOLGENT(PathBase):
     # Path-related methods #
     def _get_edges(self, nodes):
         # Creates a list of edges given the nodes selected
-        return list(
-            edge for edge in self.G.edges(self.G.nbunch_iter(nodes), data=True)
-            if edge[0:2] in zip(nodes, nodes[1:]))
+        return [edge for edge in self.G.edges(self.G.nbunch_iter(nodes), data=True)
+                if edge[0:2] in zip(nodes, nodes[1:])]
 
     @staticmethod
     def _check_edges(edges):
@@ -309,18 +310,17 @@ class PSOLGENT(PathBase):
         Returns False if path is not valid
         Penalty/cost otherwise
         """
-        if path:
-            if len(path) > 2 and (path[0] == 'Source' and path[-1] == 'Sink'):
-                base_cost = sum(edge[2]['weight'] for edge in edges)
-                self.st_path = path
-                if self.check_feasibility() is True:
-                    log.debug("Resource feasible path found")
-                    return base_cost
-                else:
-                    # penalty for resource infeasible valid path
-                    return 1e5 + base_cost
+        if not path:
+            return False
+        if len(path) > 2 and (path[0] == 'Source' and path[-1] == 'Sink'):
+            base_cost = sum(edge[2]['weight'] for edge in edges)
+            self.st_path = path
+            if self.check_feasibility() is True:
+                log.debug("Resource feasible path found")
+                return base_cost
             else:
-                return False
+                # penalty for resource infeasible valid path
+                return 1e5 + base_cost
         else:
             return False
 

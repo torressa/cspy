@@ -42,7 +42,7 @@ class TestsIssue22(unittest.TestCase):
         self.assertTrue(L1.dominates(L2, "backward"))
         self.assertFalse(L2.dominates(L1, "backward"))
 
-        if not L1.dominates(L2, "forward") and not L2.dominates(L1, "forward"):
+        if not (L1.dominates(L2, "forward") or L2.dominates(L1, "forward")):
             self.assertTrue(L1.dominates(L2, "backward"))
 
     def testTabu(self):

@@ -1,4 +1,5 @@
 from types import BuiltinFunctionType
+from typing import List
 from numpy import array_equal
 
 
@@ -9,23 +10,19 @@ class Label(object):
 
     Parameters
     -----------
-
     weight : float
         cumulative edge weight
-
     node : string
         name of last node visited
-
     res : list
         cumulative edge resource consumption
-
     path : list
         all nodes in the path
     """
 
     _REF_forward, _REF_backward = None, None
 
-    def __init__(self, weight, node, res, path):
+    def __init__(self, weight: float, node: str, res: List, path: List):
         self.weight = weight
         self.node = node
         self.res = res
@@ -42,8 +39,7 @@ class Label(object):
             if self.path != other.path:
                 return False
             return True
-        else:
-            return False
+        return False
 
     def __hash__(self):
         return id(self)
@@ -54,31 +50,34 @@ class Label(object):
     def __str__(self):
         return "Label({0},{1},{2})".format(self.weight, self.node, self.res)
 
-    def dominates(self, other, direction):
-        # Determine whether self dominates other. Returns bool
+    def dominates(self, other, direction: str) -> bool:
+        """Determine whether `self` dominates `other`.
+        :return: bool
+        """
         if self.node != other.node:
             raise Exception("Non-comparable labels given")
-        else:
-            # Assume self dominates other
-            if self.weight > other.weight:
-                return False
-            if direction == "forward":
-                if any(self.res > other.res):
-                    return False
-            elif direction == "backward":
-                # Check for the monotone resource (non-increasing)
-                if self.res[0] < other.res[0]:
-                    return False
-                # Check for all other resources (non-decreasing)
-                if any(self.res[1:] > other.res[1:]):
-                    return False
-            return True
 
-    def full_dominance(self, other, direction):
-        """
-        Checks whether self dominates other for the input direction.
+        # Assume self dominates other
+        if self.weight > other.weight:
+            return False
+        if direction == "backward":
+            # Check for the monotone resource (non-increasing)
+            if self.res[0] < other.res[0]:
+                return False
+            # Check for all other resources (non-decreasing)
+            if any(self.res[1:] > other.res[1:]):
+                return False
+        elif direction == "forward":
+            if any(self.res > other.res):
+                return False
+        return True
+
+    def full_dominance(self, other, direction: str) -> bool:
+        """Checks whether `self` dominates `other` for the input direction.
         In the case when neither dominates , i.e. they are non-dominated,
         the direction is flipped labels are compared again.
+
+        :return: bool
         """
         self_dominates = self.dominates(other, direction)
         other_dominates = other.dominates(self, direction)
@@ -96,7 +95,11 @@ class Label(object):
             elif self.weight < other.weight:
                 return True
 
-    def get_new_label(self, edge, direction):
+    def get_new_label(self, edge: tuple, direction: str):
+        """Create a label by extending the current label along the input `edge`
+        and `direction`.
+        :return: new Label object.
+        """
         path = list(self.path)
         weight, res = edge[2]["weight"], edge[2]["res_cost"]
         node = edge[1] if direction == "forward" else edge[0]
@@ -122,10 +125,17 @@ class Label(object):
             return None
         return _new_label
 
-    def feasibility_check(self, max_res, min_res):
+    def feasibility_check(self, max_res: List, min_res: List) -> bool:
+        """Check whether `self` satisfies resource constraints for input
+        `max_res` - Upper bound
+        `min_res` - Lower bound
+        :return: True if resource feasible label, False otherwise.
+        """
         return all(max_res >= self.res) and all(min_res <= self.res)
 
-    def subset(self, other):
-        # Determine whether all the nodes in the path of other are contained
-        # in self
+    def subset(self, other) -> bool:
+        """Determine whether all the nodes in the path of `other` are contained
+        in `self`
+        :return: True if input label is subset of current label, False otherwise.
+        """
         return all(n in self.path for n in other)

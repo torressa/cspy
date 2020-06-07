@@ -1,6 +1,3 @@
-import sys
-from copy import deepcopy
-from itertools import repeat
 from logging import getLogger
 from collections import OrderedDict, deque
 
@@ -9,7 +6,7 @@ from numpy import array, zeros
 # Local module imports
 from .label import Label
 
-log = getLogger(__name__)
+LOG = getLogger(__name__)
 
 
 class Search:
@@ -28,21 +25,23 @@ class Search:
         self.current_label = None
         self.unprocessed_labels = OrderedDict()
         self.best_labels = deque()
-        self.generated_labels = 0
+        self.generated_labels_count = 0
         self.final_label = None
 
         self._init_labels()
 
     def run_parallel(self, res_bound, results):
-        # Method to use for parallel search.
-        # res_bound is a shared array.
-        # results is a shared dict.
+        """Method for internal use for parallel search.
+        ``res_bound`` is a shared array.
+        ``results`` is a shared dict.
+        """
         while self.current_label:
             self.move(res_bound)
         results[self.direction] = self.best_labels
 
     def move(self, res_bound):
-        # Single search step
+        """Single step for a search in either direction.
+        """
         if self.direction == "forward":
             self.max_res = res_bound
         else:
@@ -52,13 +51,22 @@ class Search:
     # getter methods #
 
     def get_current_label(self):
+        """Return current position (label) of search.
+        """
         return self.current_label
 
     def get_res(self):
+        """Return current resource bounds.
+        """
         if self.direction == "forward":
             return self.min_res
-        else:
-            return self.max_res
+        return self.max_res
+
+    def get_unprocessed_count(self):
+        return len(self.unprocessed_labels)
+
+    def get_generated_count(self):
+        return self.generated_labels_count
 
     def get_best_labels(self):
         return self.best_labels
@@ -87,14 +95,14 @@ class Search:
             self.min_res[0] = max(
                 self.min_res[0], min(self.current_label.res[0],
                                      self.max_res[0]))
-            log.debug("HB ={} ".format(self.min_res[0]))
+            LOG.debug("HB = %s", self.min_res[0])
         else:  # backward
             idx = 1  # index for tail node
             # Update forwards half-way point
             self.max_res[0] = min(
                 self.max_res[0], max(self.current_label.res[0],
                                      self.min_res[0]))
-            log.debug("HF = {}".format(self.min_res[0]))
+            LOG.debug("HF = %s", self.min_res[0])
         # Initialise label deque
         if self.current_label not in self.unprocessed_labels:
             self.unprocessed_labels[self.current_label] = deque()
@@ -105,7 +113,7 @@ class Search:
         # Propagate current label along all suitable edges in current direction
         for edge in edges:
             self._propagate_label(edge)
-        log.debug(self.unprocessed_labels)
+        LOG.debug(self.unprocessed_labels)
         self._clean_up_unprocessed_labels()
         # Extend label
         next_label = self._get_next_label()
@@ -140,15 +148,14 @@ class Search:
             unproc_sub_labels = None
 
         if self.current_label and unproc_sub_labels:
-            log.debug("processing sub labels from {}".format(
-                self.current_label))
+            LOG.debug("processing sub labels from %s", self.current_label)
             unproc_labels = unproc_sub_labels
         else:
-            log.debug("processing labels from unprocessed")
+            LOG.debug("processing labels from unprocessed")
             unproc_labels = deque(k for k, v in self.unprocessed_labels.items()
                                   if k != exclude_label)
 
-        self.generated_labels += 1
+        self.generated_labels_count += 1
         # Return label with minimum monotone resource for the forward search
         # and the maximum monotone resource for the backward search
         if unproc_labels:
@@ -170,7 +177,7 @@ class Search:
         removed from the appropriate list.
         """
         # Select appropriate list to check
-        log.debug("Dominance")
+        LOG.debug("Dominance")
         labels_to_check = deque(
             l for l in self.unprocessed_labels.keys()
             if l != label_to_check and l.node == label_to_check.node)
@@ -212,25 +219,23 @@ class Search:
         unprocessed labels or the array of non-dominated labels
         """
         # Remove all processed labels from unprocessed dict
-        log.debug("Removing labels : {}".format(labels_to_pop))
+        LOG.debug("Removing labels : %s", labels_to_pop)
         for label_to_pop, destroy in deque(set(labels_to_pop)):
             if destroy and label_to_pop in self.unprocessed_labels:
                 del self.unprocessed_labels[label_to_pop]
-                log.debug("Deleted {}".format(label_to_pop))
+                LOG.debug("Deleted %s", label_to_pop)
             for k, sub_deque in self.unprocessed_labels.items():
                 if label_to_pop in sub_deque:
                     _idx = sub_deque.index(label_to_pop)
                     del self.unprocessed_labels[k][_idx]
-                    log.debug(
-                        "Key {} removed from sub deque".format(label_to_pop))
+                    LOG.debug("Key %s removed from sub deque", label_to_pop)
             if dominance and label_to_pop in self.best_labels:
                 idx = self.best_labels.index(label_to_pop)
                 del self.best_labels[idx]
-                log.debug("Deleted from best_labels {}".format(label_to_pop))
+                LOG.debug("Deleted from best_labels %s", label_to_pop)
 
     def _save_current_best_label(self):
-        """
-        Label saving
+        """Save labels depending on the current state of the search.
         """
         self.best_labels.append(self.current_label)
         # If first label
@@ -241,20 +246,20 @@ class Search:
         try:
             if self.current_label.full_dominance(self.final_label,
                                                  self.direction):
-                log.debug("Saving {} as best, with path {}".format(
-                    self.current_label, self.current_label.path))
-                self.final_label = current_label
+                LOG.debug("Saving %s as best, with path %s", self.current_label,
+                          self.current_label.path)
+                self.final_label = self.current_label
         except Exception:
             # Labels are not comparable i.e. Belong to different nodes
             if (self.direction == "forward" and
                 (self.current_label.path[-1] == "Sink" or
                  self.final_label.node == "Source")):
-                log.debug("Saving {} as best, with path {}".format(
-                    self.current_label, self.current_label.path))
+                LOG.debug("Saving %s as best, with path %s", self.current_label,
+                          self.current_label.path)
                 self.final_label = self.current_label
             elif (self.direction == "backward" and
                   (self.current_label.path[-1] == "Source" or
                    self.final_label.node == "Sink")):
-                log.debug("Saving {} as best, with path {}".format(
-                    self.current_label, self.current_label.path))
+                LOG.debug("Saving %s as best, with path %s", self.current_label,
+                          self.current_label.path)
                 self.final_label = self.current_label

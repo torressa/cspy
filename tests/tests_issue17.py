@@ -120,11 +120,8 @@ class TestsIssue17(unittest.TestCase):
         path = tabu.path
         cost_tabu = tabu.total_cost
         total_res = tabu.consumed_resources
-        cost = sum([
-            edge[2]['weight']
-            for edge in self.G.edges(data=True)
-            if edge[0:2] in zip(path, path[1:])
-        ])
+        cost = sum(edge[2]['weight'] for edge in self.G.edges(data=True)
+                if edge[0:2] in zip(path, path[1:]))
         # Check new cost attribute
         self.assertEqual(cost, cost_tabu)
         self.assertTrue(all(total_res == [3, 3]))
