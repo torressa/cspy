@@ -91,9 +91,7 @@ class GRASP(PathBase):
         while self.it < self.max_iter and not self.stop:
             self._algorithm()
             self.it += 1
-        if self.best_solution.path:
-            pass
-        else:
+        if not self.best_solution.path:
             raise Exception("No resource feasible path has been found")
 
     def _algorithm(self):
@@ -183,10 +181,10 @@ class GRASP(PathBase):
         n_permutations = int(factorial(len(path)) / factorial(len(path) - 2))
         sample_size = randint(3, n_permutations)
         selection = sample(deque(permutations(path, 2)), sample_size)
-        path_edges = dict(list(edge for edge in selection if edge in G.edges()))
+        path_edges = dict([edge for edge in selection if edge in G.edges()])
         elem = 'Source'  # start point in the new list
         new_list = []
-        for _ in range(len(path_edges)):
+        for _ in path_edges:
             try:
                 new_list.append((elem, path_edges[elem]))
                 elem = path_edges[elem]

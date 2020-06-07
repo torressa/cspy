@@ -50,9 +50,9 @@ class Master:
         # CONSTRAINTS #
         # Generate empty >= constraints for all flights
         self.master.flight_constrs = {
-            key: LpConstraintVar(key, LpConstraintGE, 1)
-            for key in dum_dict.keys()
+            key: LpConstraintVar(key, LpConstraintGE, 1) for key in dum_dict
         }
+
         # Generate empty <= constraints for all aircraft
         self.master.assign_constrs = {
             k: LpConstraintVar(k, LpConstraintLE, 1) for k in self.Data.aircraft
@@ -153,7 +153,7 @@ class Master:
             if i == k.replace("-", "_")
         ][0]
         # cost of path + 2 due to first edge initialisation
-        cost = 2 + sum([p[1] for p in path]) - lambda_k
+        cost = 2 + sum(p[1] for p in path) - lambda_k
         if cost < 0:
             # Add variable to master problem in appropriate columns
             var = LpVariable(

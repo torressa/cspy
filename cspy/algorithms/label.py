@@ -40,21 +40,21 @@ class Label(object):
         # Determine whether self dominates other. Returns bool
         if self.node != other.node:
             raise Exception("Non-comparable labels given")
-        else:
-            # Assume self dominates other
-            if self.weight > other.weight:
+
+        # Assume self dominates other
+        if self.weight > other.weight:
+            return False
+        if direction == "backward":
+            # Check for the monotone resource (non-increasing)
+            if self.res[0] < other.res[0]:
                 return False
-            if direction == "forward":
-                if any(self.res > other.res):
-                    return False
-            elif direction == "backward":
-                # Check for the monotone resource (non-increasing)
-                if self.res[0] < other.res[0]:
-                    return False
-                # Check for all other resources (non-decreasing)
-                if any(self.res[1:] > other.res[1:]):
-                    return False
-            return True
+            # Check for all other resources (non-decreasing)
+            if any(self.res[1:] > other.res[1:]):
+                return False
+        elif direction == "forward":
+            if any(self.res > other.res):
+                return False
+        return True
 
     def get_new_label(self, edge, direction):
         path = list(self.path)

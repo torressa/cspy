@@ -128,14 +128,8 @@ class BiDirectional:
         self.final_label = None
 
         # If given, set REFs for dominance relations and feasibility checks
-        if REF_forward:
-            Label._REF_forward = REF_forward
-        else:
-            Label._REF_forward = add
-        if REF_backward:
-            Label._REF_backward = REF_backward
-        else:
-            Label._REF_backward = sub
+        Label._REF_forward = REF_forward if REF_forward else add
+        Label._REF_backward = REF_backward if REF_backward else sub
         # Init with seed if given
         if seed is None:
             self.random_state = RandomState()
@@ -215,8 +209,7 @@ class BiDirectional:
             elif (not self.current_label["forward"] and
                   self.current_label["backward"]):
                 return "backward"
-            elif (self.current_label["forward"] and
-                  self.current_label["backward"]):
+            elif self.current_label["forward"]:
                 if self.method == "random":
                     # return a random direction
                     return self.random_state.choice(["forward", "backward"])
@@ -236,8 +229,9 @@ class BiDirectional:
             else:  # if both are empty
                 return
         else:
-            if (not self.current_label["forward"] and
-                    not self.current_label["backward"]):
+            if not (
+                self.current_label["forward"] or self.current_label["backward"]
+            ):
                 return
             elif not self.current_label[self.direc_in]:
                 return
@@ -472,10 +466,14 @@ class BiDirectional:
             # 1. Paths can be joined (exists a connecting edge)
             # 2. Introduces no cycles
             # 3. When combined with the forward label, they satisfy the halfway check
-            bwd_labels = (l for l in self.best_labels["backward"] if (
-                (fwd_label.node, l.node) in self.G.edges() and \
-                not any(n in fwd_label.path for n in l.path) and
-                self._half_way(fwd_label, l)))
+            bwd_labels = (
+                l
+                for l in self.best_labels["backward"]
+                if (fwd_label.node, l.node) in self.G.edges()
+                and all(n not in fwd_label.path for n in l.path)
+                and self._half_way(fwd_label, l)
+            )
+
             for bwd_label in bwd_labels:
                 # Merge two labels
                 merged_label = self._merge_labels(fwd_label, bwd_label)
@@ -495,10 +493,7 @@ class BiDirectional:
         .. _Righini and Salani (2006): https://www.sciencedirect.com/science/article/pii/S1572528606000417
         """
         phi = abs(fwd_label.res[0] - (self.max_res_in[0] - bwd_label.res[0]))
-        if 0 <= phi <= 2:
-            return True
-        else:
-            return False
+        return 0 <= phi <= 2
 
     def _merge_labels(self, fwd_label, bwd_label):
         """
@@ -539,8 +534,7 @@ class BiDirectional:
         # Record total weight, total_res and final path
         weight = fwd_label.weight + edge[2]['weight'] + _bwd_label.weight
         final_path = fwd_label.path + _bwd_label.path
-        merged_label = Label(weight, "Sink", final_res, final_path)
-        return merged_label
+        return Label(weight, "Sink", final_res, final_path)
 
     def _save(self, label):
         # Saves a label for exposure

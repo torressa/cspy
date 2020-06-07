@@ -30,11 +30,7 @@ class PathBase(object):
         self.max_res = max_res
         self.min_res = min_res
         # Update resource extension function if given
-        if REF:
-            self.REF = REF
-        else:
-            self.REF = add
-
+        self.REF = REF if REF else add
         if negative_edge_cycle(G) or algorithm == "simple":
             self.algorithm = "simple"
         else:
@@ -128,8 +124,7 @@ class PathBase(object):
         infeasible.
         This can changed with the ``return_edge`` parameter.
         """
-        shortest_path_edges = deque(
-            e for e in zip(self.st_path, self.st_path[1:]))
+        shortest_path_edges = deque(iter(zip(self.st_path, self.st_path[1:])))
         shortest_path_edges_w_data = deque()
         shortest_path_edges_w_data.extend([
             (e[0], e[1], self.G[e[0]][e[1]]) for e in shortest_path_edges
@@ -144,10 +139,9 @@ class PathBase(object):
                 total_res += self._edge_extract(edge)
             else:
                 total_res = self.REF(total_res, edge)
-            if (all(total_res <= self.max_res) and
-                    all(total_res >= self.min_res)):
-                pass
-            else:
+            if not (
+                (all(total_res <= self.max_res) and all(total_res >= self.min_res))
+            ):
                 break
         else:
             # Fesible path found. Save attributes.

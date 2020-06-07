@@ -75,7 +75,7 @@ class Tabu(PathBase):
         self.iteration = 0
         self.stop = False
         self.neighbour = 'Source'
-        self.neighbourhood = list()
+        self.neighbourhood = []
         self.tabu_edge = None
         self.edges_to_check = dict(self.G.edges())
 
@@ -87,9 +87,7 @@ class Tabu(PathBase):
             self._algorithm()
             self.iteration += 1
 
-        if self.best_path:
-            pass
-        else:
+        if not self.best_path:
             raise Exception("No resource feasible path has been found")
 
     def _algorithm(self):
@@ -118,9 +116,9 @@ class Tabu(PathBase):
             self.st_path = path
         elif neighbour in self.st_path:
             # Paths can be joined at neighbour
-            self.st_path = list(node for node in self.st_path if
-                                (node != neighbour and self.st_path.index(node)
-                                 < self.st_path.index(neighbour))) + path
+            self.st_path = [node for node in self.st_path if
+                                        (node != neighbour and self.st_path.index(node)
+                                         < self.st_path.index(neighbour))] + path
         else:
             self._merge_paths(neighbour, path)
 
@@ -128,8 +126,8 @@ class Tabu(PathBase):
         branch_path = [n for n in self.st_path if n not in path]
         for node in reversed(branch_path):
             if (node, neighbour) in self.G.edges():
-                self.st_path = list(n for n in branch_path if (
-                    branch_path.index(n) <= branch_path.index(node))) + path
+                self.st_path = [n for n in branch_path if (
+                                branch_path.index(n) <= branch_path.index(node))] + path
                 break
 
     # Algorithm-specific methods #
