@@ -68,8 +68,8 @@ class Subproblem:
                                         self.first_flight, False)
 
     def _get_first_flight(self):
-        sched_k = list(sched for key, sched in self.Data.scheds.items()
-                       if sched.label[2] == 's_{}_{}'.format(0, self.k))[0]
+        sched_k = [sched for key, sched in self.Data.scheds.items()
+                           if sched.label[2] == 's_{}_{}'.format(0, self.k)][0]
         sorted_flights = sorted([f for f in sched_k.flights],
                                 key=lambda x: x.departure)
         max_FH = sum(f.arrival - f.departure for f in sorted_flights)
@@ -155,9 +155,11 @@ class Subproblem:
                     crewd2 = 0  # crew duty 2 reset regardless of airport
             else:
                 # Flight (deadhead or not)
-                if ((self.k_type == 1 and flight.type > self.k_type) or
-                    ((self.k_type == 2 or self.k_type == 0) and
-                     flight.type != self.k_type)):
+                if (
+                    (self.k_type == 1 and flight.type > self.k_type)
+                    or self.k_type in [2, 0]
+                    and flight.type != self.k_type
+                ):
                     # If flight doesn't match aircraft type
                     air = 1
                 maint += duration  # maintenance

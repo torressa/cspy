@@ -42,14 +42,13 @@ def algorithm(Data, n_runs, airline):
                 if float(cost) < 0:
                     log.info(" Added a column with cost : {}".format(cost))
                     col_count += 1
-                elif float(cost) >= 0:
+                else:
                     log.info(" Solved and produced +ve reduced cost")
                     red_cost_k[k] += 1
                 relax, duals = MasterObj._solve_relax()
                 log.info(" Linear relaxation objective value : {}".format(
                     value(relax.model.objective)))
-                red_cost_count = sum(
-                    [min(1, val) for val in red_cost_k.values()])
+                red_cost_count = sum(min(1, val) for val in red_cost_k.values())
         iteration += 1
 
     MasterObj.master.model.solve()

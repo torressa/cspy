@@ -36,8 +36,7 @@ class Master:
         # OBJECTIVE FUNCTION #
         self.master.setObjective(dummy.prod(dum_dict))
         # FLIGHT CONSTRAINTS #
-        self.master.addConstrs((dummy[key] >= 1 for key in dum_dict.keys()),
-                               name='flight')
+        self.master.addConstrs((dummy[key] >= 1 for key in dum_dict), name='flight')
         # AIRCRAFT CONSTRAINTS #
         self.master.addConstrs((a.sum(k, '*') <= 1 for k in self.Data.aircraft),
                                name='aircraft_schedule')
@@ -115,7 +114,7 @@ class Master:
             if "aircraft_schedule" in c.ConstrName and k in c.ConstrName
         ][0]
         # cost of path + 2 due to first edge initialisation
-        cost = 2 + sum([p[1] for p in path]) - lambda_k
+        cost = 2 + sum(p[1] for p in path) - lambda_k
         if cost < 0:
             self.master.addVar(obj=cost_col,
                                vtype="B",
