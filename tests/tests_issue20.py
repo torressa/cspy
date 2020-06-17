@@ -32,12 +32,57 @@ class TestsIssue20(unittest.TestCase):
         self.max_res, self.min_res = [len(self.G.edges()), 2], [0, 0]
 
     @parameterized.expand(zip(range(100), range(100)))
-    def testBiDirectional(self, _, seed):
+    def testBiDirectionalRandom(self, _, seed):
         """
-        Find shortest path of simple test digraph using BiDirectional
+        Test BiDirectional with randomly chosen sequence of directions
+        for a range of seeds.
         """
-        bidirec = BiDirectional(self.G, self.max_res, self.min_res, seed=seed)
+        bidirec = BiDirectional(self.G,
+                                self.max_res,
+                                self.min_res,
+                                seed=seed,
+                                elementary=True)
         bidirec.run()
+        path = bidirec.path
+        cost = bidirec.total_cost
+        total_res = bidirec.consumed_resources
+        # Check path
+        self.assertEqual(path, ['Source', 2, 1, 'Sink'])
+        # Check attributes
+        self.assertEqual(cost, -10)
+        self.assertTrue(all(total_res == [3, 2]))
+        self.assertTrue(all(e in self.G.edges() for e in zip(path, path[1:])))
+
+    def testBiDirectionalGenerated(self):
+        """
+        Test BiDirectional with the search direction chosen by the number of
+        direction with lowest number of generated labels.
+        """
+        bidirec = BiDirectional(self.G,
+                                self.max_res,
+                                self.min_res,
+                                method="generated",
+                                elementary=True)
+        bidirec.run()
+        path = bidirec.path
+        cost = bidirec.total_cost
+        total_res = bidirec.consumed_resources
+        # Check path
+        self.assertEqual(path, ['Source', 2, 1, 'Sink'])
+        # Check attributes
+        self.assertEqual(cost, -10)
+        self.assertTrue(all(total_res == [3, 2]))
+        self.assertTrue(all(e in self.G.edges() for e in zip(path, path[1:])))
+
+    def testBiDirectionalParallel(self):
+        """
+        Test BiDirectional with the parallel search
+        """
+        bidirec = BiDirectional(self.G,
+                                self.max_res,
+                                self.min_res,
+                                elementary=True)
+        bidirec.run_parallel()
         path = bidirec.path
         cost = bidirec.total_cost
         total_res = bidirec.consumed_resources
@@ -50,7 +95,7 @@ class TestsIssue20(unittest.TestCase):
 
     def testTabu(self):
         """
-        Find shortest path of simple test digraph using Tabu
+        Find shortest path of using Tabu
         """
         tabu = Tabu(self.G, self.max_res, self.min_res)
         tabu.run()

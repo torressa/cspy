@@ -20,7 +20,7 @@ class Label(object):
         all nodes in the path
     """
 
-    _REF_forward, _REF_backward = None, None
+    REF_forward, REF_backward = None, None
 
     def __init__(self, weight: float, node: str, res: List, path: List):
         self.weight = weight
@@ -55,7 +55,7 @@ class Label(object):
         :return: bool
         """
         if self.node != other.node:
-            raise Exception("Non-comparable labels given")
+            raise TypeError("Non-comparable labels given")
 
         # Assume self dominates other
         if self.weight > other.weight:
@@ -105,19 +105,18 @@ class Label(object):
         node = edge[1] if direction == "forward" else edge[0]
         if node in path:  # If node already visited.
             return None
-        else:
-            path.append(node)
+        path.append(node)
         if direction == "forward":
-            if isinstance(self._REF_forward, BuiltinFunctionType):
+            if isinstance(self.REF_forward, BuiltinFunctionType):
                 res_new = self.res + res
             else:
-                res_new = self._REF_forward(self.res, edge)
+                res_new = self.REF_forward(self.res, edge)
         elif direction == "backward":
-            if isinstance(self._REF_backward, BuiltinFunctionType):
+            if isinstance(self.REF_backward, BuiltinFunctionType):
                 res_new = self.res + res
                 res_new[0] = self.res[0] - 1
             else:
-                res_new = self._REF_backward(self.res, edge)
+                res_new = self.REF_backward(self.res, edge)
 
         _new_label = Label(weight + self.weight, node, res_new, path)
         if _new_label == self:
@@ -125,17 +124,24 @@ class Label(object):
             return None
         return _new_label
 
-    def feasibility_check(self, max_res: List, min_res: List) -> bool:
+    def feasibility_check(self, max_res: List, min_res: List,
+                          direction: str) -> bool:
         """Check whether `self` satisfies resource constraints for input
         `max_res` - Upper bound
         `min_res` - Lower bound
         :return: True if resource feasible label, False otherwise.
+
+        For backward labels, we need to check the halfway point (in min_res[0])
         """
-        return all(max_res >= self.res) and all(min_res <= self.res)
+        if direction == "forward":
+            return all(max_res >= self.res) and all(min_res <= self.res)
+        return (all(max_res >= self.res) and all(
+            min_res[i] <= self.res[i] for i in range(1, len(min_res))) and
+                self.res[0] > min_res[0])
 
     def subset(self, other) -> bool:
         """Determine whether all the nodes in the path of `other` are contained
         in `self`
         :return: True if input label is subset of current label, False otherwise.
         """
-        return all(n in self.path for n in other)
+        return all(n in self.path for n in other.path)

@@ -11,18 +11,79 @@ from numpy import array
 from numpy.random import RandomState
 from networkx import DiGraph
 
-# Module level imports
-from cspy.checking import check
+from cspy.checking import check, check_seed
 from cspy.preprocessing import preprocess_graph
-
-# Local imports
-from .search import Search
-from .label import Label
+from cspy.algorithms.bidirectional_search import Search
+from cspy.algorithms.label import Label
 
 LOG = getLogger(__name__)
 
 
 class BiDirectional:
+    """
+    Implementation of the bidirectional labeling algorithm with dynamic
+    half-way point (`Tilk 2017`_).
+    This requires the joining procedure (Algorithm 3) from
+    `Righini and Salani (2006)`_, also implemented.
+    Depending on the range of values for bounds for the first resource, we get
+    four different algorithms. See ``self.name_algorithm`` and Notes.
+
+    Parameters
+    ----------
+    G : object instance :class:`nx.Digraph()`
+        must have ``n_res`` graph attribute and all edges must have
+        ``res_cost`` attribute.
+
+    max_res : list of floats
+        :math:`[H_F, M_1, M_2, ..., M_{n\_res}]` upper bounds for resource
+        usage (including initial forward stopping point).
+        We must have ``len(max_res)`` :math:`\geq 2`.
+
+    min_res : list of floats
+        :math:`[H_B, L_1, L_2, ..., L_{n\_res}]` lower bounds for resource
+        usage (including initial backward stopping point).
+        We must have ``len(min_res)`` :math:`=` ``len(max_res)`` :math:`\geq 2`
+
+    preprocess : bool, optional
+        enables preprocessing routine. Default : False.
+
+    direction : string, optional
+        preferred search direction.
+        Either "both", "forward", or, "backward". Default : "both".
+
+    method : string, optional
+        preferred method for determining search direction.
+        Either "random", "generated" (direction with least number of generated labels),
+        "processed" (direction with least number of processed labels), or,
+        "unprocessed" (direction with least number of unprocessed labels).
+        Default: "random"
+
+    time_limit : int, optional
+        time limit in seconds.
+        Default: None
+
+    threshold : float, optional
+        specify a threshold for a an acceptable resource feasible path.
+        This might cause the search to terminate early.
+        Default: None
+
+    elementary : bool, optional
+        whether the problem is elementary. i.e. no cycles are allowed in the
+        final path. Note this may increase run time.
+        Default: False
+
+    seed : None or int or numpy.random.RandomState instance, optional
+        seed for PSOLGENT class. Default : None (which gives a single value
+        numpy.random.RandomState).
+
+    REF_forward, REF_backward, REF_join : functions, optional
+        Custom resource extension functions. See `REFs`_ for more details.
+        Default : additive
+
+    .. _REFs : https://cspy.readthedocs.io/en/latest/how_to.html#refs
+    .. _Tilk 2017: https://www.sciencedirect.com/science/article/pii/S0377221717302035
+    .. _Righini and Salani (2006): https://www.sciencedirect.com/science/article/pii/S1572528606000417
+    """
 
     def __init__(self,
                  G: DiGraph,
@@ -59,18 +120,10 @@ class BiDirectional:
         self.time_limit = time_limit
         self.elementary = elementary
         self.threshold = threshold
-        # Init with seed if given
-        if seed is None:
-            self.random_state = RandomState()
-        elif isinstance(seed, int):
-            self.random_state = RandomState(seed)
-        elif isinstance(seed, RandomState):
-            self.random_state = seed
-        else:
-            raise Exception("{} cannot be used to seed".format(seed))
-        # If given, set REFs for dominance relations and feasibility checks
-        Label._REF_forward = REF_forward if REF_forward else add
-        Label._REF_backward = REF_backward if REF_backward else sub
+        self.random_state = check_seed(seed)
+        Label.REF_forward = REF_forward if REF_forward else add
+        Label.REF_backward = REF_backward if REF_backward else sub
+
         self.REF_join = REF_join
 
         # Algorithm specific attributes #
@@ -78,10 +131,6 @@ class BiDirectional:
         self.fwd_search = None
         self.bwd_search = None
         self.current_label = OrderedDict()
-        # Unprocessed label counts
-        self.unprocessed_labels = OrderedDict({"forward": 0, "backward": 0})
-        # Generated label counts
-        self.generated_labels = OrderedDict({"forward": 0, "backward": 0})
         # To save all best labels
         self.final_label = None
         self.best_labels = OrderedDict({
@@ -197,10 +246,11 @@ class BiDirectional:
     def _terminate_serial(self):
         if self.time_limit is not None and self._get_time_remaining() <= 0:
             return True
-        if self.final_label and self.threshold is not None and (
-                self.final_label.weight < self.threshold and
-                all(_ in self.final_label.path for _ in ["Source", "Sink"])):
-            return True
+        if self.final_label:
+            if self.threshold is not None and self.final_label.weight < self.threshold:
+                if all(_ in self.final_label.path for _ in ["Source", "Sink"]):
+                    LOG.debug("Terminated early")
+                    return True
         return False
 
     def _get_time_remaining(self):
@@ -221,17 +271,6 @@ class BiDirectional:
         self.best_labels["forward"] = self.fwd_search.get_best_labels()
         self.best_labels["backward"] = self.bwd_search.get_best_labels()
 
-    def _update_unprocessed_count(self):
-        self.unprocessed_labels[
-            "forward"] = self.fwd_search.get_unprocessed_count()
-        self.unprocessed_labels[
-            "backward"] = self.bwd_search.get_unprocessed_count()
-
-    def _update_generated_count(self):
-        self.generated_labels["forward"] = self.fwd_search.get_generated_count()
-        self.generated_labels["backward"] = self.bwd_search.get_generated_count(
-        )
-
     def _update_final_label(self):
         if self.direction == "forward":
             self.final_label = self.fwd_search.get_final_label()
@@ -243,9 +282,12 @@ class BiDirectional:
             if fwd_final:
                 self.final_label = fwd_final
             elif bwd_final:
-                self.final_label = self._process_bwd_label(bwd_final)
+                self.final_label = bwd_final
 
     def _get_direction(self):
+        """Determine the next search direction (for series search)
+        dending on the input method or direction
+        """
         if self.direction == "both":
             if (self.current_label["forward"] and
                     not self.current_label["backward"]):
@@ -260,16 +302,18 @@ class BiDirectional:
                     return self.random_state.choice(["forward", "backward"])
                 elif self.method == "generated":
                     # return direction with least number of generated labels
-                    return ("forward" if self.generated_labels["forward"] <
-                            self.generated_labels["backward"] else "backward")
+                    return ("forward" if self.fwd_search.get_generated_count() <
+                            self.bwd_search.get_generated_count() else
+                            "backward")
                 elif self.method == "processed":
                     # return direction with least number of "processed" labels
                     return ("forward" if len(self.best_labels["forward"]) < len(
                         self.best_labels["backward"]) else "backward")
                 elif self.method == "unprocessed":
                     # return direction with least number of unprocessed_labels labels
-                    return ("forward" if self.unprocessed_labels["forward"] <
-                            self.unprocessed_labels["backward"] else "backward")
+                    return (
+                        "forward" if self.fwd_search.get_unprocessed_count() <
+                        self.bwd_search.get_unprocessed_count() else "backward")
             return
         else:
             if (not self.current_label["forward"] and
@@ -336,10 +380,6 @@ class BiDirectional:
         LOG.debug("joining")
         for fwd_label in self.best_labels["forward"]:
             # Create generator for backward labels for current forward label.
-            # Includes only those that:
-            # 1. Paths can be joined (exists a connecting edge)
-            # 2. Introduces no cycles
-            # 3. When combined with the forward label, they satisfy the halfway check
             bwd_labels = (l for l in self.best_labels["backward"]
                           if (fwd_label.node, l.node) in self.G.edges() and all(
                               n not in fwd_label.path
@@ -349,7 +389,7 @@ class BiDirectional:
                 merged_label = self._merge_labels(fwd_label, bwd_label)
                 # Check resource feasibility
                 if (merged_label and merged_label.feasibility_check(
-                        self.max_res_in, self.min_res_in)):
+                        self.max_res_in, self.min_res_in, "forward")):
                     # Save label
                     self._save(merged_label)
                     # Stop if threshold specified and label is under

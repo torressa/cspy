@@ -1,5 +1,6 @@
 from networkx import DiGraph, NetworkXException, has_path
 from numpy import ndarray
+from numpy.random import RandomState
 
 
 def check(G,
@@ -71,6 +72,20 @@ def check(G,
     if errors:
         # if any check has failed raise an exception with all the errors
         raise Exception('\n'.join('{}'.format(item) for item in errors))
+
+
+def check_seed(seed):
+    """Check whether given seed can be used to seed a numpy.random.RandomState
+    :return: numpy.random.RandomState (seeded if seed given)
+    """
+    if seed is None:
+        return RandomState()
+    elif isinstance(seed, int):
+        return RandomState(seed)
+    elif isinstance(seed, RandomState):
+        return seed
+    else:
+        raise TypeError("{} cannot be used to seed".format(seed))
 
 
 def _check_res(G, max_res, min_res, direction, algorithm):

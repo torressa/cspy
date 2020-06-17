@@ -37,15 +37,6 @@ class TestsIssue25(unittest.TestCase):
         Note the first argument is required to work using parameterized and unittest.
         """
         bidirec = BiDirectional(self.G, self.max_res, self.min_res, seed=seed)
-        # Check classification
-        with self.assertLogs('cspy.algorithms.bidirectional') as cm:
-            bidirec.name_algorithm()
-        # Log should contain the word 'dynamic'
-        self.assertRegex(cm.output[0], 'dynamic')
-        # Check exception for not running first
-        with self.assertRaises(Exception) as context:
-            bidirec.path
-        self.assertTrue("run()" in str(context.exception))
         # Run and test results
         bidirec.run()
         path = bidirec.path

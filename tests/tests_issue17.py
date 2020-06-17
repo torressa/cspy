@@ -32,16 +32,20 @@ class TestsIssue17(unittest.TestCase):
         self.G.add_edge(4, 2, weight=3, res_cost=array([1, 1]))
         self.G.add_edge(4, "Sink", weight=3, res_cost=array([1, 1]))
         # Maximum and minimum resource arrays
-        self.max_res, self.min_res = [len(self.G.edges()), 6], [0, 0]
+        self.max_res, self.min_res = [len(self.G.nodes()), 6], [0, 0]
 
     @parameterized.expand(zip(range(100), range(100)))
-    def testBiDirectionalBothDynamic(self, _, seed):
+    def testBiDirectionalBothRandom(self, _, seed):
         """
         Find shortest path of simple test digraph using the BiDirectional
         algorithm for a range of seeds.
         Note the first argument is required to work using parameterized and unittest.
         """
-        bidirec = BiDirectional(self.G, self.max_res, self.min_res, seed=seed)
+        bidirec = BiDirectional(self.G,
+                                self.max_res,
+                                self.min_res,
+                                seed=seed,
+                                elementary=True)
         # Check classification
         with self.assertLogs('cspy.algorithms.bidirectional') as cm:
             bidirec.name_algorithm()
@@ -120,8 +124,9 @@ class TestsIssue17(unittest.TestCase):
         path = tabu.path
         cost_tabu = tabu.total_cost
         total_res = tabu.consumed_resources
-        cost = sum(edge[2]['weight'] for edge in self.G.edges(data=True)
-                if edge[0:2] in zip(path, path[1:]))
+        cost = sum(edge[2]['weight']
+                   for edge in self.G.edges(data=True)
+                   if edge[0:2] in zip(path, path[1:]))
         # Check new cost attribute
         self.assertEqual(cost, cost_tabu)
         self.assertTrue(all(total_res == [3, 3]))

@@ -62,11 +62,10 @@ class TestsIssue32(unittest.TestCase):
         return res_new
 
     @parameterized.expand(zip(range(100), range(100)))
-    def testBiDirectionalBothDynamic(self, _, seed):
+    def testBiDirectionalBothRandom(self, _, seed):
         """
-        Find shortest path of simple test digraph using the BiDirectional
-        algorithm for a range of seeds.
-        Note the first argument is required to work using parameterized and unittest.
+        Test BiDirectional with randomly chosen sequence of directions
+        for a range of seeds.
         """
         bidirec = BiDirectional(self.G,
                                 self.max_res,
@@ -74,16 +73,6 @@ class TestsIssue32(unittest.TestCase):
                                 REF_forward=self.custom_REF_forward,
                                 REF_backward=self.custom_REF_backward,
                                 seed=seed)
-        # Check classification
-        with self.assertLogs('cspy.algorithms.bidirectional') as cm:
-            bidirec.name_algorithm()
-        # Log should contain the word 'dynamic'
-        self.assertRegex(cm.output[0], 'dynamic')
-        # Check exception for not running first
-        with self.assertRaises(Exception) as context:
-            bidirec.path
-        self.assertTrue("run()" in str(context.exception))
-        # Run and test results
         bidirec.run()
         path = bidirec.path
         cost = bidirec.total_cost

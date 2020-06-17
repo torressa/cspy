@@ -34,7 +34,11 @@ class TestsIssue41(unittest.TestCase):
         self.G.add_edge("C", "Sink", res_cost=array([1, 1]), weight=0)
 
     @parameterized.expand(zip(range(100), range(100)))
-    def testBiDirectionalBothDynamic(self, _, seed):
+    def testBiDirectionalBothRandom(self, _, seed):
+        """
+        Test BiDirectional with randomly chosen sequence of directions
+        for a range of seeds.
+        """
         bidirec = BiDirectional(self.G,
                                 self.max_res,
                                 self.min_res,

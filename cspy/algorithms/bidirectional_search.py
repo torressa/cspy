@@ -63,15 +63,23 @@ class Search:
         return self.max_res
 
     def get_unprocessed_count(self):
+        """Get current number of labels to be processed
+        """
         return len(self.unprocessed_labels)
 
     def get_generated_count(self):
+        """Get number of labels that have been generated
+        """
         return self.generated_labels_count
 
     def get_best_labels(self):
+        """Get list of "best" non-dominanted labels.
+        """
         return self.best_labels
 
     def get_final_label(self):
+        """Get current number of labels to be processed
+        """
         return self.final_label
 
     # Private methods #
@@ -87,6 +95,7 @@ class Search:
             bwd_start = self.min_res.copy()
             bwd_start[0] = self.max_res[0]
             self.current_label = Label(0, "Sink", bwd_start, ["Sink"])
+        self.best_labels.append(self.current_label)
 
     def _algorithm(self):
         if self.direction == "forward":  # forward
@@ -102,7 +111,7 @@ class Search:
             self.max_res[0] = min(
                 self.max_res[0], max(self.current_label.res[0],
                                      self.min_res[0]))
-            LOG.debug("HF = %s", self.min_res[0])
+            LOG.debug("HF = %s", self.max_res[0])
         # Initialise label deque
         if self.current_label not in self.unprocessed_labels:
             self.unprocessed_labels[self.current_label] = deque()
@@ -113,7 +122,7 @@ class Search:
         # Propagate current label along all suitable edges in current direction
         for edge in edges:
             self._propagate_label(edge)
-        LOG.debug(self.unprocessed_labels)
+        LOG.debug("Unprocessed labels = %s", self.unprocessed_labels)
         self._clean_up_unprocessed_labels()
         # Extend label
         next_label = self._get_next_label()
@@ -126,8 +135,8 @@ class Search:
         # Label propagation #
         new_label = self.current_label.get_new_label(edge, self.direction)
         # If the new label is resource feasible
-        if new_label and new_label.feasibility_check(self.max_res,
-                                                     self.min_res):
+        if new_label and new_label.feasibility_check(self.max_res, self.min_res,
+                                                     self.direction):
             # And is not already in the unprocessed labels list
             if not any(new_label == l
                        for l in self.unprocessed_labels[self.current_label]):
@@ -161,10 +170,8 @@ class Search:
         if unproc_labels:
             if self.direction == "forward":
                 return min(unproc_labels, key=lambda x: x.weight)
-            else:
-                return min(unproc_labels, key=lambda x: x.weight)
-        else:
-            return None
+            return min(unproc_labels, key=lambda x: x.weight)
+        return None
 
     # Dominance #
 
@@ -179,21 +186,23 @@ class Search:
         # Select appropriate list to check
         LOG.debug("Dominance")
         labels_to_check = deque(
-            l for l in self.unprocessed_labels.keys()
+            l for l in self.unprocessed_labels
             if l != label_to_check and l.node == label_to_check.node)
         labels_to_check.extend(
             l for k, v in self.unprocessed_labels.items() for l in v
             if l != label_to_check and l.node == label_to_check.node)
         # If label is not None (at termination)
         if label_to_check and label_to_check.feasibility_check(
-                self.max_res_in, self.min_res_in):
+                self.max_res_in, self.min_res_in, self.direction):
             # Add to list for removal if they are dominated
             if not self.elementary:
+                # Completely remove label if non-elementary
                 labels_to_pop = deque(
                     (l, True)
                     for l in labels_to_check
                     if label_to_check.dominates(l, self.direction))
             else:
+                # Completely remove label if elementary and subset condition
                 labels_to_pop = deque(
                     (l, label_to_check.subset(l))
                     for l in labels_to_check
@@ -203,6 +212,9 @@ class Search:
             if any(
                     l.dominates(label_to_check, self.direction)
                     for l in labels_to_check):
+
+                if not self.elementary:
+                    destroy = True
                 destroy = any(
                     l.subset(label_to_check)
                     for l in labels_to_check
@@ -217,6 +229,10 @@ class Search:
         """
         Remove all labels in ``labels_to_pop`` from either the array of
         unprocessed labels or the array of non-dominated labels
+
+        ``labels_to_pop`` is a list of tuples with (label: Label, destroy: bool).
+        The destroy bool, determines if the label and all of its existing extensions
+        can be removed.
         """
         # Remove all processed labels from unprocessed dict
         LOG.debug("Removing labels : %s", labels_to_pop)
@@ -241,6 +257,7 @@ class Search:
         # If first label
         if not self.final_label:
             self.final_label = self.current_label
+            LOG.debug("Saved %s as initial best label.", self.current_label)
             return
         # Otherwise, check dominance and replace
         try:
@@ -249,7 +266,7 @@ class Search:
                 LOG.debug("Saving %s as best, with path %s", self.current_label,
                           self.current_label.path)
                 self.final_label = self.current_label
-        except Exception:
+        except TypeError:
             # Labels are not comparable i.e. Belong to different nodes
             if (self.direction == "forward" and
                 (self.current_label.path[-1] == "Sink" or
