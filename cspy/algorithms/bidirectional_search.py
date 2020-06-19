@@ -1,5 +1,6 @@
 from logging import getLogger
 from collections import OrderedDict, deque
+from typing import List, Tuple, Dict
 
 from numpy import array, zeros
 
@@ -19,14 +20,16 @@ class Search:
         self.max_res, self.min_res = max_res.copy(), min_res.copy()
         self.max_res_in, self.min_res_in = array(max_res.copy()), array(
             min_res.copy())
-        self.direction = direction
-        self.elementary = elementary
+        self.direction: str = direction
+        self.elementary: bool = elementary
         # Algorithm specific attributes #
-        self.current_label = None
-        self.unprocessed_labels = OrderedDict()
-        self.best_labels = deque()
-        self.generated_labels_count = 0
-        self.final_label = None
+        self.current_label: Label = None
+        self.unprocessed_labels: Dict[Label, Dict[List[Label]]] = OrderedDict()
+        self.best_labels: List = deque()
+        self.unprocessed_count: int = 0
+        self.processed_count: int = 0
+        self.generated_count: int = 0
+        self.final_label: Label = None
 
         self._init_labels()
 
@@ -50,37 +53,12 @@ class Search:
 
     # getter methods #
 
-    def get_current_label(self):
-        """Return current position (label) of search.
-        """
-        return self.current_label
-
     def get_res(self):
         """Return current resource bounds.
         """
         if self.direction == "forward":
             return self.min_res
         return self.max_res
-
-    def get_unprocessed_count(self):
-        """Get current number of labels to be processed
-        """
-        return len(self.unprocessed_labels)
-
-    def get_generated_count(self):
-        """Get number of labels that have been generated
-        """
-        return self.generated_labels_count
-
-    def get_best_labels(self):
-        """Get list of "best" non-dominanted labels.
-        """
-        return self.best_labels
-
-    def get_final_label(self):
-        """Get current number of labels to be processed
-        """
-        return self.final_label
 
     # Private methods #
 
@@ -98,6 +76,8 @@ class Search:
         self.best_labels.append(self.current_label)
 
     def _algorithm(self):
+        LOG.debug("Current label = %s", self.current_label)
+        LOG.debug("Current label path = %s", self.current_label.path)
         if self.direction == "forward":  # forward
             idx = 0  # index for head node
             # Update backwards half-way point
@@ -115,6 +95,7 @@ class Search:
         # Initialise label deque
         if self.current_label not in self.unprocessed_labels:
             self.unprocessed_labels[self.current_label] = deque()
+            self.unprocessed_count += 1
         # Select edges with the same head/tail node as the current label node.
         edges = deque(e for e in self.G.edges(data=True)
                       if e[idx] == self.current_label.node)
@@ -126,6 +107,7 @@ class Search:
         self._clean_up_unprocessed_labels()
         # Extend label
         next_label = self._get_next_label()
+        self.current_label.seen = True
         # Update current label
         self.current_label = next_label
         # Dominance checks
@@ -135,12 +117,13 @@ class Search:
         # Label propagation #
         new_label = self.current_label.get_new_label(edge, self.direction)
         # If the new label is resource feasible
-        if new_label and new_label.feasibility_check(self.max_res, self.min_res,
-                                                     self.direction):
+        if new_label and new_label.feasibility_check(self.max_res,
+                                                     self.min_res):
             # And is not already in the unprocessed labels list
             if not any(new_label == l
                        for l in self.unprocessed_labels[self.current_label]):
                 self.unprocessed_labels[self.current_label].append(new_label)
+                self.generated_count += 1
 
     def _clean_up_unprocessed_labels(self):
         self._remove_labels([(self.current_label, False)])
@@ -148,11 +131,10 @@ class Search:
                             for k, v in self.unprocessed_labels.items()
                             if len(v) == 0)
 
-    def _get_next_label(self, exclude_label=None):
+    def _get_next_label(self):
         if self.current_label in self.unprocessed_labels:
             unproc_sub_labels = deque(
-                l for l in self.unprocessed_labels[self.current_label]
-                if l != exclude_label)
+                l for l in self.unprocessed_labels[self.current_label])
         else:
             unproc_sub_labels = None
 
@@ -160,11 +142,18 @@ class Search:
             LOG.debug("processing sub labels from %s", self.current_label)
             unproc_labels = unproc_sub_labels
         else:
-            LOG.debug("processing labels from unprocessed")
-            unproc_labels = deque(k for k, v in self.unprocessed_labels.items()
-                                  if k != exclude_label)
+            unproc_labels = deque(
+                k for k, v in self.unprocessed_labels.items() if not k.seen)
 
-        self.generated_labels_count += 1
+        if not unproc_labels:
+            LOG.debug("processing labels from all sub labels")
+            unproc_labels = deque(l2 for l1 in self.unprocessed_labels
+                                  for l2 in self.unprocessed_labels[l1]
+                                  if not l2.seen)
+        else:
+            LOG.debug("processing labels from unprocessed")
+
+        self.processed_count += 1
         # Return label with minimum monotone resource for the forward search
         # and the maximum monotone resource for the backward search
         if unproc_labels:
@@ -192,19 +181,21 @@ class Search:
             l for k, v in self.unprocessed_labels.items() for l in v
             if l != label_to_check and l.node == label_to_check.node)
         # If label is not None (at termination)
-        if label_to_check and label_to_check.feasibility_check(
-                self.max_res_in, self.min_res_in, self.direction):
+        if label_to_check:
             # Add to list for removal if they are dominated
             if not self.elementary:
-                # Completely remove label if non-elementary
+                # Completely remove label if non-elementary and resource feasible
+                # wrt input bounds
                 labels_to_pop = deque(
-                    (l, True)
+                    (l, l.feasibility_check(self.max_res_in, self.min_res_in))
                     for l in labels_to_check
                     if label_to_check.dominates(l, self.direction))
             else:
                 # Completely remove label if elementary and subset condition
+                # and resource feasible wrt input bounds
                 labels_to_pop = deque(
-                    (l, label_to_check.subset(l))
+                    (l, (label_to_check.subset(l) and
+                         l.feasibility_check(self.max_res_in, self.min_res_in)))
                     for l in labels_to_check
                     if label_to_check.dominates(l, self.direction))
 
@@ -258,6 +249,10 @@ class Search:
         if not self.final_label:
             self.final_label = self.current_label
             LOG.debug("Saved %s as initial best label.", self.current_label)
+            return
+        # If not resource feasible wrt input resource bounds
+        if not self.current_label.feasibility_check(self.max_res_in,
+                                                    self.min_res_in):
             return
         # Otherwise, check dominance and replace
         try:

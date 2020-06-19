@@ -130,7 +130,7 @@ class BiDirectional:
         self.start_time = None
         self.fwd_search = None
         self.bwd_search = None
-        self.current_label = OrderedDict()
+        self.current_label = OrderedDict({"forward": None, "backward": None})
         # To save all best labels
         self.final_label = None
         self.best_labels = OrderedDict({
@@ -189,12 +189,21 @@ class BiDirectional:
                              args=(self.max_res, self.best_labels))
         bwd_thread = Process(target=self.bwd_search.run_parallel,
                              args=(self.min_res, self.best_labels))
+        # Start up threads
         fwd_thread.start()
         bwd_thread.start()
+        # Run searches
         fwd_thread.join(self.time_limit)
         bwd_thread.join(self.time_limit)
+        # Terminate threads
+        fwd_thread.terminate()
+        bwd_thread.terminate()
+        # Check if time limit exceeded without finding a path
+        _ = self._terminate_serial()
 
         self._process_paths()
+        if self.best_labels is None:
+            raise Exception("No resource feasible path has been found")
 
     def name_algorithm(self):
         """Determine which algorithm is running.
@@ -222,15 +231,14 @@ class BiDirectional:
         self.bwd_search = Search(self.G, self.max_res, self.min_res, "backward",
                                  self.elementary)
 
-    # Parallel private methods #
-
     def _init_parallel(self):
         mgr = Manager()
+        # Shared data structures
         self.max_res = mgr.list(self.max_res)
         self.min_res = mgr.list(self.min_res)
         self.best_labels = mgr.dict()
 
-    # Standard Search private methods #
+    # Serial Search #
 
     def _move(self, direc):
         self._update_current_labels()
@@ -243,42 +251,58 @@ class BiDirectional:
         elif self.current_label["backward"] and direc == "backward":
             self.bwd_search.move(self.min_res)
 
-    def _terminate_serial(self):
-        if self.time_limit is not None and self._get_time_remaining() <= 0:
+    def _terminate_serial(self) -> bool:
+        """Check whether time limit is violated or final path with weight
+        under the input threshold"""
+        if self.time_limit is not None and self._check_time_limit_breached():
+            if not self._check_st_final_path():
+                raise Exception("Time limit reached without finding a path")
             return True
+        if self._check_threshold():
+            return True
+        return False
+
+    def _check_threshold(self) -> bool:
+        """Check if the a final s-t path has been found that has a total weight
+        is under the threshold."""
         if self.final_label:
-            if self.threshold is not None and self.final_label.weight < self.threshold:
-                if all(_ in self.final_label.path for _ in ["Source", "Sink"]):
-                    LOG.debug("Terminated early")
+            if self._check_st_final_path():
+                if self.threshold is not None and self.final_label.weight < self.threshold:
                     return True
         return False
 
-    def _get_time_remaining(self):
-        # Returns time remaining in seconds or None if no time limit set.
+    def _check_st_final_path(self) -> bool:
+        # Check if path in the final label is a valid s-t path.
+        if self.final_label:
+            return all(_ in self.final_label.path for _ in ["Source", "Sink"])
+        return False
+
+    def _check_time_limit_breached(self) -> bool:
+        # Check if time_limit has been breached.
         if self.time_limit is not None:
-            return self.time_limit - (time() - self.start_time)
-        return None
+            return self.time_limit - (time() - self.start_time) <= 0.0
+        return False
 
     def _update_current_labels(self):
-        self.current_label["forward"] = self.fwd_search.get_current_label()
-        self.current_label["backward"] = self.bwd_search.get_current_label()
+        self.current_label["forward"] = self.fwd_search.current_label
+        self.current_label["backward"] = self.bwd_search.current_label
 
     def _update_res(self):
         self.min_res = self.fwd_search.get_res()
         self.max_res = self.bwd_search.get_res()
 
     def _update_best_labels(self):
-        self.best_labels["forward"] = self.fwd_search.get_best_labels()
-        self.best_labels["backward"] = self.bwd_search.get_best_labels()
+        self.best_labels["forward"] = self.fwd_search.best_labels
+        self.best_labels["backward"] = self.bwd_search.best_labels
 
     def _update_final_label(self):
         if self.direction == "forward":
-            self.final_label = self.fwd_search.get_final_label()
+            self.final_label = self.fwd_search.final_label
         elif self.direction == "backward":
-            self.final_label = self.bwd_search.get_final_label()
+            self.final_label = self.bwd_search.final_label
         else:
-            fwd_final = self.fwd_search.get_final_label()
-            bwd_final = self.bwd_search.get_final_label()
+            fwd_final = self.fwd_search.final_label
+            bwd_final = self.bwd_search.final_label
             if fwd_final:
                 self.final_label = fwd_final
             elif bwd_final:
@@ -302,24 +326,19 @@ class BiDirectional:
                     return self.random_state.choice(["forward", "backward"])
                 elif self.method == "generated":
                     # return direction with least number of generated labels
-                    return ("forward" if self.fwd_search.get_generated_count() <
-                            self.bwd_search.get_generated_count() else
-                            "backward")
+                    return ("forward" if self.fwd_search.generated_count <
+                            self.bwd_search.generated_count else "backward")
                 elif self.method == "processed":
-                    # return direction with least number of "processed" labels
-                    return ("forward" if len(self.best_labels["forward"]) < len(
-                        self.best_labels["backward"]) else "backward")
+                    # return direction with least number of processed labels
+                    return ("forward" if self.fwd_search.processed_count <
+                            self.bwd_search.processed_count else "backward")
                 elif self.method == "unprocessed":
-                    # return direction with least number of unprocessed_labels labels
-                    return (
-                        "forward" if self.fwd_search.get_unprocessed_count() <
-                        self.bwd_search.get_unprocessed_count() else "backward")
+                    # return direction with least number of unprocessed labels
+                    return ("forward" if self.fwd_search.unprocessed_count <
+                            self.bwd_search.unprocessed_count else "backward")
             return
         else:
-            if (not self.current_label["forward"] and
-                    not self.current_label["backward"]):
-                return
-            elif not self.current_label[self.direction]:
+            if not self.current_label[self.direction]:
                 return
             return self.direction
 
@@ -327,7 +346,8 @@ class BiDirectional:
 
     def _process_paths(self):
         # Processing of output path.
-        if (self.best_labels["forward"] and self.best_labels["backward"]):
+        if len(self.best_labels["forward"]) > 1 and len(
+                self.best_labels["backward"]) > 1:
             # If bi-directional algorithm used, run path joining procedure.
             # self._clean_up_best_labels()
             self._join_paths()
@@ -362,9 +382,10 @@ class BiDirectional:
         # Remove all dominated labels in best_labels
         for direc in ["forward", "backward"]:
             labels_to_pop = deque()
-            for l in self.best_labels[direc]:
+            for label in self.best_labels[direc]:
                 labels_to_pop.extend(
-                    self._check_dominance(l, direc, unproc=False, best=True))
+                    self._check_dominance(label, direc, unproc=False,
+                                          best=True))
             self._remove_labels(labels_to_pop, direc, unproc=False, best=True)
 
     def _join_paths(self):
@@ -389,7 +410,7 @@ class BiDirectional:
                 merged_label = self._merge_labels(fwd_label, bwd_label)
                 # Check resource feasibility
                 if (merged_label and merged_label.feasibility_check(
-                        self.max_res_in, self.min_res_in, "forward")):
+                        self.max_res_in, self.min_res_in)):
                     # Save label
                     self._save(merged_label)
                     # Stop if threshold specified and label is under

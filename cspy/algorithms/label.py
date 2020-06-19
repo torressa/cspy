@@ -27,6 +27,7 @@ class Label(object):
         self.node = node
         self.res = res
         self.path = path
+        self.seen = False
 
     def __eq__(self, other):
         if other:
@@ -124,20 +125,13 @@ class Label(object):
             return None
         return _new_label
 
-    def feasibility_check(self, max_res: List, min_res: List,
-                          direction: str) -> bool:
+    def feasibility_check(self, max_res: List, min_res: List) -> bool:
         """Check whether `self` satisfies resource constraints for input
         `max_res` - Upper bound
         `min_res` - Lower bound
         :return: True if resource feasible label, False otherwise.
-
-        For backward labels, we need to check the halfway point (in min_res[0])
         """
-        if direction == "forward":
-            return all(max_res >= self.res) and all(min_res <= self.res)
-        return (all(max_res >= self.res) and all(
-            min_res[i] <= self.res[i] for i in range(1, len(min_res))) and
-                self.res[0] > min_res[0])
+        return all(max_res >= self.res) and all(min_res <= self.res)
 
     def subset(self, other) -> bool:
         """Determine whether all the nodes in the path of `other` are contained
