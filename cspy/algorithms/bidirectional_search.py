@@ -120,8 +120,7 @@ class Search:
         if new_label and new_label.feasibility_check(self.max_res,
                                                      self.min_res):
             # And is not already in the unprocessed labels list
-            if not any(new_label == l
-                       for l in self.unprocessed_labels[self.current_label]):
+            if new_label not in self.unprocessed_labels[self.current_label]:
                 self.unprocessed_labels[self.current_label].append(new_label)
                 self.generated_count += 1
 
@@ -183,38 +182,39 @@ class Search:
         # If label is not None (at termination)
         if label_to_check:
             # Add to list for removal if they are dominated
-            if not self.elementary:
-                # Completely remove label if non-elementary and resource feasible
-                # wrt input bounds
-                labels_to_pop = deque(
-                    (l, l.feasibility_check(self.max_res_in, self.min_res_in))
-                    for l in labels_to_check
-                    if label_to_check.dominates(l, self.direction))
-            else:
-                # Completely remove label if elementary and subset condition
-                # and resource feasible wrt input bounds
-                labels_to_pop = deque(
-                    (l, (label_to_check.subset(l) and
-                         l.feasibility_check(self.max_res_in, self.min_res_in)))
-                    for l in labels_to_check
-                    if label_to_check.dominates(l, self.direction))
+            labels_to_pop = deque(
+                (l, self._check_destroy(label_to_check, l))
+                for l in labels_to_check
+                if label_to_check.dominates(l, self.direction))
 
             # Add input label for removal if itself is dominated
             if any(
                     l.dominates(label_to_check, self.direction)
                     for l in labels_to_check):
-
-                if not self.elementary:
-                    destroy = True
                 destroy = any(
-                    l.subset(label_to_check)
+                    self._check_destroy(l, label_to_check)
                     for l in labels_to_check
                     if l.dominates(label_to_check, self.direction))
                 labels_to_pop.append((label_to_check, destroy))
+            # Otherwise, save it
             else:
-                # check and save current label
                 self._save_current_best_label()
             self._remove_labels(labels_to_pop, dominance=True)
+
+    def _check_destroy(self,
+                       label1: Label = None,
+                       label2: Label = None) -> bool:
+        """Determine if label2 and all of its extensions can be removed.
+        For the elementary case, label1 dominates label2.
+        For the non-elementary case, label1 is not required as the subset
+        condition does not have to be met.
+        """
+        if self.elementary:
+            # if the path of label2 is a subset of the path of label1
+            # and label2 is resource feasible wrt input bounds
+            return (label1.is_path_subset(label2) and
+                    label2.feasibility_check(self.max_res_in, self.min_res_in))
+        return label2.feasibility_check(self.max_res_in, self.min_res_in)
 
     def _remove_labels(self, labels_to_pop, dominance=False):
         """

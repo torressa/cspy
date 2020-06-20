@@ -31,7 +31,7 @@ class TestsIssue32(unittest.TestCase):
         self.G.add_edge(3, 4, res_cost=array([0, 1, 0]), weight=-10)
         self.G.add_edge(4, 'Sink', res_cost=array([0, 0, 0]), weight=-1)
 
-    def custom_REF_forward(self, cumulative_res, edge):
+    def custom_REF_forward(self, cumulative_res, edge, **kwargs):
         res_new = array(cumulative_res)
         # Unpack edge
         u, v, edge_data = edge[0:3]
@@ -46,7 +46,7 @@ class TestsIssue32(unittest.TestCase):
         res_new[2] += edge_data["res_cost"][1]
         return res_new
 
-    def custom_REF_backward(self, cumulative_res, edge):
+    def custom_REF_backward(self, cumulative_res, edge, **kwargs):
         res_new = array(cumulative_res)
         # Unpack edge
         u, v, edge_data = edge[0:3]

@@ -63,8 +63,9 @@ class BiDirectional:
         Default: None
 
     threshold : float, optional
-        specify a threshold for a an acceptable resource feasible path.
-        This might cause the search to terminate early.
+        specify a threshold for a an acceptable resource feasible path with
+        total cost <= threshold.
+        Note this typically causes the search to terminate early.
         Default: None
 
     elementary : bool, optional
@@ -255,26 +256,21 @@ class BiDirectional:
         """Check whether time limit is violated or final path with weight
         under the input threshold"""
         if self.time_limit is not None and self._check_time_limit_breached():
-            if not self._check_st_final_path():
+            if not self.final_label.check_st_path():
                 raise Exception("Time limit reached without finding a path")
             return True
-        if self._check_threshold():
+        if self._check_final_label():
             return True
         return False
 
-    def _check_threshold(self) -> bool:
-        """Check if the a final s-t path has been found that has a total weight
+    def _check_final_label(self) -> bool:
+        """Check if the final label contains an s-t path with total weight that
         is under the threshold."""
         if self.final_label:
-            if self._check_st_final_path():
-                if self.threshold is not None and self.final_label.weight < self.threshold:
+            if self.final_label.check_st_path():
+                if self.threshold is not None and self.final_label.check_threshold(
+                        self.threshold):
                     return True
-        return False
-
-    def _check_st_final_path(self) -> bool:
-        # Check if path in the final label is a valid s-t path.
-        if self.final_label:
-            return all(_ in self.final_label.path for _ in ["Source", "Sink"])
         return False
 
     def _check_time_limit_breached(self) -> bool:
@@ -414,7 +410,8 @@ class BiDirectional:
                     # Save label
                     self._save(merged_label)
                     # Stop if threshold specified and label is under
-                    if self.threshold is not None and merged_label.weight <= self.threshold:
+                    if self.threshold is not None and merged_label.check_threshold(
+                            self.threshold):
                         return
 
     def _half_way(self, fwd_label, bwd_label):

@@ -104,20 +104,24 @@ class Label(object):
         path = list(self.path)
         weight, res = edge[2]["weight"], edge[2]["res_cost"]
         node = edge[1] if direction == "forward" else edge[0]
-        if node in path:  # If node already visited.
-            return None
         path.append(node)
         if direction == "forward":
             if isinstance(self.REF_forward, BuiltinFunctionType):
                 res_new = self.res + res
             else:
-                res_new = self.REF_forward(self.res, edge)
+                res_new = self.REF_forward(self.res,
+                                           edge,
+                                           partial_path=self.path,
+                                           accumulated_cost=self.weight)
         elif direction == "backward":
             if isinstance(self.REF_backward, BuiltinFunctionType):
                 res_new = self.res + res
                 res_new[0] = self.res[0] - 1
             else:
-                res_new = self.REF_backward(self.res, edge)
+                res_new = self.REF_backward(self.res,
+                                            edge,
+                                            partial_path=self.path,
+                                            accumulated_cost=self.weight)
 
         _new_label = Label(weight + self.weight, node, res_new, path)
         if _new_label == self:
@@ -133,9 +137,18 @@ class Label(object):
         """
         return all(max_res >= self.res) and all(min_res <= self.res)
 
-    def subset(self, other) -> bool:
-        """Determine whether all the nodes in the path of `other` are contained
-        in `self`
-        :return: True if input label is subset of current label, False otherwise.
+    def check_threshold(self, threshold) -> bool:
+        """Check if a s-t path has a total weight
+        is under the threshold."""
+        if self.weight <= threshold:
+            return True
+        return False
+
+    def check_st_path(self) -> bool:
+        return all(_ in self.path for _ in ["Source", "Sink"])
+
+    def is_path_subset(self, other) -> bool:
         """
-        return all(n in self.path for n in other.path)
+        :return: True if path of self is a subset of other, False otherwise.
+        """
+        return all(n in other.path for n in self.path)
