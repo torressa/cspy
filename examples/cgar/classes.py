@@ -114,18 +114,17 @@ class Flight(object):
             return 0  # 'Short-haul'
         elif 3 < flight_time < 6:
             return 1  # 'Medium-haul'
-        elif flight_time >= 6:
+        else:
             return 2  # 'Long-haul'
 
     @staticmethod
     def _classify_aircraft(aircraft):
         '''Function to classify a aircraft according to its type and range.'''
-        if aircraft == 'JS32' or aircraft == 'DH8D':
+        if aircraft in ['JS32', 'DH8D']:
             return 0  # short-haul
-        elif (aircraft == 'A320' or aircraft == 'A321' or aircraft == 'A319' or
-              aircraft == 'B738' or aircraft == 'B752'):
+        elif aircraft in ['A320', 'A321', 'A319', 'B738', 'B752']:
             return 1  # Medium-haul
-        elif aircraft == 'B77L' or aircraft == 'A359':
+        elif aircraft in ['B77L', 'A359']:
             return 2  # Long-Haul
         else:
             return

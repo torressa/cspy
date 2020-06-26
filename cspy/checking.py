@@ -1,5 +1,6 @@
 from networkx import DiGraph, NetworkXException, has_path
 from numpy import ndarray
+from numpy.random import RandomState
 
 
 def check(G,
@@ -46,7 +47,6 @@ def check(G,
     """
     errors = []
     if REF_forward or REF_backward or REF_join:
-        # Cannot apply pruning with custom REFs
         try:
             _check_REFs(REF_forward, REF_backward, REF_join)
         except Exception as e:
@@ -74,16 +74,28 @@ def check(G,
         raise Exception('\n'.join('{}'.format(item) for item in errors))
 
 
+def check_seed(seed):
+    """Check whether given seed can be used to seed a numpy.random.RandomState
+    :return: numpy.random.RandomState (seeded if seed given)
+    """
+    if seed is None:
+        return RandomState()
+    elif isinstance(seed, int):
+        return RandomState(seed)
+    elif isinstance(seed, RandomState):
+        return seed
+    else:
+        raise TypeError("{} cannot be used to seed".format(seed))
+
+
 def _check_res(G, max_res, min_res, direction, algorithm):
     if isinstance(max_res, list) and isinstance(min_res, list):
         if len(max_res) == len(min_res):
             if (algorithm and 'bidirectional' in algorithm and
                     len(max_res) < 2):
                 raise TypeError("Resources must be of length >= 2")
-            if (all(isinstance(i, (float, int)) for i in max_res) and
-                    all(isinstance(i, (float, int)) for i in min_res)):
-                pass
-            else:
+            if not ((all(isinstance(i, (float, int)) for i in max_res) and
+                     all(isinstance(i, (float, int)) for i in min_res))):
                 raise TypeError("Elements of input lists must be numbers")
         else:
             raise TypeError("Input lists have to be equal length")
@@ -108,16 +120,15 @@ def _check_graph_attr(G, max_res, min_res, direction, algorithm):
 
 def _check_edge_attr(G, max_res, min_res, direction, algorithm):
     """Checks whether edges in input graph have res_cost attribute"""
-    if not all('res_cost' in edge[2] for edge in G.edges(data=True)):
+    if any('res_cost' not in edge[2] for edge in G.edges(data=True)):
         raise TypeError("Input graph must have edges with 'res_cost' attribute")
-    if not all(
-            len(edge[2]['res_cost']) == G.graph['n_res']
+    if any(
+            len(edge[2]['res_cost']) != G.graph['n_res']
             for edge in G.edges(data=True)):
         raise TypeError(
             "Edges must have 'res_cost' attribute with length equal to 'n_res'")
-    if not all(
-            len(edge[2]['res_cost']) == len(max_res) == len(min_res)
-            for edge in G.edges(data=True)):
+    if any(not len(edge[2]['res_cost']) == len(max_res) == len(min_res)
+           for edge in G.edges(data=True)):
         raise TypeError(
             "Edges must have 'res_cost' attribute with length equal to" +
             " 'min_res' == 'max_res")

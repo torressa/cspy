@@ -1,18 +1,11 @@
-import sys
 import unittest
 
 from networkx import DiGraph
 from numpy import array
 from parameterized import parameterized
 
-sys.path.append("../")
-
 from cspy.algorithms.bidirectional import BiDirectional
 from cspy.algorithms.label import Label
-
-from logging import basicConfig, DEBUG
-
-basicConfig(level=DEBUG)
 
 
 class TestsIssue41(unittest.TestCase):
@@ -34,7 +27,11 @@ class TestsIssue41(unittest.TestCase):
         self.G.add_edge("C", "Sink", res_cost=array([1, 1]), weight=0)
 
     @parameterized.expand(zip(range(100), range(100)))
-    def testBiDirectionalBothDynamic(self, _, seed):
+    def testBiDirectionalBothRandom(self, _, seed):
+        """
+        Test BiDirectional with randomly chosen sequence of directions
+        for a range of seeds.
+        """
         bidirec = BiDirectional(self.G,
                                 self.max_res,
                                 self.min_res,
@@ -48,6 +45,18 @@ class TestsIssue41(unittest.TestCase):
         self.assertEqual(path, ['Source', 'A', 'C', 'Sink'])
         self.assertEqual(cost, 20)
         self.assertTrue(all(total_res == [3, 3]))
+
+    #  FIXME
+    # def testBiDirectionalParallel(self):
+    #     bidirec = BiDirectional(self.G, self.max_res, self.min_res)
+    #     # Run and test results
+    #     bidirec.run_parallel()
+    #     path = bidirec.path
+    #     cost = bidirec.total_cost
+    #     total_res = bidirec.consumed_resources
+    #     self.assertEqual(path, ['Source', 'A', 'C', 'Sink'])
+    #     self.assertEqual(cost, 20)
+    #     self.assertTrue(all(total_res == [3, 3]))
 
     def testBiDirectionalForward(self):
         bidirec = BiDirectional(self.G,

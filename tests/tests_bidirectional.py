@@ -1,11 +1,10 @@
-import sys
 import unittest
 
 from networkx import DiGraph
 from numpy import array
+from parameterized import parameterized
 
-sys.path.append("../")
-from cspy.algorithms.bidirectional import BiDirectional
+from cspy import BiDirectional
 from cspy.algorithms.label import Label
 
 
@@ -27,74 +26,173 @@ class TestsBiDirectional(unittest.TestCase):
         self.G.add_edge('B', 'Sink', res_cost=array([1, 2]), weight=10)
         self.G.add_edge('C', 'Sink', res_cost=array([1, 10]), weight=-1)
 
-    def testBiDirectionalBothDynamic(self):
-        """
-        Find shortest path of simple test digraph using the BiDirectional
-        algorithm with dynamic halfway point.
-        """
-        bidirec = BiDirectional(self.G, self.max_res, self.min_res)
-        # Check classification
-        with self.assertLogs('cspy.algorithms.bidirectional') as cm:
-            bidirec.name_algorithm()
-        # Log should contain the word 'dynamic'
-        self.assertRegex(cm.output[0], 'dynamic')
-        # Check exception for not running first
-        with self.assertRaises(Exception) as context:
-            bidirec.path
-        self.assertTrue("run()" in str(context.exception))
+        self.result_path = ['Source', 'A', 'B', 'C', 'Sink']
+        self.total_cost = -13
+        self.consumed_resources = [4, 15.3]
+
+    @parameterized.expand(zip(range(100), range(100)))
+    def testBothRandom(self, _, seed):
+        bidirec = BiDirectional(self.G, self.max_res, self.min_res, seed=96)
         # Run and test results
         bidirec.run()
         path = bidirec.path
         cost = bidirec.total_cost
         total_res = bidirec.consumed_resources
-        self.assertEqual(path, ['Source', 'A', 'B', 'C', 'Sink'])
-        self.assertEqual(cost, -13)
-        self.assertTrue(all(total_res == [4, 15.3]))
+        self.assertEqual(path, self.result_path)
+        self.assertEqual(cost, self.total_cost)
+        self.assertTrue(all(total_res == self.consumed_resources))
 
-    def testBiDirectionalForward(self):
-        """
-        Find shortest path of simple test digraph using the BiDirectional
-        algorithm with only forward direction.
-        """
+    def testBothGenerated(self):
         bidirec = BiDirectional(self.G,
                                 self.max_res,
                                 self.min_res,
-                                direction='forward')
-        # Check classification
-        with self.assertLogs('cspy.algorithms.bidirectional') as cm:
-            bidirec.name_algorithm()
-        # Log should contain the word 'forward'
-        self.assertRegex(cm.output[0], 'forward')
+                                method="generated")
         bidirec.run()
         path = bidirec.path
         cost = bidirec.total_cost
         total_res = bidirec.consumed_resources
-        self.assertEqual(path, ['Source', 'A', 'B', 'C', 'Sink'])
-        self.assertEqual(cost, -13)
-        self.assertTrue(all(total_res == [4, 15.3]))
+        self.assertEqual(path, self.result_path)
+        self.assertEqual(cost, self.total_cost)
+        self.assertTrue(all(total_res == self.consumed_resources))
 
-    def testBiDirectionalBackward(self):
+    def testBothProcessed(self):
+        bidirec = BiDirectional(self.G,
+                                self.max_res,
+                                self.min_res,
+                                method="processed")
+        bidirec.run()
+        path = bidirec.path
+        cost = bidirec.total_cost
+        total_res = bidirec.consumed_resources
+        self.assertEqual(path, self.result_path)
+        self.assertEqual(cost, self.total_cost)
+        self.assertTrue(all(total_res == self.consumed_resources))
+
+    def testBothUnprocessed(self):
+        bidirec = BiDirectional(self.G,
+                                self.max_res,
+                                self.min_res,
+                                method="unprocessed")
+        bidirec.run()
+        path = bidirec.path
+        cost = bidirec.total_cost
+        total_res = bidirec.consumed_resources
+        self.assertEqual(path, self.result_path)
+        self.assertEqual(cost, self.total_cost)
+        self.assertTrue(all(total_res == self.consumed_resources))
+
+    def testBothUnprocessedTimelimit(self):
+        bidirec = BiDirectional(self.G,
+                                self.max_res,
+                                self.min_res,
+                                method="unprocessed",
+                                time_limit=1)
+        bidirec.run()
+        path = bidirec.path
+        cost = bidirec.total_cost
+        total_res = bidirec.consumed_resources
+        self.assertEqual(path, self.result_path)
+        self.assertEqual(cost, self.total_cost)
+        self.assertTrue(all(total_res == self.consumed_resources))
+
+    def testBothUnprocessedThreshold(self):
         """
         Find shortest path of simple test digraph using the BiDirectional
-        algorithm with only backward direction.
+        algorithm with unprocessed guided search
         """
         bidirec = BiDirectional(self.G,
                                 self.max_res,
                                 self.min_res,
+                                method="unprocessed",
+                                threshold=0)
+        bidirec.run()
+        path = bidirec.path
+        cost = bidirec.total_cost
+        total_res = bidirec.consumed_resources
+        self.assertEqual(path, self.result_path)
+        self.assertEqual(cost, self.total_cost)
+        self.assertTrue(all(total_res == self.consumed_resources))
+
+    def testBothUnprocessedTimelimitThreshold(self):
+        bidirec = BiDirectional(self.G,
+                                self.max_res,
+                                self.min_res,
+                                method="unprocessed",
+                                time_limit=1,
+                                threshold=0)
+        bidirec.run()
+        path = bidirec.path
+        cost = bidirec.total_cost
+        total_res = bidirec.consumed_resources
+        self.assertEqual(path, self.result_path)
+        self.assertEqual(cost, self.total_cost)
+        self.assertTrue(all(total_res == self.consumed_resources))
+
+    def testBothUnprocessedTimelimitRaises(self):
+        bidirec = BiDirectional(self.G,
+                                self.max_res,
+                                self.min_res,
+                                method="unprocessed",
+                                time_limit=0)
+        self.assertRaises(Exception, bidirec.run)
+
+    def testParallel(self):
+        bidirec = BiDirectional(self.G, self.max_res, self.min_res)
+        # Run and test results
+        bidirec.run_parallel()
+        path = bidirec.path
+        cost = bidirec.total_cost
+        total_res = bidirec.consumed_resources
+        self.assertEqual(path, self.result_path)
+        self.assertEqual(cost, self.total_cost)
+        self.assertTrue(all(total_res == self.consumed_resources))
+
+    def testParallelThreshold(self):
+        bidirec = BiDirectional(self.G, self.max_res, self.min_res, threshold=0)
+        # Run and test results
+        bidirec.run_parallel()
+        path = bidirec.path
+        cost = bidirec.total_cost
+        total_res = bidirec.consumed_resources
+        self.assertEqual(path, self.result_path)
+        self.assertEqual(cost, self.total_cost)
+        self.assertTrue(all(total_res == self.consumed_resources))
+
+    def testParallelTimeLimit(self):
+        bidirec = BiDirectional(self.G,
+                                self.max_res,
+                                self.min_res,
+                                threshold=0,
+                                time_limit=0)
+        # Run and test results
+        self.assertRaises(Exception, bidirec.run_parallel)
+
+    def testForward(self):
+        bidirec = BiDirectional(self.G,
+                                self.max_res,
+                                self.min_res,
+                                direction='forward')
+        bidirec.run()
+        path = bidirec.path
+        cost = bidirec.total_cost
+        total_res = bidirec.consumed_resources
+        self.assertEqual(path, self.result_path)
+        self.assertEqual(cost, self.total_cost)
+        self.assertTrue(all(total_res == self.consumed_resources))
+
+    def testBackward(self):
+        bidirec = BiDirectional(self.G,
+                                self.max_res,
+                                self.min_res,
                                 direction='backward')
-        # Check classification
-        with self.assertLogs('cspy.algorithms.bidirectional') as cm:
-            bidirec.name_algorithm()
-        # Log should contain the word 'backward'
-        self.assertRegex(cm.output[0], 'backward')
         # Check path
         bidirec.run()
         path = bidirec.path
         cost = bidirec.total_cost
         total_res = bidirec.consumed_resources
-        self.assertEqual(path, ['Source', 'A', 'B', 'C', 'Sink'])
-        self.assertEqual(cost, -13)
-        self.assertTrue(all(total_res == [4, 15.3]))
+        self.assertEqual(path, self.result_path)
+        self.assertEqual(cost, self.total_cost)
+        self.assertTrue(all(total_res == self.consumed_resources))
 
     def testDominance(self):
         # Check forward and backward label dominance

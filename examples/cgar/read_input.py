@@ -25,8 +25,7 @@ def load_df(airline):
         filename for filename in os.listdir(work_dir)
         if filename.startswith(airline)
     ][0]
-    df = read_csv(work_dir + prefixed)
-    return df
+    return read_csv(work_dir + prefixed)
 
 
 def get_aircraft(csv):
@@ -43,8 +42,7 @@ def get_aircraft(csv):
     aircraft : list,
         list of strings with aircraft ids
     """
-    aircraft = list(set(csv['aircraft']))
-    return aircraft
+    return list(set(csv['aircraft']))
 
 
 def get_flights(df):
@@ -79,14 +77,22 @@ def get_ground_connections(aircraft_list, flights):
     """
     For each aircraft, get all current and next flights
     """
-    ground = list(
+    ground = [
         f._instance_from(f.destination, f_n.origin, f.arrival, f_n.departure)
-        for k in aircraft_list for f, f_n in zip(
-            sorted([f for f in flights if f.aircraft.tail == k],
-                   key=lambda x: x.departure),
-            sorted([f for f in flights if f.aircraft.tail == k],
-                   key=lambda x: x.departure)[1:])
-        if f.arrival < f_n.departure)
+        for k in aircraft_list
+        for f, f_n in zip(
+            sorted(
+                [f for f in flights if f.aircraft.tail == k],
+                key=lambda x: x.departure,
+            ),
+            sorted(
+                [f for f in flights if f.aircraft.tail == k],
+                key=lambda x: x.departure,
+            )[1:],
+        )
+        if f.arrival < f_n.departure
+    ]
+
     flights = flights + ground
     flights.sort(key=lambda x: x.departure)
     # Overwrite ids
@@ -154,5 +160,4 @@ def preprocess(df):
 
 def read_input(airline):
     df = load_df(airline)
-    data = preprocess(df)
-    return data
+    return preprocess(df)

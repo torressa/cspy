@@ -114,18 +114,30 @@ class TSN(object):
         self._add_remaining_edges()
 
     def _add_ground_edges(self):
-        nodes = sorted(list(node for node in self.G.nodes(data=True)
-                            if node[0] not in ["Source", "Sink"]),
-                       key=lambda x: x[1]['pos'][0])
+        nodes = sorted(
+            [
+                node
+                for node in self.G.nodes(data=True)
+                if node[0] not in ["Source", "Sink"]
+            ],
+            key=lambda x: x[1]['pos'][0],
+        )
+
         for n in nodes:
             # first element in tuple has string 'Airport_time'
             # Second element in tuple has node data
             n_name, n_data = n[0], n[1]
             n_time = float(n_name.split('_')[1])
             ground_nodes_n = sorted(
-                list(k for k in nodes if float(k[0].split('_')[1]) > n_time and
-                     n_data['airport'] == k[1]['airport']),
-                key=lambda x: x[1]['pos'][0])
+                [
+                    k
+                    for k in nodes
+                    if float(k[0].split('_')[1]) > n_time
+                    and n_data['airport'] == k[1]['airport']
+                ],
+                key=lambda x: x[1]['pos'][0],
+            )
+
             # ground_nodes_n.sort()
             if ground_nodes_n:
                 m = ground_nodes_n[0]
@@ -139,35 +151,43 @@ class TSN(object):
                     except NetworkXNoPath:
                         self._add_edge(n_name, n_data, n_time, m_name, m_data,
                                        m_time)
-                    if path and not all(
-                            p.split('_')[0] == n_data['airport'] for p in path):
+                    if path and any(
+                        p.split('_')[0] != n_data['airport'] for p in path
+                    ):
                         # if edge doesn't exist, add it
                         self._add_edge(n_name, n_data, n_time, m_name, m_data,
                                        m_time)
 
     def _add_remaining_edges(self):
-        nodes = sorted(list(node for node in self.G.nodes(data=True)
-                            if node[0] not in ["Source", "Sink"]),
-                       key=lambda x: x[1]['pos'][0])
+        nodes = sorted(
+            [
+                node
+                for node in self.G.nodes(data=True)
+                if node[0] not in ["Source", "Sink"]
+            ],
+            key=lambda x: x[1]['pos'][0],
+        )
+
         for n in nodes:
             # first element in tuple has string 'Airport_time'
             # Second element in tuple has node data
             n_name, n_data = n[0], n[1]
             n_time = float(n_name.split('_')[1])
-            nodes_n = sorted(list(
-                k for k in nodes if float(k[0].split('_')[1]) > n_time),
-                             key=lambda x: x[1]['pos'][0])
+            nodes_n = sorted(
+                [k for k in nodes if float(k[0].split('_')[1]) > n_time],
+                key=lambda x: x[1]['pos'][0],
+            )
+
             # nodes_n.sort()
             for m in nodes_n:
                 m_name, m_data = m[0], m[1]
                 m_time = float(m_name.split('_')[1])
                 if (not has_path(self.G, n_name, m_name)):
                     # if path doesn't exist add edge
-                    f = list(
-                        f for f in self.flights
-                        if (f.origin == n_name and f.destination == m_name and
-                            f.arrival - f.departure == n_time -
-                            m_time and f.arrival < n_time))
+                    f = [f for f in self.flights
+                                        if (f.origin == n_name and f.destination == m_name and
+                                            f.arrival - f.departure == n_time -
+                                            m_time and f.arrival < n_time)]
                     if f:
                         self._add_edge(n_name, n_data, n_time, m_name, m_data,
                                        m_time)
@@ -222,14 +242,19 @@ class TSN(object):
             edge_data = edge[2]
             i_airport = edge[0].split('_')[0]
             j_airport = edge[1].split('_')[0]
-            if (((k_type == 1 and edge_data['data']['type'] > k_type) or
-                 (k_type == 2 and edge_data['data']['type'] != k_type)) and
-                    i_airport != j_airport):
-                if i_airport == 'Source' or j_airport == 'Sink':
-                    pass
-                else:
-                    edges_to_remove.append(edge[0:2])
-                    count += 1
+            if (
+                (
+                    (
+                        (k_type == 1 and edge_data['data']['type'] > k_type)
+                        or (k_type == 2 and edge_data['data']['type'] != k_type)
+                    )
+                    and i_airport != j_airport
+                )
+                and i_airport != 'Source'
+                and j_airport != 'Sink'
+            ):
+                edges_to_remove.append(edge[0:2])
+                count += 1
         G.remove_edges_from(edges_to_remove)
         log.info('Removed {}/{} edges.'.format(count, number_edges))
         return G
@@ -294,10 +319,10 @@ class TSN(object):
 
     @staticmethod
     def _get_flight_copy(flights, edge_data):
-        previous_flights = list(f for f in flights if (
-            f._full_dict()['origin'] == edge_data['data']['origin'] and
-            f._full_dict()['destination'] == edge_data['data']['destination']
-            and f._full_dict()['departure'] < edge_data['data']['departure']))
+        previous_flights = [f for f in flights if (
+                f._full_dict()['origin'] == edge_data['data']['origin'] and
+                f._full_dict()['destination'] == edge_data['data']['destination']
+                and f._full_dict()['departure'] < edge_data['data']['departure'])]
         if previous_flights:
             return max(previous_flights, key=lambda x: x.departure)
         else:

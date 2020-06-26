@@ -42,7 +42,7 @@ class TestsIssue22(unittest.TestCase):
         self.assertTrue(L1.dominates(L2, "backward"))
         self.assertFalse(L2.dominates(L1, "backward"))
 
-        if not L1.dominates(L2, "forward") and not L2.dominates(L1, "forward"):
+        if not (L1.dominates(L2, "forward") or L2.dominates(L1, "forward")):
             self.assertTrue(L1.dominates(L2, "backward"))
 
     def testTabu(self):
@@ -65,17 +65,16 @@ class TestsIssue22(unittest.TestCase):
         self.assertEqual(path_star, ['Source', 1, 'Sink'])
 
     @parameterized.expand(zip(range(100), range(100)))
-    def testBiDirectionalBothDynamic(self, _, seed):
+    def testBiDirectionalBothRandom(self, _, seed):
         """
-        Find shortest path of simple test digraph using BiDirectional.
+        Test BiDirectional with randomly chosen sequence of directions
+        for a range of seeds.
         """
-        bidirec = BiDirectional(self.G, self.max_res, self.min_res, seed=seed)
-        # Check classification
-        with self.assertLogs('cspy.algorithms.bidirectional') as cm:
-            bidirec.name_algorithm()
-        # Log should contain the word 'dynamic'
-        self.assertRegex(cm.output[0], 'dynamic')
-
+        bidirec = BiDirectional(self.G,
+                                self.max_res,
+                                self.min_res,
+                                seed=seed,
+                                elementary=True)
         bidirec.run()
         path = bidirec.path
         cost = bidirec.total_cost
@@ -87,13 +86,14 @@ class TestsIssue22(unittest.TestCase):
 
     def testBiDirectionalForward(self):
         """
-        Find shortest path of simple test digraph using BiDirectional
-        algorithm with only forward direction.
+        Find shortest path using BiDirectional algorithm with only forward
+        direction.
         """
         bidirec = BiDirectional(self.G,
                                 self.max_res,
                                 self.min_res,
-                                direction='forward')
+                                direction='forward',
+                                elementary=True)
         # Check classification
         with self.assertLogs('cspy.algorithms.bidirectional') as cm:
             bidirec.name_algorithm()
@@ -117,7 +117,8 @@ class TestsIssue22(unittest.TestCase):
         bidirec = BiDirectional(self.G,
                                 self.max_res,
                                 self.min_res,
-                                direction='backward')
+                                direction='backward',
+                                elementary=True)
         # Check classification
         with self.assertLogs('cspy.algorithms.bidirectional') as cm:
             bidirec.name_algorithm()

@@ -67,6 +67,10 @@ python3 -m pip install cspy
 
 ### Examples
 
+- [`vrpy`](https://github.com/Kuifje02/vrpy) : External vehicle routing framework which uses `cspy` to solve different variants of the vehicle routing problem using column generation.
+- [`cgar`](examples/cgar) : Complex example use of `cspy` in a column generation example applied to the aircraft recovery problem.
+- [`jpath`](examples/jpath) : Simple example showing the necessary graph adptations and the use of custom resource extension functions.
+
 The generic gist to run the algorithms on a specific graph is to load the
 algorithm of choice, say `alg`, call the `alg.run()` method, and query the
 relevant result attributes,
@@ -74,13 +78,6 @@ relevant result attributes,
 - `alg.path` for a list with the nodes in the path;
 - `alg.total_cost` for the accumulated cost of the path;
 - `alg.consumed_resources` for the accumulated resource usage of the path.
-
-I have included a few examples:
-
-- [`jpath`](examples/jpath) : Simple example showing the necessary graph adptations and the use of custom resource extension functions.
-- [`cgar`](examples/cgar) : Complex example use of `cspy` in a column generation example applied to the aircraft recovery problem.
-- [`vrpy`](https://github.com/Kuifje02/vrpy) : (under development) external vehicle routing framework which uses `cspy` to solve different variants of the vehicle routing problem using column generation.
-
 
 ## Running the tests
 
@@ -124,17 +121,23 @@ After that feel free to send a pull request.
 
 If you have a question or need help, feel free to raise an issue explaining it.
 
-Alternatively, email me at `d.torressanchez@lancs.ac.uk`.
+Alternatively, email me at `david.sanchez@sintef.no`.
 
 ## Citing
 
 If you'd like to cite this package, please use the following bib format:
 
 ```none
-@Misc{cspy,
-  author = {Torres Sanchez, David},
-  title = {{cspy : A Python package with a collection of algorithms for the (Resource) Constrained Shortest Path problem}},
-  year = {2019},
-  url = {\url{https://github.com/torressa/cspy}}
+@article{torressa2020,
+  doi = {10.21105/joss.01655},
+  url = {https://doi.org/10.21105/joss.01655},
+  year = {2020},
+  publisher = {The Open Journal},
+  volume = {5},
+  number = {49},
+  pages = {1655},
+  author = {{Torres Sanchez}, David},
+  title = {cspy: A Python package with a collection of algorithms for the (Resource) Constrained Shortest Path problem},
+  journal = {Journal of Open Source Software}
 }
 ```

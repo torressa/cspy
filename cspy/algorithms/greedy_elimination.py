@@ -87,9 +87,7 @@ class GreedyElim(PathBase):
         while self.stop is False:
             self._algorithm()
 
-        if self.best_path:
-            pass
-        else:
+        if not self.best_path:
             raise Exception("No resource feasible path has been found")
 
     def _algorithm(self):
