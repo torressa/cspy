@@ -13,6 +13,7 @@ class TestsTabu(unittest.TestCase):
     Tests for finding the resource constrained shortest
     path of simple DiGraph using the Tabu algorithm.
     """
+
     def setUp(self):
         self.max_res, self.min_res = [5, 5], [0, 0]
         # Create digraph with a resource infeasible minimum cost path

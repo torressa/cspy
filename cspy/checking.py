@@ -1,3 +1,6 @@
+from time import time
+from typing import Union
+
 from networkx import DiGraph, NetworkXException, has_path
 from numpy import ndarray
 from numpy.random import RandomState
@@ -86,6 +89,17 @@ def check_seed(seed):
         return seed
     else:
         raise TypeError("{} cannot be used to seed".format(seed))
+
+
+def check_time_limit_breached(start_time: float,
+                              time_limit: Union[int, None]) -> bool:
+    """Check time limit.
+    :return: True if difference between current time and start time
+    exceeds the time limit. False otherwise.
+    """
+    if time_limit is not None:
+        return time_limit - (time() - start_time) <= 0.0
+    return False
 
 
 def _check_res(G, max_res, min_res, direction, algorithm):

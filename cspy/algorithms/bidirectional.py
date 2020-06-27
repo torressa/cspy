@@ -11,7 +11,7 @@ from numpy import array
 from numpy.random import RandomState
 from networkx import DiGraph
 
-from cspy.checking import check, check_seed
+from cspy.checking import check, check_seed, check_time_limit_breached
 from cspy.preprocessing import preprocess_graph
 from cspy.algorithms.bidirectional_search import Search
 from cspy.algorithms.label import Label
@@ -23,8 +23,7 @@ class BiDirectional:
     """
     Implementation of the bidirectional labeling algorithm with dynamic
     half-way point (`Tilk 2017`_).
-    This requires the joining procedure (Algorithm 3) from
-    `Righini and Salani (2006)`_, also implemented.
+
     Depending on the range of values for bounds for the first resource, we get
     four different algorithms. See ``self.name_algorithm`` and Notes.
 
@@ -177,6 +176,8 @@ class BiDirectional:
                 break
             if self._terminate_serial():
                 break
+        self._clean_up()
+        self._update_best_labels()
         self._process_paths()
         if self.best_label is None:
             raise Exception("No resource feasible path has been found")
@@ -255,10 +256,10 @@ class BiDirectional:
     def _terminate_serial(self) -> bool:
         """Check whether time limit is violated or final path with weight
         under the input threshold"""
-        if self.time_limit is not None and self._check_time_limit_breached():
+        if self.time_limit is not None and check_time_limit_breached(
+                self.start_time, self.time_limit):
             if not self.final_label.check_st_path():
                 raise Exception("Time limit reached without finding a path")
-            return True
         if self._check_final_label():
             return True
         return False
@@ -271,12 +272,6 @@ class BiDirectional:
                 if self.threshold is not None and self.final_label.check_threshold(
                         self.threshold):
                     return True
-        return False
-
-    def _check_time_limit_breached(self) -> bool:
-        # Check if time_limit has been breached.
-        if self.time_limit is not None:
-            return self.time_limit - (time() - self.start_time) <= 0.0
         return False
 
     def _update_current_labels(self):
@@ -338,6 +333,10 @@ class BiDirectional:
                 return
             return self.direction
 
+    def _clean_up(self):
+        self.fwd_search.clean_up_best_labels()
+        self.bwd_search.clean_up_best_labels()
+
     # Path post-processing #
 
     def _process_paths(self):
@@ -345,7 +344,6 @@ class BiDirectional:
         if len(self.best_labels["forward"]) > 1 and len(
                 self.best_labels["backward"]) > 1:
             # If bi-directional algorithm used, run path joining procedure.
-            # self._clean_up_best_labels()
             self._join_paths()
         else:
             # If forward direction specified or backward direction not traversed
@@ -374,16 +372,6 @@ class BiDirectional:
             label.res[1:] = label.res[1:] - self.min_res_in[1:]
         return label
 
-    def _clean_up_best_labels(self):
-        # Remove all dominated labels in best_labels
-        for direc in ["forward", "backward"]:
-            labels_to_pop = deque()
-            for label in self.best_labels[direc]:
-                labels_to_pop.extend(
-                    self._check_dominance(label, direc, unproc=False,
-                                          best=True))
-            self._remove_labels(labels_to_pop, direc, unproc=False, best=True)
-
     def _join_paths(self):
         """
         The procedure "Join" or Algorithm 3 from `Righini and Salani (2006)`_.
@@ -396,7 +384,7 @@ class BiDirectional:
         """
         LOG.debug("joining")
         for fwd_label in self.best_labels["forward"]:
-            # Create generator for backward labels for current forward label.
+            # Create generator for backward labels using current forward label.
             bwd_labels = (l for l in self.best_labels["backward"]
                           if (fwd_label.node, l.node) in self.G.edges() and all(
                               n not in fwd_label.path
@@ -472,6 +460,6 @@ class BiDirectional:
         # Saves a label for exposure
         if not self.best_label or label.full_dominance(self.best_label,
                                                        "forward"):
-            LOG.debug("Saving label %s as best", label)
-            LOG.debug("With path %s", label.path)
+            LOG.debug("Current label path = %s, weight = %s", label.path,
+                      round(label.weight, 2))
             self.best_label = label

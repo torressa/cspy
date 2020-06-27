@@ -1,12 +1,13 @@
-from __future__ import absolute_import
-from __future__ import print_function
-
+from time import time
 from logging import getLogger
+from typing import List, Optional, Callable
 from collections import deque
-from networkx import NetworkXException
+
+from networkx import NetworkXException, DiGraph
 
 # Local imports
 from cspy.algorithms.path_base import PathBase
+from cspy.checking import check_time_limit_breached
 
 log = getLogger(__name__)
 
@@ -45,6 +46,16 @@ class Tabu(PathBase):
         If the total number of simple paths is less than max_depth,
         then the shortest path is used.
 
+    time_limit : int, optional
+        time limit in seconds.
+        Default: None
+
+    threshold : float, optional
+        specify a threshold for a an acceptable resource feasible path with
+        total cost <= threshold.
+        Note this typically causes the search to terminate early.
+        Default: None
+
     REF : function, optional
         Custom resource extension function. See `REFs`_ for more details.
         Default : additive.
@@ -61,16 +72,20 @@ class Tabu(PathBase):
     """
 
     def __init__(self,
-                 G,
-                 max_res,
-                 min_res,
-                 preprocess=False,
-                 algorithm="simple",
-                 max_depth=1000,
-                 REF=None):
-        # Pass arguments to SimplePath object
-        super().__init__(G, max_res, min_res, preprocess, REF, algorithm)
+                 G: DiGraph,
+                 max_res: List[float],
+                 min_res: List[float],
+                 preprocess: Optional[bool] = False,
+                 algorithm: Optional[str] = "simple",
+                 max_depth: Optional[int] = 1000,
+                 time_limit: Optional[int] = None,
+                 threshold: Optional[float] = None,
+                 REF: Callable = None):
+        # Pass arguments to PathBase object
+        super().__init__(G, max_res, min_res, preprocess, threshold, REF,
+                         algorithm)
         # Algorithm specific parameters
+        self.time_limit = time_limit
         self.max_depth = max_depth
         self.iteration = 0
         self.stop = False
@@ -83,7 +98,9 @@ class Tabu(PathBase):
         """
         Calculate shortest path with resource constraints.
         """
-        while self.stop is False:
+        start = time()
+        while not self.stop and not check_time_limit_breached(
+                start, self.time_limit):
             self._algorithm()
             self.iteration += 1
 
@@ -116,9 +133,11 @@ class Tabu(PathBase):
             self.st_path = path
         elif neighbour in self.st_path:
             # Paths can be joined at neighbour
-            self.st_path = [node for node in self.st_path if
-                                        (node != neighbour and self.st_path.index(node)
-                                         < self.st_path.index(neighbour))] + path
+            self.st_path = [
+                node for node in self.st_path
+                if (node != neighbour and
+                    self.st_path.index(node) < self.st_path.index(neighbour))
+            ] + path
         else:
             self._merge_paths(neighbour, path)
 
@@ -126,8 +145,10 @@ class Tabu(PathBase):
         branch_path = [n for n in self.st_path if n not in path]
         for node in reversed(branch_path):
             if (node, neighbour) in self.G.edges():
-                self.st_path = [n for n in branch_path if (
-                                branch_path.index(n) <= branch_path.index(node))] + path
+                self.st_path = [
+                    n for n in branch_path
+                    if (branch_path.index(n) <= branch_path.index(node))
+                ] + path
                 break
 
     # Algorithm-specific methods #

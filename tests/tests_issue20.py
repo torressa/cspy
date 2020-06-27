@@ -103,9 +103,9 @@ class TestsIssue20(unittest.TestCase):
         cost = tabu.total_cost
         total_res = tabu.consumed_resources
         # Check attributes
-        self.assertEqual(cost, -5)
+        self.assertEqual(cost, -10)
         self.assertTrue(all(total_res == [3, 2]))
-        self.assertEqual(path, ['Source', 3, 2, 'Sink'])
+        self.assertEqual(path, ['Source', 2, 1, 'Sink'])
         # Check path
         self.assertTrue(all(e in self.G.edges() for e in zip(path, path[1:])))
 

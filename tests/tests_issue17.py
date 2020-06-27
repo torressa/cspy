@@ -99,17 +99,11 @@ class TestsIssue17(unittest.TestCase):
     def testTabu(self):
         tabu = Tabu(self.G, self.max_res, self.min_res)
         tabu.run()
-        path = tabu.path
-        cost_tabu = tabu.total_cost
-        total_res = tabu.consumed_resources
-        cost = sum(edge[2]['weight']
-                   for edge in self.G.edges(data=True)
-                   if edge[0:2] in zip(path, path[1:]))
-        # Check new cost attribute
-        self.assertEqual(cost, cost_tabu)
-        self.assertTrue(all(total_res == [3, 3]))
-        self.assertEqual(path, ['Source', 2, 5, 'Sink'])
-        self.assertTrue(all(e in self.G.edges() for e in zip(path, path[1:])))
+        self.assertEqual(tabu.total_cost, 1)
+        self.assertEqual(tabu.path, ['Source', 2, 5, 4, 'Sink'])
+        self.assertTrue(all(tabu.consumed_resources == [4, 4]))
+        self.assertTrue(
+            all(e in self.G.edges() for e in zip(tabu.path, tabu.path[1:])))
 
     def testInputExceptions(self):
         # Check whether wrong input raises exceptions

@@ -2,18 +2,20 @@
 Adapted from https://github.com/100/Solid/blob/master/Solid/ParticleSwarm.py
 """
 
-from __future__ import absolute_import
-from __future__ import print_function
-
+from time import time
 from math import sqrt
 from abc import ABCMeta
 from logging import getLogger
+from typing import List, Optional, Callable
+
+from networkx import DiGraph
 from numpy.random import RandomState
 from numpy import (argmin, array, copy, diag_indices_from, exp, dot, zeros,
                    ones, where)
 
 # Local imports
 from cspy.algorithms.path_base import PathBase
+from cspy.checking import check_seed, check_time_limit_breached
 
 log = getLogger(__name__)
 
@@ -53,6 +55,16 @@ class PSOLGENT(PathBase):
     max_iter : int, optional
         Maximum number of iterations for algorithm. Default : 100.
 
+    time_limit : int, optional
+        time limit in seconds.
+        Default: None
+
+    threshold : float, optional
+        specify a threshold for a an acceptable resource feasible path with
+        total cost <= threshold.
+        Note this typically causes the search to terminate early.
+        Default: None
+
     swarm_size : int, optional
         number of members in swarm. Default : 50.
 
@@ -62,13 +74,6 @@ class PSOLGENT(PathBase):
     neighbourhood_size : int, optional
         size of neighbourhood. Default : 10.
 
-    lower_bound : list of floats, optional
-        list of lower bounds. Default : ``numpy.zeros(member_size)``
-        (no nodes in path).
-
-    upper_bound : list of floats, optional
-        list of upper bounds. Default : ``numpy.ones(member_size)``
-        (all nodes in path).
 
     c1 : float, optional
         constant for 1st term in the velocity equation.
@@ -102,24 +107,27 @@ class PSOLGENT(PathBase):
     __metaclass__ = ABCMeta
 
     def __init__(self,
-                 G,
-                 max_res,
-                 min_res,
-                 preprocess=False,
-                 max_iter=100,
-                 swarm_size=50,
-                 member_size=None,
-                 lower_bound=None,
-                 upper_bound=None,
-                 neighbourhood_size=10,
-                 c1=1.35,
-                 c2=1.35,
-                 c3=1.4,
-                 seed=None,
-                 REF=None):
+                 G: DiGraph,
+                 max_res: List[float],
+                 min_res: List[float],
+                 preprocess: Optional[bool] = False,
+                 max_iter: Optional[int] = 100,
+                 time_limit: Optional[int] = None,
+                 threshold: Optional[float] = None,
+                 swarm_size: Optional[int] = 50,
+                 member_size: Optional[int] = None,
+                 neighbourhood_size: Optional[int] = 10,
+                 c1: Optional[float] = 1.35,
+                 c2: Optional[float] = 1.35,
+                 c3: Optional[float] = 1.4,
+                 seed: RandomState = None,
+                 REF: Callable = None):
         # Pass arguments to parent class
-        super().__init__(G, max_res, min_res, preprocess, REF)
+        super().__init__(G, max_res, min_res, preprocess, threshold, REF)
         # Inputs
+        self.max_iter = max_iter
+        self.time_limit = time_limit
+        self.threshold = threshold
         self.swarm_size = swarm_size
         self.member_size = member_size if member_size else len(G.nodes())
         self.hood_size = neighbourhood_size
@@ -128,7 +136,7 @@ class PSOLGENT(PathBase):
         self.c1 = float(c1)
         self.c2 = float(c2)
         self.c3 = float(c3)
-        self.max_iter = max_iter
+        self.random_state = check_seed(seed)
         # PSO Specific Parameters
         self.iter = 0
         self.pos = None
@@ -138,23 +146,14 @@ class PSOLGENT(PathBase):
         self.best_fit = None
         self.local_best = None
         self.global_best = None
-        # Check seed and init `random_state`. Altered from:
-        # https://github.com/scikit-learn/scikit-learn/blob/92af3dabbb5f3381a656f7727171f332b8928e05/sklearn/utils/validation.py#L764-L782
-        if seed is None:
-            self.random_state = RandomState()
-        elif isinstance(seed, int):
-            self.random_state = RandomState(seed)
-        elif isinstance(seed, RandomState):
-            self.random_state = seed
-        else:
-            raise Exception("{} cannot be used to seed".format(seed))
 
     def run(self):
+        """Calculate shortest path with resource constraints.
         """
-        Calculate shortest path with resource constraints.
-        """
+        start = time()
         self._init_swarm()
-        while self.iter < self.max_iter:
+        while (self.iter < self.max_iter and
+               not check_time_limit_breached(start, self.time_limit)):
             pos_new = self.pos + self._get_vel()
             self._update_best(self.pos, pos_new)
             self.pos = pos_new
@@ -164,6 +163,11 @@ class PSOLGENT(PathBase):
             if self.iter % 100 == 0:
                 log.info("Iteration: {0}. Current best fit: {1}".format(
                     self.iter, self.best_fit))
+            # Terminate if feasible path found with total cost <= threshold
+            if (self.best_path and self.best_path_cost and
+                    self.threshold is not None and
+                    self.best_path_cost <= self.threshold):
+                break
             self.iter += 1
         if not self.best_path:
             raise Exception("No resource feasible path has been found")
@@ -216,8 +220,10 @@ class PSOLGENT(PathBase):
         best = zeros(shape=old.shape)
         if any(of < nf for of, nf in zip(old_fitness, new_fitness)):
             # replace indices in best with old members if lower fitness
-            idx_old = [idx for idx, val in enumerate(zip(old_fitness, new_fitness))
-                        if val[0] < val[1]]
+            idx_old = [
+                idx for idx, val in enumerate(zip(old_fitness, new_fitness))
+                if val[0] < val[1]
+            ]
             best[idx_old] = old[idx_old]
             idx_new = where(best == 0)
             # replace indices in best with new members if lower fitness
@@ -265,7 +271,9 @@ class PSOLGENT(PathBase):
         0 not present, 1 present.
         """
         nodes = self._sort_nodes(list(self.G.nodes()))
-        self.current_nodes = [nodes[i] for i in range(len(nodes)) if arr[i] == 1]
+        self.current_nodes = [
+            nodes[i] for i in range(len(nodes)) if arr[i] == 1
+        ]
 
     def _get_fitness_member(self):
         # Returns the objective for a given path
@@ -289,8 +297,10 @@ class PSOLGENT(PathBase):
     # Path-related methods #
     def _get_edges(self, nodes):
         # Creates a list of edges given the nodes selected
-        return [edge for edge in self.G.edges(self.G.nbunch_iter(nodes), data=True)
-                if edge[0:2] in zip(nodes, nodes[1:])]
+        return [
+            edge for edge in self.G.edges(self.G.nbunch_iter(nodes), data=True)
+            if edge[0:2] in zip(nodes, nodes[1:])
+        ]
 
     @staticmethod
     def _check_edges(edges):

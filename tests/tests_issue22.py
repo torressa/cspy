@@ -55,10 +55,8 @@ class TestsIssue22(unittest.TestCase):
         cost = tabu.total_cost
         total_res = tabu.consumed_resources
         # Check attributes
-        self.assertEqual(cost, -5)
-        self.assertTrue(all(total_res == [3, 2]))
-        # Check path
-        self.assertEqual(path, ['Source', 3, 2, 'Sink'])
+        self.assertEqual(path, ['Source', 2, 1, 'Sink'])
+        self.assertEqual(cost, -10)
         self.assertTrue(all(e in self.G.edges() for e in zip(path, path[1:])))
         # Check if networkx's astar_path gives the same path
         path_star = astar_path(self.G, "Source", "Sink")
@@ -74,7 +72,7 @@ class TestsIssue22(unittest.TestCase):
                                 self.max_res,
                                 self.min_res,
                                 seed=seed,
-                                elementary=True)
+                                elementary=False)
         bidirec.run()
         path = bidirec.path
         cost = bidirec.total_cost

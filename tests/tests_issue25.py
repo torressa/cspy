@@ -31,11 +31,6 @@ class TestsIssue25(unittest.TestCase):
 
     @parameterized.expand(zip(range(100), range(100)))
     def testBiDirectionalBothDynamic(self, _, seed):
-        """
-        Find shortest path of simple test digraph using the BiDirectional
-        algorithm for a range of seeds.
-        Note the first argument is required to work using parameterized and unittest.
-        """
         bidirec = BiDirectional(self.G, self.max_res, self.min_res, seed=seed)
         # Run and test results
         bidirec.run()

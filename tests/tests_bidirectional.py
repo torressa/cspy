@@ -32,7 +32,7 @@ class TestsBiDirectional(unittest.TestCase):
 
     @parameterized.expand(zip(range(100), range(100)))
     def testBothRandom(self, _, seed):
-        bidirec = BiDirectional(self.G, self.max_res, self.min_res, seed=96)
+        bidirec = BiDirectional(self.G, self.max_res, self.min_res, seed=seed)
         # Run and test results
         bidirec.run()
         path = bidirec.path

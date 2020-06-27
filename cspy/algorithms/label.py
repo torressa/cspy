@@ -1,6 +1,7 @@
 from types import BuiltinFunctionType
 from typing import List
 from numpy import array_equal
+from collections import deque, OrderedDict
 
 
 class Label(object):
@@ -51,15 +52,20 @@ class Label(object):
     def __str__(self):
         return "Label({0},{1},{2})".format(self.weight, self.node, self.res)
 
-    def dominates(self, other, direction: str) -> bool:
+    def dominates(self,
+                  other,
+                  direction: str,
+                  elementary: bool = False) -> bool:
         """Determine whether `self` dominates `other`.
         :return: bool
         """
+        # Assume self dominates other
         if self.node != other.node:
             raise TypeError("Non-comparable labels given")
 
-        # Assume self dominates other
         if self.weight > other.weight:
+            return False
+        if elementary and not other.is_path_subset(self):
             return False
         if direction == "backward":
             # Check for the monotone resource (non-increasing)
