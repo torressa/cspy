@@ -7,24 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [unreleased]
 
+### Added
+
+- New paramenters: `time_limit` and `threshold`.
+- Custom REF, backward incompatible change: additional argument for more flexibility. These are the current partial path and the accumulated cost. Note that these are optional and do not have to be used. However, a slight modificiation to the function has to be made, simply add `**kwargs` as well as the existing arguments.
+
 ## [v0.1.1] - 21/05/2020
 
 ### Changed
 - BiDirectional:
   - Reverted backward REF as it is required for some problems.
   - Added REF join parameter that is required when joining forward and backward labels using custom REFs.
-- Moved notes and examples from docstrings to the docs folder. 
+- Moved notes and examples from docstrings to the docs folder.
 - Final JOSS paper changes
 
 ## [v0.1.0] - 14/04/2020
 
-### Added 
+### Added
 
 - BiDirectional:
   - Option to chose method for direction selection.
 - [vrpy](https://github.com/Kuifje02/vrpy) submodule.
 
-### Changed 
+### Changed
 
 - BiDirectional:
   - Label storage, divided into unprocessed, generated and non-dominated labels

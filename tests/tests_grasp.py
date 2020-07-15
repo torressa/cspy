@@ -43,26 +43,22 @@ class TestsGRASP(unittest.TestCase):
         self.G.add_edge('F', 'Sink', res_cost=array([10, 1]), weight=1)
         self.G.add_edge('E', 'Sink', res_cost=array([1, 1]), weight=1)
 
-    def testGRASP(self):
-        grasp = GRASP(self.G,
-                      self.max_res,
-                      self.min_res,
-                      max_iter=50,
-                      max_localiter=10)
-        # Check exception for not running first
-        with self.assertRaises(Exception) as context:
-            grasp.path
-        self.assertTrue("run()" in str(context.exception))
-        # Run and test results
-        grasp.run()
-        path = grasp.path
-        cost = grasp.total_cost
-        total_res = grasp.consumed_resources
-        self.assertEqual(path, ['Source', 'A', 'C', 'D', 'E', 'Sink'])
-        self.assertEqual(cost, 3)
-        self.assertTrue(all(total_res == [5, 5]))
+        self.result_path = ['Source', 'A', 'C', 'D', 'E', 'Sink']
+        self.total_cost = 3
+        self.consumed_resources = [5, 5]
 
-    def testInputExceptions(self):
+    def test(self):
+        alg = GRASP(self.G,
+                    self.max_res,
+                    self.min_res,
+                    max_iter=50,
+                    max_localiter=10)
+        alg.run()
+        self.assertEqual(alg.path, self.result_path)
+        self.assertEqual(alg.total_cost, self.total_cost)
+        self.assertTrue(all(alg.consumed_resources == self.consumed_resources))
+
+    def test_input_exceptions(self):
         # Check whether wrong input raises exceptions
         self.assertRaises(Exception, GRASP, self.G, 'x', [1, 'foo'],
                           'maxnumber')

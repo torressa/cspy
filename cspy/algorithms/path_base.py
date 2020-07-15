@@ -1,9 +1,10 @@
 from operator import add
 from collections import deque
 from logging import getLogger
-from numpy import zeros, array
 from types import BuiltinFunctionType
 from itertools import filterfalse, tee, chain
+
+from numpy import zeros, array
 from networkx import (shortest_simple_paths, astar_path, negative_edge_cycle)
 
 from cspy.checking import check
@@ -21,7 +22,14 @@ class PathBase(object):
     e.g. shortest path, feasibility checks, compatible joining
     """
 
-    def __init__(self, G, max_res, min_res, preprocess, REF, algorithm=None):
+    def __init__(self,
+                 G,
+                 max_res,
+                 min_res,
+                 preprocess,
+                 threshold,
+                 REF,
+                 algorithm=None):
         # Check inputs
         check(G, max_res, min_res, REF_forward=REF, algorithm=__name__)
         # Preprocess graph
@@ -29,6 +37,7 @@ class PathBase(object):
 
         self.max_res = max_res
         self.min_res = min_res
+        self.threshold = threshold
         # Update resource extension function if given
         self.REF = REF if REF else add
         if negative_edge_cycle(G) or algorithm == "simple":
@@ -78,41 +87,51 @@ class PathBase(object):
         # Select appropriate shortest path algorithm
         if self.algorithm == "simple":
             return self.get_simple_path(source, max_depth)
-        else:
-            return astar_path(self.G, source, "Sink")
+        return astar_path(self.G, source, "Sink")
 
     def get_simple_path(self, source, max_depth):
+        """Iterate through some paths (hopefully) and return the first one
+        with total cost <= {0 or threshold} if a threshold specified.
+        Otherwise, stops whenever max_depth is exceeded or all paths are
+        inspected, whichever occurs first. In this case, the path with lowest
+        cost is returned.
+        """
         depth = 0
 
         # Create two copies of the simple path generator
         paths, paths_backup = tee(shortest_simple_paths(self.G, source, 'Sink'),
                                   2)
+        paths_reduced = True
 
-        # Select only paths with negative reduced cost if they exist
+        # Select paths with under threshold if they exist
         try:
-            cost_min = 0
+            cost_min = self.threshold if self.threshold is not None else 0
             paths_backup = filterfalse(
                 lambda p: sum(self.G[i][j]["weight"]
-                              for i, j in zip(p, p[1:])) >= 0, paths_backup)
+                              for i, j in zip(p, p[1:])) >= cost_min,
+                paths_backup)
             first = paths_backup.__next__()
             # add first element back
             paths = chain([first], paths_backup)
         except StopIteration:
-            # if there exist paths with negative cost
-            cost_min = 1e10
+            # if there are no paths under threshold or no paths with -ve cost
+            cost_min = self.threshold if self.threshold is not None else 1e10
+            paths_reduced = False
         except KeyError:
             return
 
         for p in paths:
             c = sum(self.G[i][j]["weight"] for i, j in zip(p, p[1:]))
-            if c < cost_min:
-                path = p
-                cost_min = c
+            if c <= cost_min:
+                if not paths_reduced:
+                    _path = p
+                    cost_min = c
+                else:
+                    return p
             if depth > max_depth:
-                return path
+                return _path
             depth += 1
-        # All paths consumed
-        return path
+        return _path
 
     def check_feasibility(self, return_edge=True):
         """
@@ -139,9 +158,8 @@ class PathBase(object):
                 total_res += self._edge_extract(edge)
             else:
                 total_res = self.REF(total_res, edge)
-            if not (
-                (all(total_res <= self.max_res) and all(total_res >= self.min_res))
-            ):
+            if not ((all(total_res <= self.max_res) and
+                     all(total_res >= self.min_res))):
                 break
         else:
             # Fesible path found. Save attributes.
