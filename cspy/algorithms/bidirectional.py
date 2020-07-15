@@ -193,7 +193,7 @@ class BiDirectional:
     def _init_containers(self):
         'Initialise containers (labels and counters)'
         # set minimum bounds if not all 0
-        if not all(m == 0 for m in self.min_res):
+        if any(m != 0 for m in self.min_res):
             self.min_res = zeros(len(self.min_res))
         bwd_start = self.min_res.copy()
         bwd_start[0] = self.max_res[0]
@@ -224,19 +224,14 @@ class BiDirectional:
         if self.time_limit is not None and check_time_limit_breached(
                 self.start_time, self.time_limit):
             return True
-        if self._check_final_label():
-            return True
-        return False
+        return bool(self._check_final_label())
 
     def _check_final_label(self) -> bool:
         """Check if the final label contains an s-t path with total weight that
         is under the threshold."""
-        if self.final_label:
-            if (self.threshold is not None and
+        return bool(self.final_label and (self.threshold is not None and
                     self.final_label.check_threshold(self.threshold) and
-                    self.final_label.check_st_path()):
-                return True
-        return False
+                    self.final_label.check_st_path()))
 
     def _get_direction(self) -> Union[str, None]:
         """Returns which direction should be searched next

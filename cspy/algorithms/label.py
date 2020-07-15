@@ -128,9 +128,7 @@ class Label:
     def check_threshold(self, threshold) -> bool:
         """Check if a s-t path has a total weight
         is under the threshold."""
-        if self.weight <= threshold:
-            return True
-        return False
+        return self.weight <= threshold
 
     def check_st_path(self) -> bool:
         return ((self.path[0] == "Source" and self.path[-1] == "Sink") or
