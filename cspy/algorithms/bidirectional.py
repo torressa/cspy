@@ -306,7 +306,7 @@ class BiDirectional:
             if new_label and new_label.feasibility_check(
                     self.max_res, self.min_res):
                 # And is not already in the unprocessed labels list
-                if (new_label not in self.unprocessed_labels[direc]):
+                if new_label not in self.unprocessed_labels[direc]:
                     self.unprocessed_labels[direc].append(new_label)
                     self.unprocessed_counts[direc] += 1
 

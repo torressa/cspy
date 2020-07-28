@@ -44,6 +44,7 @@ class Label:
         path = list(self.path)
         weight, res = edge[2]["weight"], edge[2]["res_cost"]
         node = edge[1] if direction == "forward" else edge[0]
+        # FIXME hardcoded elementary
         if node in path:  # If node already visited.
             return None
         path.append(node)
