@@ -228,9 +228,10 @@ class BiDirectional:
     def _check_final_label(self) -> bool:
         """Check if the final label contains an s-t path with total weight that
         is under the threshold."""
-        return bool(self.final_label and (self.threshold is not None and
-                    self.final_label.check_threshold(self.threshold) and
-                    self.final_label.check_st_path()))
+        return bool(self.final_label and
+                    (self.threshold is not None and
+                     self.final_label.check_threshold(self.threshold) and
+                     self.final_label.check_st_path()))
 
     def _get_direction(self) -> Union[str, None]:
         """Returns which direction should be searched next
