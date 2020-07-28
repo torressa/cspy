@@ -1,10 +1,9 @@
-import sys
 import unittest
+from time import time
 
 from networkx import DiGraph
 from numpy import array
 
-sys.path.append("../")
 from cspy.algorithms.tabu import Tabu
 
 
@@ -15,51 +14,67 @@ class TestsTabu(unittest.TestCase):
     """
 
     def setUp(self):
-        self.max_res, self.min_res = [5, 5], [0, 0]
-        # Create digraph with a resource infeasible minimum cost path
+        # Maximum and minimum resource arrays
+        self.max_res, self.min_res = [4, 20], [0, 0]
+        # Create simple digraph with appropriate attributes
         self.G = DiGraph(directed=True, n_res=2)
-        self.G.add_edge('Source', 'A', res_cost=array([1, 1]), weight=1)
-        self.G.add_edge('Source', 'B', res_cost=array([1, 1]), weight=1)
-        # Resource infeasible edge
-        self.G.add_edge('Source', 'C', res_cost=array([10, 1]), weight=10)
-        self.G.add_edge('A', 'C', res_cost=array([1, 1]), weight=1)
-        # Resource infeasible edge
-        self.G.add_edge('A', 'E', res_cost=array([10, 1]), weight=10)
-        # Resource infeasible edge
-        self.G.add_edge('A', 'F', res_cost=array([10, 1]), weight=10)
-        self.G.add_edge('B', 'C', res_cost=array([2, 1]), weight=-1)
-        # Resource infeasible edge
-        self.G.add_edge('B', 'F', res_cost=array([10, 1]), weight=10)
-        # Resource infeasible edge
-        self.G.add_edge('B', 'E', res_cost=array([10, 1]), weight=10)
-        self.G.add_edge('C', 'D', res_cost=array([1, 1]), weight=-1)
-        self.G.add_edge('D', 'E', res_cost=array([1, 1]), weight=1)
-        self.G.add_edge('D', 'F', res_cost=array([1, 1]), weight=1)
-        # Resource infeasible edge
-        self.G.add_edge('D', 'Sink', res_cost=array([10, 10]), weight=10)
-        # Resource infeasible edge
-        self.G.add_edge('F', 'Sink', res_cost=array([10, 1]), weight=1)
-        self.G.add_edge('E', 'Sink', res_cost=array([1, 1]), weight=1)
+        self.G.add_edge('Source', 'A', res_cost=array([1, 2]), weight=-1)
+        self.G.add_edge('A', 'B', res_cost=array([1, 0.3]), weight=-1)
+        self.G.add_edge('B', 'C', res_cost=array([1, 3]), weight=-10)
+        self.G.add_edge('B', 'Sink', res_cost=array([1, 2]), weight=10)
+        self.G.add_edge('C', 'Sink', res_cost=array([1, 10]), weight=-1)
 
-    def testTabu(self):
-        tabu = Tabu(self.G, self.max_res, self.min_res)
-        # Check exception for not running first
-        with self.assertRaises(Exception) as context:
-            tabu.path
-        self.assertTrue("run()" in str(context.exception))
-        # Run and test results
-        tabu.run()
-        path = tabu.path
-        cost = tabu.total_cost
-        total_res = tabu.consumed_resources
-        self.assertEqual(path, ['Source', 'A', 'C', 'D', 'E', 'Sink'])
-        self.assertEqual(cost, 3)
-        self.assertTrue(all(total_res == [5, 5]))
+        self.result_path = ['Source', 'A', 'B', 'C', 'Sink']
+        self.total_cost = -13
+        self.consumed_resources = [4, 15.3]
+
+    def testSimple(self):
+        alg = Tabu(self.G, self.max_res, self.min_res)
+        alg.run()
+        self.assertEqual(alg.path, self.result_path)
+        self.assertEqual(alg.total_cost, self.total_cost)
+        self.assertTrue(all(alg.consumed_resources == self.consumed_resources))
+
+    def testAstar(self):
+        alg = Tabu(self.G, self.max_res, self.min_res, algorithm="astar")
+        alg.run()
+        self.assertEqual(alg.path, self.result_path)
+        self.assertEqual(alg.total_cost, self.total_cost)
+        self.assertTrue(all(alg.consumed_resources == self.consumed_resources))
+
+    def testTimelimit(self):
+        alg = Tabu(self.G, self.max_res, self.min_res, time_limit=0.001)
+        start = time()
+        alg.run()
+        self.assertTrue(time() - start <= 0.001)
+        self.assertEqual(alg.path, self.result_path)
+        self.assertEqual(alg.total_cost, self.total_cost)
+        self.assertTrue(all(alg.consumed_resources == self.consumed_resources))
+
+    def testThreshold(self):
+        alg = Tabu(self.G, self.max_res, self.min_res, threshold=100)
+        alg.run()
+        self.assertEqual(alg.path, ["Source", "A", "B", "Sink"])
+        self.assertEqual(alg.total_cost, 8)
+        self.assertTrue(all(alg.consumed_resources == [3, 4.3]))
+
+    def testTimelimitThreshold(self):
+        alg = Tabu(self.G,
+                   self.max_res,
+                   self.min_res,
+                   time_limit=0.001,
+                   threshold=0)
+        start = time()
+        alg.run()
+        self.assertTrue(time() - start <= 0.001)
+        self.assertEqual(alg.path, self.result_path)
+        self.assertEqual(alg.total_cost, self.total_cost)
+        self.assertTrue(all(alg.consumed_resources == self.consumed_resources))
+
+    def testTimelimitRaises(self):
+        alg = Tabu(self.G, self.max_res, self.min_res, time_limit=0)
+        self.assertRaises(Exception, alg.run)
 
     def testInputExceptions(self):
         # Check whether wrong input raises exceptions
         self.assertRaises(Exception, Tabu, self.G, 'x', [1, 'foo'], 'up')
-
-
-if __name__ == '__main__':
-    unittest.main()

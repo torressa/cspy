@@ -1,10 +1,10 @@
 from types import BuiltinFunctionType
-from typing import List
-from numpy import array_equal
-from collections import deque, OrderedDict
+from typing import List, Callable
+
+from numpy import greater, greater_equal, less_equal, array_equal
 
 
-class Label(object):
+class Label:
     """
     Label object that allows comparison and the modelling of dominance
     relations.
@@ -21,7 +21,8 @@ class Label(object):
         all nodes in the path
     """
 
-    REF_forward, REF_backward = None, None
+    REF_forward: Callable = None
+    REF_backward: Callable = None
 
     def __init__(self, weight: float, node: str, res: List, path: List):
         self.weight = weight
@@ -30,77 +31,11 @@ class Label(object):
         self.path = path
         self.seen = False
 
-    def __eq__(self, other):
-        if other:
-            if self.weight != other.weight:
-                return False
-            if self.node != other.node:
-                return False
-            if not array_equal(self.res, other.res):
-                return False
-            if self.path != other.path:
-                return False
-            return True
-        return False
-
-    def __hash__(self):
-        return id(self)
-
     def __repr__(self):
         return str(self)
 
     def __str__(self):
-        return "Label({0},{1},{2})".format(self.weight, self.node, self.res)
-
-    def dominates(self,
-                  other,
-                  direction: str,
-                  elementary: bool = False) -> bool:
-        """Determine whether `self` dominates `other`.
-        :return: bool
-        """
-        # Assume self dominates other
-        if self.node != other.node:
-            raise TypeError("Non-comparable labels given")
-
-        if self.weight > other.weight:
-            return False
-        if elementary and not other.is_path_subset(self):
-            return False
-        if direction == "backward":
-            # Check for the monotone resource (non-increasing)
-            if self.res[0] < other.res[0]:
-                return False
-            # Check for all other resources (non-decreasing)
-            if any(self.res[1:] > other.res[1:]):
-                return False
-        elif direction == "forward":
-            if any(self.res > other.res):
-                return False
-        return True
-
-    def full_dominance(self, other, direction: str) -> bool:
-        """Checks whether `self` dominates `other` for the input direction.
-        In the case when neither dominates , i.e. they are non-dominated,
-        the direction is flipped labels are compared again.
-
-        :return: bool
-        """
-        self_dominates = self.dominates(other, direction)
-        other_dominates = other.dominates(self, direction)
-        # self dominates other for the input direction
-        if self_dominates:
-            return True
-        # Both non-dominated labels in this direction.
-        elif (not self_dominates and not other_dominates):
-            # flip directions
-            flip_direc = "forward" if direction == "backward" else "backward"
-            self_dominates_flipped = self.dominates(other, flip_direc)
-            # label 1 dominates other in the flipped direction
-            if self_dominates_flipped:
-                return True
-            elif self.weight < other.weight:
-                return True
+        return "Label({0},{1})".format(self.weight, self.path)
 
     def get_new_label(self, edge: tuple, direction: str):
         """Create a label by extending the current label along the input `edge`
@@ -110,6 +45,9 @@ class Label(object):
         path = list(self.path)
         weight, res = edge[2]["weight"], edge[2]["res_cost"]
         node = edge[1] if direction == "forward" else edge[0]
+        # FIXME hardcoded elementary
+        if node in path:  # If node already visited.
+            return None
         path.append(node)
         if direction == "forward":
             if isinstance(self.REF_forward, BuiltinFunctionType):
@@ -141,7 +79,53 @@ class Label(object):
         `min_res` - Lower bound
         :return: True if resource feasible label, False otherwise.
         """
-        return all(max_res >= self.res) and all(min_res <= self.res)
+        return all(greater_equal(max_res, self.res)) and all(
+            less_equal(min_res, self.res))
+
+    def dominates(self, other, direction: str) -> bool:
+        """Determine whether `self` dominates `other`.
+        :return: bool
+        """
+        # Assume self dominates other
+        if self.node != other.node:
+            raise TypeError("Non-comparable labels given")
+
+        if self.weight > other.weight:
+            return False
+        if direction == "backward":
+            # Check for the monotone resource (non-increasing)
+            if self.res[0] < other.res[0]:
+                return False
+            # Check for all other resources (non-decreasing)
+            if any(greater(self.res[1:], other.res[1:])):
+                return False
+        elif direction == "forward":
+            if any(greater(self.res, other.res)):
+                return False
+        return True
+
+    def full_dominance(self, other, direction: str) -> bool:
+        """Checks whether `self` dominates `other` for the input direction.
+        In the case when neither dominates , i.e. they are non-dominated,
+        the direction is flipped labels are compared again.
+
+        :return: bool
+        """
+        self_dominates = self.dominates(other, direction)
+        other_dominates = other.dominates(self, direction)
+        # self dominates other for the input direction
+        if self_dominates:
+            return True
+        # Both non-dominated labels in this direction.
+        elif (not self_dominates and not other_dominates):
+            # flip directions
+            flip_direc = "forward" if direction == "backward" else "backward"
+            self_dominates_flipped = self.dominates(other, flip_direc)
+            # label 1 dominates other in the flipped direction
+            if self_dominates_flipped:
+                return True
+            elif self.weight < other.weight:
+                return True
 
     def check_threshold(self, threshold) -> bool:
         """Check if a s-t path has a total weight
@@ -151,10 +135,5 @@ class Label(object):
         return False
 
     def check_st_path(self) -> bool:
-        return all(_ in self.path for _ in ["Source", "Sink"])
-
-    def is_path_subset(self, other) -> bool:
-        """
-        :return: True if path of self is a subset of other, False otherwise.
-        """
-        return all(n in other.path for n in self.path)
+        return ((self.path[0] == "Source" and self.path[-1] == "Sink") or
+                (self.path[-1] == "Source" and self.path[0] == "Sink"))

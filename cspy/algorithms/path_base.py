@@ -163,10 +163,14 @@ class PathBase(object):
                 break
         else:
             # Fesible path found. Save attributes.
-            self.best_path = self.st_path
-            self.best_path_total_res = total_res
-            self.best_path_cost = _cost
-            return True
+            if not self.threshold or (self.threshold is not None and
+                                      _cost <= self.threshold):
+                self.best_path = self.st_path
+                self.best_path_total_res = total_res
+                self.best_path_cost = _cost
+                return True
+            else:
+                pass
         # Return infeasible edge unless specified
         if return_edge:
             return edge

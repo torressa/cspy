@@ -7,13 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [unreleased]
 
-### Changed
-- BiDirectional:
-  - Split into two files ([`bidirectional.py`](cspy/algorithms/bidirectional.py) and [`bidirectional_search.py`](cspy/algorithms/bidirectional_search.py).
-  - Added parallel search
-  - Added label elimination
-  - Added `kwargs` for custom REFs (backwards incompatible).
-  - Added new parameters `elementary`, `time_limit` and `threshold`.
+### Added
+
+- New paramenters: `time_limit` and `threshold`.
+- Custom REF, backward incompatible change: additional argument for more flexibility. These are the current partial path and the accumulated cost. Note that these are optional and do not have to be used. However, a slight modificiation to the function has to be made, simply add `**kwargs` as well as the existing arguments.
 
 ## [v0.1.1] - 21/05/2020
 

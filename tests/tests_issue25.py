@@ -1,14 +1,9 @@
-import sys
 import unittest
 
 from numpy import array
-from random import randint
-from networkx import DiGraph, astar_path
+from networkx import DiGraph
 from parameterized import parameterized
 
-sys.path.append("../")
-from cspy.algorithms.tabu import Tabu
-from cspy.algorithms.label import Label
 from cspy.algorithms.bidirectional import BiDirectional
 
 
@@ -28,19 +23,19 @@ class TestsIssue25(unittest.TestCase):
         self.G.add_edge('B', 'C', res_cost=array([1, 3]), weight=-10)
         self.G.add_edge('B', 'Sink', res_cost=array([1, 2]), weight=10)
         self.G.add_edge('C', 'Sink', res_cost=array([1, 10]), weight=-1)
+        # Expected results
+        self.result_path = ['Source', 'A', 'B', 'C', 'Sink']
+        self.total_cost = -13
+        self.consumed_resources = [4, 15.3]
 
     @parameterized.expand(zip(range(100), range(100)))
-    def testBiDirectionalBothDynamic(self, _, seed):
-        bidirec = BiDirectional(self.G, self.max_res, self.min_res, seed=seed)
-        # Run and test results
-        bidirec.run()
-        path = bidirec.path
-        cost = bidirec.total_cost
-        total_res = bidirec.consumed_resources
-        self.assertEqual(path, ['Source', 'A', 'B', 'C', 'Sink'])
-        self.assertEqual(cost, -13)
-        self.assertTrue(all(total_res == [4, 15.3]))
-
-
-if __name__ == '__main__':
-    unittest.main(TestsIssue25())
+    def test_bidirectional_random(self, _, seed):
+        alg = BiDirectional(self.G,
+                            self.max_res,
+                            self.min_res,
+                            seed=seed,
+                            elementary=True)
+        alg.run()
+        self.assertEqual(alg.path, self.result_path)
+        self.assertEqual(alg.total_cost, self.total_cost)
+        self.assertTrue(all(alg.consumed_resources == self.consumed_resources))

@@ -30,49 +30,55 @@ class TestsGreedyElimination(unittest.TestCase):
         self.total_cost = -13
         self.consumed_resources = [4, 15.3]
 
-    def testSimple(self):
+    def test_simple(self):
+        'algorithm = "simple" (default)'
         alg = GreedyElim(self.G, self.max_res, self.min_res)
         alg.run()
         self.assertEqual(alg.path, self.result_path)
         self.assertEqual(alg.total_cost, self.total_cost)
         self.assertTrue(all(alg.consumed_resources == self.consumed_resources))
 
-    def testAstar(self):
+    def test_astar(self):
+        'algorithm = "astar"'
         alg = GreedyElim(self.G, self.max_res, self.min_res, algorithm="astar")
         alg.run()
         self.assertEqual(alg.path, self.result_path)
         self.assertEqual(alg.total_cost, self.total_cost)
         self.assertTrue(all(alg.consumed_resources == self.consumed_resources))
 
-    def testTimelimit(self):
+    def test_time_limit(self):
+        'time limit parameter'
         alg = GreedyElim(self.G, self.max_res, self.min_res, time_limit=0.001)
+        start = time()
         alg.run()
+        self.assertTrue(time() - start <= 0.001)
         self.assertEqual(alg.path, self.result_path)
         self.assertEqual(alg.total_cost, self.total_cost)
         self.assertTrue(all(alg.consumed_resources == self.consumed_resources))
 
-    def testThreshold(self):
+    def test_threshold(self):
+        'test threshold parameter'
         alg = GreedyElim(self.G, self.max_res, self.min_res, threshold=100)
         alg.run()
         self.assertEqual(alg.path, ["Source", "A", "B", "Sink"])
         self.assertEqual(alg.total_cost, 8)
         self.assertTrue(all(alg.consumed_resources == [3, 4.3]))
 
-    def testTimelimitThreshold(self):
+    def test_time_limit_threshold(self):
+        'time limit and threshold parameters'
         alg = GreedyElim(self.G,
                          self.max_res,
                          self.min_res,
                          time_limit=0.001,
-                         threshold=0)
+                         threshold=100)
+        start = time()
         alg.run()
-        self.assertEqual(alg.path, self.result_path)
-        self.assertEqual(alg.total_cost, self.total_cost)
-        self.assertTrue(all(alg.consumed_resources == self.consumed_resources))
+        self.assertTrue(time() - start <= 0.001)
+        self.assertEqual(alg.path, ["Source", "A", "B", "Sink"])
+        self.assertEqual(alg.total_cost, 8)
+        self.assertTrue(all(alg.consumed_resources == [3, 4.3]))
 
-    def testTimelimitRaises(self):
+    def test_time_limit_raises(self):
+        'Time limit of 0 raises an exception'
         alg = GreedyElim(self.G, self.max_res, self.min_res, time_limit=0)
         self.assertRaises(Exception, alg.run)
-
-
-if __name__ == '__main__':
-    unittest.main(TestsGreedyElimination())

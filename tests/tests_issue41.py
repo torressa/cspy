@@ -1,11 +1,10 @@
 import unittest
 
-from networkx import DiGraph
 from numpy import array
+from networkx import DiGraph
 from parameterized import parameterized
 
 from cspy.algorithms.bidirectional import BiDirectional
-from cspy.algorithms.label import Label
 
 
 class TestsIssue41(unittest.TestCase):
@@ -25,65 +24,43 @@ class TestsIssue41(unittest.TestCase):
         self.G.add_edge("B", "C", res_cost=array([1, 0]), weight=3)
         self.G.add_edge("B", "Sink", res_cost=array([1, 1]), weight=5)
         self.G.add_edge("C", "Sink", res_cost=array([1, 1]), weight=0)
+        # Expected results
+        self.result_path = ['Source', 'A', 'C', 'Sink']
+        self.total_cost = 20
+        self.consumed_resources = [3, 3]
 
     @parameterized.expand(zip(range(100), range(100)))
-    def testBiDirectionalBothRandom(self, _, seed):
+    def test_bidirectional_random(self, _, seed):
         """
         Test BiDirectional with randomly chosen sequence of directions
         for a range of seeds.
         """
-        bidirec = BiDirectional(self.G,
-                                self.max_res,
-                                self.min_res,
-                                method="random",
-                                seed=seed)
-        # Run and test results
-        bidirec.run()
-        path = bidirec.path
-        cost = bidirec.total_cost
-        total_res = bidirec.consumed_resources
-        self.assertEqual(path, ['Source', 'A', 'C', 'Sink'])
-        self.assertEqual(cost, 20)
-        self.assertTrue(all(total_res == [3, 3]))
+        alg = BiDirectional(self.G,
+                            self.max_res,
+                            self.min_res,
+                            method="random",
+                            seed=seed)
+        alg.run()
+        self.assertEqual(alg.path, self.result_path)
+        self.assertEqual(alg.total_cost, self.total_cost)
+        self.assertTrue(all(alg.consumed_resources == self.consumed_resources))
 
-    #  FIXME
-    # def testBiDirectionalParallel(self):
-    #     bidirec = BiDirectional(self.G, self.max_res, self.min_res)
-    #     # Run and test results
-    #     bidirec.run_parallel()
-    #     path = bidirec.path
-    #     cost = bidirec.total_cost
-    #     total_res = bidirec.consumed_resources
-    #     self.assertEqual(path, ['Source', 'A', 'C', 'Sink'])
-    #     self.assertEqual(cost, 20)
-    #     self.assertTrue(all(total_res == [3, 3]))
+    def test_bidirectional_forward(self):
+        alg = BiDirectional(self.G,
+                            self.max_res,
+                            self.min_res,
+                            direction='forward')
+        alg.run()
+        self.assertEqual(alg.path, self.result_path)
+        self.assertEqual(alg.total_cost, self.total_cost)
+        self.assertTrue(all(alg.consumed_resources == self.consumed_resources))
 
-    def testBiDirectionalForward(self):
-        bidirec = BiDirectional(self.G,
-                                self.max_res,
-                                self.min_res,
-                                direction='forward')
-        bidirec.run()
-        path = bidirec.path
-        cost = bidirec.total_cost
-        total_res = bidirec.consumed_resources
-        self.assertEqual(path, ['Source', 'A', 'C', 'Sink'])
-        self.assertEqual(cost, 20)
-        self.assertTrue(all(total_res == [3, 3]))
-
-    def testBiDirectionalBackward(self):
-        bidirec = BiDirectional(self.G,
-                                self.max_res,
-                                self.min_res,
-                                direction='backward')
-        bidirec.run()
-        path = bidirec.path
-        cost = bidirec.total_cost
-        total_res = bidirec.consumed_resources
-        self.assertEqual(path, ['Source', 'A', 'C', 'Sink'])
-        self.assertEqual(cost, 20)
-        self.assertTrue(all(total_res == [3, 3]))
-
-
-if __name__ == '__main__':
-    unittest.main(TestsIssue41())
+    def test_bidirectional_backward(self):
+        alg = BiDirectional(self.G,
+                            self.max_res,
+                            self.min_res,
+                            direction='backward')
+        alg.run()
+        self.assertEqual(alg.path, self.result_path)
+        self.assertEqual(alg.total_cost, self.total_cost)
+        self.assertTrue(all(alg.consumed_resources == self.consumed_resources))
