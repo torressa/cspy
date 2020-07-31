@@ -4,7 +4,7 @@ from numpy import array
 from networkx import DiGraph
 from parameterized import parameterized
 
-from cspy.algorithms.bidirectional import BiDirectional
+from cspy import BiDirectional
 
 
 class TestsIssue41(unittest.TestCase):

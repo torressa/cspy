@@ -59,9 +59,9 @@ class BiDirectional:
         whether the problem is elementary. i.e. no cycles are allowed in the
         final path. Note this may increase run time.
         Default: False
-    dominance_checks : int, optional
+    dominance_frequency : int, optional
         multiple of iterations to run the dominance checks.
-        Default : 2 (every second iteration)
+        Default : 1 (every iteration)
     seed : None or int or numpy.random.RandomState instance, optional
         seed for PSOLGENT class. Default : None (which gives a single value
         numpy.random.RandomState).
@@ -456,7 +456,7 @@ class BiDirectional:
         :return: list with the final path.
         .. _Righini and Salani (2006): https://www.sciencedirect.com/science/article/pii/S1572528606000417
         """
-        LOG.debug("joining")
+        LOG.debug("Algorithm terminated. Joining labels...")
         for fwd_label in self.best_labels["forward"]:
             # Create generator for backward labels for current forward label.
             # Includes only those that:

@@ -28,21 +28,21 @@ class TestsTabu(unittest.TestCase):
         self.total_cost = -13
         self.consumed_resources = [4, 15.3]
 
-    def testSimple(self):
+    def test_simple(self):
         alg = Tabu(self.G, self.max_res, self.min_res)
         alg.run()
         self.assertEqual(alg.path, self.result_path)
         self.assertEqual(alg.total_cost, self.total_cost)
         self.assertTrue(all(alg.consumed_resources == self.consumed_resources))
 
-    def testAstar(self):
+    def test_astar(self):
         alg = Tabu(self.G, self.max_res, self.min_res, algorithm="astar")
         alg.run()
         self.assertEqual(alg.path, self.result_path)
         self.assertEqual(alg.total_cost, self.total_cost)
         self.assertTrue(all(alg.consumed_resources == self.consumed_resources))
 
-    def testTimelimit(self):
+    def test_time_limit(self):
         alg = Tabu(self.G, self.max_res, self.min_res, time_limit=0.001)
         start = time()
         alg.run()
@@ -51,14 +51,14 @@ class TestsTabu(unittest.TestCase):
         self.assertEqual(alg.total_cost, self.total_cost)
         self.assertTrue(all(alg.consumed_resources == self.consumed_resources))
 
-    def testThreshold(self):
+    def test_threshold(self):
         alg = Tabu(self.G, self.max_res, self.min_res, threshold=100)
         alg.run()
         self.assertEqual(alg.path, ["Source", "A", "B", "Sink"])
         self.assertEqual(alg.total_cost, 8)
         self.assertTrue(all(alg.consumed_resources == [3, 4.3]))
 
-    def testTimelimitThreshold(self):
+    def test_time_limit_threshold(self):
         alg = Tabu(self.G,
                    self.max_res,
                    self.min_res,
@@ -71,7 +71,48 @@ class TestsTabu(unittest.TestCase):
         self.assertEqual(alg.total_cost, self.total_cost)
         self.assertTrue(all(alg.consumed_resources == self.consumed_resources))
 
-    def testTimelimitRaises(self):
+    def test_astar_time_limit(self):
+        'time limit parameter'
+        alg = Tabu(self.G,
+                   self.max_res,
+                   self.min_res,
+                   algorithm="astar",
+                   time_limit=0.001)
+        start = time()
+        alg.run()
+        self.assertTrue(time() - start <= 0.001)
+        self.assertEqual(alg.path, self.result_path)
+        self.assertEqual(alg.total_cost, self.total_cost)
+        self.assertTrue(all(alg.consumed_resources == self.consumed_resources))
+
+    def test_astar_threshold(self):
+        'test threshold parameter'
+        alg = Tabu(self.G,
+                   self.max_res,
+                   self.min_res,
+                   algorithm="astar",
+                   threshold=100)
+        alg.run()
+        self.assertEqual(alg.path, self.result_path)
+        self.assertEqual(alg.total_cost, self.total_cost)
+        self.assertTrue(all(alg.consumed_resources == self.consumed_resources))
+
+    def test_astar_time_limit_threshold(self):
+        'time limit and threshold parameters'
+        alg = Tabu(self.G,
+                   self.max_res,
+                   self.min_res,
+                   algorithm="astar",
+                   time_limit=0.001,
+                   threshold=100)
+        start = time()
+        alg.run()
+        self.assertTrue(time() - start <= 0.001)
+        self.assertEqual(alg.path, self.result_path)
+        self.assertEqual(alg.total_cost, self.total_cost)
+        self.assertTrue(all(alg.consumed_resources == self.consumed_resources))
+
+    def test_time_limit_raises(self):
         alg = Tabu(self.G, self.max_res, self.min_res, time_limit=0)
         self.assertRaises(Exception, alg.run)
 

@@ -10,7 +10,7 @@ from networkx import (shortest_simple_paths, astar_path, negative_edge_cycle)
 from cspy.checking import check
 from cspy.preprocessing import preprocess_graph
 
-log = getLogger(__name__)
+LOG = getLogger(__name__)
 
 
 class PathBase(object):
@@ -150,10 +150,10 @@ class PathBase(object):
         ])
         # init total resources and cost
         total_res = zeros(self.G.graph['n_res'])
-        _cost = 0
+        cost = 0
         # Check path for resource feasibility by adding one edge at a time
         for edge in shortest_path_edges_w_data:
-            _cost += edge[2]['weight']
+            cost += edge[2]['weight']
             if isinstance(self.REF, BuiltinFunctionType):
                 total_res += self._edge_extract(edge)
             else:
@@ -163,14 +163,8 @@ class PathBase(object):
                 break
         else:
             # Fesible path found. Save attributes.
-            if not self.threshold or (self.threshold is not None and
-                                      _cost <= self.threshold):
-                self.best_path = self.st_path
-                self.best_path_total_res = total_res
-                self.best_path_cost = _cost
-                return True
-            else:
-                pass
+            self.save(total_res, cost)
+            return True
         # Return infeasible edge unless specified
         if return_edge:
             return edge
@@ -179,11 +173,11 @@ class PathBase(object):
 
     def remove_edge(self, edge):
         if edge[:2] in self.G.edges():
-            log.debug("Removed edge {}".format(edge[:2]))
+            LOG.debug("Removed edge {}".format(edge[:2]))
             self.G.remove_edge(*edge[:2])
 
     def add_edge_back(self, edge):
-        log.debug("Added edge back {}".format(edge[:2]))
+        LOG.debug("Added edge back {}".format(edge[:2]))
         if "data" in edge[2]:
             self.G.add_edge(*edge[:2],
                             res_cost=edge[2]['res_cost'],
@@ -193,6 +187,13 @@ class PathBase(object):
             self.G.add_edge(*edge[:2],
                             res_cost=edge[2]['res_cost'],
                             weight=edge[2]['weight'])
+
+    def save(self, total_res, cost):
+        if not self.threshold or (self.threshold is not None and
+                                  cost <= self.threshold):
+            self.best_path = self.st_path
+            self.best_path_total_res = total_res
+            self.best_path_cost = cost
 
     @staticmethod
     def _edge_extract(edge):

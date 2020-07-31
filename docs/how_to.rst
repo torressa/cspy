@@ -258,7 +258,7 @@ and the edge that is being considered for an extension of a path ``edge``
 .. code-block:: python
 
         from numpy import array
-        def jane_REF(res, edge):
+        def jane_REF(res, edge, **kwargs):
             arr = array(res)  # local array
             i, j, edge_data = edge[:]  # unpack edge
             # i, j : string, edge_data : dict

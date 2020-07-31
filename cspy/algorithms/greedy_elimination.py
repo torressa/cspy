@@ -120,6 +120,7 @@ class GreedyElim(PathBase):
                 self.stop = True
             else:
                 self.remove_edge(edge_or_true)
+                self.last_edge_removed = edge_or_true
         else:
             # no path has been found for current graph
             # Add previously removed edge

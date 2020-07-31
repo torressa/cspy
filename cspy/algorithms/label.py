@@ -1,7 +1,7 @@
-from types import BuiltinFunctionType
 from typing import List, Callable
+from types import BuiltinFunctionType
 
-from numpy import greater, greater_equal, less_equal, array_equal
+from numpy import greater, greater_equal, less_equal
 
 
 class Label:
@@ -29,7 +29,6 @@ class Label:
         self.node = node
         self.res = res
         self.path = path
-        self.seen = False
 
     def __repr__(self):
         return str(self)
@@ -57,6 +56,7 @@ class Label:
                                            edge,
                                            partial_path=self.path,
                                            accumulated_cost=self.weight)
+
         elif direction == "backward":
             if isinstance(self.REF_backward, BuiltinFunctionType):
                 res_new = self.res + res
