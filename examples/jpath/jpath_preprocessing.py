@@ -1,5 +1,3 @@
-from __future__ import absolute_import, print_function
-
 from numpy import array
 from numpy.random import RandomState
 from networkx import relabel_nodes, set_edge_attributes
@@ -26,11 +24,15 @@ def relabel_source_sink(G,
     """
     # Identify Source and Sink according to specifications
     # Source is the post office in Ternatestraat
-    source = [e for e in G.edges(data=True)
-            if 'name' in e[2] and nodes_to_relabel["Source"] in e[2]['name']][-2][0]
+    source = [
+        e for e in G.edges(data=True)
+        if 'name' in e[2] and nodes_to_relabel["Source"] in e[2]['name']
+    ][-2][0]
     # Sink is Jane's home in Ceramstraat
-    sink = [e for e in G.edges(data=True)
-            if 'name' in e[2] and nodes_to_relabel["Sink"] in e[2]['name']][0][1]
+    sink = [
+        e for e in G.edges(data=True)
+        if 'name' in e[2] and nodes_to_relabel["Sink"] in e[2]['name']
+    ][0][1]
     # Relabel nodes
     G = relabel_nodes(G, {source: 'Source', sink: 'Sink'})
     return G

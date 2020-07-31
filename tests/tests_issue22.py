@@ -1,4 +1,3 @@
-import sys
 import unittest
 
 from numpy import array
@@ -6,7 +5,6 @@ from random import randint
 from networkx import DiGraph, astar_path
 from parameterized import parameterized
 
-sys.path.append("../")
 from cspy.algorithms.tabu import Tabu
 from cspy.algorithms.label import Label
 from cspy.algorithms.bidirectional import BiDirectional
@@ -29,10 +27,74 @@ class TestsIssue22(unittest.TestCase):
         self.G.add_edge(3, "Sink", weight=-10, res_cost=array([1, 0]))
         self.G.add_edge(3, 2, weight=-5, res_cost=array([1, 1]))
         self.G.add_edge(2, 1, weight=-10, res_cost=array([1, 1]))
-
+        # Maximum and minimum resource arrays
         self.max_res, self.min_res = [len(self.G.edges()), 2], [0, 0]
+        # Expected results
+        self.result_path = ['Source', 2, 1, 'Sink']
+        self.total_cost = -10
+        self.consumed_resources = [3, 2]
 
-    def testDominance(self):
+    def test_tabu(self):
+        """Find shortest path of simple test digraph using Tabu.
+        """
+        alg = Tabu(self.G, self.max_res, self.min_res)
+        alg.run()
+        self.assertEqual(alg.path, self.result_path)
+        self.assertEqual(alg.total_cost, self.total_cost)
+        self.assertTrue(all(alg.consumed_resources == self.consumed_resources))
+        self.assertTrue(
+            all(e in self.G.edges() for e in zip(alg.path, alg.path[1:])))
+        # Check networkx's astar_path
+        path_star = astar_path(self.G, "Source", "Sink")
+        self.assertEqual(path_star, ['Source', 1, 'Sink'])
+
+    @parameterized.expand(zip(range(100), range(100)))
+    def test_bidirectional_random(self, _, seed):
+        """
+        Test BiDirectional with randomly chosen sequence of directions
+        for a range of seeds.
+        """
+        alg = BiDirectional(self.G,
+                            self.max_res,
+                            self.min_res,
+                            seed=seed,
+                            elementary=False)
+        alg.run()
+        self.assertEqual(alg.path, self.result_path)
+        self.assertEqual(alg.total_cost, self.total_cost)
+        self.assertTrue(all(alg.consumed_resources == self.consumed_resources))
+
+    def test_bidirectional_forward(self):
+        """
+        Find shortest path using BiDirectional algorithm with only forward
+        direction.
+        """
+        alg = BiDirectional(self.G,
+                            self.max_res,
+                            self.min_res,
+                            direction='forward',
+                            elementary=True)
+        alg.run()
+        self.assertEqual(alg.path, self.result_path)
+        self.assertEqual(alg.total_cost, self.total_cost)
+        self.assertTrue(all(alg.consumed_resources == self.consumed_resources))
+
+    def test_bidirectional_backward(self):
+        """
+        Find shortest path of simple test digraph using BiDirectional
+        algorithm with only backward direction.
+        """
+        alg = BiDirectional(self.G,
+                            self.max_res,
+                            self.min_res,
+                            direction='backward',
+                            elementary=True)
+        alg.run()
+        self.assertEqual(alg.path, self.result_path)
+        self.assertEqual(alg.total_cost, self.total_cost)
+        self.assertTrue(all(alg.consumed_resources == self.consumed_resources))
+
+    def test_dominance(self):
         # Check forward and backward label dominance
         L1 = Label(-10, "Sink", array([3, 0]), [])
         L2 = Label(0, "Sink", array([1, 0]), [])
@@ -44,95 +106,3 @@ class TestsIssue22(unittest.TestCase):
 
         if not (L1.dominates(L2, "forward") or L2.dominates(L1, "forward")):
             self.assertTrue(L1.dominates(L2, "backward"))
-
-    def testTabu(self):
-        """
-        Find shortest path of simple test digraph using Tabu.
-        """
-        tabu = Tabu(self.G, self.max_res, self.min_res)
-        tabu.run()
-        path = tabu.path
-        cost = tabu.total_cost
-        total_res = tabu.consumed_resources
-        # Check attributes
-        self.assertEqual(cost, -5)
-        self.assertTrue(all(total_res == [3, 2]))
-        # Check path
-        self.assertEqual(path, ['Source', 3, 2, 'Sink'])
-        self.assertTrue(all(e in self.G.edges() for e in zip(path, path[1:])))
-        # Check if networkx's astar_path gives the same path
-        path_star = astar_path(self.G, "Source", "Sink")
-        self.assertEqual(path_star, ['Source', 1, 'Sink'])
-
-    @parameterized.expand(zip(range(100), range(100)))
-    def testBiDirectionalBothDynamic(self, _, seed):
-        """
-        Find shortest path of simple test digraph using BiDirectional.
-        """
-        bidirec = BiDirectional(self.G, self.max_res, self.min_res, seed=seed)
-        # Check classification
-        with self.assertLogs('cspy.algorithms.bidirectional') as cm:
-            bidirec.name_algorithm()
-        # Log should contain the word 'dynamic'
-        self.assertRegex(cm.output[0], 'dynamic')
-
-        bidirec.run()
-        path = bidirec.path
-        cost = bidirec.total_cost
-        total_res = bidirec.consumed_resources
-        # Check path and other attributes
-        self.assertEqual(path, ['Source', 2, 1, 'Sink'])
-        self.assertEqual(cost, -10)
-        self.assertTrue(all(total_res == [3, 2]))
-
-    def testBiDirectionalForward(self):
-        """
-        Find shortest path of simple test digraph using BiDirectional
-        algorithm with only forward direction.
-        """
-        bidirec = BiDirectional(self.G,
-                                self.max_res,
-                                self.min_res,
-                                direction='forward')
-        # Check classification
-        with self.assertLogs('cspy.algorithms.bidirectional') as cm:
-            bidirec.name_algorithm()
-        # Log should contain the word 'forward'
-        self.assertRegex(cm.output[0], 'forward')
-
-        bidirec.run()
-        path = bidirec.path
-        cost = bidirec.total_cost
-        total_res = bidirec.consumed_resources
-        # Check path and other attributes
-        self.assertEqual(path, ['Source', 2, 1, 'Sink'])
-        self.assertEqual(cost, -10)
-        self.assertTrue(all(total_res == [3, 2]))
-
-    def testBiDirectionalBackward(self):
-        """
-        Find shortest path of simple test digraph using BiDirectional
-        algorithm with only backward direction.
-        """
-        bidirec = BiDirectional(self.G,
-                                self.max_res,
-                                self.min_res,
-                                direction='backward')
-        # Check classification
-        with self.assertLogs('cspy.algorithms.bidirectional') as cm:
-            bidirec.name_algorithm()
-        # Log should contain the word 'forward'
-        self.assertRegex(cm.output[0], 'backward')
-
-        bidirec.run()
-        path = bidirec.path
-        cost = bidirec.total_cost
-        total_res = bidirec.consumed_resources
-        # Check path and other attributes
-        self.assertEqual(path, ['Source', 2, 1, 'Sink'])
-        self.assertEqual(cost, -10)
-        self.assertTrue(all(total_res == [3, 2]))
-
-
-if __name__ == '__main__':
-    unittest.main(TestsIssue22())

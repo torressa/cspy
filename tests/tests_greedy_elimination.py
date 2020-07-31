@@ -3,14 +3,16 @@ from time import time
 
 from networkx import DiGraph
 from numpy import array
+from parameterized import parameterized
 
-from cspy.algorithms.tabu import Tabu
+from cspy import GreedyElim
 
 
-class TestsTabu(unittest.TestCase):
+class TestsGreedyElimination(unittest.TestCase):
     """
     Tests for finding the resource constrained shortest
-    path of simple DiGraph using the Tabu algorithm.
+    path of simple DiGraph using the BiDirectional algorithm.
+    Includes algorithm classification, and some exception handling.
     """
 
     def setUp(self):
@@ -29,21 +31,24 @@ class TestsTabu(unittest.TestCase):
         self.consumed_resources = [4, 15.3]
 
     def test_simple(self):
-        alg = Tabu(self.G, self.max_res, self.min_res)
+        'algorithm = "simple" (default)'
+        alg = GreedyElim(self.G, self.max_res, self.min_res)
         alg.run()
         self.assertEqual(alg.path, self.result_path)
         self.assertEqual(alg.total_cost, self.total_cost)
         self.assertTrue(all(alg.consumed_resources == self.consumed_resources))
 
     def test_astar(self):
-        alg = Tabu(self.G, self.max_res, self.min_res, algorithm="astar")
+        'algorithm = "astar"'
+        alg = GreedyElim(self.G, self.max_res, self.min_res, algorithm="astar")
         alg.run()
         self.assertEqual(alg.path, self.result_path)
         self.assertEqual(alg.total_cost, self.total_cost)
         self.assertTrue(all(alg.consumed_resources == self.consumed_resources))
 
     def test_time_limit(self):
-        alg = Tabu(self.G, self.max_res, self.min_res, time_limit=0.001)
+        'time limit parameter'
+        alg = GreedyElim(self.G, self.max_res, self.min_res, time_limit=0.001)
         start = time()
         alg.run()
         self.assertTrue(time() - start <= 0.001)
@@ -52,32 +57,34 @@ class TestsTabu(unittest.TestCase):
         self.assertTrue(all(alg.consumed_resources == self.consumed_resources))
 
     def test_threshold(self):
-        alg = Tabu(self.G, self.max_res, self.min_res, threshold=100)
+        'test threshold parameter'
+        alg = GreedyElim(self.G, self.max_res, self.min_res, threshold=100)
         alg.run()
         self.assertEqual(alg.path, ["Source", "A", "B", "Sink"])
         self.assertEqual(alg.total_cost, 8)
         self.assertTrue(all(alg.consumed_resources == [3, 4.3]))
 
     def test_time_limit_threshold(self):
-        alg = Tabu(self.G,
-                   self.max_res,
-                   self.min_res,
-                   time_limit=0.001,
-                   threshold=0)
+        'time limit and threshold parameters'
+        alg = GreedyElim(self.G,
+                         self.max_res,
+                         self.min_res,
+                         time_limit=0.001,
+                         threshold=100)
         start = time()
         alg.run()
         self.assertTrue(time() - start <= 0.001)
-        self.assertEqual(alg.path, self.result_path)
-        self.assertEqual(alg.total_cost, self.total_cost)
-        self.assertTrue(all(alg.consumed_resources == self.consumed_resources))
+        self.assertEqual(alg.path, ["Source", "A", "B", "Sink"])
+        self.assertEqual(alg.total_cost, 8)
+        self.assertTrue(all(alg.consumed_resources == [3, 4.3]))
 
     def test_astar_time_limit(self):
         'time limit parameter'
-        alg = Tabu(self.G,
-                   self.max_res,
-                   self.min_res,
-                   algorithm="astar",
-                   time_limit=0.001)
+        alg = GreedyElim(self.G,
+                         self.max_res,
+                         self.min_res,
+                         algorithm="astar",
+                         time_limit=0.001)
         start = time()
         alg.run()
         self.assertTrue(time() - start <= 0.001)
@@ -87,11 +94,11 @@ class TestsTabu(unittest.TestCase):
 
     def test_astar_threshold(self):
         'test threshold parameter'
-        alg = Tabu(self.G,
-                   self.max_res,
-                   self.min_res,
-                   algorithm="astar",
-                   threshold=100)
+        alg = GreedyElim(self.G,
+                         self.max_res,
+                         self.min_res,
+                         algorithm="astar",
+                         threshold=100)
         alg.run()
         self.assertEqual(alg.path, self.result_path)
         self.assertEqual(alg.total_cost, self.total_cost)
@@ -99,12 +106,12 @@ class TestsTabu(unittest.TestCase):
 
     def test_astar_time_limit_threshold(self):
         'time limit and threshold parameters'
-        alg = Tabu(self.G,
-                   self.max_res,
-                   self.min_res,
-                   algorithm="astar",
-                   time_limit=0.001,
-                   threshold=100)
+        alg = GreedyElim(self.G,
+                         self.max_res,
+                         self.min_res,
+                         algorithm="astar",
+                         time_limit=0.001,
+                         threshold=100)
         start = time()
         alg.run()
         self.assertTrue(time() - start <= 0.001)
@@ -113,9 +120,6 @@ class TestsTabu(unittest.TestCase):
         self.assertTrue(all(alg.consumed_resources == self.consumed_resources))
 
     def test_time_limit_raises(self):
-        alg = Tabu(self.G, self.max_res, self.min_res, time_limit=0)
+        'Time limit of 0 raises an exception'
+        alg = GreedyElim(self.G, self.max_res, self.min_res, time_limit=0)
         self.assertRaises(Exception, alg.run)
-
-    def testInputExceptions(self):
-        # Check whether wrong input raises exceptions
-        self.assertRaises(Exception, Tabu, self.G, 'x', [1, 'foo'], 'up')

@@ -1,14 +1,15 @@
-from __future__ import absolute_import
-from __future__ import print_function
+from time import time
+from logging import getLogger
+from typing import List, Optional, Callable
 
-import logging
 from numpy import array
-from networkx import NetworkXException
+from networkx import NetworkXException, DiGraph
 
 # Local imports
 from cspy.algorithms.path_base import PathBase
+from cspy.checking import check_time_limit_breached
 
-log = logging.getLogger(__name__)
+log = getLogger(__name__)
 
 
 class GreedyElim(PathBase):
@@ -47,6 +48,16 @@ class GreedyElim(PathBase):
         If the total number of simple paths is less than max_depth,
         then the shortest path is used.
 
+    time_limit : int, optional
+        time limit in seconds.
+        Default: None
+
+    threshold : float, optional
+        specify a threshold for a an acceptable resource feasible path with
+        total cost <= threshold.
+        Note this typically causes the search to terminate early.
+        Default: None
+
     REF : function, optional
         Custom resource extension function. See `REFs`_ for more details.
         Default : additive.
@@ -62,17 +73,21 @@ class GreedyElim(PathBase):
     """
 
     def __init__(self,
-                 G,
-                 max_res,
-                 min_res,
-                 preprocess=False,
-                 algorithm="simple",
-                 max_depth=1000,
-                 REF=None):
+                 G: DiGraph,
+                 max_res: List,
+                 min_res: List,
+                 preprocess: Optional[bool] = False,
+                 algorithm: Optional[str] = "simple",
+                 max_depth: Optional[int] = 1000,
+                 time_limit: Optional[int] = None,
+                 threshold: Optional[float] = None,
+                 REF: Callable = None):
         # Pass arguments to parent class
-        super().__init__(G, max_res, min_res, preprocess, REF, algorithm)
+        super().__init__(G, max_res, min_res, preprocess, threshold, REF,
+                         algorithm)
         # Algorithm specific parameters
         self.max_depth = max_depth
+        self.time_limit = time_limit
         self.stop = False
         self.predecessor_edges = []
         self.last_edge_removed = None
@@ -84,7 +99,9 @@ class GreedyElim(PathBase):
         """
         Calculate shortest path with resource constraints.
         """
-        while self.stop is False:
+        start = time()
+        while not self.stop and not check_time_limit_breached(
+                start, self.time_limit):
             self._algorithm()
 
         if not self.best_path:
@@ -103,6 +120,7 @@ class GreedyElim(PathBase):
                 self.stop = True
             else:
                 self.remove_edge(edge_or_true)
+                self.last_edge_removed = edge_or_true
         else:
             # no path has been found for current graph
             # Add previously removed edge

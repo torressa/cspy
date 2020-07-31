@@ -1,13 +1,8 @@
-import sys
 import unittest
 
 from numpy import array
-from random import randint
-from networkx import DiGraph, astar_path
+from networkx import DiGraph
 
-sys.path.append("../")
-from cspy.algorithms.tabu import Tabu
-from cspy.algorithms.label import Label
 from cspy.algorithms.bidirectional import BiDirectional
 from parameterized import parameterized
 
@@ -30,8 +25,12 @@ class TestsIssue32(unittest.TestCase):
         self.G.add_edge(2, 4, res_cost=array([0, 1, 0]), weight=-10)
         self.G.add_edge(3, 4, res_cost=array([0, 1, 0]), weight=-10)
         self.G.add_edge(4, 'Sink', res_cost=array([0, 0, 0]), weight=-1)
+        # Expected results
+        self.result_path = ['Source', 1, 2, 3, 4, 'Sink']
+        self.total_cost = -23
+        self.consumed_resources = [5, 30, 1]
 
-    def custom_REF_forward(self, cumulative_res, edge):
+    def custom_REF_forward(self, cumulative_res, edge, **kwargs):
         res_new = array(cumulative_res)
         # Unpack edge
         u, v, edge_data = edge[0:3]
@@ -46,7 +45,7 @@ class TestsIssue32(unittest.TestCase):
         res_new[2] += edge_data["res_cost"][1]
         return res_new
 
-    def custom_REF_backward(self, cumulative_res, edge):
+    def custom_REF_backward(self, cumulative_res, edge, **kwargs):
         res_new = array(cumulative_res)
         # Unpack edge
         u, v, edge_data = edge[0:3]
@@ -56,42 +55,23 @@ class TestsIssue32(unittest.TestCase):
         if v == "Sink":
             res_new[1] = res_new[1]
         else:
-            res_new[1] -= int(v)**2
+            res_new[1] += int(v)**2
         # Resource reset
-        res_new[2] -= edge_data["res_cost"][1]
+        res_new[2] += edge_data["res_cost"][1]
         return res_new
 
     @parameterized.expand(zip(range(100), range(100)))
-    def testBiDirectionalBothDynamic(self, _, seed):
+    def test_bidirectional_random(self, _, seed):
+        """Test BiDirectional with randomly chosen sequence of directions
+        for a range of seeds.
         """
-        Find shortest path of simple test digraph using the BiDirectional
-        algorithm for a range of seeds.
-        Note the first argument is required to work using parameterized and unittest.
-        """
-        bidirec = BiDirectional(self.G,
-                                self.max_res,
-                                self.min_res,
-                                REF_forward=self.custom_REF_forward,
-                                REF_backward=self.custom_REF_backward,
-                                seed=seed)
-        # Check classification
-        with self.assertLogs('cspy.algorithms.bidirectional') as cm:
-            bidirec.name_algorithm()
-        # Log should contain the word 'dynamic'
-        self.assertRegex(cm.output[0], 'dynamic')
-        # Check exception for not running first
-        with self.assertRaises(Exception) as context:
-            bidirec.path
-        self.assertTrue("run()" in str(context.exception))
-        # Run and test results
-        bidirec.run()
-        path = bidirec.path
-        cost = bidirec.total_cost
-        total_res = bidirec.consumed_resources
-        self.assertEqual(path, ['Source', 1, 2, 3, 4, 'Sink'])
-        self.assertEqual(cost, -23)
-        self.assertTrue(all(total_res == [5, 30, 1]))
-
-
-if __name__ == '__main__':
-    unittest.main(TestsIssue32())
+        alg = BiDirectional(self.G,
+                            self.max_res,
+                            self.min_res,
+                            REF_forward=self.custom_REF_forward,
+                            REF_backward=self.custom_REF_backward,
+                            seed=seed)
+        alg.run()
+        self.assertEqual(alg.path, self.result_path)
+        self.assertEqual(alg.total_cost, self.total_cost)
+        self.assertTrue(all(alg.consumed_resources == self.consumed_resources))

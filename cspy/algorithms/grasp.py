@@ -1,17 +1,17 @@
-# TODO: write checks for all inputs
-
-from __future__ import absolute_import
-from __future__ import print_function
-
+from time import time
 from math import factorial
 from logging import getLogger
 from collections import deque
-from numpy.random import choice
-from random import sample, randint
 from itertools import permutations, repeat
+from random import sample, randint
+from typing import List, Optional, Callable
+
+from networkx import DiGraph
+from numpy.random import choice
 
 # Local imports
 from cspy.algorithms.path_base import PathBase
+from cspy.checking import check_time_limit_breached
 
 log = getLogger(__name__)
 
@@ -45,6 +45,16 @@ class GRASP(PathBase):
     max_localiter : int, optional
         Maximum number of local search iterations. Default : 10.
 
+    time_limit : int, optional
+        time limit in seconds.
+        Default: None
+
+    threshold : float, optional
+        specify a threshold for a an acceptable resource feasible path with
+        total cost <= threshold.
+        Note this typically causes the search to terminate early.
+        Default: None
+
     alpha : float, optional
         Greediness factor 0 (random) --> 1 (greedy). Default : 0.2.
 
@@ -63,19 +73,22 @@ class GRASP(PathBase):
     """
 
     def __init__(self,
-                 G,
-                 max_res,
-                 min_res,
-                 preprocess=False,
-                 max_iter=100,
-                 max_localiter=10,
-                 alpha=0.2,
+                 G: DiGraph,
+                 max_res: List[float],
+                 min_res: List[float],
+                 preprocess: Optional[bool] = False,
+                 max_iter: Optional[int] = 100,
+                 max_localiter: Optional[int] = 10,
+                 time_limit: Optional[int] = None,
+                 threshold: Optional[float] = None,
+                 alpha: Optional[float] = 0.2,
                  REF=None):
         # Pass arguments to parent class
-        super().__init__(G, max_res, min_res, preprocess, REF)
+        super().__init__(G, max_res, min_res, preprocess, threshold, REF)
         # Algorithm specific attributes
         self.max_iter = max_iter
         self.max_localiter = max_localiter
+        self.time_limit = time_limit
         self.alpha = alpha
         # Algorithm specific parameters
         self.it = 0
@@ -88,7 +101,9 @@ class GRASP(PathBase):
         """
         Calculate shortest path with resource constraints.
         """
-        while self.it < self.max_iter and not self.stop:
+        start = time()
+        while (self.it < self.max_iter and not self.stop and
+               not check_time_limit_breached(start, self.time_limit)):
             self._algorithm()
             self.it += 1
         if not self.best_solution.path:
