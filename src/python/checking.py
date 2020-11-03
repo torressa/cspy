@@ -1,19 +1,20 @@
 from time import time
 from typing import Union
+from logging import getLogger
 
 from networkx import DiGraph, NetworkXException, has_path
 from numpy import ndarray
 from numpy.random import RandomState
+
+LOG = getLogger(__name__)
 
 
 def check(G,
           max_res=None,
           min_res=None,
           direction=None,
-          algorithm=None,
-          REF_forward=None,
-          REF_backward=None,
-          REF_join=None):
+          REF_callback=None,
+          algorithm=None):
     """
     Checks whether inputs and the graph are of the appropriate types and
     have the required properties.
@@ -29,11 +30,11 @@ def check(G,
     max_res : list of floats, optional
         :math:`[M_1, M_2, ..., M_{n\_res}]`
         upper bound for resource usage.
-        We must have ``len(max_res)`` :math:`\geq 2`
+        We must have ``len(max_res)`` :math:`\geq 1`
 
     min_res : list of floats, optional
         :math:`[L_1, L_2, ..., L_{nres}]` lower bounds for resource usage.
-        We must have ``len(min_res)`` :math:`=` ``len(max_res)`` :math:`\geq 2`
+        We must have ``len(min_res)`` :math:`=` ``len(max_res)`` :math:`\geq 1`
 
     direction : string, optional
         preferred search direction. Either 'both','forward', or, 'backward'.
@@ -49,9 +50,9 @@ def check(G,
         errors is raised.
     """
     errors = []
-    if REF_forward or REF_backward or REF_join:
+    if REF_callback:
         try:
-            _check_REFs(REF_forward, REF_backward, REF_join)
+            _check_REF(REF_callback)
         except Exception as e:
             errors.append(e)
     # Select checks to perform based on the input provided
@@ -77,10 +78,14 @@ def check(G,
         raise Exception('\n'.join('{}'.format(item) for item in errors))
 
 
-def check_seed(seed):
+def check_seed(seed, algorithm=None):
     """Check whether given seed can be used to seed a numpy.random.RandomState
     :return: numpy.random.RandomState (seeded if seed given)
     """
+    if algorithm and "bidirectional" in algorithm:
+        if isinstance(seed, int):
+            return RandomState(seed)
+        raise TypeError("{} cannot be used to seed".format(seed))
     if seed is None:
         return RandomState()
     elif isinstance(seed, int):
@@ -105,16 +110,13 @@ def check_time_limit_breached(start_time: float,
 def _check_res(G, max_res, min_res, direction, algorithm):
     if isinstance(max_res, list) and isinstance(min_res, list):
         if len(max_res) == len(min_res):
-            if (algorithm and 'bidirectional' in algorithm and
-                    len(max_res) < 2):
-                raise TypeError("Resources must be of length >= 2")
             if not ((all(isinstance(i, (float, int)) for i in max_res) and
                      all(isinstance(i, (float, int)) for i in min_res))):
                 raise TypeError("Elements of input lists must be numbers")
         else:
             raise TypeError("Input lists have to be equal length")
     else:
-        raise TypeError("Inputs have to be lists with length >= 2")
+        raise TypeError("Inputs have to be lists")
 
 
 def _check_direction(G, max_res, min_res, direction, algorithm):
@@ -163,10 +165,17 @@ def _check_path(G, max_res, min_res, direction, algorithm):
         raise Exception("An error occurred: {}".format(e))
 
 
-def _check_REFs(REF_forward, REF_backward, REF_join):
-    if REF_forward and not callable(REF_forward):
-        raise TypeError("REF functions must be callable")
-    if REF_backward and not callable(REF_backward):
-        raise TypeError("REF functions must be callable")
-    if REF_join and not callable(REF_join):
-        raise TypeError("REF functions must be callable")
+def _check_REF(REF_callback):
+    if REF_callback and not (callable(REF_callback.REF_fwd) or callable(
+            REF_callback.REF_bwd) or callable(REF_callback.REF_join)):
+        raise TypeError("At least one REF function must be callable")
+    if (REF_callback and callable(REF_callback.REF_fwd) and
+            callable(REF_callback.REF_bwd) and
+            not callable(REF_callback.REF_join)):
+        LOG.warning("Default criteria used for joining paths.")
+    if (REF_callback and callable(REF_callback.REF_fwd) and
+            not callable(REF_callback.REF_bwd) and
+            not callable(REF_callback.REF_join)):
+        LOG.warning("Forward REF set but not backward REF."
+                    " This may lead to unexpected results.")
+        LOG.warning("Default criteria used for joining paths.")

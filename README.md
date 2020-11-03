@@ -80,10 +80,21 @@ relevant result attributes,
 
 ## Running the tests
 
+### Prerequisites
+
+- Docker
+
 To run the tests first, clone the repository into a path in your machine `~/path/newfolder` by running
 
 ```none
 git clone https://github.com/torressa/cspy.git ~/path/newfolder
+```
+### Compile
+
+```
+cmake -S. -Bbuild -DBUILD_PYTHON=ON -DBUILD_TESTING=ON
+cd build
+make -k -i
 ```
 
 Then, go into the folder and run the tests using `unittest`
