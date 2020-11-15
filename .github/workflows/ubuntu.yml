@@ -7,4 +7,4 @@ jobs:
     steps:
     - name: Build and run
       id: id
-      uses: actions/cspy@cpp
+      uses: torressa/cspy
