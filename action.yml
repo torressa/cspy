@@ -1,0 +1,5 @@
+name: 'Run tests'
+description: 'Run tests'
+runs:
+  using: 'docker'
+  image: 'tools/dev/python.Dockerfile'
