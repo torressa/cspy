@@ -72,7 +72,7 @@ search_python_module(wheel)
 # search_python_module(virtualenv)
 
 if(BUILD_TESTING)
-  add_custom_target(python_setup_build ALL
+  add_custom_target(python_setup ALL
     # Copy and make appropriate folder structure
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/setup.py setup.py
     COMMAND ${CMAKE_COMMAND} -E make_directory .libs cspy
@@ -99,6 +99,8 @@ if(BUILD_TESTING)
     dist
     ${PROJECT_NAME}.egg-info
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
+  add_test(NAME python_unittest
+    COMMAND ${Python_EXECUTABLE} -m unittest test_python/*)
 endif()
 
 if (CMAKE_BUILD_TYPE EQUAL "Release")

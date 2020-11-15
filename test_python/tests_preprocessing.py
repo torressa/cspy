@@ -50,8 +50,7 @@ class TestsPreprocessing(unittest.TestCase):
         with self.assertRaises(Exception) as context:
             check(self.H, self.max_res, self.min_res, 1, "foo", "alg")
 
-        self.assertTrue(
-            "REF functions must be callable" in str(context.exception))
+        self.assertTrue("REF" in str(context.exception))
         self.assertTrue(
             "Input must be a nx.Digraph()" in str(context.exception))
 

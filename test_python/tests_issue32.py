@@ -12,31 +12,31 @@ class MyCallback(PyREFCallback):
 
     def REF_fwd(self, cumul_res, tail, head, edge_res, partial_path,
                 cumul_cost):
-        # res_new = cumul_res
+        res_new = list(cumul_res)
         # Monotone resource
-        # res_new[0] += 1.0
+        res_new[0] += 1.0
         # Increasing resource
-        # if head == "Sink":
-        #     res_new[1] = res_new[1]
-        # else:
-        #     res_new[1] += int(v)**2
-        # # Resource reset
-        # res_new[2] += edge_res[1]
-        return cumul_res
+        if "Sink" in head:
+            res_new[1] = res_new[1]
+        else:
+            res_new[1] += float(int(head)**2)
+        # Resource reset
+        res_new[2] += edge_res[1]
+        return res_new
 
-    # def REF_bwd(self, cumul_res, tail, head, edge_res, partial_path,
-    #             cumul_cost):
-    #     res_new = cumulative_res
-    #     # Monotone resource
-    #     res_new[0] -= 1
-    #     # Increasing resource
-    #     if head == "Sink":
-    #         res_new[1] = res_new[1]
-    #     else:
-    #         res_new[1] += int(v)**2
-    #     # Resource reset
-    #     res_new[2] += edge_res[1]
-    #     return res_new
+    def REF_bwd(self, cumul_res, tail, head, edge_res, partial_path,
+                cumul_cost):
+        res_new = list(cumul_res)
+        # Monotone resource
+        res_new[0] -= 1
+        # Increasing resource
+        if "Sink" in head:
+            res_new[1] = res_new[1]
+        else:
+            res_new[1] += float(int(head)**2)
+        # Resource reset
+        res_new[2] += edge_res[1]
+        return res_new
 
 
 class TestsIssue32(unittest.TestCase):
@@ -63,17 +63,26 @@ class TestsIssue32(unittest.TestCase):
         self.total_cost = -23
         self.consumed_resources = [5, 30, 1]
 
-    @parameterized.expand(zip(range(1), range(1)))
-    def test_bidirectional_random(self, _, seed):
-        """Test BiDirectional with randomly chosen sequence of directions
-        for a range of seeds.
-        """
+    def test_bidirectional(self):
+        """Test BiDirectional with custom callback."""
         alg = BiDirectional(self.G,
                             self.max_res,
                             self.min_res,
-                            REF_callback=self.my_callback,
-                            seed=seed)
+                            method="unprocessed",
+                            REF_callback=self.my_callback)
         alg.run()
         self.assertEqual(alg.path, self.result_path)
         self.assertEqual(alg.total_cost, self.total_cost)
-        self.assertTrue(alg.consumed_resources == self.consumed_resources)
+        self.assertEqual(alg.consumed_resources, self.consumed_resources)
+
+    def test_bidirectional_forward(self):
+        """Test BiDirectional with custom callback."""
+        alg = BiDirectional(self.G,
+                            self.max_res,
+                            self.min_res,
+                            direction="forward",
+                            REF_callback=self.my_callback)
+        alg.run()
+        self.assertEqual(alg.path, self.result_path)
+        self.assertEqual(alg.total_cost, self.total_cost)
+        self.assertEqual(alg.consumed_resources, self.consumed_resources)

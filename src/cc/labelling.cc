@@ -276,57 +276,56 @@ Label LabelExtension::extend(
 //  // }
 //}
 
-// bool runDominance(
-//     std::vector<Label>*                    labels_ptr,
-//     const std::string&                     direction,
-//     const bool&                            elementary,
-//     const std::vector<std::vector<Label>>& efficient_labels) {
-//   bool updated_labels = false;
-//   for (auto it = labels_ptr->begin(); it != labels_ptr->end();) {
-//     const Label& label1  = *it;
-//     bool         deleted = false;
-//     // Extract labels with the same node
-//     std::vector<Label> comparable_labels(
-//         labels_ptr->begin(), labels_ptr->end());
-//     auto copy_if_iterator = std::copy_if(
-//         labels_ptr->begin(),
-//         labels_ptr->end(),
-//         comparable_labels.begin(),
-//         [&label1](const Label& l) {
-//           return (l.vertex.idx == label1.vertex.idx && l != label1);
-//         });
-//     comparable_labels.erase(copy_if_iterator, comparable_labels.end());
-//     std::set<labelling::Label> setss(
-//         comparable_labels.begin(), comparable_labels.end());
-//     setss.insert(
-//         efficient_labels[label1.vertex.idx].begin(),
-//         efficient_labels[label1.vertex.idx].end());
-//
-//     // For each comparable label
-//     for (auto it2 = comparable_labels.begin(); it2 !=
-//     comparable_labels.end();
-//          ++it2) {
-//       const Label& label2 = *it2;
-//       // check if label1 dominates label2
-//       if (label1.checkDominance(label2, direction, elementary)) {
-//         // find and remove label2
-//         const auto& dist =
-//             std::find(labels_ptr->begin(), labels_ptr->end(), label2);
-//         labels_ptr->erase(dist);
-//         updated_labels = true;
-//       } else if (label2.checkDominance(label1, direction, elementary)) {
-//         // remove label1
-//         it             = labels_ptr->erase(it);
-//         updated_labels = true;
-//         deleted        = true;
-//         break;
-//       }
-//     }
-//     if (!deleted)
-//       ++it;
-//   }
-//   return updated_labels;
-// }
+bool runDominance(
+    std::vector<Label>*                    labels_ptr,
+    const std::string&                     direction,
+    const bool&                            elementary,
+    const std::vector<std::vector<Label>>& efficient_labels) {
+  bool updated_labels = false;
+  for (auto it = labels_ptr->begin(); it != labels_ptr->end();) {
+    const Label& label1  = *it;
+    bool         deleted = false;
+    // Extract labels with the same node
+    std::vector<Label> comparable_labels(
+        labels_ptr->begin(), labels_ptr->end());
+    auto copy_if_iterator = std::copy_if(
+        labels_ptr->begin(),
+        labels_ptr->end(),
+        comparable_labels.begin(),
+        [&label1](const Label& l) {
+          return (l.vertex.idx == label1.vertex.idx && l != label1);
+        });
+    comparable_labels.erase(copy_if_iterator, comparable_labels.end());
+    std::set<labelling::Label> setss(
+        comparable_labels.begin(), comparable_labels.end());
+    setss.insert(
+        efficient_labels[label1.vertex.idx].begin(),
+        efficient_labels[label1.vertex.idx].end());
+
+    // For each comparable label
+    for (auto it2 = comparable_labels.begin(); it2 != comparable_labels.end();
+         ++it2) {
+      const Label& label2 = *it2;
+      // check if label1 dominates label2
+      if (label1.checkDominance(label2, direction, elementary)) {
+        // find and remove label2
+        const auto& dist =
+            std::find(labels_ptr->begin(), labels_ptr->end(), label2);
+        labels_ptr->erase(dist);
+        updated_labels = true;
+      } else if (label2.checkDominance(label1, direction, elementary)) {
+        // remove label1
+        it             = labels_ptr->erase(it);
+        updated_labels = true;
+        deleted        = true;
+        break;
+      }
+    }
+    if (!deleted)
+      ++it;
+  }
+  return updated_labels;
+}
 
 bool runDominanceEff(
     std::vector<Label>* efficient_labels_ptr,
