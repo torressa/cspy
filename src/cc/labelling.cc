@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <cmath>
 #include <iostream>
+#include <set>
 
 #include "py_ref_callback.h"
 
@@ -12,16 +13,14 @@ namespace labelling {
  * Label
  */
 // constructors
-Label::Label() {}
-
 Label::Label(
     const double&                   weight,
-    const std::string&              node,
+    const bidirectional::Vertex&    vertex,
     const std::vector<double>&      resource_consumption,
     const std::vector<std::string>& partial_path,
     const bool&                     elementary)
     : weight(weight),
-      node(node),
+      vertex(vertex),
       resource_consumption(resource_consumption),
       partial_path(partial_path) {
   if (elementary) {
@@ -29,8 +28,6 @@ Label::Label(
     std::sort(unreachable_nodes.begin(), unreachable_nodes.end());
   }
 };
-
-Label::~Label() {}
 
 bool Label::checkFeasibility(
     const std::vector<double>& max_res,
@@ -53,8 +50,6 @@ bool Label::checkStPath() const {
   return false;
 }
 
-// TODO check
-// TODO heap ordering
 bool Label::checkDominance(
     const Label&       other,
     const std::string& direction,
@@ -130,7 +125,7 @@ bool operator<(const Label& label1, const Label& label2) {
 }
 
 std::ostream& operator<<(std::ostream& os, const Label& label) {
-  os << "Label(node=" << label.node
+  os << "Label(node=" << label.vertex.id << ", weight= " << label.weight
      << ", res[0]=" << label.resource_consumption[0] << ", partial_path=[";
   for (auto n : label.partial_path)
     os << "'" << n << "', ";
@@ -139,7 +134,7 @@ std::ostream& operator<<(std::ostream& os, const Label& label) {
 }
 
 bool operator==(const Label& label1, const Label& label2) {
-  if (label1.node != label2.node)
+  if (label1.vertex.idx != label2.vertex.idx)
     return false;
   if (label1.weight != label2.weight)
     return false;
@@ -163,37 +158,34 @@ void LabelExtension::setPyCallback(bidirectional::PyREFCallback* cb) {
   py_callback = cb;
 }
 
-void LabelExtension::extend(
-    std::vector<Label>*        labels_ptr,
-    Label*                     label,
-    const bidirectional::Edge& edge,
-    const std::string&         direction,
-    const bool&                elementary,
-    const std::vector<double>& max_res,
-    const std::vector<double>& min_res) const {
-  // Update partial_path
-  auto        new_partial_path = label->partial_path;
-  std::string new_node;
-  if (direction == "forward")
-    new_node = edge.head;
-  else
-    new_node = edge.tail;
-  new_partial_path.push_back(new_node);
+Label LabelExtension::extend(
+    Label*                          label,
+    const bidirectional::AdjVertex& adjacent_vertex,
+    const std::string&              direction,
+    const bool&                     elementary,
+    const std::vector<double>&      max_res,
+    const std::vector<double>&      min_res) const {
+  // extract partial_path
+  auto new_partial_path = label->partial_path;
+  // extract vertex
+  const bidirectional::Vertex& new_node = adjacent_vertex.vertex;
+  // update partial_path
+  new_partial_path.push_back(new_node.id);
   // Propagate resources
   std::vector<double> new_resources;
   if (direction == "forward") {
     if (py_callback == nullptr) {
       new_resources = bidirectional::additiveForwardREF(
           label->resource_consumption,
-          edge.tail,
-          edge.head,
-          edge.resource_consumption);
+          label->vertex.id,
+          new_node.id,
+          adjacent_vertex.resource_consumption);
     } else {
       new_resources = py_callback->REF_fwd(
           label->resource_consumption,
-          edge.tail,
-          edge.head,
-          edge.resource_consumption,
+          label->vertex.id,
+          new_node.id,
+          adjacent_vertex.resource_consumption,
           label->partial_path,
           label->weight);
     }
@@ -202,132 +194,164 @@ void LabelExtension::extend(
     if (py_callback == nullptr) {
       new_resources = bidirectional::additiveBackwardREF(
           label->resource_consumption,
-          edge.tail,
-          edge.head,
-          edge.resource_consumption);
+          new_node.id,
+          label->vertex.id,
+          adjacent_vertex.resource_consumption);
     } else {
       new_resources = py_callback->REF_bwd(
           label->resource_consumption,
-          edge.tail,
-          edge.head,
-          edge.resource_consumption,
+          new_node.id,
+          label->vertex.id,
+          adjacent_vertex.resource_consumption,
           label->partial_path,
           label->weight);
     }
   }
-  // Check feasibility before creating and inserting new label
+  // Check feasibility before creating
   if (new_resources <= max_res && new_resources >= min_res) {
-    Label new_label(
-        label->weight + edge.weight,
+    return Label(
+        label->weight + adjacent_vertex.weight,
         new_node,
         new_resources,
         new_partial_path,
         elementary);
-    if (std::find(labels_ptr->begin(), labels_ptr->end(), new_label) ==
-        labels_ptr->end()) {
-      labels_ptr->push_back(new_label);
-    }
   } else {
     // Update current labels unreachable_nodes
     if (elementary) {
-      label->unreachable_nodes.push_back(new_node);
+      label->unreachable_nodes.push_back(new_node.id);
       std::sort(
           label->unreachable_nodes.begin(), label->unreachable_nodes.end());
     }
   }
+  return Label();
 }
 
 /**
  * Misc
  */
-void runDominance(
-    std::vector<Label>* labels_ptr,
-    std::vector<Label>* best_labels_ptr,
-    bool*               updated_labels,
-    bool*               updated_best,
-    const std::string&  direction,
-    const bool&         elementary,
-    const bool&         save) {
-  for (auto it = labels_ptr->begin(); it != labels_ptr->end();) {
-    const Label& label1        = *it;
-    bool         non_dominated = true;
-    bool         deleted       = false;
-    // Extract labels with the same node
-    std::vector<Label> comparable_labels(labels_ptr->size());
-    auto               copy_if_iterator = std::copy_if(
-        labels_ptr->begin(),
-        labels_ptr->end(),
-        comparable_labels.begin(),
-        [&label1](const Label& l) {
-          return (l.node == label1.node && l != label1);
-        });
-    comparable_labels.erase(copy_if_iterator, comparable_labels.end());
-    // For each comparable label
-    for (auto it2 = comparable_labels.begin(); it2 != comparable_labels.end();
-         ++it2) {
-      const Label& label2 = *it2;
-      // check if label1 dominates label2
-      if (label1.checkDominance(label2, direction, elementary)) {
-        const auto& dist =
-            std::find(labels_ptr->begin(), labels_ptr->end(), label2);
-        labels_ptr->erase(dist);
-        *updated_labels = true;
-      } else if (label2.checkDominance(label1, direction, elementary)) {
-        it              = labels_ptr->erase(it);
-        *updated_labels = true;
-        deleted         = true;
-        non_dominated   = false;
-        break;
-      }
-    }
-    if (save && non_dominated) {
-      *updated_best = true;
-      best_labels_ptr->push_back(label1);
-    }
-    if (!deleted)
-      ++it;
-  }
-}
 
-bool runDominance(
-    std::vector<Label>* labels_ptr,
+// TODO Clean this mess
+//
+// void runDominance(
+//    std::vector<Label>* unprocessed_labels_ptr,
+//    bool*               updated_labels,
+//    bool*               updated_best,
+//    const Label&        label,
+//    const std::string&  direction,
+//    const bool&         elementary,
+//    const bool&         save) {
+//  // for (auto it = labels_ptr->begin(); it != labels_ptr->end();) {
+//  //   const Label& label1        = *it;
+//  bool non_dominated = true;
+//  // Extract labels with the same node
+//  // std::vector<Label> comparable_labels(labels_ptr->size());
+//  // For each comparable label
+//  for (auto it = efficient_labels_ptr->begin();
+//       it != efficient_labels_ptr->end();) {
+//    bool         deleted = false;
+//    const Label& label2  = *it;
+//    if (label2 != label) {
+//      // check if label1 dominates label2
+//      if (label.checkDominance(label2, direction, elementary)) {
+//        // const auto& dist =
+//        //     std::find(labels_ptr->begin(), labels_ptr->end(), label2);
+//        it      = efficient_labels_ptr->erase(it);
+//        deleted = true;
+//        // *updated_labels = true;
+//      } else if (label2.checkDominance(label, direction, elementary)) {
+//        // it              = labels_ptr->erase(it);
+//        // *updated_labels = true;
+//        non_dominated = false;
+//        // updateEfficientLabels(label2);
+//        break;
+//      }
+//    }
+//    if (!deleted)
+//      ++it;
+//  }
+//  // if (save && non_dominated) {
+//  //   *updated_best = true;
+//  //   best_labels_ptr->push_back(label);
+//  // }
+//  // }
+//}
+
+// bool runDominance(
+//     std::vector<Label>*                    labels_ptr,
+//     const std::string&                     direction,
+//     const bool&                            elementary,
+//     const std::vector<std::vector<Label>>& efficient_labels) {
+//   bool updated_labels = false;
+//   for (auto it = labels_ptr->begin(); it != labels_ptr->end();) {
+//     const Label& label1  = *it;
+//     bool         deleted = false;
+//     // Extract labels with the same node
+//     std::vector<Label> comparable_labels(
+//         labels_ptr->begin(), labels_ptr->end());
+//     auto copy_if_iterator = std::copy_if(
+//         labels_ptr->begin(),
+//         labels_ptr->end(),
+//         comparable_labels.begin(),
+//         [&label1](const Label& l) {
+//           return (l.vertex.idx == label1.vertex.idx && l != label1);
+//         });
+//     comparable_labels.erase(copy_if_iterator, comparable_labels.end());
+//     std::set<labelling::Label> setss(
+//         comparable_labels.begin(), comparable_labels.end());
+//     setss.insert(
+//         efficient_labels[label1.vertex.idx].begin(),
+//         efficient_labels[label1.vertex.idx].end());
+//
+//     // For each comparable label
+//     for (auto it2 = comparable_labels.begin(); it2 !=
+//     comparable_labels.end();
+//          ++it2) {
+//       const Label& label2 = *it2;
+//       // check if label1 dominates label2
+//       if (label1.checkDominance(label2, direction, elementary)) {
+//         // find and remove label2
+//         const auto& dist =
+//             std::find(labels_ptr->begin(), labels_ptr->end(), label2);
+//         labels_ptr->erase(dist);
+//         updated_labels = true;
+//       } else if (label2.checkDominance(label1, direction, elementary)) {
+//         // remove label1
+//         it             = labels_ptr->erase(it);
+//         updated_labels = true;
+//         deleted        = true;
+//         break;
+//       }
+//     }
+//     if (!deleted)
+//       ++it;
+//   }
+//   return updated_labels;
+// }
+
+bool runDominanceEff(
+    std::vector<Label>* efficient_labels_ptr,
+    const Label&        label,
     const std::string&  direction,
     const bool&         elementary) {
-  bool updated_labels = false;
-  for (auto it = labels_ptr->begin(); it != labels_ptr->end();) {
-    const Label& label1  = *it;
+  bool dominated = false;
+  for (auto it = efficient_labels_ptr->begin();
+       it != efficient_labels_ptr->end();) {
     bool         deleted = false;
-    // Extract labels with the same node
-    std::vector<Label> comparable_labels(labels_ptr->size());
-    auto               copy_if_iterator = std::copy_if(
-        labels_ptr->begin(),
-        labels_ptr->end(),
-        comparable_labels.begin(),
-        [&label1](const Label& l) {
-          return (l.node == label1.node && l != label1);
-        });
-    comparable_labels.erase(copy_if_iterator, comparable_labels.end());
-    // For each comparable label
-    for (auto it2 = comparable_labels.begin(); it2 != comparable_labels.end();
-         ++it2) {
-      const Label& label2 = *it2;
+    const Label& label2  = *it;
+    if (label != label2) {
       // check if label1 dominates label2
-      if (label1.checkDominance(label2, direction, elementary)) {
-        const auto& dist =
-            std::find(labels_ptr->begin(), labels_ptr->end(), label2);
-        labels_ptr->erase(dist);
-        updated_labels = true;
-      } else if (label2.checkDominance(label1, direction, elementary)) {
-        it             = labels_ptr->erase(it);
-        updated_labels = true;
-        deleted        = true;
+      if (label.checkDominance(label2, direction, elementary)) {
+        it      = efficient_labels_ptr->erase(it);
+        deleted = true;
+      } else if (label2.checkDominance(label, direction, elementary)) {
+        dominated = true;
         break;
       }
     }
     if (!deleted)
       ++it;
   }
-  return updated_labels;
+  return dominated;
 }
 
 Label getNextLabel(
@@ -370,7 +394,7 @@ Label processBwdLabel(
         ++new_resources.begin(),
         std::minus<double>());
   // Invert monotone resource
-  return Label(label.weight, label.node, new_resources, new_path);
+  return Label(label.weight, label.vertex, new_resources, new_path);
 }
 
 bool halfwayCheck(
@@ -388,6 +412,8 @@ bool mergePreCheck(
     const labelling::Label&   bwd_label,
     const std::vector<double> max_res,
     const bool&               elementary) {
+  if (fwd_label.vertex.id.empty() || bwd_label.vertex.id.empty())
+    return false;
   if (elementary) {
     std::vector<std::string> path_copy = fwd_label.partial_path;
     path_copy.insert(
@@ -410,16 +436,20 @@ Label mergeLabels(
     const bidirectional::DiGraph& graph,
     const std::vector<double>&    max_res,
     const std::vector<double>&    min_res) {
-  bidirectional::Edge edge =
-      bidirectional::getEdgeInDiGraph(graph, fwd_label.node, bwd_label.node);
+  bidirectional::AdjVertex adj_vertex =
+      graph.getAdjVertex(fwd_label.vertex.idx, bwd_label.vertex.idx);
+  // No edge between the labels return empty label
+  if (!adj_vertex.init) {
+    return Label();
+  }
   std::vector<double> final_res;
   auto                bwd_label_ptr = std::make_unique<Label>();
   if (label_extension_.py_callback == nullptr) {
     std::vector<double> temp_res = bidirectional::additiveForwardREF(
         fwd_label.resource_consumption,
-        edge.tail,
-        edge.head,
-        edge.resource_consumption);
+        fwd_label.vertex.id,
+        bwd_label.vertex.id,
+        adj_vertex.resource_consumption);
     auto bwd_label_ =
         std::make_unique<Label>(processBwdLabel(bwd_label, max_res, temp_res));
     final_res = bwd_label_->resource_consumption;
@@ -428,21 +458,20 @@ Label mergeLabels(
     final_res = label_extension_.py_callback->REF_join(
         fwd_label.resource_consumption,
         bwd_label.resource_consumption,
-        edge.tail,
-        edge.head,
-        edge.resource_consumption);
+        fwd_label.vertex.id,
+        bwd_label.vertex.id,
+        adj_vertex.resource_consumption);
     auto bwd_label_ =
         std::make_unique<Label>(processBwdLabel(bwd_label, max_res, min_res));
     bwd_label_ptr.swap(bwd_label_);
   }
-  double weight = fwd_label.weight + edge.weight + bwd_label_ptr->weight;
+  double weight = fwd_label.weight + adj_vertex.weight + bwd_label_ptr->weight;
   std::vector<std::string> final_path = fwd_label.partial_path;
   final_path.insert(
       final_path.end(),
       bwd_label_ptr->partial_path.begin(),
       bwd_label_ptr->partial_path.end());
-
-  return Label(weight, "Sink", final_res, final_path);
+  return Label(weight, graph.sink, final_res, final_path);
 }
 
 void makeHeap(

@@ -6,7 +6,6 @@ from networkx import DiGraph, astar_path
 from parameterized import parameterized
 
 from cspy.algorithms.tabu import Tabu
-from cspy.algorithms.label import Label
 from cspy.algorithms.bidirectional import BiDirectional
 
 
@@ -48,7 +47,7 @@ class TestsIssue22(unittest.TestCase):
         path_star = astar_path(self.G, "Source", "Sink")
         self.assertEqual(path_star, ['Source', 1, 'Sink'])
 
-    @parameterized.expand(zip(range(100), range(100)))
+    @parameterized.expand(zip(range(1), range(1)))
     def test_bidirectional_random(self, _, seed):
         """
         Test BiDirectional with randomly chosen sequence of directions
@@ -62,7 +61,7 @@ class TestsIssue22(unittest.TestCase):
         alg.run()
         self.assertEqual(alg.path, self.result_path)
         self.assertEqual(alg.total_cost, self.total_cost)
-        self.assertTrue(all(alg.consumed_resources == self.consumed_resources))
+        self.assertTrue(alg.consumed_resources == self.consumed_resources)
 
     def test_bidirectional_forward(self):
         """
@@ -77,7 +76,7 @@ class TestsIssue22(unittest.TestCase):
         alg.run()
         self.assertEqual(alg.path, self.result_path)
         self.assertEqual(alg.total_cost, self.total_cost)
-        self.assertTrue(all(alg.consumed_resources == self.consumed_resources))
+        self.assertTrue(alg.consumed_resources == self.consumed_resources)
 
     def test_bidirectional_backward(self):
         """
@@ -92,17 +91,4 @@ class TestsIssue22(unittest.TestCase):
         alg.run()
         self.assertEqual(alg.path, self.result_path)
         self.assertEqual(alg.total_cost, self.total_cost)
-        self.assertTrue(all(alg.consumed_resources == self.consumed_resources))
-
-    def test_dominance(self):
-        # Check forward and backward label dominance
-        L1 = Label(-10, "Sink", array([3, 0]), [])
-        L2 = Label(0, "Sink", array([1, 0]), [])
-
-        self.assertFalse(L1.dominates(L2, "forward"))
-        self.assertFalse(L2.dominates(L1, "forward"))
-        self.assertTrue(L1.dominates(L2, "backward"))
-        self.assertFalse(L2.dominates(L1, "backward"))
-
-        if not (L1.dominates(L2, "forward") or L2.dominates(L1, "forward")):
-            self.assertTrue(L1.dominates(L2, "backward"))
+        self.assertTrue(alg.consumed_resources == self.consumed_resources)

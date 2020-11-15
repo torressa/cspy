@@ -2,7 +2,7 @@ from random import randint
 from numpy import array
 from networkx import DiGraph
 
-from bidirectional_safe import BiDirectional, PyREFCallback
+from cspy.algorithms.bidirectional import BiDirectional, PyREFCallback
 
 # import pyBiDirectionalCpp as bd
 

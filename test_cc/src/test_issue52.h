@@ -14,8 +14,10 @@ void addEdgesIssue52(BiDirectional* bidirectional);
 
 class TestIssue52 : public ::testing::Test {
  protected:
-  const std::vector<double>      max_res = {5.0};
-  const std::vector<double>      min_res = {0.0};
+  const int                      number_vertices = 5;
+  const int                      number_edges    = 5;
+  const std::vector<double>      max_res         = {5.0};
+  const std::vector<double>      min_res         = {0.0};
   std::unique_ptr<BiDirectional> bidirectional;
   // Expected non-elementary solution
   const std::vector<std::string> final_path =

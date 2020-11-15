@@ -2,16 +2,13 @@ add_library(BiDirectionalCpp "")
 
 target_sources(BiDirectionalCpp
   PRIVATE
-   bidirectional.h
    bidirectional.cc
-   search.h
-   search.cc
-   py_ref_callback.h
-   py_ref_callback.cc
-   digraph.h
    digraph.cc
-   labelling.h
-   labelling.cc)
+   labelling.cc
+   preprocessing.cc
+   py_ref_callback.cc
+   search.cc
+   )
 target_include_directories(BiDirectionalCpp
   PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>

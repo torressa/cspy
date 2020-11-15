@@ -83,9 +83,8 @@ def check_seed(seed, algorithm=None):
     :return: numpy.random.RandomState (seeded if seed given)
     """
     if algorithm and "bidirectional" in algorithm:
-        if isinstance(seed, int):
-            return RandomState(seed)
-        raise TypeError("{} cannot be used to seed".format(seed))
+        if not isinstance(seed, int):
+            raise TypeError("{} cannot be used to seed".format(seed))
     if seed is None:
         return RandomState()
     elif isinstance(seed, int):

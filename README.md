@@ -82,29 +82,26 @@ relevant result attributes,
 
 ### Prerequisites
 
-- Docker
+- Docker, docker-compose
 
 To run the tests first, clone the repository into a path in your machine `~/path/newfolder` by running
 
 ```none
 git clone https://github.com/torressa/cspy.git ~/path/newfolder
 ```
-### Compile
+### Running the Cpp tests
 
 ```
-cmake -S. -Bbuild -DBUILD_PYTHON=ON -DBUILD_TESTING=ON
-cd build
-make -k -i
+cd ~/path/newfolder/tools/dev
+./build
 ```
 
-Then, go into the folder and run the tests using `unittest`
+### Running the Python tests
 
-```none
-cd ~/path/newfolder
-python3 -m unittest
 ```
-
-Please make sure that the python package cspy is not already installed in your machine.
+cd ~/path/newfolder/tools/dev
+./build -c -p
+```
 
 ## License
 

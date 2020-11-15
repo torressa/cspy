@@ -15,26 +15,26 @@ namespace labelling {
  *
  * Main functionality includes:
  *   - Checking resource feasibility
- *   - Generating new extenstions from the current label
+ *   - Cheking dominance
  */
 class Label {
  public:
   double                   weight               = 0.0;
-  std::string              node                 = "dummy";
+  bidirectional::Vertex    vertex               = {"", -1};
   std::vector<double>      resource_consumption = {};
   std::vector<std::string> partial_path         = {};
   std::vector<std::string> unreachable_nodes    = {};
 
   // constructors
-  Label();
+  Label(){};
   Label(
       const double&                   weight,
-      const std::string&              node,
+      const bidirectional::Vertex&    vertex,
       const std::vector<double>&      resource_consumption,
       const std::vector<std::string>& partial_path,
       const bool&                     elementary = false);
   // default destructor
-  ~Label();
+  ~Label(){};
 
   /**
    * Check if this dominates other.
@@ -42,7 +42,7 @@ class Label {
    *
    * @param[in] other Label
    * @param[in] direction string
-   * @param[in] elementary bool
+   * @param[in] elementary bool, optional
    * @return bool
    */
   bool checkDominance(
@@ -56,6 +56,7 @@ class Label {
    *
    * @param[in] other Label
    * @param[in] direction string
+   * @param[in] elementary bool
    * @return bool
    */
   bool fullDominance(
@@ -66,10 +67,11 @@ class Label {
   bool checkFeasibility(
       const std::vector<double>& max_res,
       const std::vector<double>& min_res) const;
-  /// Check if a s-t path has a total weight which is under the input threshold.
+  /// Check if weight is under the input threshold.
   bool checkThreshold(const double& threshold) const;
   /// Check whether the current partial path is Source - Sink
   bool checkStPath() const;
+
   // opeator overloads
   Label&      operator=(const Label& other) = default;
   friend bool operator<(const Label& label1, const Label& label2);
@@ -94,51 +96,65 @@ class LabelExtension {
   bidirectional::PyREFCallback* py_callback = nullptr;
   /// Set python callback for custom resource extensions
   void setPyCallback(bidirectional::PyREFCallback* cb);
-  /// Generate new label extentions from the current label
-  /// and add them to the labels if feasible.
-  void extend(
-      std::vector<Label>*        labels,
-      Label*                     label,
-      const bidirectional::Edge& edge,
-      const std::string&         direction,
-      const bool&                elementary,
-      const std::vector<double>& max_res = {},
-      const std::vector<double>& min_res = {}) const;
+  /**
+   * Generate new label extentions from the current label and return if resource
+   * feasible.
+   * The input label is a pointer as it may be modified in the case
+   * that the edge / adjacent_vertex is found to be resource infeasible, in
+   * which case, the head node becomes unreachable and the attribute is updated.
+   *
+   * @param[out] label, labelling::Label, current label to extend (and maybe
+   * update `unreachable_nodes`)
+   * @param[in] adjacent_vertex, AdjVertex, edge
+   */
+  Label extend(
+      Label*                          label,
+      const bidirectional::AdjVertex& adjacent_vertex,
+      const std::string&              direction,
+      const bool&                     elementary,
+      const std::vector<double>&      max_res = {},
+      const std::vector<double>&      min_res = {}) const;
 };
 
 /**
  * Get next label from ordered labels
+ * Grabs the next element in the heap (back) and removes it
+ * In the forward (backward) direction this is the label with least (most)
+ * monotone resource.
  *
- * @param[out] labels, std::vector<Label> pointer
+ * @param[out] labels, std::vector<Label> pointer (heap)
  * @param[in] direction, string
  */
 Label getNextLabel(std::vector<Label>* labels, const std::string& direction);
+
+/// Update efficient_labels using a candidate_label
+void updateEfficientLabels(
+    std::vector<Label>* efficient_labels,
+    const Label&        candidate_label,
+    const std::string&  direction,
+    const bool&         elementary);
 
 /**
  * Run dominance checks over all pairs of labels in `labels`
  * If `save` is true, the nondominated labels are added to `best_labels`.
  *
  * @param[out] labels, std::vector<Label> pointer
- * @param[out] best_labels, std::vector<Label> pointer to nondominated labels
  * @param[in] direction, string with direction of search
  * @param[in] elementary, bool with whether non-elementary paths are allowed
- * @param[in] save, bool with whether nondominated labels are to be saved in
- * `best_labels`
  *
  * @return bool with true if either labels or best_labels have been updated,
  * false otherwise.
  */
-void runDominance(
-    std::vector<Label>* labels,
-    std::vector<Label>* best_labels,
-    bool*               updated_labels,
-    bool*               updated_best,
-    const std::string&  direction,
-    const bool&         elementary,
-    const bool&         save);
-/// @overload
 bool runDominance(
-    std::vector<Label>* labels,
+    std::vector<Label>*                    labels,
+    const std::string&                     direction,
+    const bool&                            elementary,
+    const std::vector<std::vector<Label>>& efficient_labels = {{}});
+
+/// Run dominance for efficient_labels
+bool runDominanceEff(
+    std::vector<Label>* efficient_labels_ptr,
+    const Label&        label,
     const std::string&  direction,
     const bool&         elementary);
 
@@ -148,7 +164,6 @@ Label processBwdLabel(
     const std::vector<double>& max_res,
     const std::vector<double>& cumulative_resource,
     const bool&                invert_min_res = false);
-
 /**
  * Check whether a pair of forward and backward labels are suitable for merging.
  * To be used before attempting to merge
@@ -161,10 +176,6 @@ bool mergePreCheck(
 
 /**
  * Merge labels produced by a backward and forward label.
- * fwd_label : label.Label object
- * bwd_label : label.Label object
- *
- * @returns merged_label : label.Label object
  * If an s-t compatible path can be obtained the appropriately
  * extended and merged label is returned
  */
@@ -182,6 +193,7 @@ Label mergeLabels(
 void makeHeap(
     std::vector<labelling::Label>* labels_ptr,
     const std::string&             direction);
+
 /// Push new elements in heap using the appropriate comparison
 /// i.e. increasing in the monotone resource forward lists, decreasing otherwise
 void pushHeap(

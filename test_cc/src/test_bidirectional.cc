@@ -14,11 +14,13 @@ void addEdges(BiDirectional* bidirectional) {
 }
 
 TEST_F(TestBiDirectional, testBoth) {
-  bidirectional = std::make_unique<BiDirectional>(max_res, min_res);
+  bidirectional = std::make_unique<BiDirectional>(
+      number_vertices, number_edges, max_res, min_res);
   addEdges(bidirectional.get());
   auto path = bidirectional->getPath();
   ASSERT_TRUE(path.size() == 0);
   bidirectional->run();
+
   path      = bidirectional->getPath();
   auto res  = bidirectional->getConsumedResources();
   auto cost = bidirectional->getTotalCost();
@@ -29,7 +31,8 @@ TEST_F(TestBiDirectional, testBoth) {
 }
 
 TEST_F(TestBiDirectional, testBothTimeLimit) {
-  bidirectional             = std::make_unique<BiDirectional>(max_res, min_res);
+  bidirectional = std::make_unique<BiDirectional>(
+      number_vertices, number_edges, max_res, min_res);
   bidirectional->time_limit = 0.00005;
   addEdges(bidirectional.get());
   auto path = bidirectional->getPath();
@@ -49,7 +52,8 @@ TEST_F(TestBiDirectional, testBothTimeLimit) {
 }
 
 TEST_F(TestBiDirectional, testBothThreshold) {
-  bidirectional            = std::make_unique<BiDirectional>(max_res, min_res);
+  bidirectional = std::make_unique<BiDirectional>(
+      number_vertices, number_edges, max_res, min_res);
   bidirectional->threshold = 100;
   addEdges(bidirectional.get());
   auto path = bidirectional->getPath();
@@ -65,7 +69,8 @@ TEST_F(TestBiDirectional, testBothThreshold) {
 }
 
 TEST_F(TestBiDirectional, testBothUnprocessed) {
-  bidirectional         = std::make_unique<BiDirectional>(max_res, min_res);
+  bidirectional = std::make_unique<BiDirectional>(
+      number_vertices, number_edges, max_res, min_res);
   bidirectional->method = "unprocessed";
   addEdges(bidirectional.get());
   auto path = bidirectional->getPath();
@@ -80,7 +85,8 @@ TEST_F(TestBiDirectional, testBothUnprocessed) {
 }
 
 TEST_F(TestBiDirectional, testBothProcessed) {
-  bidirectional         = std::make_unique<BiDirectional>(max_res, min_res);
+  bidirectional = std::make_unique<BiDirectional>(
+      number_vertices, number_edges, max_res, min_res);
   bidirectional->method = "processed";
   addEdges(bidirectional.get());
   auto path = bidirectional->getPath();
@@ -95,7 +101,8 @@ TEST_F(TestBiDirectional, testBothProcessed) {
 }
 
 TEST_F(TestBiDirectional, testBothGenerated) {
-  bidirectional         = std::make_unique<BiDirectional>(max_res, min_res);
+  bidirectional = std::make_unique<BiDirectional>(
+      number_vertices, number_edges, max_res, min_res);
   bidirectional->method = "generated";
   addEdges(bidirectional.get());
   auto path = bidirectional->getPath();
@@ -110,7 +117,8 @@ TEST_F(TestBiDirectional, testBothGenerated) {
 }
 
 TEST_F(TestBiDirectional, testForward) {
-  bidirectional            = std::make_unique<BiDirectional>(max_res, min_res);
+  bidirectional = std::make_unique<BiDirectional>(
+      number_vertices, number_edges, max_res, min_res);
   bidirectional->direction = "forward";
   addEdges(bidirectional.get());
   auto path = bidirectional->getPath();
@@ -125,7 +133,8 @@ TEST_F(TestBiDirectional, testForward) {
 }
 
 TEST_F(TestBiDirectional, testBackward) {
-  bidirectional            = std::make_unique<BiDirectional>(max_res, min_res);
+  bidirectional = std::make_unique<BiDirectional>(
+      number_vertices, number_edges, max_res, min_res);
   bidirectional->direction = "backward";
   addEdges(bidirectional.get());
   auto path = bidirectional->getPath();

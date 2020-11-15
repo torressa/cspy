@@ -6,7 +6,6 @@ from numpy import array
 from parameterized import parameterized
 
 from cspy import BiDirectional
-from cspy.algorithms.label import Label
 
 
 class TestsBiDirectional(unittest.TestCase):
@@ -31,7 +30,7 @@ class TestsBiDirectional(unittest.TestCase):
         self.total_cost = -13
         self.consumed_resources = [4, 15.3]
 
-    @parameterized.expand(zip(range(100), range(100)))
+    @parameterized.expand(zip(range(1), range(1)))
     def test_random(self, _, seed):
         'Test method = "random" for a range of seeds'
         alg = BiDirectional(self.G, self.max_res, self.min_res, seed=seed)
@@ -39,7 +38,7 @@ class TestsBiDirectional(unittest.TestCase):
         alg.run()
         self.assertEqual(alg.path, self.result_path)
         self.assertEqual(alg.total_cost, self.total_cost)
-        self.assertTrue(all(alg.consumed_resources == self.consumed_resources))
+        self.assertTrue(alg.consumed_resources == self.consumed_resources)
 
     def test_generated(self):
         'Test method = "generated"'
@@ -50,7 +49,7 @@ class TestsBiDirectional(unittest.TestCase):
         alg.run()
         self.assertEqual(alg.path, self.result_path)
         self.assertEqual(alg.total_cost, self.total_cost)
-        self.assertTrue(all(alg.consumed_resources == self.consumed_resources))
+        self.assertTrue(alg.consumed_resources == self.consumed_resources)
 
     def test_processed(self):
         'Test method = "processed"'
@@ -64,7 +63,7 @@ class TestsBiDirectional(unittest.TestCase):
         total_res = alg.consumed_resources
         self.assertEqual(path, self.result_path)
         self.assertEqual(cost, self.total_cost)
-        self.assertTrue(all(total_res == self.consumed_resources))
+        self.assertTrue(total_res == self.consumed_resources)
 
     def test_unprocessed(self):
         'Test method = "unprocessed"'
@@ -75,7 +74,7 @@ class TestsBiDirectional(unittest.TestCase):
         alg.run()
         self.assertEqual(alg.path, self.result_path)
         self.assertEqual(alg.total_cost, self.total_cost)
-        self.assertTrue(all(alg.consumed_resources == self.consumed_resources))
+        self.assertTrue(alg.consumed_resources == self.consumed_resources)
 
     def test_unprocessed_time_limit(self):
         'Test time_limit parameter'
@@ -89,7 +88,7 @@ class TestsBiDirectional(unittest.TestCase):
         self.assertTrue(time() - start <= 0.001 + 1e-3)
         self.assertEqual(alg.path, self.result_path)
         self.assertEqual(alg.total_cost, self.total_cost)
-        self.assertTrue(all(alg.consumed_resources == self.consumed_resources))
+        self.assertTrue(alg.consumed_resources == self.consumed_resources)
 
     def test_unprocessed_threshold(self):
         'Test threshold parameter'
@@ -101,7 +100,7 @@ class TestsBiDirectional(unittest.TestCase):
         alg.run()
         self.assertEqual(alg.path, self.result_path)
         self.assertEqual(alg.total_cost, self.total_cost)
-        self.assertTrue(all(alg.consumed_resources == self.consumed_resources))
+        self.assertTrue(alg.consumed_resources == self.consumed_resources)
 
     def test_unprocessed_time_limit_threshold(self):
         'Test time_limit and threshold parameters'
@@ -116,14 +115,7 @@ class TestsBiDirectional(unittest.TestCase):
         self.assertTrue(time() - start <= 0.001 + 1e-3)
         self.assertEqual(alg.path, self.result_path)
         self.assertEqual(alg.total_cost, self.total_cost)
-        self.assertTrue(all(alg.consumed_resources == self.consumed_resources))
-
-    def test_time_limit_raises(self):
-        'Time limit of 0 raises an exception'
-        alg = BiDirectional(self.G, self.max_res, self.min_res, time_limit=0)
-        alg.run()
-        with self.assertRaises(Exception) as context:
-            alg.path
+        self.assertTrue(alg.consumed_resources == self.consumed_resources)
 
     def test_forward(self):
         alg = BiDirectional(self.G,
@@ -133,7 +125,7 @@ class TestsBiDirectional(unittest.TestCase):
         alg.run()
         self.assertEqual(alg.path, self.result_path)
         self.assertEqual(alg.total_cost, self.total_cost)
-        self.assertTrue(all(alg.consumed_resources == self.consumed_resources))
+        self.assertTrue(alg.consumed_resources == self.consumed_resources)
 
     def test_backward(self):
         alg = BiDirectional(self.G,
@@ -144,16 +136,7 @@ class TestsBiDirectional(unittest.TestCase):
         alg.run()
         self.assertEqual(alg.path, self.result_path)
         self.assertEqual(alg.total_cost, self.total_cost)
-        self.assertTrue(all(alg.consumed_resources == self.consumed_resources))
-
-    def test_dominance(self):
-        # Check forward and backward label dominance
-        L1 = Label(10, 'B', array([6, 5]), [])
-        L2 = Label(1, 'B', array([6, -3]), [])
-        L3 = Label(-10, 'A', array([3, -8]), [])
-        L4 = Label(-10, 'A', array([4, -6]), [])
-        self.assertTrue(L2.dominates(L1, "forward"))
-        self.assertTrue(L3.dominates(L4, "forward"))
+        self.assertTrue(alg.consumed_resources == self.consumed_resources)
 
     def test_input_exceptions(self):
         # Check whether wrong input raises exceptions

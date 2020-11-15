@@ -46,14 +46,15 @@ TEST_F(TestLabelling, testFeasibility) {
 
 TEST_F(TestLabelling, testExtendForward) {
   Label label(weight, node, res, path);
-  auto  labels                   = std::make_unique<std::vector<Label>>();
-  auto  label_extension          = std::make_unique<LabelExtension>();
-  const bidirectional::Edge edge = {node, "C", weight, res};
+  auto  labels                         = std::make_unique<std::vector<Label>>();
+  auto  label_extension                = std::make_unique<LabelExtension>();
+  const bidirectional::AdjVertex adj_v = {other_node, weight, res};
 
   std::make_heap(labels->begin(), labels->end(), std::greater<>{});
   labels->push_back(label);
-  label_extension->extend(
-      labels.get(), &label, edge, "forward", false, max_res, min_res);
+  Label new_label = label_extension->extend(
+      &label, adj_v, "forward", false, max_res, min_res);
+  labels->push_back(new_label);
   std::push_heap(labels->begin(), labels->end(), std::greater<>{});
 
   ASSERT_TRUE(labels->size() == 2);
@@ -61,11 +62,11 @@ TEST_F(TestLabelling, testExtendForward) {
   Label next_label = getNextLabel(labels.get(), "forward");
   ASSERT_TRUE(labels->size() == 1);
   ASSERT_TRUE(next_label.resource_consumption[0] == 6);
-  ASSERT_TRUE(next_label.node == "B");
+  ASSERT_TRUE(next_label.vertex.id == "B");
   Label last_label = getNextLabel(labels.get(), "forward");
   ASSERT_TRUE(labels->size() == 0);
   ASSERT_TRUE(last_label.resource_consumption[0] == 12);
-  ASSERT_TRUE(last_label.node == "C");
+  ASSERT_TRUE(last_label.vertex.id == "C");
 }
 
 TEST_F(TestLabelling, testExtendBackward) {
@@ -73,15 +74,16 @@ TEST_F(TestLabelling, testExtendBackward) {
   auto  labels          = std::make_unique<std::vector<Label>>();
   auto  label_extension = std::make_unique<LabelExtension>();
 
-  const bidirectional::Edge edge      = {"C", node, weight, res};
-  const std::string         direction = "backward";
+  const bidirectional::AdjVertex adj_v     = {other_node, weight, res};
+  const std::string              direction = "backward";
   // Max-heap
   std::make_heap(labels->begin(), labels->end());
   // Insert current label
   labels->push_back(label);
   // extend current label
-  label_extension->extend(
-      labels.get(), &label, edge, direction, false, max_res, min_res);
+  Label new_label = label_extension->extend(
+      &label, adj_v, direction, false, max_res, min_res);
+  labels->push_back(new_label);
   std::push_heap(labels->begin(), labels->end());
 
   // Should return labels in increasing order of the monotone resource
@@ -92,7 +94,7 @@ TEST_F(TestLabelling, testExtendBackward) {
   Label last_label = getNextLabel(labels.get(), "backward");
   ASSERT_TRUE(labels->size() == 0);
   ASSERT_TRUE(last_label.resource_consumption[0] == 0);
-  ASSERT_TRUE(last_label.node == "C");
+  ASSERT_TRUE(last_label.vertex.id == "C");
 }
 
 TEST_F(TestLabelling, testRunDominanceForward) {

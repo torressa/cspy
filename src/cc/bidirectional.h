@@ -14,7 +14,27 @@ namespace bidirectional {
 
 class BiDirectional {
  public:
+  /**
+   * BiDirectional algorithm. see docs
+   * For use called in a the following order:
+   * 1. ctor (memory allocation for the graph)
+   * 2. [optional] set solving parameters if desired (e.g. time_limit, ...)
+   * 	2.1. [optional] set callback using `setPyCallback`
+   * 	2.2. [optional] set seed using `setSeed`
+   * 3. add edges at will using `addEdge`.
+   * 4. call `run`
+   *
+   * @param[in] number_vertices, int number of vertices in the graph (to be
+   * added using addEdge)
+   * @param[in] number_edges, int number of edges in the graph
+   * @param[in] max_res, vector of double with upper bound for resource
+   * consumption
+   * @param[in] min_res, vector of double with lower bound for resource
+   * consumption
+   */
   BiDirectional(
+      const int&                 number_vertices,
+      const int&                 number_edges,
       const std::vector<double>& max_res,
       const std::vector<double>& min_res);
   ~BiDirectional();
@@ -49,13 +69,14 @@ class BiDirectional {
   /// Pass python callback for label extensions.
   /// Note: swig needs namespace specifier
   void setPyCallback(bidirectional::PyREFCallback* cb) const;
-  void call() const;
   /// Add an edge to the graph
   void addEdge(
       const std::string&         tail,
       const std::string&         head,
       const double&              weight,
       const std::vector<double>& resource_consumption);
+  /// Initalise searches
+  void initSearches();
   /// run the algorithm (assumes all the appropriate options are set)
   void run();
   /// Return the final path
@@ -69,23 +90,31 @@ class BiDirectional {
   /// @see labelling::LabelExtension
   std::shared_ptr<labelling::LabelExtension> label_extension_;
   // Algorithm parameters
-  clock_t                 start_time;
-  std::unique_ptr<Search> fwd_search_;
-  std::unique_ptr<Search> bwd_search_;
+  clock_t                              start_time;
+  std::unique_ptr<Search>              fwd_search_;
+  std::unique_ptr<Search>              bwd_search_;
+  std::shared_ptr<std::vector<double>> lower_bound_weight_;
 
   // Algorithm methods
-  void initSearches();
   /// Get the next direction to search
   std::string getDirection() const;
   /// Advance the search in a given direction
   void move(const std::string& direction_);
   // void checkTerminateSerial();
   void updateFinalLabel();
-  bool terminate() const;
-  bool checkFinalLabel() const;
+  bool terminate(const labelling::Label& label) const;
+  bool checkValidLabel(const labelling::Label& label) const;
   void cleanUp() const;
   /// Processing of output path.
   void postProcessing();
+  /// get upper bound for a source-sink path
+  double getUB();
+  /**
+   * get minimum weight across all forward / backward labels
+   * @param[out] fwd_min, double, minimum accross all forward labels
+   * @param[out] bwd_min, double, minimum accross all backward labels
+   */
+  void getMinimumWeights(double* fwd_min, double* bwd_min);
   /**
    * The procedure "Join" or Algorithm 3 from `Righini and Salani (2006)`_.
    *

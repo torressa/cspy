@@ -26,4 +26,4 @@ class TestsIssue38(unittest.TestCase):
         alg.run()
         self.assertEqual(alg.path, ['Source', "A", 'Sink'])
         self.assertEqual(alg.total_cost, 0)
-        self.assertTrue(all(alg.consumed_resources == [2, 12]))
+        self.assertTrue(alg.consumed_resources == [2, 12])

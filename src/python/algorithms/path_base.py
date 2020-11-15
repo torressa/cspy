@@ -31,7 +31,7 @@ class PathBase(object):
                  REF,
                  algorithm=None):
         # Check inputs
-        check(G, max_res, min_res, REF_forward=REF, algorithm=__name__)
+        check(G, max_res, min_res, REF_callback=REF, algorithm=__name__)
         # Preprocess graph
         self.G = preprocess_graph(G, max_res, min_res, preprocess, REF)
 

@@ -9,8 +9,8 @@ if (BUILD_TESTING)
     googletest
     GIT_REPOSITORY https://github.com/google/googletest.git
     GIT_TAG master)
-  set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
   FetchContent_MakeAvailable(googletest)
+  set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
   add_subdirectory(test_cc/)
 endif()
 

@@ -33,10 +33,11 @@ std::vector<double> additiveBackwardREF(
       edge_resource_consumption.begin(),
       new_resources.begin(),
       std::plus<double>());
-  if (edge_resource_consumption[0] > 0)
+  if (edge_resource_consumption[0] > 0) {
     new_resources[0] = cumulative_resource[0] - edge_resource_consumption[0];
-  else
+  } else {
     new_resources[0] = cumulative_resource[0] - 1;
+  }
   return new_resources;
 }
 

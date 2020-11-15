@@ -70,7 +70,6 @@ class Tabu(PathBase):
         if no resource feasible path is found
 
     """
-
     def __init__(self,
                  G: DiGraph,
                  max_res: List[float],

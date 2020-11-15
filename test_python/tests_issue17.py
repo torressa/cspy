@@ -36,7 +36,7 @@ class TestsIssue17(unittest.TestCase):
         self.total_cost = 1
         self.consumed_resources = [3, 3]
 
-    @parameterized.expand(zip(range(100), range(100)))
+    @parameterized.expand(zip(range(1), range(1)))
     def test_bidirectional_random(self, _, seed):
         alg = BiDirectional(self.G,
                             self.max_res,
@@ -46,7 +46,7 @@ class TestsIssue17(unittest.TestCase):
         alg.run()
         self.assertEqual(alg.path, self.result_path)
         self.assertEqual(alg.total_cost, self.total_cost)
-        self.assertTrue(all(alg.consumed_resources == self.consumed_resources))
+        self.assertTrue(alg.consumed_resources == self.consumed_resources)
         self.assertTrue(
             all(e in self.G.edges() for e in zip(alg.path, alg.path[1:])))
 
@@ -59,7 +59,7 @@ class TestsIssue17(unittest.TestCase):
         alg.run()
         self.assertEqual(alg.path, self.result_path)
         self.assertEqual(alg.total_cost, self.total_cost)
-        self.assertTrue(all(alg.consumed_resources == self.consumed_resources))
+        self.assertTrue(alg.consumed_resources == self.consumed_resources)
         self.assertTrue(
             all(e in self.G.edges() for e in zip(alg.path, alg.path[1:])))
 
@@ -72,7 +72,7 @@ class TestsIssue17(unittest.TestCase):
         alg.run()
         self.assertEqual(alg.path, self.result_path)
         self.assertEqual(alg.total_cost, self.total_cost)
-        self.assertTrue(all(alg.consumed_resources == self.consumed_resources))
+        self.assertTrue(alg.consumed_resources == self.consumed_resources)
         self.assertTrue(
             all(e in self.G.edges() for e in zip(alg.path, alg.path[1:])))
 

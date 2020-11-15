@@ -54,9 +54,8 @@ class BiDirectional:
     dominance_frequency : int, optional
         multiple of iterations to run the dominance checks.
         Default : 1 (every iteration)
-    seed : None or int or numpy.random.RandomState instance, optional
-        seed for PSOLGENT class. Default : None (which gives a single value
-        numpy.random.RandomState).
+    seed : None or int, optional
+        seed for random method class. Default : None.
     REF_callback : PyREFCallback, optional
         Custom resource extension callback. See `REFs`_ for more details.
         Default : None
@@ -73,27 +72,49 @@ class BiDirectional:
                  preprocess: Optional[bool] = False,
                  direction: Optional[str] = "both",
                  method: Optional[str] = "random",
-                 time_limit: Optional[float] = 0,
-                 threshold: Optional[float] = 0.0,
+                 time_limit: Optional[float] = None,
+                 threshold: Optional[float] = None,
                  elementary: Optional[bool] = False,
                  dominance_frequency: Optional[int] = 1,
-                 seed: Union[int, RandomState, None] = 0,
+                 seed: Union[int] = None,
                  REF_callback: Optional[PyREFCallback] = None):
         # Check inputs
         check(G, max_res, min_res, direction, REF_callback, __name__)
+        # check_seed(seed, __name__)
         # Preprocess graph
         G = preprocess_graph(G, max_res, min_res, preprocess, REF_callback)
-        check_seed(seed, __name__)
+        # To save original node type (for conversion later)
+        self._original_node_type: str = None
 
-        max_res_vector = _convert_list_to_double_vector(max_res)
-        min_res_vector = _convert_list_to_double_vector(min_res)
+        max_res_vector = convert_list_to_double_vector(max_res)
+        min_res_vector = convert_list_to_double_vector(min_res)
 
-        self.bidirectional_cpp = BiDirectionalCpp(max_res_vector,
+        self.bidirectional_cpp = BiDirectionalCpp(len(G.nodes()),
+                                                  len(G.edges()),
+                                                  max_res_vector,
                                                   min_res_vector)
-        self._init_graph(G)
+        # pass solving attributes
+        if direction != "both":
+            self.bidirectional_cpp.direction = direction
+        if method in ["unprocessed", "generated", "processed"]:
+            self.bidirectional_cpp.method = method
+        if time_limit is not None and (isinstance(time_limit, int) or
+                                       isinstance(time_limit, float)):
+            self.bidirectional_cpp.time_limit = time_limit
+        if threshold is not None and (isinstance(time_limit, int) or
+                                      isinstance(time_limit, float)):
+            self.bidirectional_cpp.threshold = threshold
+        if isinstance(elementary, bool) and not elementary:
+            self.bidirectional_cpp.elementary = elementary
+        if isinstance(dominance_frequency, int) and dominance_frequency != 1:
+            self.bidirectional_cpp.dominance_frequency = dominance_frequency
+        if isinstance(seed, int) and seed is not None:
+            self.bidirectional_cpp.setSeed(seed)
+
         if REF_callback is not None:
             self.bidirectional_cpp.setPyCallback(REF_callback)
-        self.bidirectional_cpp.call()
+
+        self._init_graph(G)
 
     def run(self):
         'Run the algorithm in series'
@@ -101,39 +122,58 @@ class BiDirectional:
 
     def run_parallel(self):
         'Run the algorithm in parallel'
-        self.bidirectional_cpp.run_parallel()
+        # self.bidirectional_cpp.run_parallel()
+        raise NotImplemented("Coming soon")
 
     @property
     def path(self):
         """Get list with nodes in calculated path.
         """
         path = self.bidirectional_cpp.getPath()
-        return path if len(path) > 0 else None
+        # format as list on return as SWIG returns "tuple"
+        if len(path) > 0:
+            _path = []
+            # Convert path to its original types and return
+            for p in path:
+                if p == "Source" or p == "Sink":
+                    _path.append(p)
+                else:
+                    if "int" in self._original_node_type.__name__:
+                        _path.append(int(p))
+                    elif "str" in self._original_node_type.__name__:
+                        _path.append(str(p))
+            return _path
+        else:
+            return None
 
     @property
     def total_cost(self):
         """Get accumulated cost along the path.
         """
         path = self.bidirectional_cpp.getPath()
-        return (self.bidirectional_cpp.getTotalCost()
-                if len(path) > 0 else None)
+        return self.bidirectional_cpp.getTotalCost() if len(path) > 0 else None
 
     @property
     def consumed_resources(self):
         """Get accumulated resources consumed along the path.
         """
         path = self.bidirectional_cpp.getPath()
-        return (self.bidirectional_cpp.getConsumedResources()
-                if len(path) > 0 else None)
+        res = self.bidirectional_cpp.getConsumedResources()
+        if (len(path) > 0 and len(res) > 0):
+            return list(res)
+        else:
+            return None
 
     def _init_graph(self, G):
+        self._original_node_type = type(
+            [n for n in G.nodes() if n != "Source" and n != "Sink"][0])
         for edge in G.edges(data=True):
-            res_cost = _convert_list_to_double_vector(edge[2]["res_cost"])
+            res_cost = convert_list_to_double_vector(edge[2]["res_cost"])
             self.bidirectional_cpp.addEdge(str(edge[0]), str(edge[1]),
                                            edge[2]["weight"], res_cost)
 
 
-def _convert_list_to_double_vector(input_list: List[float]):
+def convert_list_to_double_vector(input_list: List[float]):
     double_vector = DoubleVector()
     for elem in input_list:
         double_vector.append(float(elem))

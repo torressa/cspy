@@ -3,8 +3,40 @@ import unittest
 from numpy import array
 from networkx import DiGraph
 
-from cspy.algorithms.bidirectional import BiDirectional
+from cspy.algorithms.bidirectional import (BiDirectional, PyREFCallback,
+                                           convert_list_to_double_vector)
 from parameterized import parameterized
+
+
+class MyCallback(PyREFCallback):
+
+    def REF_fwd(self, cumul_res, tail, head, edge_res, partial_path,
+                cumul_cost):
+        # res_new = cumul_res
+        # Monotone resource
+        # res_new[0] += 1.0
+        # Increasing resource
+        # if head == "Sink":
+        #     res_new[1] = res_new[1]
+        # else:
+        #     res_new[1] += int(v)**2
+        # # Resource reset
+        # res_new[2] += edge_res[1]
+        return cumul_res
+
+    # def REF_bwd(self, cumul_res, tail, head, edge_res, partial_path,
+    #             cumul_cost):
+    #     res_new = cumulative_res
+    #     # Monotone resource
+    #     res_new[0] -= 1
+    #     # Increasing resource
+    #     if head == "Sink":
+    #         res_new[1] = res_new[1]
+    #     else:
+    #         res_new[1] += int(v)**2
+    #     # Resource reset
+    #     res_new[2] += edge_res[1]
+    #     return res_new
 
 
 class TestsIssue32(unittest.TestCase):
@@ -15,6 +47,7 @@ class TestsIssue32(unittest.TestCase):
 
     def setUp(self):
         # Maximum and minimum resource arrays
+        self.my_callback = MyCallback()
         self.max_res, self.min_res = [5, 10e5, 1], [0, 0, 0]
         # Create simple digraph with appropriate attributes
         # No resource costs required for custom REFs
@@ -30,37 +63,7 @@ class TestsIssue32(unittest.TestCase):
         self.total_cost = -23
         self.consumed_resources = [5, 30, 1]
 
-    def custom_REF_forward(self, cumulative_res, edge, **kwargs):
-        res_new = array(cumulative_res)
-        # Unpack edge
-        u, v, edge_data = edge[0:3]
-        # Monotone resource
-        res_new[0] += 1
-        # Increasing resource
-        if v == "Sink":
-            res_new[1] = res_new[1]
-        else:
-            res_new[1] += int(v)**2
-        # Resource reset
-        res_new[2] += edge_data["res_cost"][1]
-        return res_new
-
-    def custom_REF_backward(self, cumulative_res, edge, **kwargs):
-        res_new = array(cumulative_res)
-        # Unpack edge
-        u, v, edge_data = edge[0:3]
-        # Monotone resource
-        res_new[0] -= 1
-        # Increasing resource
-        if v == "Sink":
-            res_new[1] = res_new[1]
-        else:
-            res_new[1] += int(v)**2
-        # Resource reset
-        res_new[2] += edge_data["res_cost"][1]
-        return res_new
-
-    @parameterized.expand(zip(range(100), range(100)))
+    @parameterized.expand(zip(range(1), range(1)))
     def test_bidirectional_random(self, _, seed):
         """Test BiDirectional with randomly chosen sequence of directions
         for a range of seeds.
@@ -68,10 +71,9 @@ class TestsIssue32(unittest.TestCase):
         alg = BiDirectional(self.G,
                             self.max_res,
                             self.min_res,
-                            REF_forward=self.custom_REF_forward,
-                            REF_backward=self.custom_REF_backward,
+                            REF_callback=self.my_callback,
                             seed=seed)
         alg.run()
         self.assertEqual(alg.path, self.result_path)
         self.assertEqual(alg.total_cost, self.total_cost)
-        self.assertTrue(all(alg.consumed_resources == self.consumed_resources))
+        self.assertTrue(alg.consumed_resources == self.consumed_resources)

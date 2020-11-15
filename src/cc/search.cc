@@ -8,24 +8,28 @@ namespace bidirectional {
 
 // ctor
 Search::Search(
-    const DiGraph*                   graph,
-    const std::vector<double>&       max_res,
-    const std::vector<double>&       min_res,
-    const std::string&               direction,
-    const bool&                      elementary,
-    const int&                       dominance_frequency,
-    const labelling::LabelExtension& label_extension,
-    const bool&                      save_nondominated)
-    : graph_ptr(graph),
-      max_res(max_res),
-      min_res(min_res),
-      label_extension_(label_extension),
-      direction(direction),
-      elementary(elementary),
-      dominance_frequency(dominance_frequency),
-      save_nondominated_(save_nondominated) {
+    const DiGraph&                   graph_in,
+    const std::vector<double>&       max_res_in,
+    const std::vector<double>&       min_res_in,
+    const std::string&               direction_in,
+    const bool&                      elementary_in,
+    const int&                       dominance_frequency_in,
+    const std::vector<double>&       lower_bound_weight_in,
+    const labelling::LabelExtension& label_extension_in,
+    const bool&                      save_nondominated_in)
+    : graph(graph_in),
+      max_res(max_res_in),
+      min_res(min_res_in),
+      label_extension_(label_extension_in),
+      direction(direction_in),
+      elementary(elementary_in),
+      dominance_frequency(dominance_frequency_in),
+      lower_bound_weight(lower_bound_weight_in),
+      save_nondominated_(save_nondominated_in) {
   unprocessed_labels_ = std::make_unique<std::vector<labelling::Label>>();
-  best_labels         = std::make_unique<std::vector<labelling::Label>>();
+  // allocate memory
+  efficient_labels.resize(graph.number_vertices);
+  best_labels.resize(graph.number_vertices, nullptr);
   // Initalise resource bounds
   initResourceBounds();
   initLabels();
@@ -35,7 +39,7 @@ Search::Search(
 // Default dtor
 Search::~Search(){};
 
-void Search::move(std::vector<double> current_resource_bound) {
+void Search::move(const std::vector<double>& current_resource_bound) {
   // Update current resources
   if (direction == "forward") {
     max_res_curr = current_resource_bound;
@@ -50,27 +54,16 @@ void Search::move(std::vector<double> current_resource_bound) {
   }
 }
 
-void Search::call() const {
-  if (label_extension_.py_callback == nullptr) {
-    std::cout << "Must set callback first!" << std::endl;
-  } else {
-    label_extension_.py_callback->REF_fwd({2.0}, "Source", "A", {1}, {}, 0.0);
-    label_extension_.py_callback->REF_bwd({2.0}, "Source", "A", {1}, {}, 0.0);
-    label_extension_.py_callback->REF_join({2.0}, {2.0}, "Source", "A", {1});
-  }
+void Search::cleanUp() {}
+
+bool Search::checkVertexVisited(const int& vertex_idx) const {
+  return (
+      std::find(visited_vertices.begin(), visited_vertices.end(), vertex_idx) !=
+      visited_vertices.end());
 }
 
-void Search::cleanUp() {
-  if (save_nondominated_) {
-    const bool& updated_best =
-        runDominance(best_labels.get(), direction, elementary);
-    // Update heap
-    if (updated_best) {
-      labelling::makeHeap(unprocessed_labels_.get(), direction);
-    }
-    // Remove duplicates (just in case)
-    best_labels->erase(std::unique(best_labels->begin(), best_labels->end()));
-  }
+double Search::getHalfWayPoint() const {
+  return max_res_curr[0];
 }
 
 /**
@@ -92,75 +85,52 @@ void Search::initResourceBounds() {
 
 void Search::initContainers() {
   labelling::makeHeap(unprocessed_labels_.get(), direction);
-  labelling::makeHeap(best_labels.get(), direction);
 }
 
 void Search::initLabels() {
-  std::string              node;
+  Vertex                   vertex;
   std::vector<double>      res = min_res_curr;
   std::vector<std::string> path;
   if (direction == "forward") {
-    node = "Source";
+    vertex = graph.source;
   } else { // backward
     // set monotone resource to upper bound
     res[0] = max_res_curr[0];
-    node   = "Sink";
+    vertex = graph.sink;
   }
-  path          = {node};
-  current_label = std::make_shared<labelling::Label>(0.0, node, res, path);
+  path          = {vertex.id};
+  current_label = std::make_shared<labelling::Label>(0.0, vertex, res, path);
   // Final label dummy init
-  node        = "";
-  res         = {};
-  path        = {""};
-  final_label = std::make_shared<labelling::Label>(0.0, node, res, path);
-  // Add to best labels.
-  // best_labels->push_back(*current_label);
+  Vertex dum_vertex = {"", -1};
+  res               = {};
+  path              = {""};
+  final_label = std::make_shared<labelling::Label>(0.0, dum_vertex, res, path);
+  // updateEfficientLabels();
   unprocessed_labels_->push_back(*current_label);
-  // update heap sortings
+  // update heap
   labelling::pushHeap(unprocessed_labels_.get(), direction);
-  // labelling::pushHeap(best_labels.get(), direction);
+  // Add to efficient and best labels
+  efficient_labels[vertex.idx].push_back(*current_label);
+  best_labels[vertex.idx] = std::make_shared<labelling::Label>(*current_label);
+  // Update vertices visited
+  visited_vertices.push_back(vertex.idx);
 }
 
+// TODO investigate whether dominance here is necessary
 // Advancing the search
 void Search::runSearch() {
   updateCurrentLabel();
   updateHalfWayPoints();
   if (!stop) {
     extendCurrentLabel();
-    labelling::pushHeap(unprocessed_labels_.get(), direction);
   }
-  // Run dominance for all labels (unprocessed + best)
-  if (iteration_ % dominance_frequency == 0) {
-    auto updated_unprocessed = std::make_unique<bool>();
-    auto updated_best        = std::make_unique<bool>();
-    *updated_unprocessed     = false;
-    *updated_best            = false;
-    // auto labels_ = std::make_unique<std::vector<labelling::Label>>();
-    // // Allocate memory
-    // labels_->reserve(unprocessed_labels_->size() + best_labels->size());
-    // labels_->insert(
-    //     labels_->end(),
-    //     unprocessed_labels_->begin(),
-    //     unprocessed_labels_->end());
-    // labels_->insert(labels_->end(), best_labels->begin(),
-    // best_labels->end()); std::set<labelling::Label> s(labels_->begin(),
-    // labels_->end()); labels_->assign(s.begin(), s.end());
-    runDominance(
-        unprocessed_labels_.get(),
-        best_labels.get(),
-        updated_unprocessed.get(),
-        updated_best.get(),
-        direction,
-        elementary,
-        save_nondominated_);
-    // labels_->clear();
-    // Update heap
-    if (*updated_unprocessed)
-      labelling::makeHeap(unprocessed_labels_.get(), direction);
-    if (*updated_best && save_nondominated_) {
-      labelling::makeHeap(best_labels.get(), direction);
-      labelling::pushHeap(best_labels.get(), direction);
-    }
+  if (iteration_ % dominance_frequency == 0 && run_dominance_) {
+    // const bool& updated = runDominance(
+    //     unprocessed_labels_.get(), direction, elementary, efficient_labels);
+    // // Update heap
+    // if (updated) {
+    //   labelling::makeHeap(unprocessed_labels_.get(), direction);
+    // }
   }
   saveCurrentBestLabel();
   ++processed_count;
@@ -182,15 +152,21 @@ void Search::updateCurrentLabel() {
 
 void Search::updateHalfWayPoints() {
   // Update half-way points
-  if (direction == "forward")
-    min_res_curr[0] = std::max(
+  run_dominance_ = false;
+  if (direction == "forward") {
+    const double temp = min_res_curr[0];
+    min_res_curr[0]   = std::max(
         min_res_curr[0],
         std::min(current_label->resource_consumption[0], max_res_curr[0]));
-  else
-    max_res_curr[0] = std::min(
+    run_dominance_ = (temp == min_res_curr[0]);
+  } else {
+    const double temp = max_res_curr[0];
+    max_res_curr[0]   = std::min(
         max_res_curr[0],
         std::max(current_label->resource_consumption[0], min_res_curr[0]));
-  // Check bounds
+    run_dominance_ = (temp == max_res_curr[0]);
+  }
+  // Check resource bounds
   if ((direction == "forward" &&
        current_label->resource_consumption[0] <= max_res_curr[0]) ||
       (direction == "backward" &&
@@ -202,68 +178,122 @@ void Search::updateHalfWayPoints() {
 }
 
 void Search::extendCurrentLabel() {
-  // Extract relevant edges
-  std::vector<Edge> edges_(graph_ptr->edges.size());
-  auto              copy_if_iterator = std::copy_if(
-      graph_ptr->edges.begin(),
-      graph_ptr->edges.end(),
-      edges_.begin(),
-      [&](const Edge& e) {
-        if (elementary) {
-          if (direction == "forward" &&
-              std::find(
-                  current_label->unreachable_nodes.begin(),
-                  current_label->unreachable_nodes.end(),
-                  e.head) != current_label->unreachable_nodes.end())
-            return false;
-          else if (
-              direction == "backward" &&
-              std::find(
-                  current_label->unreachable_nodes.begin(),
-                  current_label->unreachable_nodes.end(),
-                  e.tail) != current_label->unreachable_nodes.end())
-            return false;
-        }
-        if (direction == "forward")
-          return e.tail == current_label->node;
-        return e.head == current_label->node;
-      });
-  edges_.erase(copy_if_iterator, edges_.end());
   // Extend and check current resource feasibility for each edge
-  for (Edge e : edges_) {
-    label_extension_.extend(
-        unprocessed_labels_.get(),
-        current_label.get(),
-        e,
-        direction,
-        elementary,
-        max_res_curr,
-        min_res_curr);
-    ++generated_count;
+  std::vector<AdjVertex> adj_vertices;
+  if (direction == "forward") {
+    adj_vertices = graph.adjacency_list[current_label->vertex.idx];
+  } else {
+    adj_vertices = graph.reversed_adjacency_list[current_label->vertex.idx];
+  }
+  // for each adjacent vertex (successors if forward predecessors if backward)
+  for (std::vector<AdjVertex>::const_iterator it = adj_vertices.begin();
+       it != adj_vertices.end();
+       ++it) {
+    const AdjVertex& adj_vertex = *it;
+    // If (node reachable | non elementary)
+    if ((elementary &&
+         std::find(
+             current_label->unreachable_nodes.begin(),
+             current_label->unreachable_nodes.end(),
+             adj_vertex.vertex.id) == current_label->unreachable_nodes.end()) ||
+        !elementary) {
+      // extend current label along edge
+      labelling::Label new_label = label_extension_.extend(
+          current_label.get(),
+          adj_vertex,
+          direction,
+          elementary,
+          max_res_curr,
+          min_res_curr);
+      updateEfficientLabels(adj_vertex.vertex.idx, new_label);
+    }
+  }
+}
+
+void Search::updateBestLabels(
+    const int&              vertex_idx,
+    const labelling::Label& candidate_label) {
+  if (best_labels[vertex_idx] &&
+      candidate_label.weight < best_labels[vertex_idx]->weight) {
+    best_labels[vertex_idx] =
+        std::make_shared<labelling::Label>(candidate_label);
+  } else if (!best_labels[vertex_idx]) {
+    // If not already exists
+    best_labels[vertex_idx] =
+        std::make_shared<labelling::Label>(candidate_label);
+  }
+}
+
+void Search::updateEfficientLabels(
+    const int&              vertex_idx,
+    const labelling::Label& candidate_label) {
+  // ref efficient_labels_ for a given vertex
+  std::vector<labelling::Label>& efficient_labels_vertex =
+      efficient_labels[vertex_idx];
+  if (!candidate_label.vertex.id.empty()) {
+    if (std::find(
+            efficient_labels_vertex.begin(),
+            efficient_labels_vertex.end(),
+            candidate_label) == efficient_labels_vertex.end()) {
+      ++generated_count;
+      // If there already exists labels for the given vertex
+      if (efficient_labels_vertex.size() > 1) {
+        // check if new_label is dominated by any other comparable label
+        const bool dominated = runDominanceEff(
+            &efficient_labels_vertex, candidate_label, direction, elementary);
+        if (!dominated && !checkPrimalBound(candidate_label)) {
+          // add candidate_label to efficient_labels and unprocessed heap
+          efficient_labels_vertex.push_back(candidate_label);
+          unprocessed_labels_->push_back(candidate_label);
+          labelling::pushHeap(unprocessed_labels_.get(), direction);
+        }
+      }
+      // First label produced for the vertex
+      else {
+        // update both efficient and unprocessed labels
+        efficient_labels_vertex.push_back(candidate_label);
+        unprocessed_labels_->push_back(candidate_label);
+        labelling::pushHeap(unprocessed_labels_.get(), direction);
+      }
+      updateBestLabels(vertex_idx, candidate_label);
+      // Update vertices visited
+      visited_vertices.push_back(vertex_idx);
+    }
   }
 }
 
 void Search::saveCurrentBestLabel() {
-  if (final_label->node.empty()) {
+  if (final_label->vertex.id.empty()) {
     final_label = std::make_shared<labelling::Label>(*current_label);
     return;
   }
-  if (!current_label || !current_label->checkFeasibility(max_res, min_res))
+  // Check for global feasibility
+  if (!current_label->checkFeasibility(max_res, min_res))
     return;
-  if (final_label->node == current_label->node &&
+  if (final_label->vertex.idx == current_label->vertex.idx &&
       current_label->fullDominance(*final_label, direction, elementary)) {
     final_label = std::make_shared<labelling::Label>(*current_label);
   } else {
-    // TODO check
     // First source-sink path
     if ((direction == "forward" &&
          (current_label->partial_path.back() == "Sink" &&
-          final_label->node == "Source")) ||
+          final_label->vertex.id == "Source")) ||
         (direction == "backward" &&
          (current_label->partial_path.back() == "Source" &&
-          final_label->node == "Sink")))
-      final_label = std::make_shared<labelling::Label>(*current_label);
+          final_label->vertex.id == "Sink"))) {
+      final_label      = std::make_shared<labelling::Label>(*current_label);
+      primal_st_bound_ = true;
+    }
   }
+}
+
+bool Search::checkPrimalBound(const labelling::Label& candidate_label) const {
+  if (primal_st_bound_ &&
+      candidate_label.weight + lower_bound_weight[candidate_label.vertex.idx] >=
+          final_label->weight) {
+    return true;
+  }
+  return false;
 }
 
 } // namespace bidirectional

@@ -8,7 +8,7 @@ add_executable(${NAME}
   src/test_bidirectional.cc
   src/test_issue17.cc
   src/test_issue52.cc
-  src/test_benchmarks.cc
+  # src/test_benchmarks.cc
   )
 # note: macOS is APPLE and also UNIX !
 if(APPLE)

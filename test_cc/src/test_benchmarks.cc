@@ -1,7 +1,6 @@
 #include "test_benchmarks.h"
 
-#include <assert.h> // assert
-
+#include <cassert> // assert
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -23,17 +22,13 @@ void loadMaxMinRes(
     const std::string&   path_to_instance) {
   std::ifstream      instance_file(path_to_instance);
   std::istringstream iss;
-  // std::string        first_str;
-  std::string line;
+  std::string        line;
 
   std::getline(instance_file, line);
   iss.str(line);
   iss >> *num_nodes >> *num_arcs >> *num_resources;
-  // bool testedFlag = first_str.compare("num_nodes") ? true : false;
   max_res->resize(*num_resources);
   min_res->resize(*num_resources);
-  // src = 0;
-  // dst = node_num - 1;
   std::getline(instance_file, line);
   iss.clear();
   iss.str(line);
@@ -68,16 +63,19 @@ void loadGraph(
     iss.str(line);
     int                 tail, head;
     double              weight;
-    std::vector<double> res_cost;
-    res_cost.resize(num_resources);
+    std::vector<double> res_cost(num_resources, 0.0);
     iss >> tail >> head >> weight;
     for (int j = 0; j < num_resources; ++j) {
       iss >> res_cost[j];
     }
     if (tail == 1)
       bidirectional->addEdge("Source", std::to_string(head), weight, res_cost);
+    else if (head == 1)
+      bidirectional->addEdge(std::to_string(tail), "Source", weight, res_cost);
     else if (head == num_nodes)
       bidirectional->addEdge(std::to_string(tail), "Sink", weight, res_cost);
+    else if (tail == num_nodes)
+      bidirectional->addEdge("Sink", std::to_string(head), weight, res_cost);
     else
       bidirectional->addEdge(
           std::to_string(tail), std::to_string(head), weight, res_cost);
@@ -102,30 +100,33 @@ double getBestCost(
   return best_cost;
 }
 
-// TEST_P(TestBenchmarks, testForwardElementary) {
-//   const std::string path_to_instance =
-//       path_to_data + "rcsp" + std::to_string(instance_number) + ".txt";
-//   int                 num_nodes, num_arcs, num_resources;
-//   std::vector<double> max_res, min_res;
-//   loadMaxMinRes(
-//       &max_res,
-//       &min_res,
-//       &num_nodes,
-//       &num_arcs,
-//       &num_resources,
-//       path_to_instance);
-//   bidirectional             = std::make_unique<BiDirectional>(max_res,
-//   min_res); bidirectional->direction  = "forward"; bidirectional->elementary
-//   = true; loadGraph(
-//       bidirectional.get(),
-//       num_nodes,
-//       num_arcs,
-//       num_resources,
-//       path_to_instance);
-//   bidirectional->run();
-//   auto cost = bidirectional->getTotalCost();
-//   ASSERT_EQ(cost, getBestCost(path_to_data, instance_number));
-// }
+TEST_P(TestBenchmarks, testForwardElementary) {
+  const std::string path_to_instance =
+      path_to_data + "rcsp" + std::to_string(instance_number) + ".txt";
+  int                 num_nodes, num_arcs, num_resources;
+  std::vector<double> max_res, min_res;
+  loadMaxMinRes(
+      &max_res,
+      &min_res,
+      &num_nodes,
+      &num_arcs,
+      &num_resources,
+      path_to_instance);
+  bidirectional =
+      std::make_unique<BiDirectional>(num_nodes, num_arcs, max_res, min_res);
+  bidirectional->direction  = "forward";
+  bidirectional->elementary = true;
+  bidirectional->time_limit = time_limit;
+  loadGraph(
+      bidirectional.get(),
+      num_nodes,
+      num_arcs,
+      num_resources,
+      path_to_instance);
+  bidirectional->run();
+  auto cost = bidirectional->getTotalCost();
+  ASSERT_EQ(cost, getBestCost(path_to_data, instance_number));
+}
 
 TEST_P(TestBenchmarks, testForward) {
   const std::string path_to_instance =
@@ -139,8 +140,39 @@ TEST_P(TestBenchmarks, testForward) {
       &num_arcs,
       &num_resources,
       path_to_instance);
-  bidirectional            = std::make_unique<BiDirectional>(max_res, min_res);
-  bidirectional->direction = "forward";
+  bidirectional =
+      std::make_unique<BiDirectional>(num_nodes, num_arcs, max_res, min_res);
+  bidirectional->direction  = "forward";
+  bidirectional->time_limit = time_limit;
+  loadGraph(
+      bidirectional.get(),
+      num_nodes,
+      num_arcs,
+      num_resources,
+      path_to_instance);
+  std::cout << "loaded graph\n";
+  bidirectional->run();
+  auto cost = bidirectional->getTotalCost();
+  ASSERT_EQ(cost, getBestCost(path_to_data, instance_number));
+}
+
+TEST_P(TestBenchmarks, testBothElementaryUnprocessed) {
+  const std::string path_to_instance =
+      path_to_data + "rcsp" + std::to_string(instance_number) + ".txt";
+  int                 num_nodes, num_arcs, num_resources;
+  std::vector<double> max_res, min_res;
+  loadMaxMinRes(
+      &max_res,
+      &min_res,
+      &num_nodes,
+      &num_arcs,
+      &num_resources,
+      path_to_instance);
+  bidirectional =
+      std::make_unique<BiDirectional>(num_nodes, num_arcs, max_res, min_res);
+  bidirectional->elementary = true;
+  bidirectional->method     = "unprocessed";
+  bidirectional->time_limit = time_limit;
   loadGraph(
       bidirectional.get(),
       num_nodes,
@@ -164,8 +196,10 @@ TEST_P(TestBenchmarks, testForward) {
 //       &num_arcs,
 //       &num_resources,
 //       path_to_instance);
-//   bidirectional             = std::make_unique<BiDirectional>(max_res,
-//   min_res); bidirectional->elementary = true; loadGraph(
+//   bidirectional =
+//       std::make_unique<BiDirectional>(num_nodes, num_arcs, max_res, min_res);
+//   bidirectional->method = "unprocessed";
+//   loadGraph(
 //       bidirectional.get(),
 //       num_nodes,
 //       num_arcs,
@@ -175,11 +209,10 @@ TEST_P(TestBenchmarks, testForward) {
 //   auto cost = bidirectional->getTotalCost();
 //   ASSERT_EQ(cost, getBestCost(path_to_data, instance_number));
 // }
-//
 
 INSTANTIATE_TEST_SUITE_P(
     TestBenchmarksName,
     TestBenchmarks,
-    ::testing::Range(1, 3));
+    ::testing::Range(1, 10));
 
 } // namespace bidirectional

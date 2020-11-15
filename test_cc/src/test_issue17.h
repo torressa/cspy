@@ -14,9 +14,11 @@ void addEdgesIssue17(BiDirectional* bidirectional);
 
 class TestIssue17 : public ::testing::Test {
  protected:
-  const bool                     elementary = true;
-  const std::vector<double>      max_res    = {6.0, 6.0};
-  const std::vector<double>      min_res    = {0.0, 0.0};
+  const bool                     elementary      = true;
+  const int                      number_vertices = 7;
+  const int                      number_edges    = 11;
+  const std::vector<double>      max_res         = {6.0, 6.0};
+  const std::vector<double>      min_res         = {0.0, 0.0};
   std::unique_ptr<BiDirectional> bidirectional;
   const std::vector<std::string> final_path = {"Source", "2", "5", "Sink"};
   const std::vector<double>      final_res  = {3.0, 3.0};
