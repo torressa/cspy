@@ -78,7 +78,12 @@ void BiDirectional::run() {
     }
   }
   // cleanUp();
-  postProcessing();
+  if (!terminated_early_w_st_path_) {
+    postProcessing();
+  } else {
+    // final label contains the label that triggered the early termination
+    best_label = std::make_shared<labelling::Label>(*final_label);
+  }
 }
 
 void BiDirectional::initSearches() {
@@ -179,7 +184,7 @@ void BiDirectional::updateFinalLabel() {
   }
 }
 
-bool BiDirectional::terminate(const labelling::Label& label) const {
+bool BiDirectional::terminate(const labelling::Label& label) {
   clock_t timediff     = clock() - start_time;
   double  timediff_sec = ((double)timediff) / CLOCKS_PER_SEC;
   if (!std::isnan(time_limit) && timediff_sec >= time_limit) {
@@ -188,9 +193,10 @@ bool BiDirectional::terminate(const labelling::Label& label) const {
   return checkValidLabel(label);
 }
 
-bool BiDirectional::checkValidLabel(const labelling::Label& label) const {
+bool BiDirectional::checkValidLabel(const labelling::Label& label) {
   if (!label.vertex.id.empty() && label.checkStPath()) {
     if (!std::isnan(threshold) && label.checkThreshold(threshold)) {
+      terminated_early_w_st_path_ = true;
       return true;
     }
   }

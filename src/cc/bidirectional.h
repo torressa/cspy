@@ -90,6 +90,8 @@ class BiDirectional {
   /// @see labelling::LabelExtension
   std::shared_ptr<labelling::LabelExtension> label_extension_;
   // Algorithm parameters
+  // whether the search terminad early with a valid s-t path
+  bool                                 terminated_early_w_st_path_ = false;
   clock_t                              start_time;
   std::unique_ptr<Search>              fwd_search_;
   std::unique_ptr<Search>              bwd_search_;
@@ -102,8 +104,10 @@ class BiDirectional {
   void move(const std::string& direction_);
   // void checkTerminateSerial();
   void updateFinalLabel();
-  bool terminate(const labelling::Label& label) const;
-  bool checkValidLabel(const labelling::Label& label) const;
+  /// checks if the time_limit if over (if set) or if a label under the
+  /// threshold has been found (if set). Sets terminated_early_w_st_path_
+  bool terminate(const labelling::Label& label);
+  bool checkValidLabel(const labelling::Label& label);
   void cleanUp() const;
   /// Processing of output path.
   void postProcessing();

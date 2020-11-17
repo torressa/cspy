@@ -1,0 +1,17 @@
+name: Ubuntu Python tests
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Configure
+      run: cmake -S . -Bbuild -DBUILD_TESTING=ON -DBUILD_PYTHON=ON -DBUILD_SHARED_LIBS=ON
+    - name: Build
+      run: cmake --build build --config Release --target all -v
+    - name: Test
+      run: cmake --build build --config Release --target test -v
+    - name: Install
+      run: cmake --build build --config Release --target install -v

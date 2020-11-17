@@ -42,13 +42,9 @@ TEST_F(TestBiDirectional, testBothTimeLimit) {
   auto res  = bidirectional->getConsumedResources();
   auto cost = bidirectional->getTotalCost();
 
-  std::vector<std::string> path_ = {"Source", "A", "B", "Sink"};
-  std::vector<double>      res_  = {3.0, 4.3};
-  double                   cost_ = 8;
-
-  ASSERT_TRUE(path == path_);
-  ASSERT_TRUE(res == res_);
-  ASSERT_TRUE(cost == cost_);
+  ASSERT_TRUE(path == final_path);
+  ASSERT_TRUE(res == final_res);
+  ASSERT_TRUE(cost == final_cost);
 }
 
 TEST_F(TestBiDirectional, testBothThreshold) {
@@ -59,13 +55,18 @@ TEST_F(TestBiDirectional, testBothThreshold) {
   auto path = bidirectional->getPath();
   ASSERT_TRUE(path.size() == 0);
   bidirectional->run();
+
   path      = bidirectional->getPath();
   auto res  = bidirectional->getConsumedResources();
   auto cost = bidirectional->getTotalCost();
 
-  ASSERT_TRUE(path == final_path);
-  ASSERT_TRUE(res == final_res);
-  ASSERT_TRUE(cost == final_cost);
+  std::vector<std::string> path_ = {"Source", "A", "B", "Sink"};
+  std::vector<double>      res_  = {3.0, 4.3};
+  double                   cost_ = 8;
+
+  ASSERT_TRUE(path == path_);
+  ASSERT_TRUE(res == res_);
+  ASSERT_TRUE(cost == cost_);
 }
 
 TEST_F(TestBiDirectional, testBothUnprocessed) {

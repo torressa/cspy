@@ -92,8 +92,8 @@ message(STATUS "Build Python: ${BUILD_PYTHON}")
 # message(STATUS "Build Java: ${BUILD_JAVA}")
 # message(STATUS "Build .Net: ${BUILD_DOTNET}")
 
-include(cpp)
 enable_testing()
+include(cpp)
 
 if(WIN32 AND (BUILD_PYTHON OR BUILD_JAVA OR BUILD_DOTNET))
   message(STATUS "Getting SWIG: ...")
