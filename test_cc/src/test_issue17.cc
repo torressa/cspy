@@ -1,6 +1,5 @@
 #include "test_issue17.h"
 
-#include <iostream>
 #include <numeric>
 
 namespace bidirectional {

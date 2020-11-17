@@ -7,6 +7,7 @@ add_executable(${NAME}
   src/test_labelling.cc
   src/test_bidirectional.cc
   src/test_issue17.cc
+  src/test_issue38.cc
   src/test_issue52.cc
   # src/test_benchmarks.cc
   )

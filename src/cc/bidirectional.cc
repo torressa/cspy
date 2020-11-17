@@ -37,7 +37,6 @@ void BiDirectional::setSeed(const int& seed) {
 }
 
 void BiDirectional::setPyCallback(bidirectional::PyREFCallback* cb) const {
-  std::cout << "setting cb\n";
   label_extension_->setPyCallback(cb);
 }
 
@@ -259,7 +258,7 @@ void BiDirectional::getMinimumWeights(double* fwd_min, double* bwd_min) {
   }
 }
 
-// TODO refactor
+// TODO! refactor
 void BiDirectional::joinLabels() {
   // extract bounds
   // upper bound on source-sink path
@@ -271,14 +270,16 @@ void BiDirectional::joinLabels() {
   getMinimumWeights(fwd_min.get(), bwd_min.get());
   for (const int& n : fwd_search_->visited_vertices) {
     // for each vertex visited forward
-    if (fwd_search_->best_labels[n]->weight + *bwd_min < UB) {
+    if (fwd_search_->best_labels[n]->weight + *bwd_min <= UB) {
       // if bound check fwd_label
       for (auto fwd_iter = fwd_search_->efficient_labels[n].begin();
            fwd_iter != fwd_search_->efficient_labels[n].end();
            ++fwd_iter) { // for each forward label at n
-        const labelling::Label& fwd_label = *fwd_iter;
+        // break for loops recursively
+        bool                    propagate_break = false;
+        const labelling::Label& fwd_label       = *fwd_iter;
         if (fwd_label.resource_consumption[0] <= HF &&
-            fwd_label.weight + *bwd_min < UB) { // if bound check fwd_label
+            fwd_label.weight + *bwd_min <= UB) { // if bound check fwd_label
           const std::vector<AdjVertex>& adj_vertices = graph->adjacency_list[n];
           for (std::vector<AdjVertex>::const_iterator it = adj_vertices.begin();
                it != adj_vertices.end();
@@ -317,13 +318,22 @@ void BiDirectional::joinLabels() {
                       if (terminate(*best_label)) {
                         return;
                       }
+                      propagate_break = true;
+                      break; // bwd labels loop
+                    } else if (merged_label.weight < best_label->weight) {
+                      propagate_break = true;
+                      break;
                     }
                   }
                 }
               }
             }
+            if (propagate_break)
+              break; // adj_vertices loop
           }
         }
+        if (propagate_break)
+          break; // fwd labels loop
       }
     }
   }

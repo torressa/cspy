@@ -57,6 +57,7 @@ class Search {
   /// advance the search updating the resource bounds from the opposite
   /// direction
   void move(const std::vector<double>& current_resource_bound);
+  /// Sorts efficient_labels for each vertex
   void cleanUp();
   /// checks if a given vertex has been visited
   /// @return true if it has been visited false otherwise

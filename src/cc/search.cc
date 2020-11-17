@@ -54,7 +54,20 @@ void Search::move(const std::vector<double>& current_resource_bound) {
   }
 }
 
-void Search::cleanUp() {}
+void Search::cleanUp() {
+  for (const int n : visited_vertices) {
+    if (efficient_labels[n].size() > 0) {
+      if (direction == "forward") {
+        std::sort(efficient_labels[n].begin(), efficient_labels[n].end());
+      } else {
+        std::sort(
+            efficient_labels[n].begin(),
+            efficient_labels[n].end(),
+            std::greater<>{});
+      }
+    }
+  }
+}
 
 bool Search::checkVertexVisited(const int& vertex_idx) const {
   return (
