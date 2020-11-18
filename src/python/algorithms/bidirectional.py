@@ -38,7 +38,7 @@ class BiDirectional:
         Either "random", "generated" (direction with least number of generated
         labels), "processed" (direction with least number of processed labels),
         or, "unprocessed" (direction with least number of unprocessed labels).
-        Default: "random"
+        Default: "unprocessed"
     time_limit : int, optional
         time limit in seconds.
         Default: None
@@ -71,7 +71,7 @@ class BiDirectional:
                  min_res: List[float],
                  preprocess: Optional[bool] = False,
                  direction: Optional[str] = "both",
-                 method: Optional[str] = "random",
+                 method: Optional[str] = "unprocessed",
                  time_limit: Optional[float] = None,
                  threshold: Optional[float] = None,
                  elementary: Optional[bool] = False,
@@ -96,7 +96,7 @@ class BiDirectional:
         # pass solving attributes
         if direction != "both":
             self.bidirectional_cpp.direction = direction
-        if method in ["unprocessed", "generated", "processed"]:
+        if method in ["random", "generated", "processed"]:
             self.bidirectional_cpp.method = method
         if time_limit is not None and (isinstance(time_limit, int) or
                                        isinstance(time_limit, float)):
@@ -110,10 +110,10 @@ class BiDirectional:
             self.bidirectional_cpp.dominance_frequency = dominance_frequency
         if isinstance(seed, int) and seed is not None:
             self.bidirectional_cpp.setSeed(seed)
-
         if REF_callback is not None:
             self.bidirectional_cpp.setREFCallback(REF_callback)
 
+        # Pass graph
         self._init_graph(G)
 
     def run(self):

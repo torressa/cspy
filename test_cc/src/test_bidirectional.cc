@@ -33,7 +33,7 @@ TEST_F(TestBiDirectional, testBoth) {
 TEST_F(TestBiDirectional, testBothTimeLimit) {
   bidirectional = std::make_unique<BiDirectional>(
       number_vertices, number_edges, max_res, min_res);
-  bidirectional->time_limit = 0.00005;
+  bidirectional->time_limit = 0.05;
   addEdges(bidirectional.get());
   auto path = bidirectional->getPath();
   ASSERT_TRUE(path.size() == 0);
@@ -69,10 +69,10 @@ TEST_F(TestBiDirectional, testBothThreshold) {
   ASSERT_TRUE(cost == cost_);
 }
 
-TEST_F(TestBiDirectional, testBothUnprocessed) {
+TEST_F(TestBiDirectional, testBothRandom) {
   bidirectional = std::make_unique<BiDirectional>(
       number_vertices, number_edges, max_res, min_res);
-  bidirectional->method = "unprocessed";
+  bidirectional->method = "random";
   addEdges(bidirectional.get());
   auto path = bidirectional->getPath();
   ASSERT_TRUE(path.size() == 0);

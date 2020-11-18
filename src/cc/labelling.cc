@@ -31,9 +31,16 @@ Label::Label(
 bool Label::checkFeasibility(
     const std::vector<double>& max_res,
     const std::vector<double>& min_res) const {
-  if (resource_consumption <= max_res && resource_consumption >= min_res)
-    return true;
-  return false;
+  const int& resource_size = resource_consumption.size();
+  for (int i = 0; i < resource_size; i++) {
+    if (resource_consumption[i] <= max_res[i] &&
+        resource_consumption[i] >= min_res[i]) {
+      ;
+    } else {
+      return false;
+    }
+  }
+  return true;
 }
 
 bool Label::checkThreshold(const double& threshold) const {

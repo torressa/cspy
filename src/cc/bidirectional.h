@@ -50,7 +50,7 @@ class BiDirectional {
   // Optional inputs (set manually)
   std::string direction = "both";
   /// string with method to determine the next direction of search
-  std::string method = "random";
+  std::string method = "unprocessed";
   /// double with time limit in seconds
   double time_limit = std::nan("na");
   /// double with threshold to stop search with total cost <= threshold
