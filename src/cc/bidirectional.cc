@@ -36,8 +36,8 @@ void BiDirectional::setSeed(const int& seed) {
   std::srand(seed);
 }
 
-void BiDirectional::setPyCallback(bidirectional::PyREFCallback* cb) const {
-  label_extension_->setPyCallback(cb);
+void BiDirectional::setREFCallback(bidirectional::REFCallback* cb) const {
+  label_extension_->setREFCallback(cb);
 }
 
 std::vector<std::string> BiDirectional::getPath() const {

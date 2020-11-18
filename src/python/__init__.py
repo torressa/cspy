@@ -1,3 +1,4 @@
+from pyBiDirectionalCpp import REFCallback
 from cspy.algorithms.bidirectional import BiDirectional
 from cspy.algorithms.tabu import Tabu
 from cspy.algorithms.greedy_elimination import GreedyElim

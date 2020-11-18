@@ -7,7 +7,7 @@ from cspy.preprocessing import preprocess_graph
 from cspy.checking import check, check_seed
 
 # Import from python Cpp wrapper
-from pyBiDirectionalCpp import (BiDirectionalCpp, PyREFCallback, DoubleVector)
+from pyBiDirectionalCpp import (BiDirectionalCpp, REFCallback, DoubleVector)
 
 
 class BiDirectional:
@@ -56,7 +56,7 @@ class BiDirectional:
         Default : 1 (every iteration)
     seed : None or int, optional
         seed for random method class. Default : None.
-    REF_callback : PyREFCallback, optional
+    REF_callback : REFCallback, optional
         Custom resource extension callback. See `REFs`_ for more details.
         Default : None
 
@@ -77,7 +77,7 @@ class BiDirectional:
                  elementary: Optional[bool] = False,
                  dominance_frequency: Optional[int] = 1,
                  seed: Union[int] = None,
-                 REF_callback: Optional[PyREFCallback] = None):
+                 REF_callback: Optional[REFCallback] = None):
         # Check inputs
         check(G, max_res, min_res, direction, REF_callback, __name__)
         # check_seed(seed, __name__)
@@ -112,7 +112,7 @@ class BiDirectional:
             self.bidirectional_cpp.setSeed(seed)
 
         if REF_callback is not None:
-            self.bidirectional_cpp.setPyCallback(REF_callback)
+            self.bidirectional_cpp.setREFCallback(REF_callback)
 
         self._init_graph(G)
 

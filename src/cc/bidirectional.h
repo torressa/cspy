@@ -7,7 +7,7 @@
 
 #include "digraph.h"
 #include "labelling.h"
-#include "py_ref_callback.h"
+#include "ref_callback.h"
 #include "search.h"
 
 namespace bidirectional {
@@ -19,7 +19,7 @@ class BiDirectional {
    * For use called in a the following order:
    * 1. ctor (memory allocation for the graph)
    * 2. [optional] set solving parameters if desired (e.g. time_limit, ...)
-   * 	2.1. [optional] set callback using `setPyCallback`
+   * 	2.1. [optional] set callback using `setREFCallback`
    * 	2.2. [optional] set seed using `setSeed`
    * 3. add edges at will using `addEdge`.
    * 4. call `run`
@@ -68,7 +68,7 @@ class BiDirectional {
   void setSeed(const int& seed = 1);
   /// Pass python callback for label extensions.
   /// Note: swig needs namespace specifier
-  void setPyCallback(bidirectional::PyREFCallback* cb) const;
+  void setREFCallback(bidirectional::REFCallback* cb) const;
   /// Add an edge to the graph
   void addEdge(
       const std::string&         tail,

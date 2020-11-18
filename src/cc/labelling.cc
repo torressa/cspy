@@ -4,8 +4,7 @@
 #include <cmath>
 #include <iostream>
 #include <set>
-
-#include "py_ref_callback.h"
+#include <typeinfo>
 
 namespace labelling {
 
@@ -150,12 +149,12 @@ bool operator==(const Label& label1, const Label& label2) {
  */
 LabelExtension::LabelExtension() {}
 LabelExtension::~LabelExtension() {
-  py_callback = nullptr;
-  delete py_callback;
+  ref_callback = nullptr;
+  delete ref_callback;
 }
 
-void LabelExtension::setPyCallback(bidirectional::PyREFCallback* cb) {
-  py_callback = cb;
+void LabelExtension::setREFCallback(bidirectional::REFCallback* cb) {
+  ref_callback = cb;
 }
 
 Label LabelExtension::extend(
@@ -174,14 +173,14 @@ Label LabelExtension::extend(
   // Propagate resources
   std::vector<double> new_resources;
   if (direction == "forward") {
-    if (py_callback == nullptr) {
+    if (ref_callback == nullptr) {
       new_resources = bidirectional::additiveForwardREF(
           label->resource_consumption,
           label->vertex.id,
           new_node.id,
           adjacent_vertex.resource_consumption);
     } else {
-      new_resources = py_callback->REF_fwd(
+      new_resources = ref_callback->REF_fwd(
           label->resource_consumption,
           label->vertex.id,
           new_node.id,
@@ -191,14 +190,14 @@ Label LabelExtension::extend(
     }
   } else {
     // backward
-    if (py_callback == nullptr) {
+    if (ref_callback == nullptr) {
       new_resources = bidirectional::additiveBackwardREF(
           label->resource_consumption,
           new_node.id,
           label->vertex.id,
           adjacent_vertex.resource_consumption);
     } else {
-      new_resources = py_callback->REF_bwd(
+      new_resources = ref_callback->REF_bwd(
           label->resource_consumption,
           new_node.id,
           label->vertex.id,
@@ -435,7 +434,7 @@ Label mergeLabels(
     const bidirectional::DiGraph& graph,
     const std::vector<double>&    max_res,
     const std::vector<double>&    min_res) {
-  bidirectional::AdjVertex adj_vertex =
+  const bidirectional::AdjVertex& adj_vertex =
       graph.getAdjVertex(fwd_label.vertex.idx, bwd_label.vertex.idx);
   // No edge between the labels return empty label
   if (!adj_vertex.init) {
@@ -443,8 +442,8 @@ Label mergeLabels(
   }
   std::vector<double> final_res;
   auto                bwd_label_ptr = std::make_unique<Label>();
-  if (label_extension_.py_callback == nullptr) {
-    std::vector<double> temp_res = bidirectional::additiveForwardREF(
+  if (label_extension_.ref_callback == nullptr) {
+    const std::vector<double>& temp_res = bidirectional::additiveForwardREF(
         fwd_label.resource_consumption,
         fwd_label.vertex.id,
         bwd_label.vertex.id,
@@ -454,17 +453,26 @@ Label mergeLabels(
     final_res = bwd_label_->resource_consumption;
     bwd_label_ptr.swap(bwd_label_);
   } else {
-    final_res = label_extension_.py_callback->REF_join(
+    final_res = label_extension_.ref_callback->REF_join(
         fwd_label.resource_consumption,
         bwd_label.resource_consumption,
         fwd_label.vertex.id,
         bwd_label.vertex.id,
         adj_vertex.resource_consumption);
+    const double bwd_res_inverted =
+        max_res[0] - bwd_label.resource_consumption[0];
+    // in the case when default REF_join has been called (or user hasn't added
+    // the resources appropriately)
+    if (final_res[0] !=
+        (fwd_label.resource_consumption[0] + 1 + bwd_res_inverted)) {
+      final_res[0] += bwd_res_inverted;
+    }
     auto bwd_label_ =
         std::make_unique<Label>(processBwdLabel(bwd_label, max_res, min_res));
     bwd_label_ptr.swap(bwd_label_);
   }
-  double weight = fwd_label.weight + adj_vertex.weight + bwd_label_ptr->weight;
+  const double& weight =
+      fwd_label.weight + adj_vertex.weight + bwd_label_ptr->weight;
   std::vector<std::string> final_path = fwd_label.partial_path;
   final_path.insert(
       final_path.end(),

@@ -3,7 +3,7 @@
 %module(directors="1") bidirectional
 %{
 #include "bidirectional.h"
-#include "py_ref_callback.h"
+#include "ref_callback.h"
 using namespace bidirectional;
 %}
 
@@ -15,7 +15,7 @@ using namespace bidirectional;
 %template(StringVector) std::vector<std::string>;
 
 /* turn on director wrapping Callback */
-%feature("director") bidirectional::PyREFCallback;
+%feature("director") bidirectional::REFCallback;
 
 %rename($ignore, %$isclass) "";
 %rename("%s") bidirectional;
@@ -38,12 +38,12 @@ using namespace bidirectional;
 %rename("%s") bidirectional::BiDirectional::getTotalCost;
 %rename("%s") bidirectional::BiDirectional::getConsumedResources;
 
-%rename("%s") bidirectional::PyREFCallback;
-%rename("%s") bidirectional::PyREFCallback::PyREFCallback;
-%rename("%s") bidirectional::PyREFCallback::~PyREFCallback;
-%rename("%s") bidirectional::PyREFCallback::REF_fwd;
-%rename("%s") bidirectional::PyREFCallback::REF_bwd;
-%rename("%s") bidirectional::PyREFCallback::REF_join;
+%rename("%s") bidirectional::REFCallback;
+%rename("%s") bidirectional::REFCallback::REFCallback;
+%rename("%s") bidirectional::REFCallback::~REFCallback;
+%rename("%s") bidirectional::REFCallback::REF_fwd;
+%rename("%s") bidirectional::REFCallback::REF_bwd;
+%rename("%s") bidirectional::REFCallback::REF_join;
 
 %include "bidirectional.h"
-%include "py_ref_callback.h"
+%include "ref_callback.h"

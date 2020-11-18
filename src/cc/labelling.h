@@ -5,7 +5,7 @@
 #include <vector>
 
 #include "digraph.h"
-#include "py_ref_callback.h"
+#include "ref_callback.h"
 
 namespace labelling {
 
@@ -93,9 +93,9 @@ class LabelExtension {
   LabelExtension();
   ~LabelExtension();
   /// Python callback to custom REF
-  bidirectional::PyREFCallback* py_callback = nullptr;
+  bidirectional::REFCallback* ref_callback = nullptr;
   /// Set python callback for custom resource extensions
-  void setPyCallback(bidirectional::PyREFCallback* cb);
+  void setREFCallback(bidirectional::REFCallback* cb);
   /**
    * Generate new label extentions from the current label and return if resource
    * feasible.

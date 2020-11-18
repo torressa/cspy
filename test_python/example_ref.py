@@ -2,12 +2,12 @@ from random import randint
 from numpy import array
 from networkx import DiGraph
 
-from cspy.algorithms.bidirectional import BiDirectional, PyREFCallback
+from cspy import BiDirectional, REFCallback
 
 # import pyBiDirectionalCpp as bd
 
 
-class Callback(PyREFCallback):
+class Callback(REFCallback):
 
     def REF_fwd(self, cumul_res, tail, head, edge_res, partial_path,
                 cumul_cost):

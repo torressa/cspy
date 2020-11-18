@@ -3,12 +3,12 @@ import unittest
 from numpy import array
 from networkx import DiGraph
 
-from cspy.algorithms.bidirectional import (BiDirectional, PyREFCallback,
-                                           convert_list_to_double_vector)
+from cspy import BiDirectional, REFCallback
+
 from parameterized import parameterized
 
 
-class MyCallback(PyREFCallback):
+class MyCallback(REFCallback):
 
     def REF_fwd(self, cumul_res, tail, head, edge_res, partial_path,
                 cumul_cost):

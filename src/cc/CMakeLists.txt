@@ -6,7 +6,7 @@ target_sources(BiDirectionalCpp
    digraph.cc
    labelling.cc
    preprocessing.cc
-   py_ref_callback.cc
+   ref_callback.cc
    search.cc
    )
 target_include_directories(BiDirectionalCpp

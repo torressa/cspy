@@ -1,4 +1,4 @@
-#include "py_ref_callback.h"
+#include "ref_callback.h"
 
 #include <algorithm>
 #include <iostream>
@@ -41,7 +41,7 @@ std::vector<double> additiveBackwardREF(
   return new_resources;
 }
 
-std::vector<double> PyREFCallback::REF_fwd(
+std::vector<double> REFCallback::REF_fwd(
     const std::vector<double>&      cumulative_resource,
     const std::string&              tail,
     const std::string&              head,
@@ -52,7 +52,7 @@ std::vector<double> PyREFCallback::REF_fwd(
       cumulative_resource, tail, head, edge_resource_consumption);
 }
 
-std::vector<double> PyREFCallback::REF_bwd(
+std::vector<double> REFCallback::REF_bwd(
     const std::vector<double>&      cumulative_resource,
     const std::string&              tail,
     const std::string&              head,
@@ -63,7 +63,7 @@ std::vector<double> PyREFCallback::REF_bwd(
       cumulative_resource, tail, head, edge_resource_consumption);
 }
 
-std::vector<double> PyREFCallback::REF_join(
+std::vector<double> REFCallback::REF_join(
     const std::vector<double>& fwd_resource,
     const std::vector<double>& bwd_resource,
     const std::string&         tail,

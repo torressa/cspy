@@ -6,7 +6,6 @@
 
 #include "digraph.h"
 #include "labelling.h"
-#include "py_ref_callback.h"
 
 namespace bidirectional {
 

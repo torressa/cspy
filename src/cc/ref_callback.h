@@ -1,5 +1,5 @@
-#ifndef BIDIRECTIONAL_PY_REF_CALLBACK_H__
-#define BIDIRECTIONAL_PY_REF_CALLBACK_H__
+#ifndef BIDIRECTIONAL_REF_CALLBACK_H__
+#define BIDIRECTIONAL_REF_CALLBACK_H__
 
 #include <string>
 #include <vector>
@@ -11,10 +11,10 @@ namespace bidirectional {
  * In the case the user has not defined all three, default additive REFs are
  * used.
  */
-class PyREFCallback {
+class REFCallback {
  public:
-  PyREFCallback() {}
-  virtual ~PyREFCallback() {}
+  REFCallback() {}
+  virtual ~REFCallback() {}
 
   /// Default implementation of a forward REF
   virtual std::vector<double> REF_fwd(
@@ -60,4 +60,4 @@ std::vector<double> additiveBackwardREF(
 
 } // namespace bidirectional
 
-#endif // BIDIRECTIONAL_PY_REF_CALLBACK_H__
+#endif // BIDIRECTIONAL_REF_CALLBACK_H__
