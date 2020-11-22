@@ -2,7 +2,6 @@ import unittest
 
 from numpy import array
 from networkx import DiGraph
-from parameterized import parameterized
 
 from cspy.algorithms.tabu import Tabu
 from cspy.algorithms.bidirectional import BiDirectional
@@ -31,38 +30,16 @@ class TestsIssue20(unittest.TestCase):
         self.total_cost = -10
         self.consumed_resources = [3, 2]
 
-    @parameterized.expand(zip(range(1), range(1)))
-    def test_bidirectional_random(self, _, seed):
+    def test_bidirectional(self):
         """
         Test BiDirectional with randomly chosen sequence of directions
         for a range of seeds.
         """
-        alg = BiDirectional(self.G,
-                            self.max_res,
-                            self.min_res,
-                            seed=seed,
-                            elementary=True)
+        alg = BiDirectional(self.G, self.max_res, self.min_res, elementary=True)
         alg.run()
         self.assertEqual(alg.path, self.result_path)
         self.assertEqual(alg.total_cost, self.total_cost)
-        self.assertTrue(alg.consumed_resources == self.consumed_resources)
-        self.assertTrue(
-            all(e in self.G.edges() for e in zip(alg.path, alg.path[1:])))
-
-    def test_bidirectional_generated(self):
-        """
-        Test BiDirectional with the search direction chosen by the number of
-        direction with lowest number of generated labels.
-        """
-        alg = BiDirectional(self.G,
-                            self.max_res,
-                            self.min_res,
-                            method="generated",
-                            elementary=True)
-        alg.run()
-        self.assertEqual(alg.path, self.result_path)
-        self.assertEqual(alg.total_cost, self.total_cost)
-        self.assertTrue(alg.consumed_resources == self.consumed_resources)
+        self.assertEqual(alg.consumed_resources, self.consumed_resources)
         self.assertTrue(
             all(e in self.G.edges() for e in zip(alg.path, alg.path[1:])))
 

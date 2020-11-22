@@ -21,7 +21,7 @@ class Search {
       const int&                       dominance_frequency,
       const std::vector<double>&       lower_bound_weight,
       const labelling::LabelExtension& label_extension,
-      const bool&                      save);
+      const bool&                      direction_both);
   // dtor
   ~Search();
 
@@ -67,13 +67,15 @@ class Search {
  private:
   /// label extension class
   const labelling::LabelExtension label_extension_;
-  /// Parameter to indicate whether lists of non_dominated labels should be
-  /// kept. Only when the search is bidirectional.
-  bool save_nondominated_ = true;
+  /// Boolean to indicate whether the algorithm is running in both directions or
+  /// not
+  bool direction_both_ = true;
   /// iteration number
   int iteration_ = 0;
-  /// whether dominance will be ran
+  /// whether dominance will be ran in the current iteration
   bool run_dominance_ = false;
+  /// whether resource bounds will be checked during dominance
+  bool check_feasibility_dominance_ = false;
   /// whether final_label contains a source-sink feasible path
   bool primal_st_bound_ = false;
   /**

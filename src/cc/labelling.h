@@ -63,7 +63,16 @@ class Label {
       const Label&       other,
       const std::string& direction,
       const bool&        elementary) const;
-  /// Check resource feasibility of current label
+  /**
+   * Check resource feasibility of current label i.e.
+   * min_res[i] <= resource_consumption[i] <= max_res[i]
+   * for i in 0..resource_consumption.size()
+   *
+   * @param [in] max_res, vector of double with upper bound(s) for resource
+   * consumption
+   * @param [in] min_res, vector of double with lower bound(s) for resource
+   * consumption
+   */
   bool checkFeasibility(
       const std::vector<double>& max_res,
       const std::vector<double>& min_res) const;
@@ -136,7 +145,6 @@ void updateEfficientLabels(
 
 /**
  * Run dominance checks over all pairs of labels in `labels`
- * If `save` is true, the nondominated labels are added to `best_labels`.
  *
  * @param[out] labels, std::vector<Label> pointer
  * @param[in] direction, string with direction of search
@@ -151,12 +159,34 @@ bool runDominance(
     const bool&                            elementary,
     const std::vector<std::vector<Label>>& efficient_labels = {{}});
 
-/// Run dominance for efficient_labels
+/**
+ * Check whether the input label dominates any efficient label (previously
+ * undominated labels) at the same node. All the labels that are dominated by
+ * the input label are removed.
+ *
+ * @param[out] efficient_labels, pointer to a vector of Label with the efficient
+ * labels at the same node as `label`. If a label is dominated by `label`, it is
+ * removed from this vector.
+ * @param[in] label, Label to compare
+ * @param[in] direction, string with direction of search
+ * @param[in] elementary, bool with whether non-elementary paths are allowed
+ * @param[in] check_feasibility, bool  whether resource feasibility checks have
+ * to be performed prior to the removal of a label.
+ * @param [in] max_res, vector of double with upper bound(s) for resource
+ * consumption
+ * @param [in] min_res, vector of double with lower bound(s) for resource
+ * consumption
+ *
+ * @return bool, true if `label` is dominated, false otherwise
+ */
 bool runDominanceEff(
-    std::vector<Label>* efficient_labels_ptr,
-    const Label&        label,
-    const std::string&  direction,
-    const bool&         elementary);
+    std::vector<Label>*        efficient_labels_ptr,
+    const Label&               label,
+    const std::string&         direction,
+    const bool&                elementary,
+    const bool&                check_feasibility,
+    const std::vector<double>& max_res,
+    const std::vector<double>& min_res);
 
 /// Reverse backward path and inverts resource consumption
 Label processBwdLabel(

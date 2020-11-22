@@ -4,7 +4,6 @@
 #include <cmath>
 #include <iostream>
 #include <set>
-#include <typeinfo>
 
 namespace labelling {
 
@@ -334,20 +333,25 @@ bool runDominance(
 }
 
 bool runDominanceEff(
-    std::vector<Label>* efficient_labels_ptr,
-    const Label&        label,
-    const std::string&  direction,
-    const bool&         elementary) {
+    std::vector<Label>*        efficient_labels_ptr,
+    const Label&               label,
+    const std::string&         direction,
+    const bool&                elementary,
+    const bool&                check_feasibility,
+    const std::vector<double>& max_res,
+    const std::vector<double>& min_res) {
   bool dominated = false;
   for (auto it = efficient_labels_ptr->begin();
        it != efficient_labels_ptr->end();) {
     bool         deleted = false;
     const Label& label2  = *it;
     if (label != label2) {
-      // check if label1 dominates label2
+      // check if label1 dominates label2 and remove if it is resource feasible
       if (label.checkDominance(label2, direction, elementary)) {
-        it      = efficient_labels_ptr->erase(it);
-        deleted = true;
+        if (!check_feasibility || !label2.checkFeasibility(max_res, min_res)) {
+          it      = efficient_labels_ptr->erase(it);
+          deleted = true;
+        }
       } else if (label2.checkDominance(label, direction, elementary)) {
         dominated = true;
         break;
@@ -390,14 +394,15 @@ Label processBwdLabel(
       cumulative_resource.begin(),
       new_resources.begin(),
       std::plus<double>());
-  if (invert_min_res)
+  if (invert_min_res) {
     // invert minimum resource
     std::transform(
-        ++label.resource_consumption.begin(),
-        label.resource_consumption.end(),
-        ++cumulative_resource.begin(),
-        ++new_resources.begin(),
+        new_resources.cbegin() + 1,
+        new_resources.cend(),
+        cumulative_resource.begin() + 1,
+        new_resources.begin() + 1,
         std::minus<double>());
+  }
   // Invert monotone resource
   return Label(label.weight, label.vertex, new_resources, new_path);
 }
@@ -470,8 +475,11 @@ Label mergeLabels(
         max_res[0] - bwd_label.resource_consumption[0];
     // in the case when default REF_join has been called (or user hasn't added
     // the resources appropriately)
-    if (final_res[0] !=
-        (fwd_label.resource_consumption[0] + 1 + bwd_res_inverted)) {
+    const double& bwd_monotone_edge = (adj_vertex.resource_consumption[0] == 0)
+                                          ? 1
+                                          : adj_vertex.resource_consumption[0];
+    if (final_res[0] != (fwd_label.resource_consumption[0] + bwd_monotone_edge +
+                         bwd_res_inverted)) {
       final_res[0] += bwd_res_inverted;
     }
     auto bwd_label_ =

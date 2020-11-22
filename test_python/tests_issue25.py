@@ -33,6 +33,7 @@ class TestsIssue25(unittest.TestCase):
         alg = BiDirectional(self.G,
                             self.max_res,
                             self.min_res,
+                            method="random",
                             seed=seed,
                             elementary=True)
         alg.run()

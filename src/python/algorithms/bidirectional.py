@@ -1,3 +1,4 @@
+# Wrapper for BiDirectionalCpp
 from typing import List, Optional, Union
 
 from networkx import DiGraph
@@ -6,7 +7,7 @@ from numpy.random import RandomState
 from cspy.preprocessing import preprocess_graph
 from cspy.checking import check, check_seed
 
-# Import from python Cpp wrapper
+# Import from the SWIG output file
 from pyBiDirectionalCpp import (BiDirectionalCpp, REFCallback, DoubleVector)
 
 
@@ -86,8 +87,8 @@ class BiDirectional:
         # To save original node type (for conversion later)
         self._original_node_type: str = None
 
-        max_res_vector = convert_list_to_double_vector(max_res)
-        min_res_vector = convert_list_to_double_vector(min_res)
+        max_res_vector = _convert_list_to_double_vector(max_res)
+        min_res_vector = _convert_list_to_double_vector(min_res)
 
         self.bidirectional_cpp = BiDirectionalCpp(len(G.nodes()),
                                                   len(G.edges()),
@@ -168,12 +169,12 @@ class BiDirectional:
         self._original_node_type = type(
             [n for n in G.nodes() if n != "Source" and n != "Sink"][0])
         for edge in G.edges(data=True):
-            res_cost = convert_list_to_double_vector(edge[2]["res_cost"])
+            res_cost = _convert_list_to_double_vector(edge[2]["res_cost"])
             self.bidirectional_cpp.addEdge(str(edge[0]), str(edge[1]),
                                            edge[2]["weight"], res_cost)
 
 
-def convert_list_to_double_vector(input_list: List[float]):
+def _convert_list_to_double_vector(input_list: List[float]):
     double_vector = DoubleVector()
     for elem in input_list:
         double_vector.append(float(elem))

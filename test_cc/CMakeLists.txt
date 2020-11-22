@@ -9,6 +9,7 @@ add_executable(${NAME}
   src/test_issue17.cc
   src/test_issue22.cc
   src/test_issue38.cc
+  src/test_issue41.cc
   src/test_issue52.cc
   # src/test_benchmarks.cc
   )

@@ -16,16 +16,16 @@ Search::Search(
     const int&                       dominance_frequency_in,
     const std::vector<double>&       lower_bound_weight_in,
     const labelling::LabelExtension& label_extension_in,
-    const bool&                      save_nondominated_in)
+    const bool&                      direction_both_in)
     : graph(graph_in),
       max_res(max_res_in),
       min_res(min_res_in),
-      label_extension_(label_extension_in),
       direction(direction_in),
       elementary(elementary_in),
       dominance_frequency(dominance_frequency_in),
       lower_bound_weight(lower_bound_weight_in),
-      save_nondominated_(save_nondominated_in) {
+      label_extension_(label_extension_in),
+      direction_both_(direction_both_in) {
   unprocessed_labels_ = std::make_unique<std::vector<labelling::Label>>();
   // allocate memory
   efficient_labels.resize(graph.number_vertices);
@@ -92,6 +92,8 @@ void Search::initResourceBounds() {
   if (zeros == false) {
     std::vector<double> temp(min_res.size(), 0.0);
     min_res_curr = temp;
+    // resource feasibility has to be checked during dominance
+    check_feasibility_dominance_ = true;
   } else
     min_res_curr = min_res;
 }
@@ -185,7 +187,8 @@ void Search::updateHalfWayPoints() {
       (direction == "backward" &&
        current_label->resource_consumption[0] > min_res_curr[0]))
     ;
-  else {
+  // only stop if search is being performed in both directions
+  else if (direction_both_) {
     stop = true;
   }
 }
@@ -223,20 +226,6 @@ void Search::extendCurrentLabel() {
   }
 }
 
-void Search::updateBestLabels(
-    const int&              vertex_idx,
-    const labelling::Label& candidate_label) {
-  if (best_labels[vertex_idx] &&
-      candidate_label.weight < best_labels[vertex_idx]->weight) {
-    best_labels[vertex_idx] =
-        std::make_shared<labelling::Label>(candidate_label);
-  } else if (!best_labels[vertex_idx]) {
-    // If not already exists
-    best_labels[vertex_idx] =
-        std::make_shared<labelling::Label>(candidate_label);
-  }
-}
-
 void Search::updateEfficientLabels(
     const int&              vertex_idx,
     const labelling::Label& candidate_label) {
@@ -253,7 +242,13 @@ void Search::updateEfficientLabels(
       if (efficient_labels_vertex.size() > 1) {
         // check if new_label is dominated by any other comparable label
         const bool dominated = runDominanceEff(
-            &efficient_labels_vertex, candidate_label, direction, elementary);
+            &efficient_labels_vertex,
+            candidate_label,
+            direction,
+            elementary,
+            check_feasibility_dominance_,
+            max_res_curr,
+            min_res_curr);
         if (!dominated && !checkPrimalBound(candidate_label)) {
           // add candidate_label to efficient_labels and unprocessed heap
           efficient_labels_vertex.push_back(candidate_label);
@@ -275,14 +270,29 @@ void Search::updateEfficientLabels(
   }
 }
 
+void Search::updateBestLabels(
+    const int&              vertex_idx,
+    const labelling::Label& candidate_label) {
+  if (best_labels[vertex_idx] &&
+      candidate_label.weight < best_labels[vertex_idx]->weight) {
+    best_labels[vertex_idx] =
+        std::make_shared<labelling::Label>(candidate_label);
+  } else if (!best_labels[vertex_idx]) {
+    // If not already exists
+    best_labels[vertex_idx] =
+        std::make_shared<labelling::Label>(candidate_label);
+  }
+}
+
 void Search::saveCurrentBestLabel() {
   if (final_label->vertex.id.empty()) {
     final_label = std::make_shared<labelling::Label>(*current_label);
     return;
   }
   // Check for global feasibility
-  if (!current_label->checkFeasibility(max_res, min_res))
+  if (!current_label->checkFeasibility(max_res, min_res)) {
     return;
+  }
   if (final_label->vertex.idx == current_label->vertex.idx &&
       current_label->fullDominance(*final_label, direction, elementary)) {
     final_label = std::make_shared<labelling::Label>(*current_label);

@@ -3,7 +3,6 @@ import unittest
 from numpy import array
 from random import randint
 from networkx import DiGraph, astar_path
-from parameterized import parameterized
 
 from cspy.algorithms.tabu import Tabu
 from cspy.algorithms.bidirectional import BiDirectional
@@ -47,8 +46,7 @@ class TestsIssue22(unittest.TestCase):
         path_star = astar_path(self.G, "Source", "Sink")
         self.assertEqual(path_star, ['Source', 1, 'Sink'])
 
-    @parameterized.expand(zip(range(1), range(1)))
-    def test_bidirectional_random(self, _, seed):
+    def test_bidirectional(self):
         """
         Test BiDirectional with randomly chosen sequence of directions
         for a range of seeds.
@@ -56,12 +54,11 @@ class TestsIssue22(unittest.TestCase):
         alg = BiDirectional(self.G,
                             self.max_res,
                             self.min_res,
-                            seed=seed,
                             elementary=False)
         alg.run()
         self.assertEqual(alg.path, self.result_path)
         self.assertEqual(alg.total_cost, self.total_cost)
-        self.assertTrue(alg.consumed_resources == self.consumed_resources)
+        self.assertEqual(alg.consumed_resources, self.consumed_resources)
 
     def test_bidirectional_forward(self):
         """

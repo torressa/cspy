@@ -1,20 +1,16 @@
-name: Ubuntu Python tests
+name: Upload Python Package
 
-on: [push, pull_request]
+on:
+  release:
+    types: [created]
 
 jobs:
-  build:
+  deploy:
+
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: [3.6, 3.7, 3.8]
 
     steps:
     - uses: actions/checkout@v2
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python-version }}
     - name: Configure
       run: cmake -S . -Bbuild -DBUILD_TESTING=ON -DBUILD_PYTHON=ON -DBUILD_SHARED_LIBS=ON
     - name: Build
@@ -23,3 +19,9 @@ jobs:
       run: cmake --build build --config Release --target test -v
     - name: Install
       run: cmake --build build --config Release --target install -v
+    - name: Build and publish
+      env:
+        TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
+        TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+      run: |
+        twine upload dist/*

@@ -29,21 +29,16 @@ class TestsIssue41(unittest.TestCase):
         self.total_cost = 20
         self.consumed_resources = [3, 3]
 
-    @parameterized.expand(zip(range(1), range(1)))
-    def test_bidirectional_random(self, _, seed):
+    def test_bidirectional(self):
         """
         Test BiDirectional with randomly chosen sequence of directions
         for a range of seeds.
         """
-        alg = BiDirectional(self.G,
-                            self.max_res,
-                            self.min_res,
-                            method="random",
-                            seed=seed)
+        alg = BiDirectional(self.G, self.max_res, self.min_res)
         alg.run()
         self.assertEqual(alg.path, self.result_path)
         self.assertEqual(alg.total_cost, self.total_cost)
-        self.assertTrue(alg.consumed_resources == self.consumed_resources)
+        self.assertEqual(alg.consumed_resources, self.consumed_resources)
 
     def test_bidirectional_forward(self):
         alg = BiDirectional(self.G,
