@@ -1,22 +1,14 @@
-name: Ubuntu Python tests
+name: MacOS Cpp Test
 
 on: [push, pull_request]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: [3.6, 3.7, 3.8]
-
+    runs-on: macos-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python-version }}
     - name: Configure
-      run: cmake -S . -Bbuild -DBUILD_TESTING=ON -DBUILD_PYTHON=ON -DBUILD_SHARED_LIBS=ON
+      run: cmake -S . -Bbuild -DBUILD_TESTING=ON -DCMAKE_BUILD_TYPE=Release -DBUILD_PYTHON=OFF -DBUILD_SHARED_LIBS=OFF
     - name: Build
       run: cmake --build build --config Release --target all -v
     - name: Test
