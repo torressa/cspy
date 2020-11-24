@@ -8,12 +8,10 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Configure
-      run: cmake -S . -Bbuild -DBUILD_TESTING=ON -DCMAKE_BUILD_TYPE=Release \
-        -DBUILD_PYTHON=OFF -DBUILD_SHARED_LIBS=OFF
+      run: cmake -S . -Bbuild -DBUILD_TESTING=ON -DCMAKE_BUILD_TYPE=Release -DBUILD_PYTHON=OFF -DBUILD_SHARED_LIBS=OFF
     - name: Build
       run: cmake --build build --config Release --target all -v
     - name: Test
-      run: cmake --build build --config Release --target test -v \
-        && cat build/Testing/Temporary/LastTest.log
+      run: cmake --build build --config Release --target test -v && cat build/Testing/Temporary/LastTest.log
     - name: Install
       run: cmake --build build --config Release --target install -v -- DESTDIR=install
