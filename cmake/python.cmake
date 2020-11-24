@@ -93,14 +93,14 @@ if(BUILD_TESTING)
     # Must not call it in a folder containing the setup.py otherwise pip call it
     # (i.e. "python setup.py bdist") while we want to consume the wheel package
     COMMAND ${Python_EXECUTABLE} -m pip install --find-links=dist ${PROJECT_NAME}
-    COMMAND ${Python_EXECUTABLE} -m unittest test_python/*
+	COMMAND ${Python_EXECUTABLE} -m unittest discover -s test/python/
     BYPRODUCTS
     build
     dist
     ${PROJECT_NAME}.egg-info
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
   add_test(NAME python_unittest
-    COMMAND ${Python_EXECUTABLE} -m unittest test_python/*)
+	COMMAND ${Python_EXECUTABLE} -m unittest discover -s test/python/)
 endif()
 
 if (CMAKE_BUILD_TYPE EQUAL "Release")

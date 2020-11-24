@@ -11,7 +11,7 @@ if (BUILD_TESTING)
     GIT_TAG master)
   FetchContent_MakeAvailable(googletest)
   set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-  add_subdirectory(test_cc/)
+  add_subdirectory(test/cc/)
 endif()
 
 # Install

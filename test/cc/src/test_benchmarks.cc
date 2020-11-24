@@ -124,37 +124,38 @@ TEST_P(TestBenchmarks, testForwardElementary) {
       num_resources,
       path_to_instance);
   bidirectional->run();
+
   auto cost = bidirectional->getTotalCost();
   ASSERT_EQ(cost, getBestCost(path_to_data, instance_number));
 }
 
-TEST_P(TestBenchmarks, testForward) {
-  const std::string path_to_instance =
-      path_to_data + "rcsp" + std::to_string(instance_number) + ".txt";
-  int                 num_nodes, num_arcs, num_resources;
-  std::vector<double> max_res, min_res;
-  loadMaxMinRes(
-      &max_res,
-      &min_res,
-      &num_nodes,
-      &num_arcs,
-      &num_resources,
-      path_to_instance);
-  bidirectional =
-      std::make_unique<BiDirectional>(num_nodes, num_arcs, max_res, min_res);
-  bidirectional->direction  = "forward";
-  bidirectional->time_limit = time_limit;
-  loadGraph(
-      bidirectional.get(),
-      num_nodes,
-      num_arcs,
-      num_resources,
-      path_to_instance);
-  std::cout << "loaded graph\n";
-  bidirectional->run();
-  auto cost = bidirectional->getTotalCost();
-  ASSERT_EQ(cost, getBestCost(path_to_data, instance_number));
-}
+// TEST_P(TestBenchmarks, testForward) {
+//   const std::string path_to_instance =
+//       path_to_data + "rcsp" + std::to_string(instance_number) + ".txt";
+//   int                 num_nodes, num_arcs, num_resources;
+//   std::vector<double> max_res, min_res;
+//   loadMaxMinRes(
+//       &max_res,
+//       &min_res,
+//       &num_nodes,
+//       &num_arcs,
+//       &num_resources,
+//       path_to_instance);
+//   bidirectional =
+//       std::make_unique<BiDirectional>(num_nodes, num_arcs, max_res, min_res);
+//   bidirectional->direction  = "forward";
+//   bidirectional->time_limit = time_limit;
+//   loadGraph(
+//       bidirectional.get(),
+//       num_nodes,
+//       num_arcs,
+//       num_resources,
+//       path_to_instance);
+//   bidirectional->run();
+//
+//   auto cost = bidirectional->getTotalCost();
+//   ASSERT_EQ(cost, getBestCost(path_to_data, instance_number));
+// }
 
 TEST_P(TestBenchmarks, testBothElementaryUnprocessed) {
   const std::string path_to_instance =
@@ -171,7 +172,6 @@ TEST_P(TestBenchmarks, testBothElementaryUnprocessed) {
   bidirectional =
       std::make_unique<BiDirectional>(num_nodes, num_arcs, max_res, min_res);
   bidirectional->elementary = true;
-  bidirectional->method     = "unprocessed";
   bidirectional->time_limit = time_limit;
   loadGraph(
       bidirectional.get(),
@@ -180,6 +180,7 @@ TEST_P(TestBenchmarks, testBothElementaryUnprocessed) {
       num_resources,
       path_to_instance);
   bidirectional->run();
+
   auto cost = bidirectional->getTotalCost();
   ASSERT_EQ(cost, getBestCost(path_to_data, instance_number));
 }
@@ -213,6 +214,6 @@ TEST_P(TestBenchmarks, testBothElementaryUnprocessed) {
 INSTANTIATE_TEST_SUITE_P(
     TestBenchmarksName,
     TestBenchmarks,
-    ::testing::Range(1, 10));
+    ::testing::Range(1, 25));
 
 } // namespace bidirectional
