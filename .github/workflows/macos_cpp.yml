@@ -12,6 +12,8 @@ jobs:
     - name: Build
       run: cmake --build build --config Release --target all -v
     - name: Test
-      run: cmake --build build --config Release --target test -v && cat build/Testing/Temporary/LastTest.log
+      run: cmake --build build --config Release --target test -v
+    - name: Show test output
+      run: cat build/Testing/Temporary/LastTest.log
     - name: Install
       run: cmake --build build --config Release --target install -v -- DESTDIR=install
