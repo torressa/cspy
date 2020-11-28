@@ -270,7 +270,8 @@ void BiDirectional::joinLabels() {
   getMinimumWeights(fwd_min.get(), bwd_min.get());
   for (const int& n : fwd_search_->visited_vertices) {
     // for each vertex visited forward
-    if (fwd_search_->best_labels[n]->weight + *bwd_min <= UB) {
+    if (fwd_search_->best_labels[n]->weight + *bwd_min <= UB &&
+        n != graph->sink.idx) {
       // if bound check fwd_label
       for (auto fwd_iter = fwd_search_->efficient_labels[n].begin();
            fwd_iter != fwd_search_->efficient_labels[n].end();
@@ -287,7 +288,7 @@ void BiDirectional::joinLabels() {
             // get successors idx (m)
             const int&    m           = (*it).vertex.idx;
             const double& edge_weight = (*it).weight;
-            if (bwd_search_->checkVertexVisited(m) &&
+            if (bwd_search_->checkVertexVisited(m) && m != graph->source.idx &&
                 (fwd_label.weight + edge_weight +
                      bwd_search_->best_labels[m]->weight <=
                  UB)) {

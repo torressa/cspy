@@ -20,6 +20,6 @@ jobs:
     - name: Build
       run: cmake --build build --config Release --target all -v
     - name: Test
-      run: cmake --build build --config Release --target test -v
+      run: cd build && ctest --verbose
     - name: Install
       run: cmake --build build --config Release --target install -v -- DESTDIR=install

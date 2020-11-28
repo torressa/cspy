@@ -8,7 +8,7 @@ from cspy.preprocessing import preprocess_graph
 from cspy.checking import check, check_seed
 
 # Import from the SWIG output file
-from pyBiDirectionalCpp import (BiDirectionalCpp, REFCallback, DoubleVector)
+from .pyBiDirectionalCpp import (BiDirectionalCpp, REFCallback, DoubleVector)
 
 
 class BiDirectional:

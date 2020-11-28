@@ -273,6 +273,16 @@ void Search::updateEfficientLabels(
 void Search::updateBestLabels(
     const int&              vertex_idx,
     const labelling::Label& candidate_label) {
+  // Only save full paths when they are global resource feasible
+  if (direction == "foward" && vertex_idx == graph.sink.idx &&
+      !candidate_label.checkFeasibility(max_res, min_res)) {
+    return;
+  } else if (
+      direction == "backward" && vertex_idx == graph.source.idx &&
+      !candidate_label.checkFeasibility(max_res, min_res)) {
+    return;
+  }
+  // Update best_label only when new label has lower weight or first label
   if (best_labels[vertex_idx] &&
       candidate_label.weight < best_labels[vertex_idx]->weight) {
     best_labels[vertex_idx] =
