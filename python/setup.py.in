@@ -25,6 +25,7 @@ setup(
     author='torressa',
     author_email='\"David Torres\" <david.sanchez@sintef.no>',
     url='https://github.com/torressa/cspy',
+    description='(Resource) Constrained  Shortest Path algorithms in Python',
     distclass=BinaryDistribution,
     cmdclass={'install': InstallPlatlib},
     packages=find_packages(),
