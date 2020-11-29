@@ -12,8 +12,7 @@ class Callback(REFCallback):
     def REF_fwd(self, cumul_res, tail, head, edge_res, partial_path,
                 cumul_cost):
         print(cumul_res, tail, head, edge_res, partial_path, cumul_cost)
-        new_res = cumul_res + edge_res
-        return new_res
+        return cumul_res + edge_res
 
 
 def main():

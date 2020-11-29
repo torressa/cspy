@@ -99,11 +99,9 @@ class BiDirectional:
             self.bidirectional_cpp.direction = direction
         if method in ["random", "generated", "processed"]:
             self.bidirectional_cpp.method = method
-        if time_limit is not None and (isinstance(time_limit, int) or
-                                       isinstance(time_limit, float)):
+        if time_limit is not None and isinstance(time_limit, (int, float)):
             self.bidirectional_cpp.time_limit = time_limit
-        if threshold is not None and (isinstance(time_limit, int) or
-                                      isinstance(time_limit, float)):
+        if threshold is not None and isinstance(time_limit, (int, float)):
             self.bidirectional_cpp.threshold = threshold
         if isinstance(elementary, bool) and not elementary:
             self.bidirectional_cpp.elementary = elementary
@@ -132,20 +130,20 @@ class BiDirectional:
         """
         path = self.bidirectional_cpp.getPath()
         # format as list on return as SWIG returns "tuple"
-        if len(path) > 0:
-            _path = []
-            # Convert path to its original types and return
-            for p in path:
-                if p == "Source" or p == "Sink":
-                    _path.append(p)
-                else:
-                    if "int" in self._original_node_type.__name__:
-                        _path.append(int(p))
-                    elif "str" in self._original_node_type.__name__:
-                        _path.append(str(p))
-            return _path
-        else:
+        if len(path) <= 0:
             return None
+
+        _path = []
+            # Convert path to its original types and return
+        for p in path:
+            if p in ["Source", "Sink"]:
+                _path.append(p)
+            else:
+                if "int" in self._original_node_type.__name__:
+                    _path.append(int(p))
+                elif "str" in self._original_node_type.__name__:
+                    _path.append(str(p))
+        return _path
 
     @property
     def total_cost(self):
@@ -167,7 +165,9 @@ class BiDirectional:
 
     def _init_graph(self, G):
         self._original_node_type = type(
-            [n for n in G.nodes() if n != "Source" and n != "Sink"][0])
+            [n for n in G.nodes() if n not in ["Source", "Sink"]][0]
+        )
+
         for edge in G.edges(data=True):
             res_cost = _convert_list_to_double_vector(edge[2]["res_cost"])
             self.bidirectional_cpp.addEdge(str(edge[0]), str(edge[1]),
