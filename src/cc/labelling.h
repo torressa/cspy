@@ -1,7 +1,6 @@
 #ifndef BIDIRECTIONAL_LABELLING_H__
 #define BIDIRECTIONAL_LABELLING_H__
 
-#include <memory>
 #include <vector>
 
 #include "digraph.h"

@@ -1,7 +1,7 @@
 #ifndef BIDIRECTIONAL_SEARCH_H__
 #define BIDIRECTIONAL_SEARCH_H__
 
-#include <cmath>
+#include <cmath> // nan
 #include <vector>
 
 #include "digraph.h"

@@ -1,8 +1,8 @@
 #ifndef BIDIRECTIONAL_BIDIRECTIONAL_H__
 #define BIDIRECTIONAL_BIDIRECTIONAL_H__
 
-#include <cmath>
-#include <ctime>
+#include <cmath> // nan
+#include <ctime> // clock_t
 #include <vector>
 
 #include "digraph.h"
@@ -59,10 +59,6 @@ class BiDirectional {
   bool elementary = false;
   /// int multiples of the iterations where dominance function is run
   int dominance_frequency = 1;
-  // For output
-  /// Final label
-  std::shared_ptr<labelling::Label> final_label;
-  std::shared_ptr<labelling::Label> best_label;
 
   /// set seed
   void setSeed(const int& seed = 1);
@@ -87,15 +83,20 @@ class BiDirectional {
   double getTotalCost() const;
 
  private:
+  /// Intermediate current best label with possibly complete source-sink path
+  /// (shared pointer as we want to be able to substitute it without reseting)
+  std::shared_ptr<labelling::Label> intermediate_label_;
+  /// Final best label (merged or otherwise)
+  std::shared_ptr<labelling::Label> best_label_;
   /// @see labelling::LabelExtension
-  std::shared_ptr<labelling::LabelExtension> label_extension_;
+  std::unique_ptr<labelling::LabelExtension> label_extension_;
   // Algorithm parameters
   // whether the search terminad early with a valid s-t path
   bool                                 terminated_early_w_st_path_ = false;
-  clock_t                              start_time;
+  clock_t                              start_time_;
   std::unique_ptr<Search>              fwd_search_;
   std::unique_ptr<Search>              bwd_search_;
-  std::shared_ptr<std::vector<double>> lower_bound_weight_;
+  std::unique_ptr<std::vector<double>> lower_bound_weight_;
 
   // Algorithm methods
   /// Get the next direction to search
@@ -103,15 +104,21 @@ class BiDirectional {
   /// Advance the search in a given direction
   void move(const std::string& direction_);
   // void checkTerminateSerial();
-  void updateFinalLabel();
+  void updateIntermediateLabel();
   /// checks if the time_limit if over (if set) or if a label under the
   /// threshold has been found (if set). Sets terminated_early_w_st_path_
   bool terminate(const labelling::Label& label);
   bool checkValidLabel(const labelling::Label& label);
+  /// @see Search.cleanUp
   void cleanUp() const;
-  /// Processing of output path.
+  /**
+   * Wrapper to process of output path. Either saves appropriate label
+   * (single-direction search or early termination) or calls joinLabels to merge
+   * forward + backward labels
+   */
   void postProcessing();
-  /// get upper bound for a source-sink path
+  /// get upper bound for a source-sink path (looks at both forward and backward
+  /// source-sink paths)
   double getUB();
   /**
    * get minimum weight across all forward / backward labels

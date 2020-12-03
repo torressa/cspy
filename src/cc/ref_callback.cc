@@ -1,7 +1,6 @@
 #include "ref_callback.h"
 
-#include <algorithm>
-#include <iostream>
+#include <algorithm> // transform
 
 namespace bidirectional {
 

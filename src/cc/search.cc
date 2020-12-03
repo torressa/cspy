@@ -1,8 +1,6 @@
 #include "search.h"
 
-#include <algorithm>
-#include <iostream>
-#include <set>
+#include <algorithm> // sort, all_of, find
 
 namespace bidirectional {
 

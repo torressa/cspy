@@ -1,11 +1,6 @@
 #include "bidirectional.h"
 
-#include <stdlib.h>
-
-#include <algorithm>
-#include <iostream>
-
-#include "preprocessing.h" // dijkstra
+#include "preprocessing.h" // dijkstra, INF
 
 namespace bidirectional {
 
@@ -16,15 +11,15 @@ BiDirectional::BiDirectional(
     const std::vector<double>& min_res_in)
     : graph(new DiGraph(number_vertices, number_edges)),
       max_res(max_res_in),
-      min_res(min_res_in) {
+      min_res(min_res_in),
+      label_extension_(std::make_unique<labelling::LabelExtension>()),
+      lower_bound_weight_(std::make_unique<std::vector<double>>()) {
   // allocate memory
-  lower_bound_weight_ = std::make_shared<std::vector<double>>();
   lower_bound_weight_->resize(number_vertices);
 
-  label_extension_        = std::make_shared<labelling::LabelExtension>();
   Vertex           vertex = {"", -1};
   labelling::Label label(0.0, vertex, {}, {});
-  best_label = std::make_shared<labelling::Label>(label);
+  best_label_ = std::make_shared<labelling::Label>(label);
 }
 
 BiDirectional::~BiDirectional() {
@@ -41,15 +36,15 @@ void BiDirectional::setREFCallback(bidirectional::REFCallback* cb) const {
 }
 
 std::vector<std::string> BiDirectional::getPath() const {
-  return best_label->partial_path;
+  return best_label_->partial_path;
 }
 
 std::vector<double> BiDirectional::getConsumedResources() const {
-  return best_label->resource_consumption;
+  return best_label_->resource_consumption;
 }
 
 double BiDirectional::getTotalCost() const {
-  return best_label->weight;
+  return best_label_->weight;
 }
 
 void BiDirectional::addEdge(
@@ -61,18 +56,18 @@ void BiDirectional::addEdge(
 }
 
 void BiDirectional::run() {
-  start_time = clock();
+  start_time_ = clock();
   dijkstra(lower_bound_weight_.get(), *graph);
   initSearches();
   while (!fwd_search_->stop || !bwd_search_->stop) {
     const std::string next_direction = getDirection();
     if (!next_direction.empty()) {
       move(next_direction);
-      updateFinalLabel();
+      updateIntermediateLabel();
     } else {
       break;
     }
-    if (terminate(*final_label)) {
+    if (terminate(*intermediate_label_)) {
       break;
     }
   }
@@ -81,7 +76,7 @@ void BiDirectional::run() {
     postProcessing();
   } else {
     // final label contains the label that triggered the early termination
-    best_label = std::make_shared<labelling::Label>(*final_label);
+    best_label_ = std::make_shared<labelling::Label>(*intermediate_label_);
   }
 }
 
@@ -168,23 +163,25 @@ void BiDirectional::move(const std::string& direction_) {
     bwd_search_->move(fwd_search_->min_res_curr);
 }
 
-void BiDirectional::updateFinalLabel() {
+void BiDirectional::updateIntermediateLabel() {
   if (direction == "forward")
-    final_label = std::make_shared<labelling::Label>(*fwd_search_->final_label);
+    intermediate_label_ =
+        std::make_shared<labelling::Label>(*fwd_search_->final_label);
   else if (direction == "backward")
-    final_label = std::make_shared<labelling::Label>(*bwd_search_->final_label);
+    intermediate_label_ =
+        std::make_shared<labelling::Label>(*bwd_search_->final_label);
   else {
     if (!fwd_search_->final_label->vertex.id.empty())
-      final_label =
+      intermediate_label_ =
           std::make_shared<labelling::Label>(*fwd_search_->final_label);
     else if (!bwd_search_->final_label->vertex.id.empty())
-      final_label =
+      intermediate_label_ =
           std::make_shared<labelling::Label>(*bwd_search_->final_label);
   }
 }
 
 bool BiDirectional::terminate(const labelling::Label& label) {
-  clock_t timediff     = clock() - start_time;
+  clock_t timediff     = clock() - start_time_;
   double  timediff_sec = ((double)timediff) / CLOCKS_PER_SEC;
   if (!std::isnan(time_limit) && timediff_sec >= time_limit) {
     return true;
@@ -215,12 +212,13 @@ void BiDirectional::postProcessing() {
     // If forward direction specified or backward direction not traversed
     if (direction == "forward")
       // Forward
-      best_label = std::make_shared<labelling::Label>(*final_label);
+      best_label_ = std::make_shared<labelling::Label>(*intermediate_label_);
     // If backward direction specified or forward direction not traversed
     else {
       // Backward
-      best_label = std::make_shared<labelling::Label>(
-          labelling::processBwdLabel(*final_label, max_res, min_res, true));
+      best_label_ =
+          std::make_shared<labelling::Label>(labelling::processBwdLabel(
+              *intermediate_label_, max_res, min_res, true));
     }
   }
 }
@@ -309,19 +307,19 @@ void BiDirectional::joinLabels() {
                       min_res);
                   if (!merged_label.vertex.id.empty() &&
                       merged_label.checkFeasibility(max_res, min_res)) {
-                    if (best_label->vertex.id.empty() ||
+                    if (best_label_->vertex.id.empty() ||
                         (merged_label.fullDominance(
-                             *best_label, "forward", elementary) ||
-                         merged_label.weight < best_label->weight)) {
+                             *best_label_, "forward", elementary) ||
+                         merged_label.weight < best_label_->weight)) {
                       // Save
-                      best_label =
+                      best_label_ =
                           std::make_shared<labelling::Label>(merged_label);
-                      if (terminate(*best_label)) {
+                      if (terminate(*best_label_)) {
                         return;
                       }
                       propagate_break = true;
                       break; // bwd labels loop
-                    } else if (merged_label.weight < best_label->weight) {
+                    } else if (merged_label.weight < best_label_->weight) {
                       propagate_break = true;
                       break;
                     }

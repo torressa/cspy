@@ -8,6 +8,7 @@
 
 namespace bidirectional {
 
+/// Data structure for vertices
 struct Vertex {
   std::string id;
   int         idx;
@@ -54,13 +55,15 @@ class DiGraph {
   /// adjacency_matrix to avoid O(E) extraction of edges with the adjacency list
   std::vector<std::vector<std::shared_ptr<AdjVertex>>> adjacency_matrix;
 
-  /// default constructor
-  DiGraph(){};
-  /// constructor with memory allocation
+  /**
+   * Constructor with memory allocation for vertices, adjacency + reversed list,
+   * adjacency matrix.
+   *
+   * @param[in] number_vertices, int
+   * @param[in] number_edges, int
+   */
   DiGraph(const int& number_vertices, const int& number_edges);
 
-  /// Allocate memory for the adjacency_list
-  void resizeVertices();
   /// Add a new edge to the graph. Updates nodes and adjacency_matrix
   void addEdge(
       const std::string&         tail,
@@ -71,13 +74,16 @@ class DiGraph {
   bool checkEdge(const int& tail, const int& head) const;
   /// If a (tail, head) edge exists, retrieves the appropriate edge object
   AdjVertex getAdjVertex(const int& tail, const int& head) const;
-  /// initialise reversed_adjacency_list for backward edge extractions
+  /// initialise reversed_adjacency_list for backward vertex iterations
   void initReversedAdjList();
 
  private:
-  bool source_saved_          = false;
-  bool sink_saved_            = false;
-  int  number_vertices_added_ = 0;
+  /// whether the source vertex has already been saved in vertices
+  bool source_saved_ = false;
+  /// whether the sink vertex has already been saved in vertices
+  bool sink_saved_ = false;
+  ///
+  int number_vertices_added_ = 0;
   /**
    * Checks if a vertex with the same id already exists, in which case, it is
    * retrieved and returned.

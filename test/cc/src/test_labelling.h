@@ -1,8 +1,6 @@
 #ifndef TEST_TEST_LABELLING_H__
 #define TEST_TEST_LABELLING_H__
 
-#include <memory>
-
 #include "bidirectional.h"
 #include "digraph.h"
 #include "gtest/gtest.h"

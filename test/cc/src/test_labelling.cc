@@ -1,7 +1,7 @@
 #include "test_labelling.h"
 
-#include <iostream>
-#include <numeric>
+#include <algorithm> // make_heap, push_heap
+#include <memory>    // make_unique
 
 namespace labelling {
 

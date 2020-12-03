@@ -1,8 +1,7 @@
 #include "labelling.h"
 
-#include <algorithm>
-#include <cmath>
-#include <iostream>
+#include <algorithm> // sort, includes, copy_if, find, push/make_heap, adj_vertex
+#include <iostream>  // ostream
 #include <set>
 
 namespace labelling {
