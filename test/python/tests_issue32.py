@@ -10,6 +10,11 @@ from parameterized import parameterized
 
 class MyCallback(REFCallback):
 
+    def __init__(self, arg1, arg2):
+        REFCallback.__init__(self)
+        self._arg1: int = arg1
+        self._arg2: bool = arg2
+
     def REF_fwd(self, cumul_res, tail, head, edge_res, partial_path,
                 cumul_cost):
         res_new = list(cumul_res)
@@ -47,7 +52,7 @@ class TestsIssue32(unittest.TestCase):
 
     def setUp(self):
         # Maximum and minimum resource arrays
-        self.my_callback = MyCallback()
+        self.my_callback = MyCallback(10, True)
         self.max_res, self.min_res = [5, 10e5, 1], [0, 0, 0]
         # Create simple digraph with appropriate attributes
         # No resource costs required for custom REFs

@@ -110,7 +110,10 @@ class BiDirectional:
         if isinstance(seed, int) and seed is not None:
             self.bidirectional_cpp.setSeed(seed)
         if REF_callback is not None:
-            self.bidirectional_cpp.setREFCallback(REF_callback)
+            # Add a Python callback (caller owns the callback, so we
+            # disown it first by calling __disown__).
+            # see: https://github.com/swig/swig/blob/b6c2438d7d7aac5711376a106a156200b7ff1056/Examples/python/callback/runme.py#L36
+            self.bidirectional_cpp.setREFCallback(REF_callback.__disown__())
 
         # Pass graph
         self._init_graph(G)
