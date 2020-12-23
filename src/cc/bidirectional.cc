@@ -9,9 +9,9 @@ BiDirectional::BiDirectional(
     const int&                 number_edges,
     const std::vector<double>& max_res_in,
     const std::vector<double>& min_res_in)
-    : graph(new DiGraph(number_vertices, number_edges)),
-      max_res(max_res_in),
+    : max_res(max_res_in),
       min_res(min_res_in),
+      graph(new DiGraph(number_vertices, number_edges)),
       label_extension_(std::make_unique<labelling::LabelExtension>()),
       lower_bound_weight_(std::make_unique<std::vector<double>>()) {
   // allocate memory
@@ -25,10 +25,6 @@ BiDirectional::BiDirectional(
 BiDirectional::~BiDirectional() {
   graph = nullptr;
   delete graph;
-}
-
-void BiDirectional::setSeed(const int& seed) {
-  std::srand(seed);
 }
 
 void BiDirectional::setREFCallback(bidirectional::REFCallback* cb) const {
@@ -57,7 +53,9 @@ void BiDirectional::addEdge(
 
 void BiDirectional::run() {
   start_time_ = clock();
+  // Run dijkstra's to get lower bounds
   dijkstra(lower_bound_weight_.get(), *graph);
+  // Init search classes using lower_bound_weight_ + others
   initSearches();
   while (!fwd_search_->stop || !bwd_search_->stop) {
     const std::string next_direction = getDirection();
@@ -224,13 +222,15 @@ void BiDirectional::postProcessing() {
 }
 
 double BiDirectional::getUB() {
-  double      UB       = INF;
+  double UB = INF;
+  // Extract feasible
   const auto& fwd_best = fwd_search_->best_labels[graph->sink.idx];
   const auto& bwd_best = bwd_search_->best_labels[graph->source.idx];
-  if (fwd_best) {
+  // Upper bound must be a resource-feasible s-t path
+  if (fwd_best && fwd_best->checkFeasibility(max_res, min_res)) {
     UB = fwd_best->weight;
   }
-  if (bwd_best) {
+  if (bwd_best && bwd_best->checkFeasibility(max_res, min_res)) {
     if (bwd_best->weight < UB) {
       UB = bwd_best->weight;
     }
@@ -243,14 +243,16 @@ void BiDirectional::getMinimumWeights(double* fwd_min, double* bwd_min) {
   // init
   *fwd_min = INF;
   for (const int& n : fwd_search_->visited_vertices) {
-    if (fwd_search_->best_labels[n]->weight < *fwd_min) {
+    if (fwd_search_->best_labels[n] &&
+        fwd_search_->best_labels[n]->weight < *fwd_min) {
       *fwd_min = fwd_search_->best_labels[n]->weight;
     }
   }
   // backward
   *bwd_min = INF;
   for (const int& n : bwd_search_->visited_vertices) {
-    if (bwd_search_->best_labels[n]->weight < *bwd_min) {
+    if (bwd_search_->best_labels[n] &&
+        bwd_search_->best_labels[n]->weight < *bwd_min) {
       *bwd_min = bwd_search_->best_labels[n]->weight;
     }
   }
@@ -271,8 +273,8 @@ void BiDirectional::joinLabels() {
     if (fwd_search_->best_labels[n]->weight + *bwd_min <= UB &&
         n != graph->sink.idx) {
       // if bound check fwd_label
-      for (auto fwd_iter = fwd_search_->efficient_labels[n].begin();
-           fwd_iter != fwd_search_->efficient_labels[n].end();
+      for (auto fwd_iter = fwd_search_->efficient_labels[n].cbegin();
+           fwd_iter != fwd_search_->efficient_labels[n].cend();
            ++fwd_iter) { // for each forward label at n
         // break for loops recursively
         bool                    propagate_break = false;
@@ -280,8 +282,9 @@ void BiDirectional::joinLabels() {
         if (fwd_label.resource_consumption[0] <= HF &&
             fwd_label.weight + *bwd_min <= UB) { // if bound check fwd_label
           const std::vector<AdjVertex>& adj_vertices = graph->adjacency_list[n];
-          for (std::vector<AdjVertex>::const_iterator it = adj_vertices.begin();
-               it != adj_vertices.end();
+          for (std::vector<AdjVertex>::const_iterator it =
+                   adj_vertices.cbegin();
+               it != adj_vertices.cend();
                ++it) { // for each successors of n
             // get successors idx (m)
             const int&    m           = (*it).vertex.idx;
@@ -290,8 +293,8 @@ void BiDirectional::joinLabels() {
                 (fwd_label.weight + edge_weight +
                      bwd_search_->best_labels[m]->weight <=
                  UB)) {
-              for (auto bwd_iter = bwd_search_->efficient_labels[m].begin();
-                   bwd_iter != bwd_search_->efficient_labels[m].end();
+              for (auto bwd_iter = bwd_search_->efficient_labels[m].cbegin();
+                   bwd_iter != bwd_search_->efficient_labels[m].cend();
                    ++bwd_iter) { // for each backward label at m
                 const labelling::Label& bwd_label = *bwd_iter;
                 if (bwd_label.resource_consumption[0] > HF &&

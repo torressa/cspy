@@ -109,11 +109,15 @@ class LabelExtension {
    * feasible.
    * The input label is a pointer as it may be modified in the case
    * that the edge / adjacent_vertex is found to be resource infeasible, in
-   * which case, the head node becomes unreachable and the attribute is updated.
+   * which case, the head/tail node becomes unreachable and the attribute is
+   * updated.
    *
    * @param[out] label, labelling::Label, current label to extend (and maybe
    * update `unreachable_nodes`)
    * @param[in] adjacent_vertex, AdjVertex, edge
+   *
+   * @return Label object with extended label. Note this may be empty if the
+   * extension is resource infeasible
    */
   Label extend(
       Label*                          label,
@@ -143,22 +147,6 @@ void updateEfficientLabels(
     const bool&         elementary);
 
 /**
- * Run dominance checks over all pairs of labels in `labels`
- *
- * @param[out] labels, std::vector<Label> pointer
- * @param[in] direction, string with direction of search
- * @param[in] elementary, bool with whether non-elementary paths are allowed
- *
- * @return bool with true if either labels or best_labels have been updated,
- * false otherwise.
- */
-bool runDominance(
-    std::vector<Label>*                    labels,
-    const std::string&                     direction,
-    const bool&                            elementary,
-    const std::vector<std::vector<Label>>& efficient_labels = {{}});
-
-/**
  * Check whether the input label dominates any efficient label (previously
  * undominated labels) at the same node. All the labels that are dominated by
  * the input label are removed.
@@ -184,8 +172,8 @@ bool runDominanceEff(
     const std::string&         direction,
     const bool&                elementary,
     const bool&                check_feasibility,
-    const std::vector<double>& max_res,
-    const std::vector<double>& min_res);
+    const std::vector<double>& max_res = {},
+    const std::vector<double>& min_res = {});
 
 /// Reverse backward path and inverts resource consumption
 Label processBwdLabel(

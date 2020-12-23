@@ -35,6 +35,7 @@ setup(
         ],
     },
     include_package_data=True,
+    install_requires=['networkx', 'numpy'],
     classifiers=[
         'Operating System :: POSIX :: Linux',
         'Operating System :: MacOS :: MacOS X',

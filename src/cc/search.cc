@@ -219,7 +219,10 @@ void Search::extendCurrentLabel() {
           elementary,
           max_res_curr,
           min_res_curr);
-      updateEfficientLabels(adj_vertex.vertex.idx, new_label);
+      // If label non-empty, (only when the extension is resource-feasible)
+      if (!new_label.vertex.id.empty()) {
+        updateEfficientLabels(adj_vertex.vertex.idx, new_label);
+      }
     }
   }
 }
@@ -247,7 +250,8 @@ void Search::updateEfficientLabels(
             check_feasibility_dominance_,
             max_res_curr,
             min_res_curr);
-        if (!dominated && !checkPrimalBound(candidate_label)) {
+        if (!dominated // && !checkPrimalBound(candidate_label)
+        ) {
           // add candidate_label to efficient_labels and unprocessed heap
           efficient_labels_vertex.push_back(candidate_label);
           unprocessed_labels_->push_back(candidate_label);

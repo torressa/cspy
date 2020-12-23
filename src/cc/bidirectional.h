@@ -39,10 +39,8 @@ class BiDirectional {
       const std::vector<double>& min_res);
   ~BiDirectional();
 
-  /// DiGraph pointer (raw cause of swig!)
-  DiGraph* graph;
+  /* Variables */
 
-  // Inputs
   /// vector with upper and lower bounds for resources
   std::vector<double> max_res;
   std::vector<double> min_res;
@@ -59,9 +57,13 @@ class BiDirectional {
   bool elementary = false;
   /// int multiples of the iterations where dominance function is run
   int dominance_frequency = 1;
+  /// DiGraph pointer (raw cause of swig!)
+  DiGraph* graph;
 
-  /// set seed
-  void setSeed(const int& seed = 1);
+  /* Methods */
+
+  /// set random using a given seed
+  void setSeed(const int& seed) { std::srand(seed); }
   /// Pass python callback for label extensions.
   /// Note: swig needs namespace specifier
   void setREFCallback(bidirectional::REFCallback* cb) const;
@@ -71,10 +73,11 @@ class BiDirectional {
       const std::string&         head,
       const double&              weight,
       const std::vector<double>& resource_consumption);
-  /// Initalise searches
-  void initSearches();
   /// run the algorithm (assumes all the appropriate options are set)
   void run();
+
+  /* Getters */
+
   /// Return the final path
   std::vector<std::string> getPath() const;
   /// Return the consumed resources
@@ -99,6 +102,8 @@ class BiDirectional {
   std::unique_ptr<std::vector<double>> lower_bound_weight_;
 
   // Algorithm methods
+  /// Initalise searches
+  void initSearches();
   /// Get the next direction to search
   std::string getDirection() const;
   /// Advance the search in a given direction
@@ -117,8 +122,8 @@ class BiDirectional {
    * forward + backward labels
    */
   void postProcessing();
-  /// get upper bound for a source-sink path (looks at both forward and backward
-  /// source-sink paths)
+  /// get upper bound using a valid source-sink path (looks at both forward and
+  /// backward source-sink paths)
   double getUB();
   /**
    * get minimum weight across all forward / backward labels

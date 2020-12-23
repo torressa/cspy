@@ -12,6 +12,7 @@ using namespace bidirectional;
 %include <std_string.i>
 
 %template(DoubleVector) std::vector<double>;
+/* Needed for graph, ow causes memory leak */
 %template(StringVector) std::vector<std::string>;
 
 /* turn on director wrapping Callback */
@@ -24,15 +25,7 @@ using namespace bidirectional;
 %rename("%s") bidirectional::BiDirectional::~BiDirectional;
 /* Expose graph construction and setters */
 %rename("%s") bidirectional::BiDirectional::addEdge;
-%rename("%s") bidirectional::BiDirectional::setPyCallback;
-%rename("%s") bidirectional::BiDirectional::setSeed;
-/* Expose all solving members */
-%rename("%s") bidirectional::BiDirectional::direction;
-%rename("%s") bidirectional::BiDirectional::method;
-%rename("%s") bidirectional::BiDirectional::time_limit;
-%rename("%s") bidirectional::BiDirectional::threshold;
-%rename("%s") bidirectional::BiDirectional::elementary;
-%rename("%s") bidirectional::BiDirectional::dominance_frequency;
+%rename("%s") bidirectional::BiDirectional::setREFCallback;
 /* Expose getters */
 %rename("%s") bidirectional::BiDirectional::getPath;
 %rename("%s") bidirectional::BiDirectional::getTotalCost;

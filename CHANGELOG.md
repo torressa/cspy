@@ -8,6 +8,59 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [unreleased]
 
+### Changed
+
+Rewrite of the bidirectional algorithm in C++ interfaced with python using SWIG.
+
+The algorithm improvements include:
+ - Bug fix for non-elementary paths (#52)
+ - Faster joining procedure (when `direction="both"`) with lower bounding and sorted labels
+ - Lower bounding using Dijkstra's algorithm and the primal bound obtained during the search
+ - Backwards incompatible change to do with custom REFs. Now, instead of specifying each function separately, you can implement them in class that inherits from `REFCallback`. and then pass them to the algorithm using the `REF_callback` parameter.
+ Note that:
+   1. the naming of the functions has to match (`REF_fwd`, `REF_bwd` and `REF_join`)
+   2. so does the number of arguments (not necessarily the naming of the variables though)
+   3. not all three have to be implemented. If for example, one is just using `direction="forward"`, then only `REF_fwd` would suffice. In the case of the callback being passed and only part of the functions implemented, the default implementation will used for the missing ones.
+
+e.g.
+```python
+from cspy import BiDirectional, REFCallback
+
+class MyCallback(REFCallback):
+
+    def __init__(self, arg1, arg2):
+        # You can use custom arguments and save for later use
+        REFCallback.__init__(self) # Init parent
+        self._arg1: int = arg1
+        self._arg2: bool = arg2
+
+    def REF_fwd(self, cumul_res, tail, head, edge_res, partial_path,
+                cumul_cost):
+        res_new = list(cumul_res) # local copy
+        # do some operations on `res_new` maybe using `self._arg1/2`
+        return res_new
+
+    def REF_bwd(self, cumul_res, tail, head, edge_res, partial_path,
+                cumul_cost):
+        res_new = list(cumul_res) # local copy
+        # do some operations on `res_new` maybe using `self._arg1/2`
+        return res_new
+
+    def REF_join(self, fwd_resources, bwd_resources, tail, head, edge_res):
+        fwd_res = list(fwd_resources) # local copy
+        # do some operations on `res_new` maybe using `self._arg1/2`
+        return fwd_res
+
+# Load G, max_res, min_res
+alg = BiDirectional(G, max_res, min_res, REF_callback=MyCallback())
+```
+
+### Added
+ - Benchmarks from Beasley and Christofides (1989)
+
+### Removed
+ - `BiDirectional` python implementation
+
 ## [v0.1.2] - 31/07/2020
 
 ### Added

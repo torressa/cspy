@@ -212,17 +212,21 @@ Label LabelExtension::extend(
     }
   }
   // Check feasibility before creating
-  if (new_resources <= max_res && new_resources >= min_res) {
-    return Label(
-        label->weight + adjacent_vertex.weight,
-        new_node,
-        new_resources,
-        new_partial_path,
-        elementary);
+  Label new_label(
+      label->weight + adjacent_vertex.weight,
+      new_node,
+      new_resources,
+      new_partial_path,
+      elementary);
+  if (new_label.checkFeasibility(max_res, min_res)) {
+    return new_label;
   } else {
     // Update current labels unreachable_nodes
     if (elementary) {
+      // Push new node (direction doesn't matter here as edges have been
+      // reversed for backward extensions)
       label->unreachable_nodes.push_back(new_node.id);
+      // Keep them sorted for comparison
       std::sort(
           label->unreachable_nodes.begin(), label->unreachable_nodes.end());
     }
@@ -233,103 +237,6 @@ Label LabelExtension::extend(
 /**
  * Misc
  */
-
-// TODO Clean this mess
-//
-// void runDominance(
-//    std::vector<Label>* unprocessed_labels_ptr,
-//    bool*               updated_labels,
-//    bool*               updated_best,
-//    const Label&        label,
-//    const std::string&  direction,
-//    const bool&         elementary,
-//    const bool&         save) {
-//  // for (auto it = labels_ptr->begin(); it != labels_ptr->end();) {
-//  //   const Label& label1        = *it;
-//  bool non_dominated = true;
-//  // Extract labels with the same node
-//  // std::vector<Label> comparable_labels(labels_ptr->size());
-//  // For each comparable label
-//  for (auto it = efficient_labels_ptr->begin();
-//       it != efficient_labels_ptr->end();) {
-//    bool         deleted = false;
-//    const Label& label2  = *it;
-//    if (label2 != label) {
-//      // check if label1 dominates label2
-//      if (label.checkDominance(label2, direction, elementary)) {
-//        // const auto& dist =
-//        //     std::find(labels_ptr->begin(), labels_ptr->end(), label2);
-//        it      = efficient_labels_ptr->erase(it);
-//        deleted = true;
-//        // *updated_labels = true;
-//      } else if (label2.checkDominance(label, direction, elementary)) {
-//        // it              = labels_ptr->erase(it);
-//        // *updated_labels = true;
-//        non_dominated = false;
-//        // updateEfficientLabels(label2);
-//        break;
-//      }
-//    }
-//    if (!deleted)
-//      ++it;
-//  }
-//  // if (save && non_dominated) {
-//  //   *updated_best = true;
-//  //   best_labels_ptr->push_back(label);
-//  // }
-//  // }
-//}
-
-bool runDominance(
-    std::vector<Label>*                    labels_ptr,
-    const std::string&                     direction,
-    const bool&                            elementary,
-    const std::vector<std::vector<Label>>& efficient_labels) {
-  bool updated_labels = false;
-  for (auto it = labels_ptr->begin(); it != labels_ptr->end();) {
-    const Label& label1  = *it;
-    bool         deleted = false;
-    // Extract labels with the same node
-    std::vector<Label> comparable_labels(
-        labels_ptr->begin(), labels_ptr->end());
-    auto copy_if_iterator = std::copy_if(
-        labels_ptr->begin(),
-        labels_ptr->end(),
-        comparable_labels.begin(),
-        [&label1](const Label& l) {
-          return (l.vertex.idx == label1.vertex.idx && l != label1);
-        });
-    comparable_labels.erase(copy_if_iterator, comparable_labels.end());
-    std::set<labelling::Label> setss(
-        comparable_labels.begin(), comparable_labels.end());
-    setss.insert(
-        efficient_labels[label1.vertex.idx].begin(),
-        efficient_labels[label1.vertex.idx].end());
-
-    // For each comparable label
-    for (auto it2 = comparable_labels.begin(); it2 != comparable_labels.end();
-         ++it2) {
-      const Label& label2 = *it2;
-      // check if label1 dominates label2
-      if (label1.checkDominance(label2, direction, elementary)) {
-        // find and remove label2
-        const auto& dist =
-            std::find(labels_ptr->begin(), labels_ptr->end(), label2);
-        labels_ptr->erase(dist);
-        updated_labels = true;
-      } else if (label2.checkDominance(label1, direction, elementary)) {
-        // remove label1
-        it             = labels_ptr->erase(it);
-        updated_labels = true;
-        deleted        = true;
-        break;
-      }
-    }
-    if (!deleted)
-      ++it;
-  }
-  return updated_labels;
-}
 
 bool runDominanceEff(
     std::vector<Label>*        efficient_labels_ptr,
@@ -413,7 +320,7 @@ bool halfwayCheck(
   const double phi = std::abs(
       fwd_label.resource_consumption[0] -
       (max_res[0] - bwd_label.resource_consumption[0]));
-  return ((0.0 <= phi) && (phi <= 2.0));
+  return ((0.0 <= phi) && (phi <= 1.0));
 }
 
 bool mergePreCheck(

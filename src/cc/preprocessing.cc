@@ -1,5 +1,6 @@
 #include "preprocessing.h"
 
+#include <iostream>
 #include <queue>
 #include <set>
 
@@ -9,12 +10,11 @@ namespace bidirectional {
 
 void dijkstra(std::vector<double>* lower_bound_weight, const DiGraph& graph) {
   const int&    number_vertices = graph.number_vertices;
-  std::set<int> not_visited;
+  std::set<int> visited;
   // vertices have idx and distance
   std::vector<Vertex> vertices = graph.vertices;
   for (int i = 0; i < number_vertices; ++i) {
     vertices[i].distance = INF;
-    not_visited.insert(vertices[i].idx);
   }
   // init heap with source
   const int&                  source_idx = graph.source.idx;
@@ -25,26 +25,31 @@ void dijkstra(std::vector<double>* lower_bound_weight, const DiGraph& graph) {
   while (!queue.empty()) {
     const Vertex min_vertex = queue.top();
     queue.pop();
-    for (std::set<int>::const_iterator it = not_visited.begin();
-         it != not_visited.end();
+    const std::vector<AdjVertex>& adj_vertices =
+        graph.adjacency_list[min_vertex.idx];
+    for (std::vector<AdjVertex>::const_iterator it = adj_vertices.begin();
+         it != adj_vertices.end();
          ++it) {
-      // If edge exists
-      if (graph.checkEdge(min_vertex.idx, *it)) {
-        // Get edge
-        const AdjVertex& adj_vertex =
-            *graph.adjacency_matrix[min_vertex.idx][*it];
-        Vertex& next_vertex = vertices[adj_vertex.vertex.idx];
-        //  If there is shorted path to next_vertex through min_vertex.
-        if (next_vertex.distance > min_vertex.distance + adj_vertex.weight) {
-          // Updating distance of v
-          next_vertex.distance = min_vertex.distance + adj_vertex.weight;
+      // Get edge
+      const AdjVertex& adj_vertex  = *it;
+      Vertex&          next_vertex = vertices[adj_vertex.vertex.idx];
+      //  If there is shorter path to next_vertex through min_vertex.
+      if (min_vertex.distance + adj_vertex.weight < next_vertex.distance) {
+        // Updating distance of next_vertex
+        next_vertex.distance = min_vertex.distance + adj_vertex.weight;
+        // std::cout << "Setting vertex " << next_vertex.id << " distance to "
+        //           << next_vertex.distance << "\n";
+        if (visited.find(next_vertex.idx) == visited.end()) {
           queue.push(next_vertex);
         }
       }
     }
-    not_visited.erase(min_vertex.idx);
+    visited.insert(min_vertex.idx);
   }
+  // std::cout << "Shortest path\n";
   for (int i = 0; i < number_vertices; ++i) {
+    // std::cout << "i = " << i << ", id = " << vertices[i].id
+    //           << ", d = " << vertices[i].distance << "\n";
     (*lower_bound_weight)[i] = vertices[i].distance;
   }
 }

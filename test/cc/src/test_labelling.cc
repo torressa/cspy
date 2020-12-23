@@ -104,21 +104,18 @@ TEST_F(TestLabelling, testRunDominanceForward) {
   const Label         label2(weight, node, res2, path);
   const Label         label3(weight, node, res3, path);
 
-  auto labels          = std::make_unique<std::vector<Label>>();
-  auto label_extension = std::make_unique<LabelExtension>();
+  auto labels = std::make_unique<std::vector<Label>>();
+
   std::make_heap(labels->begin(), labels->end(), std::greater<>{});
 
   // Insert labels
   labels->push_back(label1);
   labels->push_back(label2);
-  labels->push_back(label3);
   std::push_heap(labels->begin(), labels->end(), std::greater<>{});
 
-  ASSERT_TRUE(labels->size() == 3);
-  runDominance(labels.get(), "forward", false);
-  ASSERT_TRUE(labels->size() == 1);
-  Label last_label = getNextLabel(labels.get(), "forward");
-  ASSERT_TRUE(last_label.resource_consumption[0] == 1);
+  ASSERT_TRUE(labels->size() == 2);
+  runDominanceEff(labels.get(), label3, "forward", false, false);
+  ASSERT_TRUE(labels->size() == 0);
 }
 
 TEST_F(TestLabelling, testRunDominanceBackward) {
@@ -128,21 +125,16 @@ TEST_F(TestLabelling, testRunDominanceBackward) {
   const Label         label2(weight, node, res2, path);
   const Label         label3(weight, node, res3, path);
 
-  auto labels          = std::make_unique<std::vector<Label>>();
-  auto label_extension = std::make_unique<LabelExtension>();
+  auto labels = std::make_unique<std::vector<Label>>();
 
   std::make_heap(labels->begin(), labels->end());
   labels->push_back(label1);
   labels->push_back(label2);
-  labels->push_back(label3);
   std::push_heap(labels->begin(), labels->end());
 
-  ASSERT_TRUE(label1.checkDominance(label2, "backward", false));
-  ASSERT_TRUE(labels->size() == 3);
-  runDominance(labels.get(), "backward", false);
-  ASSERT_TRUE(labels->size() == 1);
-  Label last_label = getNextLabel(labels.get(), "backward");
-  ASSERT_TRUE(last_label.resource_consumption[0] == 6);
+  ASSERT_TRUE(labels->size() == 2);
+  runDominanceEff(labels.get(), label3, "forward", false, false);
+  ASSERT_TRUE(labels->size() == 0);
 }
 
 } // namespace labelling

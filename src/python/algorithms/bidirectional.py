@@ -105,8 +105,8 @@ class BiDirectional:
             self.bidirectional_cpp.threshold = threshold
         if isinstance(elementary, bool) and not elementary:
             self.bidirectional_cpp.elementary = elementary
-        if isinstance(dominance_frequency, int) and dominance_frequency != 1:
-            self.bidirectional_cpp.dominance_frequency = dominance_frequency
+        # if isinstance(dominance_frequency, int) and dominance_frequency != 1:
+        #     self.bidirectional_cpp.dominance_frequency = dominance_frequency
         if isinstance(seed, int) and seed is not None:
             self.bidirectional_cpp.setSeed(seed)
         if REF_callback is not None:
@@ -125,7 +125,7 @@ class BiDirectional:
     def run_parallel(self):
         'Run the algorithm in parallel'
         # self.bidirectional_cpp.run_parallel()
-        raise NotImplemented("Coming soon")
+        raise NotImplementedError("Coming soon")
 
     @property
     def path(self):

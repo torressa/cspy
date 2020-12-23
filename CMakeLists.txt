@@ -36,7 +36,7 @@ if(POLICY CMP0086)
   cmake_policy(SET CMP0086 NEW)
 endif()
 
-project(cspy VERSION 0.2.0 LANGUAGES CXX)
+project(cspy VERSION 1.0.0 LANGUAGES CXX)
 message(STATUS "project: ${PROJECT_NAME}")
 message(STATUS "version: ${PROJECT_VERSION}")
 
@@ -86,7 +86,7 @@ option(BUILD_PYTHON "Build Python Library" ON)
 message(STATUS "Build C++ library: ${BUILD_CXX}")
 message(STATUS "Build Python: ${BUILD_PYTHON}")
 
-# Other languages
+# TODO Other languages
 # option(BUILD_JAVA "Build Java Library" OFF)
 # option(BUILD_DOTNET "Build .NET Library" OFF)
 # message(STATUS "Build Java: ${BUILD_JAVA}")
