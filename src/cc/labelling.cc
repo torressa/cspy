@@ -123,9 +123,14 @@ bool Label::fullDominance(
   return result;
 }
 
-// operator overloads
+/* Operator Overloads */
+
 bool operator<(const Label& label1, const Label& label2) {
   return (label1.resource_consumption[0] < label2.resource_consumption[0]);
+}
+
+bool operator>(const Label& label1, const Label& label2) {
+  return (label1.resource_consumption[0] > label2.resource_consumption[0]);
 }
 
 std::ostream& operator<<(std::ostream& os, const Label& label) {
@@ -320,7 +325,7 @@ bool halfwayCheck(
   const double phi = std::abs(
       fwd_label.resource_consumption[0] -
       (max_res[0] - bwd_label.resource_consumption[0]));
-  return ((0.0 <= phi) && (phi <= 1.0));
+  return ((0.0 <= phi) && (phi <= 2.0));
 }
 
 bool mergePreCheck(
@@ -406,9 +411,12 @@ void makeHeap(
     std::vector<labelling::Label>* labels_ptr,
     const std::string&             direction) {
   if (direction == "forward") {
+    // Min-heap
     std::make_heap(labels_ptr->begin(), labels_ptr->end(), std::greater<>{});
-  } else
+  } else {
+    // Max-heap
     std::make_heap(labels_ptr->begin(), labels_ptr->end());
+  }
 }
 
 void pushHeap(
@@ -416,9 +424,12 @@ void pushHeap(
     const std::string&             direction) {
   if (labels_ptr->size() > 1) {
     if (direction == "forward") {
+      // Min-heap
       std::push_heap(labels_ptr->begin(), labels_ptr->end(), std::greater<>{});
-    } else
+    } else {
+      // Max-heap
       std::push_heap(labels_ptr->begin(), labels_ptr->end());
+    }
   }
 }
 

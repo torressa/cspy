@@ -52,7 +52,7 @@ class MyCallback(REFCallback):
         return fwd_res
 
 # Load G, max_res, min_res
-alg = BiDirectional(G, max_res, min_res, REF_callback=MyCallback())
+alg = BiDirectional(G, max_res, min_res, REF_callback=MyCallback(1, True))
 ```
 
 ### Added

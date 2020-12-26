@@ -81,11 +81,9 @@ class Label {
   bool checkStPath() const;
 
   // opeator overloads
-  Label&      operator=(const Label& other) = default;
-  friend bool operator<(const Label& label1, const Label& label2);
-  friend bool operator>(const Label& label1, const Label& label2) {
-    return !(label1 < label2);
-  }
+  Label&               operator=(const Label& other) = default;
+  friend bool          operator<(const Label& label1, const Label& label2);
+  friend bool          operator>(const Label& label1, const Label& label2);
   friend std::ostream& operator<<(std::ostream& os, const Label& label);
   friend bool          operator==(const Label& label1, const Label& label2);
   friend bool          operator!=(const Label& label1, const Label& label2) {

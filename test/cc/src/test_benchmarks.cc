@@ -169,7 +169,6 @@ TEST_P(TestBenchmarks, testBothElementary) {
       num_arcs,
       num_resources,
       path_to_instance);
-  std::cout << "graph loaded OK\n";
   bidirectional->run();
 
   auto cost = bidirectional->getTotalCost();

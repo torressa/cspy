@@ -52,9 +52,6 @@ class BiDirectional:
         whether the problem is elementary. i.e. no cycles are allowed in the
         final path. Note this may increase run time.
         Default: False
-    dominance_frequency : int, optional
-        multiple of iterations to run the dominance checks.
-        Default : 1 (every iteration)
     seed : None or int, optional
         seed for random method class. Default : None.
     REF_callback : REFCallback, optional
@@ -76,7 +73,6 @@ class BiDirectional:
                  time_limit: Optional[float] = None,
                  threshold: Optional[float] = None,
                  elementary: Optional[bool] = False,
-                 dominance_frequency: Optional[int] = 1,
                  seed: Union[int] = None,
                  REF_callback: Optional[REFCallback] = None):
         # Check inputs
@@ -84,7 +80,7 @@ class BiDirectional:
         # check_seed(seed, __name__)
         # Preprocess graph
         G = preprocess_graph(G, max_res, min_res, preprocess, REF_callback)
-        # To save original node type (for conversion later)
+        # To save original node type (for conversion at the end)
         self._original_node_type: str = None
 
         max_res_vector = _convert_list_to_double_vector(max_res)
@@ -103,10 +99,8 @@ class BiDirectional:
             self.bidirectional_cpp.time_limit = time_limit
         if threshold is not None and isinstance(time_limit, (int, float)):
             self.bidirectional_cpp.threshold = threshold
-        if isinstance(elementary, bool) and not elementary:
+        if isinstance(elementary, bool) and elementary:
             self.bidirectional_cpp.elementary = elementary
-        # if isinstance(dominance_frequency, int) and dominance_frequency != 1:
-        #     self.bidirectional_cpp.dominance_frequency = dominance_frequency
         if isinstance(seed, int) and seed is not None:
             self.bidirectional_cpp.setSeed(seed)
         if REF_callback is not None:
@@ -167,10 +161,11 @@ class BiDirectional:
             return None
 
     def _init_graph(self, G):
+        # Save original node type for later conversion
         self._original_node_type = type(
             [n for n in G.nodes() if n not in ["Source", "Sink"]][0]
         )
-
+        # Convert each edge with attributes independently.
         for edge in G.edges(data=True):
             res_cost = _convert_list_to_double_vector(edge[2]["res_cost"])
             self.bidirectional_cpp.addEdge(str(edge[0]), str(edge[1]),

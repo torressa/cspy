@@ -69,7 +69,6 @@ void BiDirectional::run() {
       break;
     }
   }
-  // cleanUp();
   if (!terminated_early_w_st_path_) {
     postProcessing();
   } else {
@@ -197,11 +196,6 @@ bool BiDirectional::checkValidLabel(const labelling::Label& label) {
   return false;
 }
 
-void BiDirectional::cleanUp() const {
-  fwd_search_->cleanUp();
-  bwd_search_->cleanUp();
-}
-
 void BiDirectional::postProcessing() {
   if (direction == "both") {
     // If bidirectional algorithm used, run path joining procedure.
@@ -260,9 +254,12 @@ void BiDirectional::getMinimumWeights(double* fwd_min, double* bwd_min) {
 
 // TODO! refactor
 void BiDirectional::joinLabels() {
+  // one can sort the labels prior to joining but it takes too long
+  // fwd_search_->cleanUp();
+  // bwd_search_->cleanUp();
   // extract bounds
   // upper bound on source-sink path
-  const double& UB      = getUB();
+  double        UB      = getUB();
   const double& HF      = fwd_search_->getHalfWayPoint();
   auto          fwd_min = std::make_unique<double>();
   auto          bwd_min = std::make_unique<double>();
@@ -277,8 +274,7 @@ void BiDirectional::joinLabels() {
            fwd_iter != fwd_search_->efficient_labels[n].cend();
            ++fwd_iter) { // for each forward label at n
         // break for loops recursively
-        bool                    propagate_break = false;
-        const labelling::Label& fwd_label       = *fwd_iter;
+        const labelling::Label& fwd_label = *fwd_iter;
         if (fwd_label.resource_consumption[0] <= HF &&
             fwd_label.weight + *bwd_min <= UB) { // if bound check fwd_label
           const std::vector<AdjVertex>& adj_vertices = graph->adjacency_list[n];
@@ -317,25 +313,23 @@ void BiDirectional::joinLabels() {
                       // Save
                       best_label_ =
                           std::make_shared<labelling::Label>(merged_label);
+                      // Tighten UB
+                      if (best_label_->weight < UB) {
+                        UB = best_label_->weight;
+                      }
                       if (terminate(*best_label_)) {
                         return;
                       }
-                      propagate_break = true;
-                      break; // bwd labels loop
                     } else if (merged_label.weight < best_label_->weight) {
-                      propagate_break = true;
-                      break;
+                      // propagate_break = true;
+                      // break;
                     }
                   }
                 }
               }
             }
-            if (propagate_break)
-              break; // adj_vertices loop
           }
         }
-        if (propagate_break)
-          break; // fwd labels loop
       }
     }
   }

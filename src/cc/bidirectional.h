@@ -114,8 +114,6 @@ class BiDirectional {
   /// threshold has been found (if set). Sets terminated_early_w_st_path_
   bool terminate(const labelling::Label& label);
   bool checkValidLabel(const labelling::Label& label);
-  /// @see Search.cleanUp
-  void cleanUp() const;
   /**
    * Wrapper to process of output path. Either saves appropriate label
    * (single-direction search or early termination) or calls joinLabels to merge
