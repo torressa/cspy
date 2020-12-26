@@ -91,11 +91,11 @@ class PSOLGENT(PathBase):
         seed for PSOLGENT class. Default : None (which gives a single value
         numpy.random.RandomState).
 
-    REF : function, optional
-        Custom resource extension function. See `REFs`_ for more details.
-        Default : additive.
+    REF_callback : REFCallback, optional
+        Custom resource extension callback. See `REFs`_ for more details.
+        Default : None
 
-    .. _REFs : https://cspy.readthedocs.io/en/latest/how_to.html#refs
+    .. _REFs : https://cspy.readthedocs.io/en/latest/ref.html
 
     Raises
     ------
@@ -121,9 +121,10 @@ class PSOLGENT(PathBase):
                  c2: Optional[float] = 1.35,
                  c3: Optional[float] = 1.4,
                  seed: RandomState = None,
-                 REF: Callable = None):
+                 REF_callback: Callable = None):
         # Pass arguments to parent class
-        super().__init__(G, max_res, min_res, preprocess, threshold, REF)
+        super().__init__(G, max_res, min_res, preprocess, threshold,
+                         REF_callback)
         # Inputs
         self.max_iter = max_iter
         self.time_limit = time_limit

@@ -3,9 +3,7 @@ import unittest
 from numpy import array
 from networkx import DiGraph
 
-from cspy import BiDirectional, REFCallback
-
-from parameterized import parameterized
+from cspy import BiDirectional, Tabu, GreedyElim, REFCallback
 
 
 class MyCallback(REFCallback):
@@ -21,7 +19,7 @@ class MyCallback(REFCallback):
         # Monotone resource
         res_new[0] += 1.0
         # Increasing resource
-        if "Sink" in head:
+        if "Sink" in str(head):
             res_new[1] = res_new[1]
         else:
             res_new[1] += float(int(head)**2)
@@ -35,7 +33,7 @@ class MyCallback(REFCallback):
         # Monotone resource
         res_new[0] -= 1
         # Increasing resource
-        if "Sink" in head:
+        if "Sink" in str(head):
             res_new[1] = res_new[1]
         else:
             res_new[1] += float(int(head)**2)
@@ -51,8 +49,9 @@ class TestsIssue32(unittest.TestCase):
     """
 
     def setUp(self):
-        # Maximum and minimum resource arrays
+        # Custom callback
         self.my_callback = MyCallback(10, True)
+        # Maximum and minimum resource arrays
         self.max_res, self.min_res = [5, 10e5, 1], [0, 0, 0]
         # Create simple digraph with appropriate attributes
         # No resource costs required for custom REFs
@@ -67,6 +66,10 @@ class TestsIssue32(unittest.TestCase):
         self.result_path = ['Source', 1, 2, 3, 4, 'Sink']
         self.total_cost = -23
         self.consumed_resources = [5, 30, 1]
+
+        self.result_path_heur = ['Source', 1, 2, 4, 'Sink']
+        self.total_cost_heur = -13
+        self.consumed_resources_heur = [4, 21, 1]
 
     def test_bidirectional(self):
         """Test BiDirectional with custom callback."""
@@ -91,3 +94,25 @@ class TestsIssue32(unittest.TestCase):
         self.assertEqual(alg.path, self.result_path)
         self.assertEqual(alg.total_cost, self.total_cost)
         self.assertEqual(alg.consumed_resources, self.consumed_resources)
+
+    def test_tabu(self):
+        alg = Tabu(self.G,
+                   self.max_res,
+                   self.min_res,
+                   REF_callback=self.my_callback)
+        alg.run()
+        self.assertEqual(alg.path, self.result_path_heur)
+        self.assertEqual(alg.total_cost, self.total_cost_heur)
+        self.assertEqual(list(alg.consumed_resources),
+                         self.consumed_resources_heur)
+
+    def test_greedyelim(self):
+        alg = GreedyElim(self.G,
+                         self.max_res,
+                         self.min_res,
+                         REF_callback=self.my_callback)
+        alg.run()
+        self.assertEqual(alg.path, self.result_path_heur)
+        self.assertEqual(alg.total_cost, self.total_cost_heur)
+        self.assertEqual(list(alg.consumed_resources),
+                         self.consumed_resources_heur)

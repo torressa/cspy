@@ -16,7 +16,7 @@ sys.path.insert(0, os.path.abspath('../'))
 
 # -- Project information -----------------------------------------------------
 project = 'cspy'
-copyright = '2019, David Torres Sanchez'
+copyright = '2020, David Torres Sanchez'
 author = 'David Torres Sanchez'
 
 # The full version, including alpha/beta/rc tags
@@ -28,6 +28,7 @@ release = '0.1.0'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.mathjax', 'sphinx.ext.imgmath']
+pngmath_use_preview = True
 master_doc = 'index'
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']

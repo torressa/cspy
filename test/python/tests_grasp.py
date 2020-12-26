@@ -1,10 +1,7 @@
 import unittest
-import sys
 
 from networkx import DiGraph
 from numpy import array
-
-sys.path.append("../")
 
 from cspy.algorithms.grasp import GRASP
 

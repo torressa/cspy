@@ -13,7 +13,7 @@ from cspy.preprocessing import preprocess_graph
 LOG = getLogger(__name__)
 
 
-class PathBase(object):
+class PathBase:
     """
     Parent class for :class:Tabu, :class:GRASP, :class:GreedyElim,
     and :class:PSOLGENT.
@@ -28,18 +28,22 @@ class PathBase(object):
                  min_res,
                  preprocess,
                  threshold,
-                 REF,
+                 REF_callback,
                  algorithm=None):
         # Check inputs
-        check(G, max_res, min_res, REF_callback=REF, algorithm=__name__)
+        check(G,
+              max_res,
+              min_res,
+              REF_callback=REF_callback,
+              algorithm=__name__)
         # Preprocess graph
-        self.G = preprocess_graph(G, max_res, min_res, preprocess, REF)
+        self.G = preprocess_graph(G, max_res, min_res, preprocess, REF_callback)
 
         self.max_res = max_res
         self.min_res = min_res
         self.threshold = threshold
         # Update resource extension function if given
-        self.REF = REF if REF else add
+        self.REF = REF_callback.REF_fwd if REF_callback is not None else add
         if negative_edge_cycle(G) or algorithm == "simple":
             self.algorithm = "simple"
         else:
@@ -157,7 +161,9 @@ class PathBase(object):
             if isinstance(self.REF, BuiltinFunctionType):
                 total_res += self._edge_extract(edge)
             else:
-                total_res = self.REF(total_res, edge)
+                total_res = self.REF(total_res, edge[0], edge[1],
+                                     edge[2]["res_cost"], None, None)
+                total_res = array(total_res)
             if not ((all(total_res <= self.max_res) and
                      all(total_res >= self.min_res))):
                 break

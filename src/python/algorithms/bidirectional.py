@@ -8,7 +8,7 @@ from cspy.preprocessing import preprocess_graph
 from cspy.checking import check, check_seed
 
 # Import from the SWIG output file
-from .pyBiDirectionalCpp import (BiDirectionalCpp, REFCallback, DoubleVector)
+from .pyBiDirectionalCpp import BiDirectionalCpp, REFCallback, DoubleVector
 
 
 class BiDirectional:
@@ -21,44 +21,54 @@ class BiDirectional:
     G : object instance :class:`nx.Digraph()`
         must have ``n_res`` graph attribute and all edges must have
         ``res_cost`` attribute.
+
     max_res : list of floats
         :math:`[H_F, M_1, M_2, ..., M_{n\_res}]` upper bounds for resource
         usage (including initial forward stopping point).
-        We must have ``len(max_res)`` :math:`\geq 2`.
+        We must have ``len(max_res)`` :math:`=` ``len(max_res)``
+
     min_res : list of floats
         :math:`[H_B, L_1, L_2, ..., L_{n\_res}]` lower bounds for resource
         usage (including initial backward stopping point).
-        We must have ``len(min_res)`` :math:`=` ``len(max_res)`` :math:`\geq 2`
+        We must have ``len(min_res)`` :math:`=` ``len(max_res)``
+
     preprocess : bool, optional
         enables preprocessing routine. Default : False.
+
     direction : string, optional
         preferred search direction.
         Either "both", "forward", or, "backward". Default : "both".
+
     method : string, optional
         preferred method for determining search direction.
         Either "random", "generated" (direction with least number of generated
         labels), "processed" (direction with least number of processed labels),
         or, "unprocessed" (direction with least number of unprocessed labels).
         Default: "unprocessed"
+
     time_limit : int, optional
         time limit in seconds.
         Default: None
+
     threshold : float, optional
         specify a threshold for a an acceptable resource feasible path with
         total cost <= threshold.
         Note this typically causes the search to terminate early.
         Default: None
+
     elementary : bool, optional
         whether the problem is elementary. i.e. no cycles are allowed in the
         final path. Note this may increase run time.
         Default: False
+
     seed : None or int, optional
         seed for random method class. Default : None.
+
     REF_callback : REFCallback, optional
         Custom resource extension callback. See `REFs`_ for more details.
         Default : None
 
-    .. _REFs : https://cspy.readthedocs.io/en/latest/how_to.html#refs
+    .. _REFs : https://cspy.readthedocs.io/en/latest/ref.html
     .. _Tilk 2017: https://www.sciencedirect.com/science/article/pii/S0377221717302035
     .. _Righini and Salani (2006): https://www.sciencedirect.com/science/article/pii/S1572528606000417
     """
@@ -131,7 +141,7 @@ class BiDirectional:
             return None
 
         _path = []
-            # Convert path to its original types and return
+        # Convert path to its original types and return
         for p in path:
             if p in ["Source", "Sink"]:
                 _path.append(p)
@@ -163,8 +173,7 @@ class BiDirectional:
     def _init_graph(self, G):
         # Save original node type for later conversion
         self._original_node_type = type(
-            [n for n in G.nodes() if n not in ["Source", "Sink"]][0]
-        )
+            [n for n in G.nodes() if n not in ["Source", "Sink"]][0])
         # Convert each edge with attributes independently.
         for edge in G.edges(data=True):
             res_cost = _convert_list_to_double_vector(edge[2]["res_cost"])

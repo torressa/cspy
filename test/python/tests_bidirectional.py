@@ -30,10 +30,14 @@ class TestsBiDirectional(unittest.TestCase):
         self.total_cost = -13
         self.consumed_resources = [4, 15.3]
 
-    @parameterized.expand(zip(range(1), range(1)))
+    @parameterized.expand(zip(range(100), range(100)))
     def test_random(self, _, seed):
         'Test method = "random" for a range of seeds'
-        alg = BiDirectional(self.G, self.max_res, self.min_res, seed=seed)
+        alg = BiDirectional(self.G,
+                            self.max_res,
+                            self.min_res,
+                            method="random",
+                            seed=seed)
         # Run and test results
         alg.run()
         self.assertEqual(alg.path, self.result_path)

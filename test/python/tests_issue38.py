@@ -21,7 +21,7 @@ class TestsIssue38(unittest.TestCase):
         self.G.add_edge("Source", "A", res_cost=array([1, 2]), weight=0)
         self.G.add_edge("A", "Sink", res_cost=array([1, 10]), weight=0)
 
-    def test_bidirectional_random(self):
+    def test_bidirectional(self):
         alg = BiDirectional(self.G, self.max_res, self.min_res)
         alg.run()
         self.assertEqual(alg.path, ['Source', "A", 'Sink'])

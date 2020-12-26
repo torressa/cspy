@@ -2,7 +2,6 @@ import unittest
 
 from numpy import array
 from networkx import DiGraph
-from parameterized import parameterized
 
 from cspy import BiDirectional
 

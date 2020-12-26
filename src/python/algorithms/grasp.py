@@ -58,11 +58,11 @@ class GRASP(PathBase):
     alpha : float, optional
         Greediness factor 0 (random) --> 1 (greedy). Default : 0.2.
 
-    REF : function, optional
-        Custom resource extension function. See `REFs`_ for more details.
-        Default : additive.
+    REF_callback : REFCallback, optional
+        Custom resource extension callback. See `REFs`_ for more details.
+        Default : None
 
-    .. _REFs : https://cspy.readthedocs.io/en/latest/how_to.html#refs
+    .. _REFs : https://cspy.readthedocs.io/en/latest/ref.html
     .. _Ferone et al 2019: https://www.tandfonline.com/doi/full/10.1080/10556788.2018.1548015
 
     Raises
@@ -82,9 +82,10 @@ class GRASP(PathBase):
                  time_limit: Optional[int] = None,
                  threshold: Optional[float] = None,
                  alpha: Optional[float] = 0.2,
-                 REF=None):
+                 REF_callback=None):
         # Pass arguments to parent class
-        super().__init__(G, max_res, min_res, preprocess, threshold, REF)
+        super().__init__(G, max_res, min_res, preprocess, threshold,
+                         REF_callback)
         # Algorithm specific attributes
         self.max_iter = max_iter
         self.max_localiter = max_localiter

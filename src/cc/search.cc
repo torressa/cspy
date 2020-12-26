@@ -250,8 +250,7 @@ void Search::updateEfficientLabels(
             check_feasibility_dominance_,
             max_res_curr,
             min_res_curr);
-        if (!dominated // && !checkPrimalBound(candidate_label)
-        ) {
+        if (!dominated && !checkPrimalBound(candidate_label)) {
           // add candidate_label to efficient_labels and unprocessed heap
           efficient_labels_vertex.push_back(candidate_label);
           unprocessed_labels_->push_back(candidate_label);
@@ -324,8 +323,8 @@ void Search::saveCurrentBestLabel() {
 
 bool Search::checkPrimalBound(const labelling::Label& candidate_label) const {
   if (primal_st_bound_ &&
-      candidate_label.weight + lower_bound_weight[candidate_label.vertex.idx] >=
-          final_label->weight) {
+      candidate_label.weight // + lower_bound_weight[candidate_label.vertex.idx]
+          >= final_label->weight) {
     return true;
   }
   return false;

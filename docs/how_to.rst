@@ -59,6 +59,8 @@ For this reason, it sometimes takes longer than the others.
 The remaining algorithms are metaheuristics,
 i.e. they provide fast and approximate solutions to the CSP problem.
 
+If you are interested in custom resource extension functions, see the `REFs`_ section.
+
 Examples
 ~~~~~~~~
 
@@ -78,108 +80,8 @@ Please see individual algorithm documentation for simple examples.
 .. _Marinakis et al 2017: https://www.sciencedirect.com/science/article/pii/S0377221717302357z
 .. _examples: https://github.com/torressa/cspy/tree/master/examples/
 .. _vrpy: https://github.com/Kuifje02/vrpy
+.. _REFs: https://cspy.readthedocs.io/en/latest/ref.html
 
-REFs
-~~~~
-
-Pre-requirements
-****************
-
-For the :class:`BiDirectional` algorithm, there is a number of assumptions required by definition (`Tilk et al 2017`_).
-
-1. The first resource must be a monotone resource;
-2. The resource extension functions are invertible.
-
-For assumption 1, the resource can be either artificial,
-such as the number of edges in the graph, or real, for example time.
-This allows for the monotone resource to be comparable for the forward and backward directions.
-In practice, this means, that ``res_cost[0]``, ``max_res[0]``,
-and ``min_res[0]`` correspond to the monotone resource;
-and that we must have at least two resources
-(the monotone one and the one you wish to model; otherwise you might as well use a standard
-shortest path algorithm!) (i.e. ``n_res = len(max_res) = len(min_res)``:math:`\geq 2`),
-and that the first element in both edge attributes and input limits refer to the monotone
-resource.
-
-The bounds chosen for the monotone resource
-(``max_res[0]`` and ``min_res[0]``), effectively represent the halfway points for the
-algorithm. Hence unless ``max_res[0]``:math`>```min_res[0]``, the searches will not reach
-either end of the graph and the resulting path will be erroneous.
-Additionally, occasionally, the resource limits do not allow for a feasible path to be found.
-Some preprocessing routines have been implemented for the case of additive REFs.
-
-For assumption 2, if resource extension functions are additive, these are easily invertible (i.e. add in the forward direction and subtract in the backward direction).
-However, when using custom resource extension functions (discussed below),
-it is up to the user to define them appropriately!
-
-Additive REFs
-*************
-
-Additive resource extension functions (REFs), are implemented by default in all the algorithms.
-If left unchanged, this means that resources propagate in the following fashion.
-Suppose we are considering extending partial path :math:`p_i`
-(a path from the source to node :math:`i`), along edge :math:`(i, j)`.
-Under the assumption that edge :math:`(i, j)` has a resource cost defined
-(one for each of the resources);
-the partial path :math:`p_j` (a path from the source to node :math:`j` passing
-through node :math:`i`) will have a resource consumption equal to the total resource accumulated along :math:`p_i` plus the resource cost of edge :math:`(i, j)`.
-If for instance, this resource consumption for a given resource exceeds the limit given in
-As discussed above, the resource costs are defined by the user in the input graph.
-
-Custom REFs
-***********
-
-Additionally, users can implement their own custom REFs.
-This allows the modelling of more complex relationships and more realistic evolution
-of resources.
-However, it is up the users to ensure that the custom REFs are well defined,
-it may be the case that the algorithm fails to find a feasible path, or gets stuck.
-
-For theoretical information on what REFs are we refer you to the paper by `Inrich 2005`_.
-For a brief overview with a practical implementation see any of the `examples`_.
-
-Custom REF template
-*******************
-
-Practically, if the users wished for more control on the propagation of resources,
-a custom REF can be defined as follows.
-First, the function will need two inputs: ``cumulative_res``, a cumulative resource array,
-and ``edge``, an edge to consider for the extension of the current partial path.
-Additionally, some optional arguments are given in ``kwargs`` (``partial_path`` and
-``accumulated_cost``).
-This function will be called every time the algorithms wish to consider and edge as part of the shortest path.
-
-As an example, suppose the 2nd resource represents travel time (``res[1]``).
-Suppose the edge contains an attribute to hold the travel time.
-Hence, every time an edge is traversed, the ``res[1]`` is updated by adding its previous cumulative value and the current edge weight. We can define our custom REF as follows,
-
-.. code-block:: python
-
-        from numpy import array
-
-        def REF_custom(cumulative_res, edge, **kwargs):
-        	new_res = array(cumulative_res)
-        	# your filtering criteria that changes the elements of new_res
-        	# For example:
-        	head_node, tail_node, egde_data = edge[0:3]
-            # Monotone resource
-            new_res[0] += 1
-            # Travel time
-        	new_res[1] += edge_data['travel_time']
-        	return new_res
-
-Your custom REF can then be passed with this format, into the algorithm of choice using the ``REF``
-argument (see individual algorithms for details).
-
-As a word of warning, it is up to the user to ensure the custom REF behaves appropriately.
-Otherwise, you will most likely either stall the algorithms, get an exception saying that a resource
-feasible path could not be found, or get a path that's not very meaningfull.
-
-For a simple example of custom REFs, please see the `unittest`_.
-
-For an intermediate example, see below.
-
-For more advanced examples, see the `examples`_ folder.
 
 Simple Example
 ~~~~~~~~~~~~~~

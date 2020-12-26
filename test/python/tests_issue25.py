@@ -2,7 +2,6 @@ import unittest
 
 from numpy import array
 from networkx import DiGraph
-from parameterized import parameterized
 
 from cspy.algorithms.bidirectional import BiDirectional
 
@@ -28,14 +27,8 @@ class TestsIssue25(unittest.TestCase):
         self.total_cost = -13
         self.consumed_resources = [4, 15.3]
 
-    @parameterized.expand(zip(range(1), range(1)))
-    def test_bidirectional_random(self, _, seed):
-        alg = BiDirectional(self.G,
-                            self.max_res,
-                            self.min_res,
-                            method="random",
-                            seed=seed,
-                            elementary=True)
+    def test_bidirectional(self):
+        alg = BiDirectional(self.G, self.max_res, self.min_res, elementary=True)
         alg.run()
         self.assertEqual(alg.path, self.result_path)
         self.assertEqual(alg.total_cost, self.total_cost)

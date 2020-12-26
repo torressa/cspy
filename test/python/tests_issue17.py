@@ -3,8 +3,6 @@ import unittest
 from networkx import DiGraph
 from numpy import array
 
-from parameterized import parameterized
-
 from cspy.algorithms.tabu import Tabu
 from cspy.algorithms.bidirectional import BiDirectional
 
@@ -36,13 +34,8 @@ class TestsIssue17(unittest.TestCase):
         self.total_cost = 1
         self.consumed_resources = [3, 3]
 
-    @parameterized.expand(zip(range(1), range(1)))
-    def test_bidirectional_random(self, _, seed):
-        alg = BiDirectional(self.G,
-                            self.max_res,
-                            self.min_res,
-                            seed=seed,
-                            elementary=True)
+    def test_bidirectional(self):
+        alg = BiDirectional(self.G, self.max_res, self.min_res, elementary=True)
         alg.run()
         self.assertEqual(alg.path, self.result_path)
         self.assertEqual(alg.total_cost, self.total_cost)

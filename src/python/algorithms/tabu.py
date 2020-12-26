@@ -56,11 +56,11 @@ class Tabu(PathBase):
         Note this typically causes the search to terminate early.
         Default: None
 
-    REF : function, optional
-        Custom resource extension function. See `REFs`_ for more details.
-        Default : additive.
+    REF_callback : REFCallback, optional
+        Custom resource extension callback. See `REFs`_ for more details.
+        Default : None
 
-    .. _REFs : https://cspy.readthedocs.io/en/latest/how_to.html#refs
+    .. _REFs : https://cspy.readthedocs.io/en/latest/ref.html
     .. _simple : https://networkx.github.io/documentation/stable/reference/algorithms/generated/networkx.algorithms.simple_paths.shortest_simple_paths.html#networkx.algorithms.simple_paths.shortest_simple_paths
     .. _astar : https://networkx.github.io/documentation/stable/reference/algorithms/generated/networkx.algorithms.shortest_paths.astar.astar_path.html#networkx.algorithms.shortest_paths.astar.astar_path
 
@@ -70,6 +70,7 @@ class Tabu(PathBase):
         if no resource feasible path is found
 
     """
+
     def __init__(self,
                  G: DiGraph,
                  max_res: List[float],
@@ -79,10 +80,10 @@ class Tabu(PathBase):
                  max_depth: Optional[int] = 1000,
                  time_limit: Optional[int] = None,
                  threshold: Optional[float] = None,
-                 REF: Callable = None):
+                 REF_callback: Callable = None):
         # Pass arguments to PathBase object
-        super().__init__(G, max_res, min_res, preprocess, threshold, REF,
-                         algorithm)
+        super().__init__(G, max_res, min_res, preprocess, threshold,
+                         REF_callback, algorithm)
         # Algorithm specific parameters
         self.time_limit = time_limit
         self.max_depth = max_depth

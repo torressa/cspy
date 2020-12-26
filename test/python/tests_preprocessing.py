@@ -1,10 +1,7 @@
-import sys
 import unittest
 
 from networkx import MultiGraph, DiGraph
 from numpy import array
-
-sys.path.append("../")
 
 from cspy.checking import check
 from cspy.preprocessing import preprocess_graph
