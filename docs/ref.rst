@@ -118,6 +118,7 @@ feasible path could not be found, or get a path that's not very meaningfull.
 A full skeleton with custom attributes could be as follows:
 
 e.g.
+
 .. code-block:: python
 
         from cspy import BiDirectional, REFCallback
