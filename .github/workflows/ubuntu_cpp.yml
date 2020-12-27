@@ -1,4 +1,4 @@
-name: Ubuntu Cpp tests
+name: Ubuntu Cpp
 
 on: [push, pull_request]
 

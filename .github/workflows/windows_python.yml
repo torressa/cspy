@@ -1,4 +1,4 @@
-name: Windows Python tests
+name: Windows Python
 
 on: [push, pull_request]
 

@@ -5,20 +5,20 @@
 | Windows  | [![Status][cpp_win_svg]][cpp_win_link] | [![Status][python_win_svg]][python_win_link] |
 
 
-[cpp_linux_svg]: https://github.com/torressa/cspy/workflows/Ubuntu%20Cpp%20tests/badge.svg
-[cpp_linux_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22Ubuntu+Cpp+tests%22
-[python_linux_svg]: https://github.com/torressa/cspy/workflows/Ubuntu%20Python%20tests/badge.svg
-[python_linux_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22Ubuntu+Python+tests%22
+[cpp_linux_svg]: https://github.com/torressa/cspy/workflows/Ubuntu%20Cpp/badge.svg
+[cpp_linux_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22Ubuntu+Cpp%22
+[python_linux_svg]: https://github.com/torressa/cspy/workflows/Ubuntu%20Python/badge.svg
+[python_linux_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22Ubuntu+Python%22
 
-[cpp_osx_svg]: https://github.com/torressa/cspy/workflows/MacOS%20Cpp%20Test/badge.svg
-[cpp_osx_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22MacOS+Cpp+Test%22
-[python_osx_svg]: https://github.com/torressa/cspy/workflows/MacOS%20Python%20tests/badge.svg
-[python_osx_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22MacOS+Python+tests%22
+[cpp_osx_svg]: https://github.com/torressa/cspy/workflows/MacOS%20Cpp/badge.svg
+[cpp_osx_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22MacOS+Cpp%22
+[python_osx_svg]: https://github.com/torressa/cspy/workflows/MacOS%20Python/badge.svg
+[python_osx_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22MacOS+Python%22
 
-[cpp_win_svg]: https://github.com/torressa/cspy/workflows/Windows%20Cpp%20tests/badge.svg
-[cpp_win_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22Windows+Cpp+tests%22
-[python_win_svg]: https://github.com/torressa/cspy/workflows/Windows%20Python%20tests/badge.svg
-[python_win_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22Windows+Python+tests%22
+[cpp_win_svg]: https://github.com/torressa/cspy/workflows/Windows%20Cpp/badge.svg
+[cpp_win_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22Windows+Cpp%22
+[python_win_svg]: https://github.com/torressa/cspy/workflows/Windows%20Python/badge.svg
+[python_win_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22Windows+Python%22
 
 [![Documentation Status](https://readthedocs.org/projects/cspy/badge/?version=latest)](https://cspy.readthedocs.io/en/latest/?badge=latest)
 [![PyPI version](https://badge.fury.io/py/cspy.svg)](https://badge.fury.io/py/cspy)
