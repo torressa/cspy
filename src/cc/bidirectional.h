@@ -55,8 +55,6 @@ class BiDirectional {
   double threshold = std::nan("na");
   /// bool with whether output path is required to be elementary
   bool elementary = false;
-  /// int multiples of the iterations where dominance function is run
-  int dominance_frequency = 1;
   /// DiGraph pointer (raw cause of swig!)
   DiGraph* graph;
 

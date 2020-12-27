@@ -42,15 +42,17 @@ bool Label::checkFeasibility(
 }
 
 bool Label::checkThreshold(const double& threshold) const {
-  if (weight <= threshold)
+  if (weight <= threshold) {
     return true;
+  }
   return false;
 }
 
 bool Label::checkStPath() const {
   if ((partial_path[0] == "Source" && partial_path.back() == "Sink") ||
-      (partial_path.back() == "Source" && partial_path[0] == "Sink"))
+      (partial_path.back() == "Source" && partial_path[0] == "Sink")) {
     return true;
+  }
   return false;
 }
 
@@ -244,13 +246,10 @@ Label LabelExtension::extend(
  */
 
 bool runDominanceEff(
-    std::vector<Label>*        efficient_labels_ptr,
-    const Label&               label,
-    const std::string&         direction,
-    const bool&                elementary,
-    const bool&                check_feasibility,
-    const std::vector<double>& max_res,
-    const std::vector<double>& min_res) {
+    std::vector<Label>* efficient_labels_ptr,
+    const Label&        label,
+    const std::string&  direction,
+    const bool&         elementary) {
   bool dominated = false;
   for (auto it = efficient_labels_ptr->begin();
        it != efficient_labels_ptr->end();) {
@@ -259,10 +258,8 @@ bool runDominanceEff(
     if (label != label2) {
       // check if label1 dominates label2 and remove if it is resource feasible
       if (label.checkDominance(label2, direction, elementary)) {
-        if (!check_feasibility || !label2.checkFeasibility(max_res, min_res)) {
-          it      = efficient_labels_ptr->erase(it);
-          deleted = true;
-        }
+        it      = efficient_labels_ptr->erase(it);
+        deleted = true;
       } else if (label2.checkDominance(label, direction, elementary)) {
         dominated = true;
         break;

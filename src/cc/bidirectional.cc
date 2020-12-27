@@ -89,7 +89,6 @@ void BiDirectional::initSearches() {
       min_res,
       "forward",
       elementary,
-      dominance_frequency,
       *lower_bound_weight_,
       *label_extension_,
       (direction == "both"));
@@ -100,7 +99,6 @@ void BiDirectional::initSearches() {
       min_res,
       "backward",
       elementary,
-      dominance_frequency,
       *lower_bound_weight_,
       *label_extension_,
       (direction == "both"));
@@ -113,11 +111,11 @@ void BiDirectional::initSearches() {
 
 std::string BiDirectional::getDirection() const {
   if (direction == "both") {
-    if (!fwd_search_->stop && bwd_search_->stop)
+    if (!fwd_search_->stop && bwd_search_->stop) {
       return "forward";
-    else if (fwd_search_->stop && !bwd_search_->stop)
+    } else if (fwd_search_->stop && !bwd_search_->stop) {
       return "backward";
-    else if (!fwd_search_->stop && !bwd_search_->stop) {
+    } else if (!fwd_search_->stop && !bwd_search_->stop) {
       if (method == "random") {
         // return a random direction
         const std::vector<std::string> directions = {"forward", "backward"};
@@ -139,41 +137,55 @@ std::string BiDirectional::getDirection() const {
           return "forward";
         return "backward";
       }
-    } else
+    } else {
       ;
+    }
   } else {
     // Single direction
-    if (direction == "forward" && fwd_search_->stop)
+    if (direction == "forward" && fwd_search_->stop) {
       ;
-    else if (direction == "backward" && bwd_search_->stop)
+    } else if (direction == "backward" && bwd_search_->stop) {
       ;
-    else
+    } else {
       return direction;
+    }
   }
   return "";
 }
 
 void BiDirectional::move(const std::string& direction_) {
-  if (direction_ == "forward" && !fwd_search_->stop)
+  if (direction_ == "forward" && !fwd_search_->stop) {
     fwd_search_->move(bwd_search_->max_res_curr);
-  else if (direction_ == "backward" && !bwd_search_->stop)
+    // Set primal bound
+    if (!bwd_search_->final_label->vertex.id.empty() &&
+        bwd_search_->final_label->checkStPath()) {
+      fwd_search_->setPrimalBound(bwd_search_->final_label->weight);
+    }
+  } else if (direction_ == "backward" && !bwd_search_->stop) {
     bwd_search_->move(fwd_search_->min_res_curr);
+    // Set primal bound
+    if (!fwd_search_->final_label->vertex.id.empty() &&
+        fwd_search_->final_label->checkStPath()) {
+      bwd_search_->setPrimalBound(fwd_search_->final_label->weight);
+    }
+  }
 }
 
 void BiDirectional::updateIntermediateLabel() {
-  if (direction == "forward")
+  if (direction == "forward") {
     intermediate_label_ =
         std::make_shared<labelling::Label>(*fwd_search_->final_label);
-  else if (direction == "backward")
+  } else if (direction == "backward") {
     intermediate_label_ =
         std::make_shared<labelling::Label>(*bwd_search_->final_label);
-  else {
-    if (!fwd_search_->final_label->vertex.id.empty())
+  } else {
+    if (!fwd_search_->final_label->vertex.id.empty()) {
       intermediate_label_ =
           std::make_shared<labelling::Label>(*fwd_search_->final_label);
-    else if (!bwd_search_->final_label->vertex.id.empty())
+    } else if (!bwd_search_->final_label->vertex.id.empty()) {
       intermediate_label_ =
           std::make_shared<labelling::Label>(*bwd_search_->final_label);
+    }
   }
 }
 
@@ -198,13 +210,15 @@ bool BiDirectional::checkValidLabel(const labelling::Label& label) {
 
 void BiDirectional::postProcessing() {
   if (direction == "both") {
-    // If bidirectional algorithm used, run path joining procedure.
+    // If bidirectional algorithm used and both directions traversed, run path
+    // joining procedure.
     joinLabels();
   } else {
     // If forward direction specified or backward direction not traversed
-    if (direction == "forward")
+    if (direction == "forward") {
       // Forward
       best_label_ = std::make_shared<labelling::Label>(*intermediate_label_);
+    }
     // If backward direction specified or forward direction not traversed
     else {
       // Backward
@@ -273,7 +287,6 @@ void BiDirectional::joinLabels() {
       for (auto fwd_iter = fwd_search_->efficient_labels[n].cbegin();
            fwd_iter != fwd_search_->efficient_labels[n].cend();
            ++fwd_iter) { // for each forward label at n
-        // break for loops recursively
         const labelling::Label& fwd_label = *fwd_iter;
         if (fwd_label.resource_consumption[0] <= HF &&
             fwd_label.weight + *bwd_min <= UB) { // if bound check fwd_label
@@ -317,12 +330,10 @@ void BiDirectional::joinLabels() {
                       if (best_label_->weight < UB) {
                         UB = best_label_->weight;
                       }
+                      // Stop if time out or threshold found
                       if (terminate(*best_label_)) {
                         return;
                       }
-                    } else if (merged_label.weight < best_label_->weight) {
-                      // propagate_break = true;
-                      // break;
                     }
                   }
                 }

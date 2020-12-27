@@ -11,7 +11,6 @@ Search::Search(
     const std::vector<double>&       min_res_in,
     const std::string&               direction_in,
     const bool&                      elementary_in,
-    const int&                       dominance_frequency_in,
     const std::vector<double>&       lower_bound_weight_in,
     const labelling::LabelExtension& label_extension_in,
     const bool&                      direction_both_in)
@@ -20,7 +19,6 @@ Search::Search(
       min_res(min_res_in),
       direction(direction_in),
       elementary(elementary_in),
-      dominance_frequency(dominance_frequency_in),
       lower_bound_weight(lower_bound_weight_in),
       label_extension_(label_extension_in),
       direction_both_(direction_both_in) {
@@ -52,6 +50,17 @@ void Search::move(const std::vector<double>& current_resource_bound) {
   }
 }
 
+void Search::setPrimalBound(const double& new_primal_bound) {
+  if (primal_st_bound_ && new_primal_bound < final_label->weight) {
+    primal_bound_ = new_primal_bound;
+  } else if (
+      (primal_bound_set_ && new_primal_bound < primal_bound_) ||
+      !primal_bound_set_) {
+    primal_bound_     = new_primal_bound;
+    primal_bound_set_ = true;
+  }
+}
+
 void Search::cleanUp() {
   for (const int n : visited_vertices) {
     if (efficient_labels[n].size() > 0) {
@@ -68,9 +77,7 @@ void Search::cleanUp() {
 }
 
 bool Search::checkVertexVisited(const int& vertex_idx) const {
-  return (
-      std::find(visited_vertices.begin(), visited_vertices.end(), vertex_idx) !=
-      visited_vertices.end());
+  return (visited_vertices.find(vertex_idx) != visited_vertices.end());
 }
 
 double Search::getHalfWayPoint() const {
@@ -90,8 +97,6 @@ void Search::initResourceBounds() {
   if (zeros == false) {
     std::vector<double> temp(min_res.size(), 0.0);
     min_res_curr = temp;
-    // resource feasibility has to be checked during dominance
-    check_feasibility_dominance_ = true;
   } else
     min_res_curr = min_res;
 }
@@ -126,24 +131,15 @@ void Search::initLabels() {
   efficient_labels[vertex.idx].push_back(*current_label);
   best_labels[vertex.idx] = std::make_shared<labelling::Label>(*current_label);
   // Update vertices visited
-  visited_vertices.push_back(vertex.idx);
+  visited_vertices.insert(vertex.idx);
 }
 
-// TODO investigate whether dominance here is necessary
 // Advancing the search
 void Search::runSearch() {
   updateCurrentLabel();
   updateHalfWayPoints();
   if (!stop) {
     extendCurrentLabel();
-  }
-  if (iteration_ % dominance_frequency == 0 && run_dominance_) {
-    // const bool& updated = runDominance(
-    //     unprocessed_labels_.get(), direction, elementary, efficient_labels);
-    // // Update heap
-    // if (updated) {
-    //   labelling::makeHeap(unprocessed_labels_.get(), direction);
-    // }
   }
   saveCurrentBestLabel();
   ++processed_count;
@@ -165,19 +161,14 @@ void Search::updateCurrentLabel() {
 
 void Search::updateHalfWayPoints() {
   // Update half-way points
-  run_dominance_ = false;
   if (direction == "forward") {
-    const double temp = min_res_curr[0];
-    min_res_curr[0]   = std::max(
+    min_res_curr[0] = std::max(
         min_res_curr[0],
         std::min(current_label->resource_consumption[0], max_res_curr[0]));
-    run_dominance_ = (temp == min_res_curr[0]);
   } else {
-    const double temp = max_res_curr[0];
-    max_res_curr[0]   = std::min(
+    max_res_curr[0] = std::min(
         max_res_curr[0],
         std::max(current_label->resource_consumption[0], min_res_curr[0]));
-    run_dominance_ = (temp == max_res_curr[0]);
   }
   // Check resource bounds
   if ((direction == "forward" &&
@@ -243,13 +234,7 @@ void Search::updateEfficientLabels(
       if (efficient_labels_vertex.size() > 1) {
         // check if new_label is dominated by any other comparable label
         const bool dominated = runDominanceEff(
-            &efficient_labels_vertex,
-            candidate_label,
-            direction,
-            elementary,
-            check_feasibility_dominance_,
-            max_res_curr,
-            min_res_curr);
+            &efficient_labels_vertex, candidate_label, direction, elementary);
         if (!dominated && !checkPrimalBound(candidate_label)) {
           // add candidate_label to efficient_labels and unprocessed heap
           efficient_labels_vertex.push_back(candidate_label);
@@ -266,7 +251,7 @@ void Search::updateEfficientLabels(
       }
       updateBestLabels(vertex_idx, candidate_label);
       // Update vertices visited
-      visited_vertices.push_back(vertex_idx);
+      visited_vertices.insert(vertex_idx);
     }
   }
 }
@@ -322,9 +307,9 @@ void Search::saveCurrentBestLabel() {
 }
 
 bool Search::checkPrimalBound(const labelling::Label& candidate_label) const {
-  if (primal_st_bound_ &&
-      candidate_label.weight // + lower_bound_weight[candidate_label.vertex.idx]
-          >= final_label->weight) {
+  if ((primal_st_bound_ && candidate_label.weight >= final_label->weight) ||
+      (primal_bound_set_ && candidate_label.weight >= primal_bound_)) {
+    // + lower_bound_weight[candidate_label.vertex.idx]
     return true;
   }
   return false;

@@ -59,7 +59,7 @@ alg = BiDirectional(G, max_res, min_res, REF_callback=MyCallback(1, True))
  - Benchmarks from Beasley and Christofides (1989)
 
 ### Removed
- - `BiDirectional` python implementation
+ - `BiDirectional` python implementation (can be found [here](https://github.com/torressa/cspy/tree/fba830cac02c1914670ca2def90c5c3447fd61e1))
 
 ## [v0.1.2] - 31/07/2020
 

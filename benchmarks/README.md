@@ -1,31 +1,31 @@
-# Resource constrained shortest path
+# Benchmark Results
 
-From: http://people.brunel.ac.uk/~mastjjb/jeb/orlib/rcspinfo.html
+## Beasley and Christofides (1989)
 
-There are currently 24 data files.
-
-These data files are the 24 test problems from Table 1 of
-J.E.Beasley and N.Christofides "An algorithm for the
-resource constrained shortest path problem" Networks 19 (1989)
-379-394.
-
-Test problems 1, 2, ..., 24 from Table 1 of that paper are
-available in files rcsp1, rcsp2, ..., rcsp24 respectively.
-
-The format of these data files is:
-number of vertices (n), number of arcs (m), number of resources (K)
-for each resource k (k=1,...,K): the lower limit on the resources
-consumed on the chosen path
-for each resource k (k=1,...,K): the upper limit on the resources
-consumed on the chosen path
-for each vertex i (i=1,...,n): the amount of each resource k 
-(k=1,...,K) consumed in passing through vertex i
-for each arc j (j=1,...,m): vertex at start of the arc, vertex at 
-end of the arc, cost of the arc, the amount of each resource k  
-(k=1,...,K) consumed in traversing the arc
-
-The value of the optimal solution for each of these data files 
-is given in the above paper.
-
-The largest file is rcsp21 of size 220Kb (approximately).
-The entire set of files is of size 1800Kb (approximately).
+  | CPU time (ms) |
+-- | -- | --
+Instance # | Forward | Bidirectional
+1 | 8 | 12
+2 | 8 | 15
+3 | 15 | 26
+4 | 11 | 26
+5 | 5 | 13
+6 | 7 | 9
+7 | 107 | 541
+8 | 46 | 4005
+9 | 4 | 8
+10 | 4 | 10
+11 | 27 | 63
+12 | 29 | 67
+13 | 18 | 31
+14 | 11 | 35
+15 | 97 | 579
+16 | 39 | 697
+17 | 50 | 102
+18 | 52 | 103
+19 | 63 | 159
+20 | 62 | 150
+21 | 42 | 60
+22 | 39 | 55
+23 | 1185 | 3593
+24 | 399 | 1786

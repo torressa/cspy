@@ -165,13 +165,10 @@ void updateEfficientLabels(
  * @return bool, true if `label` is dominated, false otherwise
  */
 bool runDominanceEff(
-    std::vector<Label>*        efficient_labels_ptr,
-    const Label&               label,
-    const std::string&         direction,
-    const bool&                elementary,
-    const bool&                check_feasibility,
-    const std::vector<double>& max_res = {},
-    const std::vector<double>& min_res = {});
+    std::vector<Label>* efficient_labels_ptr,
+    const Label&        label,
+    const std::string&  direction,
+    const bool&         elementary);
 
 /// Reverse backward path and inverts resource consumption
 Label processBwdLabel(

@@ -2,6 +2,7 @@
 #define BIDIRECTIONAL_SEARCH_H__
 
 #include <cmath> // nan
+#include <set>
 #include <vector>
 
 #include "digraph.h"
@@ -18,7 +19,6 @@ class Search {
       const std::vector<double>&       min_res,
       const std::string&               direction,
       const bool&                      elementary,
-      const int&                       dominance_frequency,
       const std::vector<double>&       lower_bound_weight,
       const labelling::LabelExtension& label_extension,
       const bool&                      direction_both);
@@ -31,7 +31,6 @@ class Search {
   const std::vector<double> min_res;
   const std::string         direction;
   const bool                elementary;
-  const int                 dominance_frequency;
   const std::vector<double> lower_bound_weight;
 
   // Algorithm members
@@ -50,12 +49,14 @@ class Search {
   /// vector with pointer to label with least weight (per node)
   std::vector<std::shared_ptr<labelling::Label>> best_labels;
   /// vector with indices of vertices visited
-  std::vector<int> visited_vertices;
+  std::set<int> visited_vertices;
   // current resources
   std::vector<double> max_res_curr, min_res_curr;
   /// advance the search updating the resource bounds from the opposite
   /// direction
   void move(const std::vector<double>& current_resource_bound);
+  /// Set the primal bound
+  void setPrimalBound(const double& new_primal_bound);
   /// Sorts efficient_labels for each vertex (not used as it takes too long)
   void cleanUp();
   /// checks if a given vertex has been visited
@@ -72,12 +73,11 @@ class Search {
   bool direction_both_ = true;
   /// iteration number
   int iteration_ = 0;
-  /// whether dominance will be ran in the current iteration
-  bool run_dominance_ = false;
-  /// whether resource bounds will be checked during dominance
-  bool check_feasibility_dominance_ = false;
   /// whether final_label contains a source-sink feasible path
   bool primal_st_bound_ = false;
+  /// whether an external primal bound has been set
+  bool   primal_bound_set_ = false;
+  double primal_bound_     = std::nan("nan");
   /**
    * heap vector to keep unprocessed labels ordered.
    * the order depends on the on the direction of the search. i.e. forward ->

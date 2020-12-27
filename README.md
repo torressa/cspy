@@ -1,12 +1,30 @@
-[![CircleCI](https://circleci.com/gh/torressa/cspy/tree/master.svg?style=svg&circle-token=910e28b03dd0d32967fae038a3cf28b6cdf56334)](https://circleci.com/gh/torressa/cspy/tree/master)
+| OS     | C++ | Python |
+|:-------|-----|--------|
+| Linux  | [![Status][cpp_linux_svg]][cpp_linux_link] | [![Status][python_linux_svg]][python_linux_link] |
+| macOS  | [![Status][cpp_osx_svg]][cpp_osx_link] | [![Status][python_osx_svg]][python_osx_link] |
+| Windows  | [![Status][cpp_win_svg]][cpp_win_link] | [![Status][python_win_svg]][python_win_link] |
+
+
+[cpp_linux_svg]: https://github.com/torressa/cspy/workflows/Ubuntu%20Cpp%20tests/badge.svg
+[cpp_linux_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22Ubuntu+Cpp+tests%22
+[python_linux_svg]: https://github.com/torressa/cspy/workflows/Ubuntu%20Python%20tests/badge.svg
+[python_linux_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22Ubuntu+Python+tests%22
+
+[cpp_osx_svg]: https://github.com/torressa/cspy/workflows/MacOS%20Cpp%20Test/badge.svg
+[cpp_osx_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22MacOS+Cpp+Test%22
+[python_osx_svg]: https://github.com/torressa/cspy/workflows/MacOS%20Python%20tests/badge.svg
+[python_osx_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22MacOS+Python+tests%22
+
+[cpp_win_svg]: https://github.com/torressa/cspy/workflows/Windows%20Cpp%20tests/badge.svg
+[cpp_win_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22Windows+Cpp+tests%22
+[python_win_svg]: https://github.com/torressa/cspy/workflows/Windows%20Python%20tests/badge.svg
+[python_win_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22Windows+Python+tests%22
+
 [![Documentation Status](https://readthedocs.org/projects/cspy/badge/?version=latest)](https://cspy.readthedocs.io/en/latest/?badge=latest)
 [![PyPI version](https://badge.fury.io/py/cspy.svg)](https://badge.fury.io/py/cspy)
-[![codecov](https://codecov.io/gh/torressa/cspy/branch/master/graph/badge.svg?token=24tyrWinNT)](https://codecov.io/gh/torressa/cspy)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/c28f50e92dae4bcc921f1bd142370608)](https://www.codacy.com/app/torressa/cspy?utm_source=github.com&utm_medium=referral&utm_content=torressa/cspy&utm_campaign=Badge_Grade)
 [![JOSS badge](https://joss.theoj.org/papers/25eda55801a528b982d03a6a61f7730d/status.svg)](https://joss.theoj.org/papers/25eda55801a528b982d03a6a61f7730d)
 
-<!-- [![BCH compliance](https://bettercodehub.com/edge/badge/torressa/cspy?branch=master)](https://bettercodehub.com/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) -->
 
 # cspy
 
