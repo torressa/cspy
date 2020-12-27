@@ -114,13 +114,13 @@ TEST_F(TestLabelling, testRunDominanceForward) {
   std::push_heap(labels->begin(), labels->end(), std::greater<>{});
 
   ASSERT_TRUE(labels->size() == 2);
-  runDominanceEff(labels.get(), label3, "forward", false, false);
+  runDominanceEff(labels.get(), label3, "forward", false);
   ASSERT_TRUE(labels->size() == 0);
 }
 
 TEST_F(TestLabelling, testRunDominanceBackward) {
   std::vector<double> res2 = {3.0, res[1]};
-  std::vector<double> res3 = {1.0, res[1]};
+  std::vector<double> res3 = {7.0, res[1]};
   const Label         label1(weight, node, res, path);
   const Label         label2(weight, node, res2, path);
   const Label         label3(weight, node, res3, path);
@@ -133,8 +133,10 @@ TEST_F(TestLabelling, testRunDominanceBackward) {
   std::push_heap(labels->begin(), labels->end());
 
   ASSERT_TRUE(labels->size() == 2);
-  runDominanceEff(labels.get(), label3, "forward", false, false);
+  runDominanceEff(labels.get(), label3, "backward", false);
   ASSERT_TRUE(labels->size() == 0);
 }
 
 } // namespace labelling
+
+// namespace labelling
