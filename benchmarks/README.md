@@ -1,10 +1,10 @@
 # Benchmark Results
 
 ## Beasley and Christofides (1989)
+CPU time (ms) 
 
-  | CPU time (ms) |
--- | -- | --
 Instance # | Forward | Bidirectional
+-- | -- | --
 1 | 8 | 12
 2 | 8 | 15
 3 | 15 | 26
