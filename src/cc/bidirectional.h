@@ -55,6 +55,8 @@ class BiDirectional {
   double threshold = std::nan("na");
   /// bool with whether output path is required to be elementary
   bool elementary = false;
+  /// bool with whether lower bounds based on shortest paths are used
+  bool primal_bound = true;
   /// DiGraph pointer (raw cause of swig!)
   DiGraph* graph;
 
@@ -93,11 +95,13 @@ class BiDirectional {
   std::unique_ptr<labelling::LabelExtension> label_extension_;
   // Algorithm parameters
   // whether the search terminad early with a valid s-t path
-  bool                                 terminated_early_w_st_path_ = false;
-  clock_t                              start_time_;
-  std::unique_ptr<Search>              fwd_search_;
-  std::unique_ptr<Search>              bwd_search_;
-  std::unique_ptr<std::vector<double>> lower_bound_weight_;
+  bool                    terminated_early_w_st_path_ = false;
+  clock_t                 start_time_;
+  std::unique_ptr<Search> fwd_search_;
+  std::unique_ptr<Search> bwd_search_;
+
+  std::unique_ptr<std::vector<double>> lower_bound_weight_fwd_;
+  std::unique_ptr<std::vector<double>> lower_bound_weight_bwd_;
 
   // Algorithm methods
   /// Initalise searches

@@ -58,8 +58,13 @@ class BiDirectional:
 
     elementary : bool, optional
         whether the problem is elementary. i.e. no cycles are allowed in the
-        final path. Note this may increase run time.
+        final path. Note, True increases run time.
         Default: False
+
+    primal_bound : bool, optional
+        whether lower bounds based on shortest paths are used when pruning labels
+        using primal bounds
+        Default: True
 
     seed : None or int, optional
         seed for random method class. Default : None.
@@ -83,6 +88,7 @@ class BiDirectional:
                  time_limit: Optional[float] = None,
                  threshold: Optional[float] = None,
                  elementary: Optional[bool] = False,
+                 primal_bound: Optional[bool] = True,
                  seed: Union[int] = None,
                  REF_callback: Optional[REFCallback] = None):
         # Check inputs
@@ -111,6 +117,8 @@ class BiDirectional:
             self.bidirectional_cpp.threshold = threshold
         if isinstance(elementary, bool) and elementary:
             self.bidirectional_cpp.elementary = elementary
+        if isinstance(primal_bound, bool) and not primal_bound:
+            self.bidirectional_cpp.primal_bound = primal_bound
         if isinstance(seed, int) and seed is not None:
             self.bidirectional_cpp.setSeed(seed)
         if REF_callback is not None:

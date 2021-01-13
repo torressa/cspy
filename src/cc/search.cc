@@ -51,14 +51,18 @@ void Search::move(const std::vector<double>& current_resource_bound) {
 }
 
 void Search::setPrimalBound(const double& new_primal_bound) {
-  if (primal_st_bound_ && new_primal_bound < final_label->weight) {
+  // External primal bound not set and s-t path already found
+  if (!primal_bound_set_ && primal_st_bound_ &&
+      new_primal_bound < final_label->weight) {
     primal_bound_ = new_primal_bound;
-  } else if (
+  }
+  // Better bound found or external primal bound not set
+  else if (
       (primal_bound_set_ && new_primal_bound < primal_bound_) ||
       !primal_bound_set_) {
-    primal_bound_     = new_primal_bound;
-    primal_bound_set_ = true;
+    primal_bound_ = new_primal_bound;
   }
+  primal_bound_set_ = true;
 }
 
 void Search::cleanUp() {
@@ -307,8 +311,14 @@ void Search::saveCurrentBestLabel() {
 }
 
 bool Search::checkPrimalBound(const labelling::Label& candidate_label) const {
-  if ((primal_st_bound_ && candidate_label.weight >= final_label->weight) ||
-      (primal_bound_set_ && candidate_label.weight >= primal_bound_)) {
+  if ((primal_st_bound_ &&
+       candidate_label.weight +
+               lower_bound_weight[candidate_label.vertex.idx] >=
+           final_label->weight) ||
+      (primal_bound_set_ &&
+       candidate_label.weight +
+               lower_bound_weight[candidate_label.vertex.idx] >=
+           primal_bound_)) {
     // + lower_bound_weight[candidate_label.vertex.idx]
     return true;
   }

@@ -13,9 +13,11 @@ BiDirectional::BiDirectional(
       min_res(min_res_in),
       graph(new DiGraph(number_vertices, number_edges)),
       label_extension_(std::make_unique<labelling::LabelExtension>()),
-      lower_bound_weight_(std::make_unique<std::vector<double>>()) {
+      lower_bound_weight_fwd_(std::make_unique<std::vector<double>>()),
+      lower_bound_weight_bwd_(std::make_unique<std::vector<double>>()) {
   // allocate memory
-  lower_bound_weight_->resize(number_vertices);
+  lower_bound_weight_fwd_->resize(number_vertices, 0.0);
+  lower_bound_weight_bwd_->resize(number_vertices, 0.0);
 
   Vertex           vertex = {"", -1};
   labelling::Label label(0.0, vertex, {}, {});
@@ -54,7 +56,14 @@ void BiDirectional::addEdge(
 void BiDirectional::run() {
   start_time_ = clock();
   // Run dijkstra's to get lower bounds
-  dijkstra(lower_bound_weight_.get(), *graph);
+  // Init revesed edge list (if required)
+  if (direction == "both" || direction == "backward" || primal_bound) {
+    graph->initReversedAdjList();
+  }
+  if (primal_bound) {
+    dijkstra(lower_bound_weight_fwd_.get(), *graph, true);
+    dijkstra(lower_bound_weight_bwd_.get(), *graph, false);
+  }
   // Init search classes using lower_bound_weight_ + others
   initSearches();
   while (!fwd_search_->stop || !bwd_search_->stop) {
@@ -78,10 +87,6 @@ void BiDirectional::run() {
 }
 
 void BiDirectional::initSearches() {
-  // Init revesed edge list (if required)
-  if (direction == "both" || direction == "backward") {
-    graph->initReversedAdjList();
-  }
   // Init forward search
   fwd_search_ = std::make_unique<Search>(
       *graph,
@@ -89,7 +94,7 @@ void BiDirectional::initSearches() {
       min_res,
       "forward",
       elementary,
-      *lower_bound_weight_,
+      *lower_bound_weight_fwd_,
       *label_extension_,
       (direction == "both"));
   // Init backward search
@@ -99,7 +104,7 @@ void BiDirectional::initSearches() {
       min_res,
       "backward",
       elementary,
-      *lower_bound_weight_,
+      *lower_bound_weight_bwd_,
       *label_extension_,
       (direction == "both"));
 }
@@ -120,7 +125,8 @@ std::string BiDirectional::getDirection() const {
         // return a random direction
         const std::vector<std::string> directions = {"forward", "backward"};
         const int                      r          = std::rand() % 2;
-        return directions[r];
+        const std::string&             direction  = directions[r];
+        return direction;
       } else if (method == "generated") {
         // return direction with least number of generated labels
         if (fwd_search_->generated_count < bwd_search_->generated_count)
@@ -230,8 +236,7 @@ void BiDirectional::postProcessing() {
 }
 
 double BiDirectional::getUB() {
-  double UB = INF;
-  // Extract feasible
+  double      UB       = INF;
   const auto& fwd_best = fwd_search_->best_labels[graph->sink.idx];
   const auto& bwd_best = bwd_search_->best_labels[graph->source.idx];
   // Upper bound must be a resource-feasible s-t path
@@ -266,12 +271,10 @@ void BiDirectional::getMinimumWeights(double* fwd_min, double* bwd_min) {
   }
 }
 
-// TODO! refactor
 void BiDirectional::joinLabels() {
   // one can sort the labels prior to joining but it takes too long
   // fwd_search_->cleanUp();
   // bwd_search_->cleanUp();
-  // extract bounds
   // upper bound on source-sink path
   double        UB      = getUB();
   const double& HF      = fwd_search_->getHalfWayPoint();

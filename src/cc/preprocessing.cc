@@ -8,7 +8,10 @@
 
 namespace bidirectional {
 
-void dijkstra(std::vector<double>* lower_bound_weight, const DiGraph& graph) {
+void dijkstra(
+    std::vector<double>* lower_bound_weight,
+    const DiGraph&       graph,
+    const double&        reverse) {
   const int&    number_vertices = graph.number_vertices;
   std::set<int> visited;
   // vertices have idx and distance
@@ -16,8 +19,14 @@ void dijkstra(std::vector<double>* lower_bound_weight, const DiGraph& graph) {
   for (int i = 0; i < number_vertices; ++i) {
     vertices[i].distance = INF;
   }
-  // init heap with source
-  const int&                  source_idx = graph.source.idx;
+  int source_idx;
+  if (reverse) {
+    // init heap with source
+    source_idx = graph.sink.idx;
+  } else {
+    // init heap with source
+    source_idx = graph.source.idx;
+  }
   std::priority_queue<Vertex> queue;
   vertices[source_idx].distance = 0;
   queue.push(vertices[source_idx]);
@@ -25,8 +34,12 @@ void dijkstra(std::vector<double>* lower_bound_weight, const DiGraph& graph) {
   while (!queue.empty()) {
     const Vertex min_vertex = queue.top();
     queue.pop();
-    const std::vector<AdjVertex>& adj_vertices =
-        graph.adjacency_list[min_vertex.idx];
+    std::vector<AdjVertex> adj_vertices;
+    if (reverse) {
+      adj_vertices = graph.reversed_adjacency_list[min_vertex.idx];
+    } else {
+      adj_vertices = graph.adjacency_list[min_vertex.idx];
+    }
     for (std::vector<AdjVertex>::const_iterator it = adj_vertices.begin();
          it != adj_vertices.end();
          ++it) {
@@ -46,7 +59,7 @@ void dijkstra(std::vector<double>* lower_bound_weight, const DiGraph& graph) {
     }
     visited.insert(min_vertex.idx);
   }
-  // std::cout << "Shortest path\n";
+  // std::cout << "Shortest path " << reverse << "\n";
   for (int i = 0; i < number_vertices; ++i) {
     // std::cout << "i = " << i << ", id = " << vertices[i].id
     //           << ", d = " << vertices[i].distance << "\n";

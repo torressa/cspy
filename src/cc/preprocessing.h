@@ -14,7 +14,10 @@ namespace bidirectional {
  * @param[out] lower_bound_weight, vector of double that contains the lower
  * bound in the appropriate vertex index
  */
-void dijkstra(std::vector<double>* lower_bound_weight, const DiGraph& graph);
+void dijkstra(
+    std::vector<double>* lower_bound_weight,
+    const DiGraph&       graph,
+    const double&        reverse);
 
 } // namespace bidirectional
 
