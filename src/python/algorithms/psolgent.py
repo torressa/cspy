@@ -31,7 +31,7 @@ class PSOLGENT(PathBase):
 
     Code adapted from `Solid`_.
 
-    .. _Marinakis et al 2017: https://www.sciencedirect.com/science/article/pii/S0377221717302357z
+    .. _Marinakis et al 2017: https://www.sciencedirect.com/science/article/abs/pii/S0377221717302357
 
     .. _Solid: https://github.com/100/Solid/blob/master/Solid/ParticleSwarm.py
 
