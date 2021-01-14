@@ -12,6 +12,7 @@ class TestsPSOLGENT(unittest.TestCase):
     Tests for finding the resource constrained shortest
     path of simple DiGraph using the PSOLGENT algorithm.
     """
+
     def setUp(self):
         self.max_res, self.min_res = [5, 5], [0, 0]
         # Create digraph with a resource infeasible minimum cost path
@@ -43,6 +44,8 @@ class TestsPSOLGENT(unittest.TestCase):
         psolgent = PSOLGENT(self.G,
                             self.max_res,
                             self.min_res,
+                            neighbourhood_size=3,
+                            max_iter=50,
                             seed=RandomState(123))
         # Check exception for not running first
         with self.assertRaises(Exception) as context:

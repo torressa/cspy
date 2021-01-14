@@ -26,6 +26,8 @@ class PSOLGENT(PathBase):
     Neighborhood Topology (PSOLGENT) algorithm for the (resource)
     constrained shortest path problem (`Marinakis et al 2017`_).
 
+    Note. Neighborhood expansion not implemented yet, so PSOLGNT.
+
     Given the nature of our problem we have set the default parameters of
     the algorithm as suggested in the paper mentioned.
 
@@ -160,7 +162,9 @@ class PSOLGENT(PathBase):
             self.pos = pos_new
             self.fitness = self._get_fitness(self.pos)
             self._global_best()
-            self._local_best(self.iter, self.hood_size)
+            # Update local best for each particle
+            for i in range(self.swarm_size):
+                self._local_best(i)
             if self.iter % 100 == 0:
                 log.info("Iteration: {0}. Current best fit: {1}".format(
                     self.iter, self.best_fit))
@@ -240,15 +244,18 @@ class PSOLGENT(PathBase):
                                      self.swarm_size)
             self.best_fit = min(self.fitness)  # update best fitness
 
-    def _local_best(self, i, hood_size):
-        # Updates the local best across swarm
-        bottom = max(i - hood_size, 0)
-        top = min(bottom + hood_size, len(self.fitness))
-        if top - bottom < hood_size:
+    def _local_best(self, i):
+        """
+        Updates the local best for particle i using a neighbourhood around it.
+        """
+        bottom = max(i - self.hood_size, 0)
+        top = min(bottom + self.hood_size, len(self.fitness))
+        if top - bottom < self.hood_size:
             # Maximum length reached
-            bottom = top - hood_size
-        self.local_best = array([self.pos[argmin(self.fitness[bottom:top])]] *
-                                self.swarm_size)
+            bottom = top - self.hood_size
+        _range = list(range(bottom, top + 1))
+        min_idx = _range[argmin(self.fitness[bottom:top])]
+        self.local_best[i] = self.pos[min_idx]
 
     # Fitness #
     # Fitness conversion to path representation of solutions and evaluation

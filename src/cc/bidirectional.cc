@@ -61,8 +61,12 @@ void BiDirectional::run() {
     graph->initReversedAdjList();
   }
   if (primal_bound) {
-    dijkstra(lower_bound_weight_fwd_.get(), *graph, true);
-    dijkstra(lower_bound_weight_bwd_.get(), *graph, false);
+    if (direction == "both" || direction == "forward") {
+      dijkstra(lower_bound_weight_fwd_.get(), *graph, true);
+    }
+    if (direction == "both" || direction == "backward") {
+      dijkstra(lower_bound_weight_bwd_.get(), *graph, false);
+    }
   }
   // Init search classes using lower_bound_weight_ + others
   initSearches();
