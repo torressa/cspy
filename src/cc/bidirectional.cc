@@ -1,6 +1,6 @@
 #include "bidirectional.h"
 
-#include "preprocessing.h" // dijkstra, INF
+#include "preprocessing.h" // shortest_path, INF
 
 namespace bidirectional {
 
@@ -55,17 +55,16 @@ void BiDirectional::addEdge(
 
 void BiDirectional::run() {
   start_time_ = clock();
-  // Run dijkstra's to get lower bounds
   // Init revesed edge list (if required)
-  if (direction == "both" || direction == "backward" || primal_bound) {
+  if (direction == "both" || direction == "backward" || bounds_pruning) {
     graph->initReversedAdjList();
   }
-  if (primal_bound) {
+  if (bounds_pruning) {
     if (direction == "both" || direction == "forward") {
-      dijkstra(lower_bound_weight_fwd_.get(), *graph, true);
+      shortest_path(lower_bound_weight_fwd_.get(), *graph, true);
     }
     if (direction == "both" || direction == "backward") {
-      dijkstra(lower_bound_weight_bwd_.get(), *graph, false);
+      shortest_path(lower_bound_weight_bwd_.get(), *graph, false);
     }
   }
   // Init search classes using lower_bound_weight_ + others
@@ -98,6 +97,7 @@ void BiDirectional::initSearches() {
       min_res,
       "forward",
       elementary,
+      bounds_pruning,
       *lower_bound_weight_fwd_,
       *label_extension_,
       (direction == "both"));
@@ -108,6 +108,7 @@ void BiDirectional::initSearches() {
       min_res,
       "backward",
       elementary,
+      bounds_pruning,
       *lower_bound_weight_bwd_,
       *label_extension_,
       (direction == "both"));
@@ -125,26 +126,31 @@ std::string BiDirectional::getDirection() const {
     } else if (fwd_search_->stop && !bwd_search_->stop) {
       return "backward";
     } else if (!fwd_search_->stop && !bwd_search_->stop) {
-      if (method == "random") {
-        // return a random direction
-        const std::vector<std::string> directions = {"forward", "backward"};
-        const int                      r          = std::rand() % 2;
-        const std::string&             direction  = directions[r];
-        return direction;
-      } else if (method == "generated") {
+      // TODO: fix random
+      // if (method == "random") {
+      //   // return a random direction
+      //   const std::vector<std::string> directions = {"forward", "backward"};
+      //   const int                      r          = std::rand() % 2;
+      //   const std::string&             direction  = directions[r];
+      //   return direction;
+      // } else
+      if (method == "generated") {
         // return direction with least number of generated labels
-        if (fwd_search_->generated_count < bwd_search_->generated_count)
+        if (fwd_search_->generated_count < bwd_search_->generated_count) {
           return "forward";
+        }
         return "backward";
       } else if (method == "processed") {
         // return direction with least number of processed labels
-        if (fwd_search_->processed_count < bwd_search_->processed_count)
+        if (fwd_search_->processed_count < bwd_search_->processed_count) {
           return "forward";
+        }
         return "backward";
       } else if (method == "unprocessed") {
         // return direction with least number of unprocessed labels
-        if (fwd_search_->unprocessed_count < bwd_search_->unprocessed_count)
+        if (fwd_search_->unprocessed_count < bwd_search_->unprocessed_count) {
           return "forward";
+        }
         return "backward";
       }
     } else {
@@ -166,14 +172,14 @@ std::string BiDirectional::getDirection() const {
 void BiDirectional::move(const std::string& direction_) {
   if (direction_ == "forward" && !fwd_search_->stop) {
     fwd_search_->move(bwd_search_->max_res_curr);
-    // Set primal bound
+    // Set primal bound found in backward search (if any)
     if (!bwd_search_->final_label->vertex.id.empty() &&
         bwd_search_->final_label->checkStPath()) {
       fwd_search_->setPrimalBound(bwd_search_->final_label->weight);
     }
   } else if (direction_ == "backward" && !bwd_search_->stop) {
     bwd_search_->move(fwd_search_->min_res_curr);
-    // Set primal bound
+    // Set primal bound found in forward search (if any)
     if (!fwd_search_->final_label->vertex.id.empty() &&
         fwd_search_->final_label->checkStPath()) {
       bwd_search_->setPrimalBound(fwd_search_->final_label->weight);

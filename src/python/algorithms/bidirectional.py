@@ -12,10 +12,12 @@ from .pyBiDirectionalCpp import BiDirectionalCpp, REFCallback, DoubleVector
 
 
 class BiDirectional:
-    """Implementation of the bidirectional labeling algorithm with dynamic
+    """
+    Implementation of the bidirectional labeling algorithm with dynamic
     half-way point (`Tilk 2017`_).
     Depending on the range of values for bounds for the first resource, we get
     four different algorithms. See ``self.name_algorithm`` and Notes.
+
     Parameters
     ----------
     G : object instance :class:`nx.Digraph()`
@@ -41,12 +43,12 @@ class BiDirectional:
 
     method : string, optional
         preferred method for determining search direction.
-        Either "random", "generated" (direction with least number of generated
+        Either "generated" (direction with least number of generated
         labels), "processed" (direction with least number of processed labels),
         or, "unprocessed" (direction with least number of unprocessed labels).
         Default: "unprocessed"
 
-    time_limit : int, optional
+    time_limit : float or int, optional
         time limit in seconds.
         Default: None
 
@@ -61,10 +63,11 @@ class BiDirectional:
         final path. Note, True increases run time.
         Default: False
 
-    primal_bound : bool, optional
+    bounds_pruning : bool, optional
         whether lower bounds based on shortest paths are used when pruning labels
-        using primal bounds
-        Default: True
+        using primal bounds.
+        Note this is an experimental feauture. See issues.
+        Default: False
 
     seed : None or int, optional
         seed for random method class. Default : None.
@@ -85,10 +88,10 @@ class BiDirectional:
                  preprocess: Optional[bool] = False,
                  direction: Optional[str] = "both",
                  method: Optional[str] = "unprocessed",
-                 time_limit: Optional[float] = None,
+                 time_limit: Optional[Union[float, int]] = None,
                  threshold: Optional[float] = None,
                  elementary: Optional[bool] = False,
-                 primal_bound: Optional[bool] = True,
+                 bounds_pruning: Optional[bool] = False,
                  seed: Union[int] = None,
                  REF_callback: Optional[REFCallback] = None):
         # Check inputs
@@ -117,8 +120,8 @@ class BiDirectional:
             self.bidirectional_cpp.threshold = threshold
         if isinstance(elementary, bool) and elementary:
             self.bidirectional_cpp.elementary = elementary
-        if isinstance(primal_bound, bool) and not primal_bound:
-            self.bidirectional_cpp.primal_bound = primal_bound
+        if isinstance(bounds_pruning, bool) and not bounds_pruning:
+            self.bidirectional_cpp.bounds_pruning = bounds_pruning
         if isinstance(seed, int) and seed is not None:
             self.bidirectional_cpp.setSeed(seed)
         if REF_callback is not None:

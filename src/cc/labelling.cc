@@ -292,6 +292,7 @@ Label processBwdLabel(
   // Invert path
   std::vector<std::string> new_path = label.partial_path;
   std::reverse(new_path.begin(), new_path.end());
+  // Init resources
   std::vector<double> new_resources(label.resource_consumption);
   // Invert monotone resource
   new_resources[0] = max_res[0] - new_resources[0];
@@ -303,7 +304,8 @@ Label processBwdLabel(
       new_resources.begin(),
       std::plus<double>());
   if (invert_min_res) {
-    // invert minimum resource
+    // invert minimum resource from original resources and place in
+    // new_resources
     std::transform(
         new_resources.cbegin() + 1,
         new_resources.cend(),
@@ -311,7 +313,6 @@ Label processBwdLabel(
         new_resources.begin() + 1,
         std::minus<double>());
   }
-  // Invert monotone resource
   return Label(label.weight, label.vertex, new_resources, new_path);
 }
 

@@ -11,6 +11,7 @@ Search::Search(
     const std::vector<double>&       min_res_in,
     const std::string&               direction_in,
     const bool&                      elementary_in,
+    const bool&                      bounds_pruning_in,
     const std::vector<double>&       lower_bound_weight_in,
     const labelling::LabelExtension& label_extension_in,
     const bool&                      direction_both_in)
@@ -19,6 +20,7 @@ Search::Search(
       min_res(min_res_in),
       direction(direction_in),
       elementary(elementary_in),
+      bounds_pruning(bounds_pruning_in),
       lower_bound_weight(lower_bound_weight_in),
       label_extension_(label_extension_in),
       direction_both_(direction_both_in) {
@@ -216,15 +218,15 @@ void Search::extendCurrentLabel() {
           min_res_curr);
       // If label non-empty, (only when the extension is resource-feasible)
       if (!new_label.vertex.id.empty()) {
-        updateEfficientLabels(adj_vertex.vertex.idx, new_label);
+        updateEfficientLabels(new_label);
       }
     }
   }
 }
 
-void Search::updateEfficientLabels(
-    const int&              vertex_idx,
-    const labelling::Label& candidate_label) {
+void Search::updateEfficientLabels(const labelling::Label& candidate_label) {
+  // ref vertex index
+  const int& vertex_idx = candidate_label.vertex.idx;
   // ref efficient_labels_ for a given vertex
   std::vector<labelling::Label>& efficient_labels_vertex =
       efficient_labels[vertex_idx];
@@ -253,17 +255,16 @@ void Search::updateEfficientLabels(
         unprocessed_labels_->push_back(candidate_label);
         labelling::pushHeap(unprocessed_labels_.get(), direction);
       }
-      updateBestLabels(vertex_idx, candidate_label);
+      updateBestLabels(candidate_label);
       // Update vertices visited
       visited_vertices.insert(vertex_idx);
     }
   }
 }
 
-void Search::updateBestLabels(
-    const int&              vertex_idx,
-    const labelling::Label& candidate_label) {
+void Search::updateBestLabels(const labelling::Label& candidate_label) {
   // Only save full paths when they are global resource feasible
+  const int& vertex_idx = candidate_label.vertex.idx;
   if (direction == "foward" && vertex_idx == graph.sink.idx &&
       !candidate_label.checkFeasibility(max_res, min_res)) {
     return;
@@ -311,15 +312,15 @@ void Search::saveCurrentBestLabel() {
 }
 
 bool Search::checkPrimalBound(const labelling::Label& candidate_label) const {
+  if (!bounds_pruning) {
+    return false;
+  }
   if ((primal_st_bound_ &&
-       candidate_label.weight +
-               lower_bound_weight[candidate_label.vertex.idx] >=
+       candidate_label.weight + lower_bound_weight[candidate_label.vertex.idx] >
            final_label->weight) ||
       (primal_bound_set_ &&
-       candidate_label.weight +
-               lower_bound_weight[candidate_label.vertex.idx] >=
+       candidate_label.weight + lower_bound_weight[candidate_label.vertex.idx] >
            primal_bound_)) {
-    // + lower_bound_weight[candidate_label.vertex.idx]
     return true;
   }
   return false;

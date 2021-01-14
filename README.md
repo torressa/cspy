@@ -82,19 +82,78 @@ or
 python3 -m pip install cspy
 ```
 
+### Quick start
+
+#### Python
+
+```python
+# Imports
+from cspy import BiDirectional
+from networkx import DiGraph
+from numpy import array
+
+# Create a DiGraph
+G = DiGraph(directed=True, n_res=2)
+G.add_edge("Source", "A", res_cost=[1, 2], weight=0)
+G.add_edge("A", "B", res_cost=[1, 0.3], weight=0)
+G.add_edge("A", "C", res_cost=[1, 0.1], weight=0)
+G.add_edge("B", "C", res_cost=[1, 3], weight=-10)
+G.add_edge("B", "Sink", res_cost=[1, 2], weight=10)
+G.add_edge("C", "Sink", res_cost=[1, 10], weight=0)
+max_res, min_res = [4, 20], [1, 0]
+
+# init algorithm
+bidirec = BiDirectional(G, max_res, min_res)
+
+# Call and query attributes
+bidirec.run()
+print(bidirec.path)
+print(bidirec.total_cost)
+print(bidirec.consumed_resources)
+```
+
+#### Cpp
+
+```cpp
+#include "bidirectional.h"
+
+namespace bidirectional {
+
+int main(int argc, char** argv) {
+  // Init
+  const std::vector<double> max_res         = {4.0, 20.0};
+  const std::vector<double> min_res         = {1.0, 0.0};
+  const int                 number_vertices = 5;
+  const int                 number_edges    = 5;
+  bidirectional                             = std::make_unique<BiDirectional>(
+      number_vertices, number_edges, max_res, min_res);
+
+  // Populate graph
+  bidirectional->addEdge("Source", "A", 0, {1, 2});
+  bidirectional->addEdge("A", "B", 0, {1, 0.3});
+  bidirectional->addEdge("B", "C", -10, {1, 3});
+  bidirectional->addEdge("B", "Sink", 10, {1, 2});
+  bidirectional->addEdge("C", "Sink", 0, {1, 10});
+
+  // Run and query attributes
+  bidirectional->run();
+
+  auto path = bidirectional->getPath();
+  auto res  = bidirectional->getConsumedResources();
+  auto cost = bidirectional->getTotalCost();
+  return 0;
+}
+
+} // namespace bidirectional
+
+```
+
 ### Examples
 
-- [`vrpy`](https://github.com/Kuifje02/vrpy) : External vehicle routing framework which uses `cspy` to solve different variants of the vehicle routing problem using column generation.
-- [`cgar`](examples/cgar) : Complex example use of `cspy` in a column generation example applied to the aircraft recovery problem.
+- [`vrpy`](https://github.com/Kuifje02/vrpy) : External vehicle routing framework which uses `cspy` to solve different variants of the vehicle routing problem using column generation. Particulatly, see  [`subproblem_cspy.py`](https://github.com/Kuifje02/vrpy/blob/master/vrpy/subproblem_cspy.py).
+- [`cgar`](examples/cgar) : [needs revising] Complex example use of `cspy` in a column generation example applied to the aircraft recovery problem.
 - [`jpath`](examples/jpath) : Simple example showing the necessary graph adptations and the use of custom resource extension functions.
 
-The generic gist to run the algorithms on a specific graph is to load the
-algorithm of choice, say `alg`, call the `alg.run()` method, and query the
-relevant result attributes,
-
-- `alg.path` for a list with the nodes in the path;
-- `alg.total_cost` for the accumulated cost of the path;
-- `alg.consumed_resources` for the accumulated resource usage of the path.
 
 ## Running the tests
 

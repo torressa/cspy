@@ -12,18 +12,19 @@
 
 namespace bidirectional {
 
+/**
+ * BiDirectional algorithm. see docs
+ *
+ * 1. ctor (memory allocation for the graph)
+ * 2. add edges to graph using `addEdge`.
+ * 3. [optional] set solving parameters if desired (e.g. time_limit, ...)
+ * 	3.1. [optional] set callback using `setREFCallback`
+ * 	3.2. [optional] set seed using `setSeed`
+ * 4. call `run`
+ */
 class BiDirectional {
  public:
   /**
-   * BiDirectional algorithm. see docs
-   * For use called in a the following order:
-   * 1. ctor (memory allocation for the graph)
-   * 2. [optional] set solving parameters if desired (e.g. time_limit, ...)
-   * 	2.1. [optional] set callback using `setREFCallback`
-   * 	2.2. [optional] set seed using `setSeed`
-   * 3. add edges at will using `addEdge`.
-   * 4. call `run`
-   *
    * @param[in] number_vertices, int number of vertices in the graph (to be
    * added using addEdge)
    * @param[in] number_edges, int number of edges in the graph
@@ -55,9 +56,10 @@ class BiDirectional {
   double threshold = std::nan("na");
   /// bool with whether output path is required to be elementary
   bool elementary = false;
-  /// bool with whether lower bounds based on shortest paths are used
-  bool primal_bound = true;
-  /// DiGraph pointer (raw cause of swig!)
+  /// bool with whether lower bounds based on shortest paths are used to prune
+  /// labels
+  bool bounds_pruning = false;
+  /// DiGraph pointer (raw cause of SWIG!)
   DiGraph* graph;
 
   /* Methods */
@@ -93,10 +95,12 @@ class BiDirectional {
   std::shared_ptr<labelling::Label> best_label_;
   /// @see labelling::LabelExtension
   std::unique_ptr<labelling::LabelExtension> label_extension_;
+
   // Algorithm parameters
   // whether the search terminad early with a valid s-t path
-  bool                    terminated_early_w_st_path_ = false;
-  clock_t                 start_time_;
+  bool    terminated_early_w_st_path_ = false;
+  clock_t start_time_;
+
   std::unique_ptr<Search> fwd_search_;
   std::unique_ptr<Search> bwd_search_;
 

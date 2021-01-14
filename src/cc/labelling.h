@@ -10,7 +10,6 @@ namespace labelling {
 
 /**
  * Single node label. With resource, cost and other attributes.
- * Note: Once created cannot be modified.
  *
  * Main functionality includes:
  *   - Checking resource feasibility
@@ -48,6 +47,7 @@ class Label {
       const Label&       other,
       const std::string& direction,
       const bool&        elementary = false) const;
+
   /**
    * Checks whether `this` dominates `other` for the input direction. In the
    * case when neither dominates , i.e. they are non-dominated, the direction is
@@ -62,21 +62,24 @@ class Label {
       const Label&       other,
       const std::string& direction,
       const bool&        elementary) const;
+
   /**
    * Check resource feasibility of current label i.e.
    * min_res[i] <= resource_consumption[i] <= max_res[i]
    * for i in 0..resource_consumption.size()
    *
-   * @param [in] max_res, vector of double with upper bound(s) for resource
+   * @param[in] max_res, vector of double with upper bound(s) for resource
    * consumption
-   * @param [in] min_res, vector of double with lower bound(s) for resource
+   * @param[in] min_res, vector of double with lower bound(s) for resource
    * consumption
    */
   bool checkFeasibility(
       const std::vector<double>& max_res,
       const std::vector<double>& min_res) const;
+
   /// Check if weight is under the input threshold.
   bool checkThreshold(const double& threshold) const;
+
   /// Check whether the current partial path is Source - Sink
   bool checkStPath() const;
 
@@ -92,27 +95,36 @@ class Label {
 };
 
 /**
- * Label extention
+ * Label extention using custom REFs if callback defined
+ * Holds pointer to callback.
+ * All calls callback REF should do it through an instance of LabelExtension as
+ * for example `label_extension.ref_callback->REF_fwd`
  */
 class LabelExtension {
  public:
   LabelExtension();
   ~LabelExtension();
-  /// Python callback to custom REF
+  /// Callback to custom REF
   bidirectional::REFCallback* ref_callback = nullptr;
   /// Set python callback for custom resource extensions
   void setREFCallback(bidirectional::REFCallback* cb);
   /**
-   * Generate new label extentions from the current label and return if resource
-   * feasible.
-   * The input label is a pointer as it may be modified in the case
-   * that the edge / adjacent_vertex is found to be resource infeasible, in
-   * which case, the head/tail node becomes unreachable and the attribute is
-   * updated.
+   * Generate new label extentions from the current label and return only if
+   * resource feasible.
+   * The input label is a pointer as it may be modified in
+   * the case that the edge / adjacent_vertex is found to be resource
+   * infeasible, in which case, the head/tail node becomes unreachable and the
+   * attribute is updated.
    *
    * @param[out] label, labelling::Label, current label to extend (and maybe
    * update `unreachable_nodes`)
    * @param[in] adjacent_vertex, AdjVertex, edge
+   * @param[in] direction string
+   * @param[in] elementary bool
+   * @param[in] max_res, vector of double with upper bound(s) for resource
+   * consumption
+   * @param[in] min_res, vector of double with lower bound(s) for resource
+   * consumption
    *
    * @return Label object with extended label. Note this may be empty if the
    * extension is resource infeasible
@@ -129,7 +141,7 @@ class LabelExtension {
 /**
  * Get next label from ordered labels
  * Grabs the next element in the heap (back) and removes it
- * In the forward (backward) direction this is the label with least (most)
+ * In the forward (backward) direction this is the label with lowest (highest)
  * monotone resource.
  *
  * @param[out] labels, std::vector<Label> pointer (heap)
@@ -146,8 +158,8 @@ void updateEfficientLabels(
 
 /**
  * Check whether the input label dominates any efficient label (previously
- * undominated labels) at the same node. All the labels that are dominated by
- * the input label are removed.
+ * undominated labels) at the same node.
+ * If any label is dominated by the input label, they are removed.
  *
  * @param[out] efficient_labels, pointer to a vector of Label with the efficient
  * labels at the same node as `label`. If a label is dominated by `label`, it is
@@ -155,12 +167,6 @@ void updateEfficientLabels(
  * @param[in] label, Label to compare
  * @param[in] direction, string with direction of search
  * @param[in] elementary, bool with whether non-elementary paths are allowed
- * @param[in] check_feasibility, bool  whether resource feasibility checks have
- * to be performed prior to the removal of a label.
- * @param [in] max_res, vector of double with upper bound(s) for resource
- * consumption
- * @param [in] min_res, vector of double with lower bound(s) for resource
- * consumption
  *
  * @return bool, true if `label` is dominated, false otherwise
  */
@@ -170,12 +176,24 @@ bool runDominanceEff(
     const std::string&  direction,
     const bool&         elementary);
 
-/// Reverse backward path and inverts resource consumption
+/**
+ * Reverse backward path and inverts resource consumption
+ * and returns resulting forward-compatible label.
+ *
+ * @param[out] label, labelling::Label, current label to extend (and maybe
+ * update `unreachable_nodes`)
+ * @param[in] max_res, vector of double with upper bound(s) for resource
+ * consumption. To use to invert monotone resource
+ * @param[in] invert_min_res, bool
+ *
+ * @return inverted label
+ */
 Label processBwdLabel(
     const labelling::Label&    label,
     const std::vector<double>& max_res,
     const std::vector<double>& cumulative_resource,
     const bool&                invert_min_res = false);
+
 /**
  * Check whether a pair of forward and backward labels are suitable for merging.
  * To be used before attempting to merge
@@ -189,7 +207,7 @@ bool mergePreCheck(
 /**
  * Merge labels produced by a backward and forward label.
  * If an s-t compatible path can be obtained the appropriately
- * extended and merged label is returned
+ * extended and merged label is returned.
  */
 Label mergeLabels(
     const labelling::Label&       fwd_label,
@@ -199,7 +217,8 @@ Label mergeLabels(
     const std::vector<double>&    max_res,
     const std::vector<double>&    min_res);
 
-// Heap operations for vector of Labels
+/* Heap operations for vector of labels */
+
 /// Initalise heap using the appropriate comparison
 /// i.e. increasing in the monotone resource forward lists, decreasing otherwise
 void makeHeap(

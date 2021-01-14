@@ -5,18 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-
 ## [unreleased]
 
 ### Changed
 
-Rewrite of the bidirectional algorithm in C++ interfaced with python using SWIG.
+Rewrite of the bidirectional algorithm in C++ interfaced with Python using SWIG.
 
 The algorithm improvements include:
- - Bug fix for non-elementary paths (#52)
  - Faster joining procedure (when `direction="both"`) with lower bounding and sorted labels
- - Lower bounding using Dijkstra's algorithm and the primal bound obtained during the search
- - Backwards incompatible change to do with custom REFs. Now, instead of specifying each function separately, you can implement them in class that inherits from `REFCallback`. and then pass them to the algorithm using the `REF_callback` parameter.
+ - Bounds pruning using shortest path algorithm lower bounds and the primal bound obtained during the search (experimental).
+ - Backwards incompatible change to do with custom REFs. Now, instead of specifying each function separately, you can implement them in class that inherits from `REFCallback`. and then pass them to the algorithm using the `REF_callback` parameter. This change applies to all algorithms.
  Note that:
    1. the naming of the functions has to match (`REF_fwd`, `REF_bwd` and `REF_join`)
    2. so does the number of arguments (not necessarily the naming of the variables though)
@@ -56,10 +54,16 @@ alg = BiDirectional(G, max_res, min_res, REF_callback=MyCallback(1, True))
 ```
 
 ### Added
- - Benchmarks from Beasley and Christofides (1989)
+ - Benchmarks (and comp results for BiDirectional) from Beasley and Christofides (1989)
+
+### Fixed
+
+ - [BiDirectional] Bug fix for non-elementary paths (#52)
+ - [PSOLGENT] Bug fix for local search (#57)
 
 ### Removed
- - `BiDirectional` python implementation (can be found [here](https://github.com/torressa/cspy/tree/fba830cac02c1914670ca2def90c5c3447fd61e1))
+ - BiDirectional python implementation (can be found [here](https://github.com/torressa/cspy/tree/fba830cac02c1914670ca2def90c5c3447fd61e1))
+ - BiDirectional `method="random"` see issues (hopefully only temporary).
 
 ## [v0.1.2] - 31/07/2020
 

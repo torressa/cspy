@@ -148,8 +148,8 @@ def _check_edge_attr(G, max_res, min_res, direction, algorithm):
             "Edges must have 'res_cost' attribute with length equal to" +
             " 'min_res' == 'max_res")
     if not all(
-            isinstance(edge[2]['res_cost'], ndarray)
-            for edge in G.edges(data=True)):
+            isinstance(edge[2]['res_cost'], ndarray) for edge in G.edges(
+                data=True)) and "bidirectional" not in algorithm:
         raise TypeError("The edge 'res_cost' attribute must be a numpy.array")
 
 

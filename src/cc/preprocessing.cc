@@ -8,7 +8,7 @@
 
 namespace bidirectional {
 
-void dijkstra(
+void shortest_path(
     std::vector<double>* lower_bound_weight,
     const DiGraph&       graph,
     const double&        reverse) {
