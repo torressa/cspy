@@ -1,0 +1,69 @@
+#!/bin/bash
+
+# This file orchestrates the docker builds
+
+export BENCHMARK_TESTS=false
+export BUILD_DOCS=false
+export BUILD_CLEAN=false
+export BUILD_PYTHON=false
+export BUILD_RELEASE=false
+
+usage() {
+   cat <<EOF
+Usage: $0 [ -b -d -c -p] or [ ]
+where:
+    -b      : [not implemented] runs benchmark tests (outputs RO csv summary files to tools/dev/output see test_cc/test_benchmarks_sch.cc for more details)
+    -d      : [not implemented] build docs
+	-c      : clean build (remove current build directory)
+	-p      : build python
+    -r      : build release in manylinux container and places wheels in build/python/wheelhouse/
+    -h      : help, display this and exit.
+  no flag   : runs production tests in an alpine container mounting the build folder
+EOF
+   exit 0
+}
+
+while getopts "bdcpr" opt; do
+	case $opt in
+	b )
+		BENCHMARK_TESTS=true
+		;;
+	d )
+		BUILD_DOCS=true
+		;;
+	c )
+		BUILD_CLEAN=true
+		;;
+	p )
+		BUILD_PYTHON=true
+		;;
+    r )
+        BUILD_PYTHON=true
+        BUILD_RELEASE=true
+        ;;
+	h )
+		usage
+		exit 1
+		;;
+	* )
+		usage
+		exit 1
+		;;
+	\? )
+		usage
+		exit 1
+		;;
+	esac
+done
+
+# Clean spin and clean
+docker-compose rm -fsv
+
+if $BUILD_PYTHON
+then
+ 	docker-compose up --build --remove-orphans cspy-dev-python-builder cspy-dev-python
+else
+ 	docker-compose up --build --remove-orphans cspy-dev-cpp-builder cspy-dev-cpp
+fi
+
+docker-compose rm -fsv

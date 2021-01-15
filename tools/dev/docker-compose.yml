@@ -1,0 +1,60 @@
+version: "2.3"
+
+services:
+
+  cspy-dev-cpp-builder:
+    image: cspy-docker:builder
+    build:
+      context: ../../
+      dockerfile: tools/docker/Dockerfile
+      target: builder
+      cache_from:
+        - cspy-docker:builder
+
+  cspy-dev-cpp:
+    image: cspy-docker-dev:latest
+    build:
+      context: ../../
+      dockerfile: tools/docker/Dockerfile
+      target: dev
+      args:
+        BENCHMARK_TESTS: $BENCHMARK_TESTS
+        BUILD_DOCS : $BUILD_DOCS
+        BUILD_CLEAN : $BUILD_CLEAN
+        BUILD_PYTHON: $BUILD_PYTHON
+        BUILD_RELEASE: $BUILD_RELEASE
+      cache_from:
+        - cspy-docker:builder
+        - cspy-docker:latest
+    container_name: cspy-dev
+    volumes:
+      - ../../build:/root/build/
+    command: ./run_tests
+
+  cspy-dev-python-builder:
+    image: cspy-docker-python:builder
+    build:
+      context: ../../
+      dockerfile: tools/docker/python.Dockerfile
+      target: builder
+      cache_from:
+        - cspy-docker-python:builder
+
+  cspy-dev-python:
+    image: cspy-docker-python:latest
+    build:
+      context: ../../
+      dockerfile: tools/docker/python.Dockerfile
+      target: dev
+      args:
+        BENCHMARK_TESTS: $BENCHMARK_TESTS
+        BUILD_DOCS : $BUILD_DOCS
+        BUILD_CLEAN : $BUILD_CLEAN
+        BUILD_RELEASE: $BUILD_RELEASE
+      cache_from:
+        - cspy-docker-python:builder
+        - cspy-docker-python:latest
+    container_name: cspy-dev
+    volumes:
+      - ../../build:/root/build/
+    command: ./run_tests

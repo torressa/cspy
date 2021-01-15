@@ -1,0 +1,37 @@
+#!/bin/bash
+
+# script to run tests inside docker containers
+
+set -e
+
+cd /root/
+
+# Clear contents of build dir
+if $BUILD_CLEAN
+then
+	rm -rf build/*
+fi
+
+case $BUILD_PYTHON:$BUILD_RELEASE in
+	true:true)
+	    cmake -S . -Bbuild -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON \
+            -DBUILD_PYTHON=ON -DBUILD_SHARED_LIBS=ON
+		;;
+	true:false)
+	    cmake -S . -Bbuild -DBUILD_TESTING=ON -DBUILD_PYTHON=ON -DBUILD_SHARED_LIBS=ON
+		;;
+	false:false)
+    	cmake -S . -Bbuild -DBUILD_TESTING=ON -DCMAKE_BUILD_TYPE=Release \
+					-DBUILD_PYTHON=OFF -DBUILD_SHARED_LIBS=OFF
+		;;
+esac
+
+cmake --build build --config Release --target all -v
+
+if $BUILD_RELEASE
+then
+	./build_manylinux_wheels
+else
+	# TODO currently broken as python.cmake install cspy locally command doesn't work
+	cd build && ctest --verbose -R python_unittest
+fi

@@ -1,13 +1,30 @@
-[![CircleCI](https://circleci.com/gh/torressa/cspy/tree/master.svg?style=svg&circle-token=910e28b03dd0d32967fae038a3cf28b6cdf56334)](https://circleci.com/gh/torressa/cspy/tree/master)
+| OS     | C++ | Python |
+|:-------|-----|--------|
+| Linux  | [![Status][cpp_linux_svg]][cpp_linux_link] | [![Status][python_linux_svg]][python_linux_link] |
+| macOS  | [![Status][cpp_osx_svg]][cpp_osx_link] | [![Status][python_osx_svg]][python_osx_link] |
+| Windows  | [![Status][cpp_win_svg]][cpp_win_link] | [![Status][python_win_svg]][python_win_link] |
+
+
+[cpp_linux_svg]: https://github.com/torressa/cspy/workflows/Ubuntu%20Cpp/badge.svg
+[cpp_linux_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22Ubuntu+Cpp%22
+[python_linux_svg]: https://github.com/torressa/cspy/workflows/Ubuntu%20Python/badge.svg
+[python_linux_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22Ubuntu+Python%22
+
+[cpp_osx_svg]: https://github.com/torressa/cspy/workflows/MacOS%20Cpp/badge.svg
+[cpp_osx_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22MacOS+Cpp%22
+[python_osx_svg]: https://github.com/torressa/cspy/workflows/MacOS%20Python/badge.svg
+[python_osx_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22MacOS+Python%22
+
+[cpp_win_svg]: https://github.com/torressa/cspy/workflows/Windows%20Cpp/badge.svg
+[cpp_win_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22Windows+Cpp%22
+[python_win_svg]: https://github.com/torressa/cspy/workflows/Windows%20Python/badge.svg
+[python_win_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22Windows+Python%22
+
 [![Documentation Status](https://readthedocs.org/projects/cspy/badge/?version=latest)](https://cspy.readthedocs.io/en/latest/?badge=latest)
 [![PyPI version](https://badge.fury.io/py/cspy.svg)](https://badge.fury.io/py/cspy)
-[![codecov](https://codecov.io/gh/torressa/cspy/branch/master/graph/badge.svg?token=24tyrWinNT)](https://codecov.io/gh/torressa/cspy)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/c28f50e92dae4bcc921f1bd142370608)](https://www.codacy.com/app/torressa/cspy?utm_source=github.com&utm_medium=referral&utm_content=torressa/cspy&utm_campaign=Badge_Grade)
 [![JOSS badge](https://joss.theoj.org/papers/25eda55801a528b982d03a6a61f7730d/status.svg)](https://joss.theoj.org/papers/25eda55801a528b982d03a6a61f7730d)
-![PyPI - Python Version](https://img.shields.io/pypi/pyversions/cspy)
 
-<!-- [![BCH compliance](https://bettercodehub.com/edge/badge/torressa/cspy?branch=master)](https://bettercodehub.com/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) -->
 
 # cspy
 
@@ -65,39 +82,103 @@ or
 python3 -m pip install cspy
 ```
 
+### Quick start
+
+#### Python
+
+```python
+# Imports
+from cspy import BiDirectional
+from networkx import DiGraph
+from numpy import array
+
+# Create a DiGraph
+G = DiGraph(directed=True, n_res=2)
+G.add_edge("Source", "A", res_cost=[1, 2], weight=0)
+G.add_edge("A", "B", res_cost=[1, 0.3], weight=0)
+G.add_edge("A", "C", res_cost=[1, 0.1], weight=0)
+G.add_edge("B", "C", res_cost=[1, 3], weight=-10)
+G.add_edge("B", "Sink", res_cost=[1, 2], weight=10)
+G.add_edge("C", "Sink", res_cost=[1, 10], weight=0)
+max_res, min_res = [4, 20], [1, 0]
+
+# init algorithm
+bidirec = BiDirectional(G, max_res, min_res)
+
+# Call and query attributes
+bidirec.run()
+print(bidirec.path)
+print(bidirec.total_cost)
+print(bidirec.consumed_resources)
+```
+
+#### Cpp
+
+```cpp
+#include "bidirectional.h"
+
+namespace bidirectional {
+
+int main(int argc, char** argv) {
+  // Init
+  const std::vector<double> max_res         = {4.0, 20.0};
+  const std::vector<double> min_res         = {1.0, 0.0};
+  const int                 number_vertices = 5;
+  const int                 number_edges    = 5;
+  bidirectional                             = std::make_unique<BiDirectional>(
+      number_vertices, number_edges, max_res, min_res);
+
+  // Populate graph
+  bidirectional->addEdge("Source", "A", 0, {1, 2});
+  bidirectional->addEdge("A", "B", 0, {1, 0.3});
+  bidirectional->addEdge("B", "C", -10, {1, 3});
+  bidirectional->addEdge("B", "Sink", 10, {1, 2});
+  bidirectional->addEdge("C", "Sink", 0, {1, 10});
+
+  // Run and query attributes
+  bidirectional->run();
+
+  auto path = bidirectional->getPath();
+  auto res  = bidirectional->getConsumedResources();
+  auto cost = bidirectional->getTotalCost();
+  return 0;
+}
+
+} // namespace bidirectional
+
+```
+
 ### Examples
 
-The generic gist to run the algorithms on a specific graph is to load the
-algorithm of choice, say `alg`, call the `alg.run()` method, and query the
-relevant result attributes,
-
-- `alg.path` for a list with the nodes in the path;
-- `alg.total_cost` for the accumulated cost of the path;
-- `alg.consumed_resources` for the accumulated resource usage of the path.
-
-I have included a few examples:
-
+- [`vrpy`](https://github.com/Kuifje02/vrpy) : External vehicle routing framework which uses `cspy` to solve different variants of the vehicle routing problem using column generation. Particulatly, see  [`subproblem_cspy.py`](https://github.com/Kuifje02/vrpy/blob/master/vrpy/subproblem_cspy.py).
+- [`cgar`](examples/cgar) : [needs revising] Complex example use of `cspy` in a column generation example applied to the aircraft recovery problem.
 - [`jpath`](examples/jpath) : Simple example showing the necessary graph adptations and the use of custom resource extension functions.
-- [`cgar`](examples/cgar) : Complex example use of `cspy` in a column generation example applied to the aircraft recovery problem.
-- [`vrpy`](https://github.com/Kuifje02/vrpy) : (under development) external vehicle routing framework which uses `cspy` to solve different variants of the vehicle routing problem using column generation.
 
 
 ## Running the tests
+
+### Prerequisites
+
+- Docker, docker-compose
 
 To run the tests first, clone the repository into a path in your machine `~/path/newfolder` by running
 
 ```none
 git clone https://github.com/torressa/cspy.git ~/path/newfolder
 ```
+### Running the Cpp tests
 
-Then, go into the folder and run the tests using `unittest`
-
-```none
-cd ~/path/newfolder
-python3 -m unittest
+```
+cd ~/path/newfolder/tools/dev
+./build
 ```
 
-Please make sure that the python package cspy is not already installed in your machine.
+### Running the Python tests
+
+```
+cd ~/path/newfolder/tools/dev
+./build -c -p
+```
 
 ## License
 
@@ -124,17 +205,23 @@ After that feel free to send a pull request.
 
 If you have a question or need help, feel free to raise an issue explaining it.
 
-Alternatively, email me at `d.torressanchez@lancs.ac.uk`.
+Alternatively, email me at `david.sanchez@sintef.no`.
 
 ## Citing
 
 If you'd like to cite this package, please use the following bib format:
 
 ```none
-@Misc{cspy,
-  author = {Torres Sanchez, David},
-  title = {{cspy : A Python package with a collection of algorithms for the (Resource) Constrained Shortest Path problem}},
-  year = {2019},
-  url = {\url{https://github.com/torressa/cspy}}
+@article{torressa2020,
+  doi = {10.21105/joss.01655},
+  url = {https://doi.org/10.21105/joss.01655},
+  year = {2020},
+  publisher = {The Open Journal},
+  volume = {5},
+  number = {49},
+  pages = {1655},
+  author = {{Torres Sanchez}, David},
+  title = {cspy: A Python package with a collection of algorithms for the (Resource) Constrained Shortest Path problem},
+  journal = {Journal of Open Source Software}
 }
 ```

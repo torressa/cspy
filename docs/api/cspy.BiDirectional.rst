@@ -4,23 +4,21 @@ cspy.BiDirectional
 .. automodule:: cspy.BiDirectional
 	:members:
    	:inherited-members:
- 
+
 Notes
 -----
-The input graph must have a ``n_res`` attribute which must be
-:math:`\geq 2`. The edges in the graph must all have a ``res_cost``
-attribute.
+The input graph must have a ``n_res`` attribute equal to the number of resources.
+The edges in the graph must all have a ``res_cost`` attribute (with size equal to  ``n_res``).
 
 According to the inputs, four different algorithms can be used.
-If you'd like to check which algorithm is running given the resource
-limits, call the method :func:`BiDirectional.name_algorithm()`
-for a log with the classification.
 
 - ``direction`` = "forward": Monodirectional forward labeling algorithm
 - :math:`H_F == H_B`: Bidirectional labeling algorithm with static halfway point.
 - ``direction`` = "backward": Monodirectional backward labeling algorithm
 - :math:`H_F > H_B`: Bidirectional labeling algorithm with dynamic halfway point.
 - :math:`H_F < H_B`: The algorithm won't go anywhere!
+
+Where :math:`H_F / H_B` are the first elements in the maximum / minimum resources arrays.
 
 Example
 -------
@@ -44,4 +42,3 @@ To run the algorithm, create a :class:`BiDirectional` instance and call
     >>> bidirec.run()
     >>> print(bidirec.path)
     ["Source", "A", "B", "C", "Sink"]
-

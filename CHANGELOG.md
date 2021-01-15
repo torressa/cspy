@@ -7,24 +7,89 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [unreleased]
 
+### Changed
+
+Rewrite of the bidirectional algorithm in C++ interfaced with Python using SWIG.
+
+The algorithm improvements include:
+ - Faster joining procedure (when `direction="both"`) with lower bounding and sorted labels
+ - Bounds pruning using shortest path algorithm lower bounds and the primal bound obtained during the search (experimental).
+ - Backwards incompatible change to do with custom REFs. Now, instead of specifying each function separately, you can implement them in class that inherits from `REFCallback`. and then pass them to the algorithm using the `REF_callback` parameter. This change applies to all algorithms.
+ Note that:
+   1. the naming of the functions has to match (`REF_fwd`, `REF_bwd` and `REF_join`)
+   2. so does the number of arguments (not necessarily the naming of the variables though)
+   3. not all three have to be implemented. If for example, one is just using `direction="forward"`, then only `REF_fwd` would suffice. In the case of the callback being passed and only part of the functions implemented, the default implementation will used for the missing ones.
+
+e.g.
+```python
+from cspy import BiDirectional, REFCallback
+
+class MyCallback(REFCallback):
+
+    def __init__(self, arg1, arg2):
+        # You can use custom arguments and save for later use
+        REFCallback.__init__(self) # Init parent
+        self._arg1: int = arg1
+        self._arg2: bool = arg2
+
+    def REF_fwd(self, cumul_res, tail, head, edge_res, partial_path,
+                cumul_cost):
+        res_new = list(cumul_res) # local copy
+        # do some operations on `res_new` maybe using `self._arg1/2`
+        return res_new
+
+    def REF_bwd(self, cumul_res, tail, head, edge_res, partial_path,
+                cumul_cost):
+        res_new = list(cumul_res) # local copy
+        # do some operations on `res_new` maybe using `self._arg1/2`
+        return res_new
+
+    def REF_join(self, fwd_resources, bwd_resources, tail, head, edge_res):
+        fwd_res = list(fwd_resources) # local copy
+        # do some operations on `res_new` maybe using `self._arg1/2`
+        return fwd_res
+
+# Load G, max_res, min_res
+alg = BiDirectional(G, max_res, min_res, REF_callback=MyCallback(1, True))
+```
+
+### Added
+ - Benchmarks (and comp results for BiDirectional) from Beasley and Christofides (1989)
+
+### Fixed
+
+ - [BiDirectional] Bug fix for non-elementary paths (#52)
+ - [PSOLGENT] Bug fix for local search (#57)
+
+### Removed
+ - BiDirectional python implementation (can be found [here](https://github.com/torressa/cspy/tree/fba830cac02c1914670ca2def90c5c3447fd61e1))
+ - BiDirectional `method="random"` see issues (hopefully only temporary).
+
+## [v0.1.2] - 31/07/2020
+
+### Added
+
+- New paramenters: `time_limit` and `threshold`.
+- Custom REF, backward incompatible change: additional argument for more flexibility. These are the current partial path and the accumulated cost. Note that these are optional and do not have to be used. However, a slight modificiation to the function has to be made, simply add `**kwargs` as well as the existing arguments.
+
 ## [v0.1.1] - 21/05/2020
 
 ### Changed
 - BiDirectional:
   - Reverted backward REF as it is required for some problems.
   - Added REF join parameter that is required when joining forward and backward labels using custom REFs.
-- Moved notes and examples from docstrings to the docs folder. 
+- Moved notes and examples from docstrings to the docs folder.
 - Final JOSS paper changes
 
 ## [v0.1.0] - 14/04/2020
 
-### Added 
+### Added
 
 - BiDirectional:
   - Option to chose method for direction selection.
 - [vrpy](https://github.com/Kuifje02/vrpy) submodule.
 
-### Changed 
+### Changed
 
 - BiDirectional:
   - Label storage, divided into unprocessed, generated and non-dominated labels
@@ -171,7 +236,8 @@ path using `networkx.shortest_simple_paths`.
 - Docstring modifications to include maths.
 - Updated README.
 
-[unreleased]: https://github.com/torressa/cspy/compare/v0.1.1...HEAD
+[unreleased]: https://github.com/torressa/cspy/compare/v0.1.2...HEAD
+[v0.1.2]: https://github.com/torressa/cspy/compare/v0.1.1...v0.1.2
 [v0.1.1]: https://github.com/torressa/cspy/compare/v0.1.0...v0.1.1
 [v0.1.0]: https://github.com/torressa/cspy/compare/v0.0.14...v0.1.0
 [v0.0.14]: https://github.com/torressa/cspy/compare/v0.0.13...v0.0.14
