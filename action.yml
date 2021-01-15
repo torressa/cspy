@@ -10,3 +10,6 @@ inputs:
   commit_ref:
     description: "The reference for the current commit"
     required: true
+runs:
+  using: "node12"
+  main: "docs/compiled/index.js"
