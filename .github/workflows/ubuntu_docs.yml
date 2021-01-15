@@ -1,0 +1,43 @@
+name: Ubuntu docs
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+  release:
+    types:
+      - published
+
+jobs:
+  notebooks:
+    name: "Build the notebooks for the docs"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: Configure
+        run: cmake -S . -Bbuild -DBUILD_TESTING=ON -DBUILD_PYTHON=ON -DBUILD_SHARED_LIBS=ON
+      - name: Build
+        run: cmake --build build --config Release --target all -v
+      - name: Test
+        run: cd build && ctest --verbose -R python_unittest
+      - name: Install
+        run: cmake --build build --config Release --target install -v -- DESTDIR=install
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: notebooks-for-${{ github.sha }}
+          path: docs/
+
+      - name: Trigger RTDs build
+        uses: ./
+        with:
+          webhook_url: ${{ secrets.RTDS_WEBHOOK_URL }}
+          webhook_token: ${{ secrets.RTDS_WEBHOOK_TOKEN }}
+          commit_ref: ${{ github.ref }}
