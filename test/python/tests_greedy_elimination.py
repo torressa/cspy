@@ -1,8 +1,9 @@
 import unittest
 from time import time
 
-from numpy import array
 from networkx import DiGraph
+from numpy import array
+from parameterized import parameterized
 
 from cspy import GreedyElim
 

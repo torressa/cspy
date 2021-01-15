@@ -119,7 +119,7 @@ print(bidirec.consumed_resources)
 
 namespace bidirectional {
 
-int main(int argc, char** argv) {
+void wrap() {
   // Init
   const std::vector<double> max_res         = {4.0, 20.0};
   const std::vector<double> min_res         = {1.0, 0.0};
@@ -145,7 +145,6 @@ int main(int argc, char** argv) {
 }
 
 } // namespace bidirectional
-
 ```
 
 ### Examples

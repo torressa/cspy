@@ -2,6 +2,7 @@ import unittest
 
 from numpy import array
 from networkx import DiGraph
+from parameterized import parameterized
 
 from cspy import BiDirectional
 
@@ -28,16 +29,21 @@ class TestsIssue41(unittest.TestCase):
         self.total_cost = 20
         self.consumed_resources = [3, 3]
 
-    def test_bidirectional(self):
-        """
-        Test BiDirectional with randomly chosen sequence of directions
-        for a range of seeds.
-        """
-        alg = BiDirectional(self.G, self.max_res, self.min_res)
-        alg.run()
-        self.assertEqual(alg.path, self.result_path)
-        self.assertEqual(alg.total_cost, self.total_cost)
-        self.assertEqual(alg.consumed_resources, self.consumed_resources)
+    # @parameterized.expand(zip(range(100), range(100)))
+    # def test_bidirectional_random(self, _, seed):
+    #     """
+    #     Test BiDirectional with randomly chosen sequence of directions
+    #     for a range of seeds.
+    #     """
+    #     alg = BiDirectional(self.G,
+    #                         self.max_res,
+    #                         self.min_res,
+    #                         method="random",
+    #                         seed=seed)
+    #     alg.run()
+    #     self.assertEqual(alg.path, self.result_path)
+    #     self.assertEqual(alg.total_cost, self.total_cost)
+    #     self.assertTrue(all(alg.consumed_resources == self.consumed_resources))
 
     def test_bidirectional_forward(self):
         alg = BiDirectional(self.G,
@@ -47,7 +53,7 @@ class TestsIssue41(unittest.TestCase):
         alg.run()
         self.assertEqual(alg.path, self.result_path)
         self.assertEqual(alg.total_cost, self.total_cost)
-        self.assertTrue(alg.consumed_resources == self.consumed_resources)
+        self.assertTrue(all(alg.consumed_resources == self.consumed_resources))
 
     def test_bidirectional_backward(self):
         alg = BiDirectional(self.G,
@@ -57,4 +63,4 @@ class TestsIssue41(unittest.TestCase):
         alg.run()
         self.assertEqual(alg.path, self.result_path)
         self.assertEqual(alg.total_cost, self.total_cost)
-        self.assertTrue(alg.consumed_resources == self.consumed_resources)
+        self.assertTrue(all(alg.consumed_resources == self.consumed_resources))
