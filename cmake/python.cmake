@@ -88,7 +88,7 @@ if(BUILD_TESTING)
   	# copy swig generated python interface file
   	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/python/*.py ${PROJECT_NAME}/algorithms/
   	# Install prereqs for testing
-  	COMMAND ${Python_EXECUTABLE} -m pip install -r ${PROJECT_SOURCE_DIR}/python/requirements.dev.txt
+	COMMAND ${Python_EXECUTABLE} -m pip install -r ${PROJECT_SOURCE_DIR}/python/requirements.dev.txt
     # Build wheel
     COMMAND ${Python_EXECUTABLE} setup.py sdist bdist_wheel
     # Remove setup.py (otherwise will be called again when installing

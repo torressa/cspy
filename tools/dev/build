@@ -16,9 +16,9 @@ where:
     -d      : [not implemented] build docs
 	-c      : clean build (remove current build directory)
 	-p      : build python
-    -r      : build release
+    -r      : build release in manylinux container and places wheels in build/python/wheelhouse/
     -h      : help, display this and exit.
-  no flag   : runs production tests mounting the build folder
+  no flag   : runs production tests in an alpine container mounting the build folder
 EOF
    exit 0
 }

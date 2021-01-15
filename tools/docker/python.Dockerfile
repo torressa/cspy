@@ -1,17 +1,14 @@
-FROM ubuntu:rolling AS builder
+FROM quay.io/pypa/manylinux2014_x86_64 AS builder
 
 ENV PATH=/usr/local/bin:$PATH
-RUN apt-get update -qq \
-&& apt-get install -yq \
-	git wget libssl-dev build-essential swig python3-dev python3-pip \
-&& apt-get clean \
-&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# Install CMake 3.18.1
-RUN wget "https://cmake.org/files/v3.18/cmake-3.18.1-Linux-x86_64.sh" \
-&& chmod a+x cmake-3.18.1-Linux-x86_64.sh \
-&& ./cmake-3.18.1-Linux-x86_64.sh --prefix=/usr/local/ --skip-license \
-&& rm cmake-3.18.1-Linux-x86_64.sh
+RUN yum install -y python3-devel
+
+# Download and install SWIG from git
+RUN git clone https://github.com/swig/swig.git --branch v4.0.2 \
+&& cd swig && ./autogen.sh && ./configure \
+&& make && make install && cd .. && rm -rf swig/
+
 CMD [ "/usr/bin/bash" ]
 
 FROM builder AS dev
@@ -28,4 +25,5 @@ ENV BUILD_RELEASE ${BUILD_RELEASE:-false}
 
 WORKDIR /root/
 COPY . .
-RUN mv tools/docker/scripts/run_tests .
+RUN mv tools/docker/scripts/* . \
+&& chmod +x run_tests build_manylinux_wheels

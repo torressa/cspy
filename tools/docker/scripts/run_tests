@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # script to run tests inside docker containers
 
@@ -26,7 +26,12 @@ case $BUILD_PYTHON:$BUILD_RELEASE in
 		;;
 esac
 
-cmake --build build --target all
-cmake --build build --target install
-cmake --build build --target test
-./build/bin/BiDirectional_test
+cmake --build build --config Release --target all -v
+
+if $BUILD_RELEASE
+then
+	./build_manylinux_wheels
+else
+	# TODO currently broken as python.cmake install cspy locally command doesn't work
+	cd build && ctest --verbose -R python_unittest
+fi

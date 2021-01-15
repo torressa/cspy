@@ -36,7 +36,7 @@ if(POLICY CMP0086)
   cmake_policy(SET CMP0086 NEW)
 endif()
 
-project(cspy VERSION 1.0.0 LANGUAGES CXX)
+project(cspy VERSION 1.0.0 DESCRIPTION alpha LANGUAGES CXX)
 message(STATUS "project: ${PROJECT_NAME}")
 message(STATUS "version: ${PROJECT_VERSION}")
 
