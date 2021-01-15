@@ -36,7 +36,7 @@ jobs:
           path: docs/
 
       - name: Trigger RTDs build
-        uses: ./
+        uses: .github/workflows/rtd.yml
         with:
           webhook_url: ${{ secrets.RTDS_WEBHOOK_URL }}
           webhook_token: ${{ secrets.RTDS_WEBHOOK_TOKEN }}
