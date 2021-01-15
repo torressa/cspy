@@ -23,6 +23,8 @@ jobs:
 
       - name: Configure
         run: cmake -S . -Bbuild -DBUILD_TESTING=ON -DBUILD_PYTHON=ON -DBUILD_SHARED_LIBS=ON
+      - name: Install rtds-action
+        run: python3 -m pip install rtds-action
       - name: Build
         run: cmake --build build --config Release --target all -v
       - name: Test
@@ -36,7 +38,7 @@ jobs:
           path: docs/
 
       - name: Trigger RTDs build
-        uses: ./
+        uses: dfm/rtds-action@v1
         with:
           webhook_url: ${{ secrets.RTDS_WEBHOOK_URL }}
           webhook_token: ${{ secrets.RTDS_WEBHOOK_TOKEN }}
