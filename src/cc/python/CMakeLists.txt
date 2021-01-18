@@ -6,12 +6,12 @@ swig_add_library(pyBiDirectionalCpp
   OUTPUT_DIR ${CMAKE_BINARY_DIR}/python/
   SOURCES bidirectional.i)
 
+set_property(TARGET pyBiDirectionalCpp PROPERTY SWIG_USE_TARGET_INCLUDE_DIRECTORIES ON)
 target_include_directories(pyBiDirectionalCpp
   PRIVATE
   ../
   ${Python_INCLUDE_DIRS}
   )
-set_property(TARGET pyBiDirectionalCpp PROPERTY SWIG_USE_TARGET_INCLUDE_DIRECTORIES ON)
 
 # note: macOS is APPLE and also UNIX !
 if(APPLE)

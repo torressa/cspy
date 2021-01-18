@@ -20,13 +20,13 @@ jobs:
       run: cmake -S . -Bbuild -DBUILD_TESTING=ON -DBUILD_PYTHON=ON -DBUILD_SHARED_LIBS=ON
     - name: Build
       run: cmake --build build --config Release --target all -v
-    - name: Install cspy
+    - name: Install cspy and run python tests
       run: |
         cd build/python/
         pip3 install delocate
         delocate-wheel -w wheelhouse dist/*.whl
-        pip3 install --user wheelhouse/*.whl
-    - name: Test
-      run: cd build && ctest --verbose -R python_unittest
+        python3 -m pip install --user wheelhouse/*.whl
+        cd ..
+        ctest --verbose -R python_unittest
     - name: Install
       run: cmake --build build --config Release --target install -v -- DESTDIR=install
