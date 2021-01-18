@@ -27,15 +27,13 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Set Python path
         run: |
-          export pythonLocationBin="$pythonLocation/bin/python3.6"
-          export PATH="$pythonLocationBin:$PATH"
+          export PATH="$PATH:$pythonLocationBin"
           echo $PATH
         shell: bash -l {0}
       - name: Configure
         run: |
           echo $pythonLocation
-          echo $pythonLocationBin
-          cmake -S . -Bbuild -DBUILD_TESTING=ON -DBUILD_PYTHON=ON -DBUILD_SHARED_LIBS=ON -DPython3_ROOT_DIR=${pythonLocationBin}
+          cmake -S . -Bbuild -DBUILD_TESTING=ON -DBUILD_PYTHON=ON -DBUILD_SHARED_LIBS=ON -DPython3_ROOT_DIR=${pythonLocation} -DPython_ROOT_DIR=${pythonLocation}
       - name: Build
         run: cmake --build build --config Release --target all -v
       - name: Fix wheel and run python tests

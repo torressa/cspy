@@ -36,10 +36,10 @@ if(POLICY CMP0086)
   cmake_policy(SET CMP0086 NEW)
 endif()
 
-# Enable Python find by location 
-if(POLICY CMP0094)
-	cmake_policy(SET CMP0094 NEW)
-endif()
+# Enable Python find by location
+# if(POLICY CMP0094)
+# 	cmake_policy(SET CMP0094 NEW)
+# endif()
 
 
 project(cspy VERSION 1.0.0 DESCRIPTION alpha LANGUAGES CXX)
@@ -107,6 +107,17 @@ if(WIN32 AND (BUILD_PYTHON OR BUILD_JAVA OR BUILD_DOTNET))
 endif()
 
 include(python)
+
+if (BUILD_TESTING)
+  include(FetchContent)
+  FetchContent_Declare(
+    googletest
+    GIT_REPOSITORY https://github.com/google/googletest.git
+    GIT_TAG master)
+  FetchContent_MakeAvailable(googletest)
+  set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+  add_subdirectory(test/cc/)
+endif()
 
 # Other languages
 # include(java)
