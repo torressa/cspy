@@ -92,12 +92,12 @@ if(BUILD_TESTING)
     # Build wheel
     COMMAND ${Python_EXECUTABLE} setup.py sdist bdist_wheel
     # Remove setup.py (otherwise will be called again when installing
-  	COMMAND ${CMAKE_COMMAND} -E remove setup.py
+	# COMMAND ${CMAKE_COMMAND} -E remove setup.py
   	# Must not call it in a folder containing the setup.py otherwise pip call it
   	# (i.e. "python setup.py bdist") while we want to consume the wheel package
-	COMMAND ${Python_EXECUTABLE} -m pip install --find-links=dist ${PROJECT_NAME}
+	COMMAND pip3 install --user ${PROJECT_SOURCE_DIR}/build/python/dist/*.whl
 	# Copy setup generated file (again for release)
-    COMMAND ${CMAKE_COMMAND} -E copy $<CONFIG>/setup.py setup.py
+	# COMMAND ${CMAKE_COMMAND} -E copy $<CONFIG>/setup.py setup.py
     BYPRODUCTS
     python/${PROJECT_NAME}
     python/build
