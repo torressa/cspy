@@ -17,9 +17,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Configure
-        run: |
-          export PATH="$pythonLocation:$PATH"
-          cmake -S . -Bbuild -DBUILD_TESTING=ON -DBUILD_PYTHON=ON -DBUILD_SHARED_LIBS=ON
+        run: cmake -S . -Bbuild -DBUILD_TESTING=ON -DBUILD_PYTHON=ON -DBUILD_SHARED_LIBS=ON -DPython_ROOT_DIR=${pythonLocation}
       - name: Build
         run: cmake --build build --config Release --target all -v
       - name: Run python tests

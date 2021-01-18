@@ -3,3 +3,4 @@ nbsphinx
 sphinx_material
 recommonmark
 sphinx_copybutton
+cspy==v1.0.0a0

@@ -12,7 +12,7 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../cspy_docs/'))
+# sys.path.insert(0, os.path.abspath('..'))
 
 # -- Project information -----------------------------------------------------
 project = 'cspy'
@@ -27,10 +27,7 @@ release = '1.0.0-alpha'
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = [
-    'sphinx.ext.autodoc', 'sphinx.ext.mathjax', 'sphinx.ext.imgmath',
-    'rtds_action'
-]
+extensions = ['sphinx.ext.autodoc', 'sphinx.ext.mathjax', 'sphinx.ext.imgmath']
 pngmath_use_preview = True
 master_doc = 'index'
 # Add any paths that contain templates here, relative to this directory.
@@ -52,16 +49,3 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
-
-# The name of your GitHub repository
-rtds_action_github_repo = "torressa/cspy"
-
-# The path where the artifact should be extracted
-# Note: this is relative to the conf.py file!
-rtds_action_path = "../cspy_docs/"
-
-# The "prefix" used in the `upload-artifact` step of the action
-rtds_action_artifact_prefix = "package-for-"
-
-# A GitHub personal access token is required, more info below
-rtds_action_github_token = os.environ["GITHUB_TOKEN"]
