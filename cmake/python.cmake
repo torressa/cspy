@@ -23,9 +23,9 @@ if(UNIX AND NOT APPLE)
 endif()
 
 # Find Python using env variable from github workflows
-find_package(Python REQUIRED COMPONENTS Interpreter Development)
+find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
 
-if(Python_VERSION VERSION_GREATER_EQUAL 3)
+if(Python3_VERSION VERSION_GREATER_EQUAL 3)
   list(APPEND CMAKE_SWIG_FLAGS "-py3;-DPY3")
 endif()
 
@@ -49,7 +49,7 @@ file(GENERATE
 # if not install it to the Python user install directory.
 function(search_python_module MODULE_NAME)
   execute_process(
-    COMMAND ${Python_EXECUTABLE} -c "import ${MODULE_NAME}; print(${MODULE_NAME}.__version__)"
+    COMMAND ${Python3_EXECUTABLE} -c "import ${MODULE_NAME}; print(${MODULE_NAME}.__version__)"
     RESULT_VARIABLE _RESULT
     OUTPUT_VARIABLE MODULE_VERSION
     ERROR_QUIET
@@ -60,7 +60,7 @@ function(search_python_module MODULE_NAME)
   else()
     message(WARNING "Can't find python module \"${MODULE_NAME}\", user install it using pip...")
     execute_process(
-      COMMAND ${Python_EXECUTABLE} -m pip install --upgrade --user ${MODULE_NAME}
+      COMMAND ${Python3_EXECUTABLE} -m pip install --upgrade --user ${MODULE_NAME}
       OUTPUT_STRIP_TRAILING_WHITESPACE
       )
   endif()
@@ -89,7 +89,7 @@ add_custom_target(python_package ALL
   # Install prereqs for testing
   # COMMAND ${Python_EXECUTABLE} -m pip install -r ${PROJECT_SOURCE_DIR}/python/requirements.dev.txt
   # # Build wheel
-  COMMAND ${Python_EXECUTABLE} setup.py bdist_wheel
+  COMMAND ${Python3_EXECUTABLE} setup.py bdist_wheel
   # Remove setup.py (otherwise will be called again when installing
   # COMMAND ${CMAKE_COMMAND} -E remove setup.py
   # Must not call it in a folder containing the setup.py otherwise pip call it
@@ -110,7 +110,7 @@ if(BUILD_TESTING)
   # Look for python module virtualenv
   search_python_module(virtualenv)
   # Testing using a vitual environment
-  set(VENV_EXECUTABLE ${Python_EXECUTABLE} -m virtualenv)
+  set(VENV_EXECUTABLE ${Python3_EXECUTABLE} -m virtualenv)
   set(VENV_DIR ${CMAKE_CURRENT_BINARY_DIR}/venv)
   if(WIN32)
     set(VENV_Python_EXECUTABLE "${VENV_DIR}\\Scripts\\python.exe")
@@ -119,7 +119,7 @@ if(BUILD_TESTING)
   endif()
   # make a virtualenv to install our python package in it
   add_custom_command(TARGET python_package POST_BUILD
-    COMMAND ${VENV_EXECUTABLE} -p ${Python_EXECUTABLE} ${VENV_DIR}
+    COMMAND ${VENV_EXECUTABLE} -p ${Python3_EXECUTABLE} ${VENV_DIR}
     # Must not call it in a folder containing the setup.py otherwise pip call it
     # (i.e. "python setup.py bdist") while we want to consume the wheel package
   	COMMAND ${VENV_Python_EXECUTABLE} -m pip install -r ${PROJECT_SOURCE_DIR}/python/requirements.dev.txt

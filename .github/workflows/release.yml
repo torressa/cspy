@@ -25,8 +25,13 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
+      - name: Set Python path
+        run: export PATH="$pythonLocation:$PATH"
+        shell: bash -l {0}
       - name: Configure
-        run: cmake -S . -Bbuild -DBUILD_TESTING=ON -DBUILD_PYTHON=ON -DBUILD_SHARED_LIBS=ON -DPython_ROOT_DIR=${pythonLocation}
+        run: |
+          echo $pythonLocation
+          cmake -S . -Bbuild -DBUILD_TESTING=ON -DBUILD_PYTHON=ON -DBUILD_SHARED_LIBS=ON -DPython3_ROOT_DIR=${pythonLocation} -DPython3_FIND_FRAMEWORK=LAST
       - name: Build
         run: cmake --build build --config Release --target all -v
       - name: Fix wheel and run python tests

@@ -10,7 +10,7 @@ set_property(TARGET pyBiDirectionalCpp PROPERTY SWIG_USE_TARGET_INCLUDE_DIRECTOR
 target_include_directories(pyBiDirectionalCpp
   PRIVATE
   ../
-  ${Python_INCLUDE_DIRS}
+  ${Python3_INCLUDE_DIRS}
   )
 
 # note: macOS is APPLE and also UNIX !
@@ -34,5 +34,5 @@ target_link_libraries(pyBiDirectionalCpp PRIVATE BiDirectionalCpp)
 # i.e. we can't use: $<$<PLATFORM_ID:Windows>:${PYTHON_LIBRARIES}>
 # see: https://cmake.org/cmake/help/git-stage/command/target_link_libraries.html#command:target_link_libraries
 if(MSVC)
-  target_link_libraries(pyBiDirectionalCpp PRIVATE ${Python_LIBRARIES})
+  target_link_libraries(pyBiDirectionalCpp PRIVATE ${Python3_LIBRARIES})
 endif()
