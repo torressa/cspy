@@ -29,19 +29,15 @@ jobs:
       run: cmake -S . -Bbuild -DBUILD_TESTING=ON -DBUILD_PYTHON=ON -DBUILD_SHARED_LIBS=ON
     - name: Build
       run: cmake --build build --config Release --target all -v
-    - name: Install cspy
+    - name: Fix wheel and run python tests
       run: |
-        cd build/python/
-        pip3 install delocate
-        delocate-wheel -w wheelhouse dist/*.whl
-        pip3 install --user wheelhouse/*.whl
-    - name: Test
-      run: cd build && ctest --verbose -R python_unittest
-    - name: Install
-      run: cmake --build build --config Release --target install -v -- DESTDIR=install
+        python3 -m pip install delocate wheel
+        delocate-listdeps --all build/python/dist/*.whl
+        delocate-wheel -w wheelhouse -v build/python/dist/*.whl
+        cd build
+        ctest --verbose -R python_unittest
     - name: upload wheel
       run: |
-        cd build/python/
-        pip install twine
+        python3 -m pip install twine
         twine upload wheelhouse/*
       continue-on-error: true

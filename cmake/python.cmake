@@ -71,43 +71,67 @@ search_python_module(setuptools)
 search_python_module(wheel)
 # search_python_module(virtualenv)
 
-if(BUILD_TESTING)
-  add_custom_target(python_package ALL
-	# Create appropriate package structure
-    COMMAND ${CMAKE_COMMAND} -E make_directory ${PROJECT_NAME} ${PROJECT_NAME}/.libs ${PROJECT_NAME}/algorithms/
-	# Copy setup generated file
-    COMMAND ${CMAKE_COMMAND} -E copy $<CONFIG>/setup.py setup.py
-	# Copy python source code
-    COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/src/python/* ${PROJECT_NAME}/
-  	COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/src/python/algorithms/* ${PROJECT_NAME}/algorithms/
-    COMMAND ${CMAKE_COMMAND} -E remove_directory dist
-    COMMAND ${CMAKE_COMMAND} -E make_directory ${PROJECT_NAME}/.libs
-    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:pyBiDirectionalCpp> ${PROJECT_NAME}/algorithms/
-    # Don't need to copy static lib on Windows
-    COMMAND ${CMAKE_COMMAND} -E $<IF:$<BOOL:${UNIX}>,copy,true> $<TARGET_FILE:BiDirectionalCpp> ${PROJECT_NAME}/.libs
-  	# copy swig generated python interface file
-  	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/python/*.py ${PROJECT_NAME}/algorithms/
-  	# Install prereqs for testing
-	COMMAND ${Python_EXECUTABLE} -m pip install -r ${PROJECT_SOURCE_DIR}/python/requirements.dev.txt
-    # Build wheel
-    COMMAND ${Python_EXECUTABLE} setup.py bdist_wheel
-    # Remove setup.py (otherwise will be called again when installing
-	# COMMAND ${CMAKE_COMMAND} -E remove setup.py
-  	# Must not call it in a folder containing the setup.py otherwise pip call it
-  	# (i.e. "python setup.py bdist") while we want to consume the wheel package
-	# COMMAND pip3 install --user ${PROJECT_SOURCE_DIR}/build/python/dist/*.whl
-	# Copy setup generated file (again for release)
-	# COMMAND ${CMAKE_COMMAND} -E copy $<CONFIG>/setup.py setup.py
-    BYPRODUCTS
+add_custom_target(python_package ALL
+  # Create appropriate package structure
+  COMMAND ${CMAKE_COMMAND} -E make_directory ${PROJECT_NAME} ${PROJECT_NAME}/.libs ${PROJECT_NAME}/algorithms/
+  # Copy setup generated file
+  COMMAND ${CMAKE_COMMAND} -E copy $<CONFIG>/setup.py setup.py
+  # Copy python source code
+  COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/src/python/* ${PROJECT_NAME}/
+  COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/src/python/algorithms/* ${PROJECT_NAME}/algorithms/
+  COMMAND ${CMAKE_COMMAND} -E remove_directory dist
+  COMMAND ${CMAKE_COMMAND} -E make_directory ${PROJECT_NAME}/.libs
+  COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:pyBiDirectionalCpp> ${PROJECT_NAME}/algorithms/
+  # Don't need to copy static lib on Windows
+  COMMAND ${CMAKE_COMMAND} -E $<IF:$<BOOL:${UNIX}>,copy,true> $<TARGET_FILE:BiDirectionalCpp> ${PROJECT_NAME}/.libs
+  # copy swig generated python interface file
+  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/python/*.py ${PROJECT_NAME}/algorithms/
+  # Install prereqs for testing
+  # COMMAND ${Python_EXECUTABLE} -m pip install -r ${PROJECT_SOURCE_DIR}/python/requirements.dev.txt
+  # # Build wheel
+  COMMAND ${Python_EXECUTABLE} setup.py bdist_wheel
+  # Remove setup.py (otherwise will be called again when installing
+  # COMMAND ${CMAKE_COMMAND} -E remove setup.py
+  # Must not call it in a folder containing the setup.py otherwise pip call it
+  # (i.e. "python setup.py bdist") while we want to consume the wheel package
+  # COMMAND pip3 install --user ${PROJECT_SOURCE_DIR}/build/python/dist/*.whl
+  # Copy setup generated file (again for release)
+  # COMMAND ${CMAKE_COMMAND} -E copy $<CONFIG>/setup.py setup.py
+  BYPRODUCTS
     python/${PROJECT_NAME}
     python/build
     python/dist
     python/${PROJECT_NAME}.egg-info
-    WORKING_DIRECTORY python
-    )
+  WORKING_DIRECTORY python
+)
+
+# Test
+if(BUILD_TESTING)
+  # Look for python module virtualenv
+  search_python_module(virtualenv)
+  # Testing using a vitual environment
+  set(VENV_EXECUTABLE ${Python_EXECUTABLE} -m virtualenv)
+  set(VENV_DIR ${CMAKE_CURRENT_BINARY_DIR}/venv)
+  if(WIN32)
+    set(VENV_Python_EXECUTABLE "${VENV_DIR}\\Scripts\\python.exe")
+  else()
+    set(VENV_Python_EXECUTABLE ${VENV_DIR}/bin/python)
+  endif()
+  # make a virtualenv to install our python package in it
+  add_custom_command(TARGET python_package POST_BUILD
+    COMMAND ${VENV_EXECUTABLE} -p ${Python_EXECUTABLE} ${VENV_DIR}
+    # Must not call it in a folder containing the setup.py otherwise pip call it
+    # (i.e. "python setup.py bdist") while we want to consume the wheel package
+  	COMMAND ${VENV_Python_EXECUTABLE} -m pip install -r ${PROJECT_SOURCE_DIR}/python/requirements.dev.txt
+    COMMAND ${VENV_Python_EXECUTABLE} -m pip install --find-links=${CMAKE_CURRENT_BINARY_DIR}/python/dist --no-index ${PROJECT_NAME}
+    BYPRODUCTS ${VENV_DIR}
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+  # run the tests within the virtualenv
+  # add_test(NAME pytest_venv
+  #   COMMAND ${VENV_Python_EXECUTABLE} ${PROJECT_SOURCE_DIR}/python/test.py)
   # Test to be run from build/
   add_test(NAME python_unittest
-	COMMAND ${Python_EXECUTABLE} -m unittest discover -s ../test/python/)
+	COMMAND ${VENV_Python_EXECUTABLE} -m unittest discover -s ${PROJECT_SOURCE_DIR}/test/python/)
 endif()
 
 if (CMAKE_BUILD_TYPE EQUAL "Release")
