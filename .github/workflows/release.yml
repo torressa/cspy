@@ -1,4 +1,4 @@
-name: MacOS Release 
+name: MacOS Release
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
 #  TODO add windows as per:
 # https://github.com/Niraj-Kamdar/manylinux-wheel-builder#advanced-usage
 jobs:
-  build:
+  macos-build:
     runs-on: macos-latest
     env:
       TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
@@ -29,6 +29,12 @@ jobs:
       run: cmake -S . -Bbuild -DBUILD_TESTING=ON -DBUILD_PYTHON=ON -DBUILD_SHARED_LIBS=ON
     - name: Build
       run: cmake --build build --config Release --target all -v
+    - name: Install cspy
+      run: |
+        cd build/python/
+        pip3 install delocate
+        delocate-wheel -w wheelhouse dist/*.whl
+        pip3 install --user wheelhouse/*.whl
     - name: Test
       run: cd build && ctest --verbose -R python_unittest
     - name: Install
@@ -37,5 +43,37 @@ jobs:
       run: |
         cd build/python/
         pip install twine
-        twine upload dist/*
+        twine upload wheelhouse/*
+      continue-on-error: true
+
+  manylinux-build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.6, 3.7, 3.8, 3.9]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Configure
+      run: cmake -S . -Bbuild -DBUILD_TESTING=ON -DBUILD_PYTHON=ON -DBUILD_SHARED_LIBS=ON
+    - name: Build
+      run: cmake --build build --config Release --target all -v
+    - name: Install cspy
+      run: |
+        cd build/python/
+        pip3 install auditwheel
+        auditwheel repair dist/*.whl
+	    pip3 install --user wheelhouse/*.whl
+    - name: Test
+      run: cd build && ctest --verbose -R python_unittest
+    - name: Install
+      run: cmake --build build --config Release --target install -v -- DESTDIR=install
+    - name: upload wheel
+      run: |
+        cd build/python/
+        pip install twine
+        twine upload wheelhouse/*
       continue-on-error: true

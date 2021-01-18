@@ -90,12 +90,12 @@ if(BUILD_TESTING)
   	# Install prereqs for testing
 	COMMAND ${Python_EXECUTABLE} -m pip install -r ${PROJECT_SOURCE_DIR}/python/requirements.dev.txt
     # Build wheel
-    COMMAND ${Python_EXECUTABLE} setup.py sdist bdist_wheel
+    COMMAND ${Python_EXECUTABLE} setup.py bdist_wheel
     # Remove setup.py (otherwise will be called again when installing
 	# COMMAND ${CMAKE_COMMAND} -E remove setup.py
   	# Must not call it in a folder containing the setup.py otherwise pip call it
   	# (i.e. "python setup.py bdist") while we want to consume the wheel package
-	COMMAND pip3 install --user ${PROJECT_SOURCE_DIR}/build/python/dist/*.whl
+	# COMMAND pip3 install --user ${PROJECT_SOURCE_DIR}/build/python/dist/*.whl
 	# Copy setup generated file (again for release)
 	# COMMAND ${CMAKE_COMMAND} -E copy $<CONFIG>/setup.py setup.py
     BYPRODUCTS
