@@ -9,16 +9,16 @@ jobs:
       matrix:
         python-version: [3.6, 3.7, 3.8, 3.9]
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Configure
-      run: cmake -S . -Bbuild -DBUILD_TESTING=ON -DBUILD_PYTHON=ON -DBUILD_SHARED_LIBS=ON
-    - name: Build
-      run: cmake --build build --config Release --target all -v
-    - name: Run python tests
-      run: |
-        cd build/
-        ctest --verbose -R python_unittest
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Configure
+        run: cmake -S . -Bbuild -DBUILD_TESTING=ON -DBUILD_PYTHON=ON -DBUILD_SHARED_LIBS=ON
+      - name: Build
+        run: cmake --build build --config Release --target all -v
+      - name: Run python tests
+        run: |
+          cd build/
+          ctest --verbose -R python_unittest
