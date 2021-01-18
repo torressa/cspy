@@ -23,9 +23,6 @@ if(UNIX AND NOT APPLE)
 endif()
 
 # Find Python using env variable from github workflows
-if (APPLE)
-	set(Python_FIND_STRATEGY LOCATION ${pythonLocation})
-endif()
 find_package(Python REQUIRED COMPONENTS Interpreter Development)
 
 if(Python_VERSION VERSION_GREATER_EQUAL 3)
@@ -130,8 +127,6 @@ if(BUILD_TESTING)
     BYPRODUCTS ${VENV_DIR}
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
   # run the tests within the virtualenv
-  # add_test(NAME pytest_venv
-  #   COMMAND ${VENV_Python_EXECUTABLE} ${PROJECT_SOURCE_DIR}/python/test.py)
   # Test to be run from build/
   add_test(NAME python_unittest
 	COMMAND ${VENV_Python_EXECUTABLE} -m unittest discover -s ${PROJECT_SOURCE_DIR}/test/python/)

@@ -18,6 +18,7 @@ jobs:
       matrix:
         python-version: [3.6, 3.7, 3.8, 3.9]
     steps:
+      - uses: actions/checkout@v2
       - name: Swig install
         run: brew install swig
       - name: Set up Python ${{ matrix.python-version }}
@@ -25,7 +26,9 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Configure
-        run: cmake -S . -Bbuild -DBUILD_TESTING=ON -DBUILD_PYTHON=ON -DBUILD_SHARED_LIBS=ON
+        run: |
+          export PATH="$pythonLocation:$PATH"
+          cmake -S . -Bbuild -DBUILD_TESTING=ON -DBUILD_PYTHON=ON -DBUILD_SHARED_LIBS=ON
       - name: Build
         run: cmake --build build --config Release --target all -v
       - name: Fix wheel and run python tests
