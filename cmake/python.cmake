@@ -22,7 +22,10 @@ if(UNIX AND NOT APPLE)
   list(APPEND CMAKE_SWIG_FLAGS "-DSWIGWORDSIZE64")
 endif()
 
-# Find Python
+# Find Python using env variable from github workflows
+if (APPLE)
+	set(Python_FIND_STRATEGY LOCATION ${pythonLocation})
+endif()
 find_package(Python REQUIRED COMPONENTS Interpreter Development)
 
 if(Python_VERSION VERSION_GREATER_EQUAL 3)
