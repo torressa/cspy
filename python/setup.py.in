@@ -21,7 +21,7 @@ class InstallPlatlib(install):
 
 setup(
     name='@PROJECT_NAME@',
-    version='@PROJECT_VERSION@',
+    version='@PROJECT_VERSION@-alpha',
     author='torressa',
     author_email='\"David Torres\" <david.sanchez@sintef.no>',
     url='https://github.com/torressa/cspy',
