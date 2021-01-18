@@ -12,7 +12,7 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../build/python/'))
+sys.path.insert(0, os.path.abspath('../'))
 
 # -- Project information -----------------------------------------------------
 project = 'cspy'
@@ -20,7 +20,7 @@ copyright = '2020, David Torres Sanchez'
 author = 'David Torres Sanchez'
 
 # The full version, including alpha/beta/rc tags
-release = '0.1.0'
+release = '1.0.0-alpha'
 
 # -- General configuration ---------------------------------------------------
 
@@ -58,10 +58,10 @@ rtds_action_github_repo = "torressa/cspy"
 
 # The path where the artifact should be extracted
 # Note: this is relative to the conf.py file!
-rtds_action_path = "./"
+rtds_action_path = "../cspy_docs/"
 
 # The "prefix" used in the `upload-artifact` step of the action
-rtds_action_artifact_prefix = "notebooks-for-"
+rtds_action_artifact_prefix = "package-for-"
 
 # A GitHub personal access token is required, more info below
 rtds_action_github_token = os.environ["GITHUB_TOKEN"]
