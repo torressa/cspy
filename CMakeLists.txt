@@ -37,9 +37,9 @@ if(POLICY CMP0086)
 endif()
 
 # Enable Python find by location
-# if(POLICY CMP0094)
-# 	cmake_policy(SET CMP0094 NEW)
-# endif()
+if(POLICY CMP0094)
+	cmake_policy(SET CMP0094 NEW)
+endif()
 
 
 project(cspy VERSION 1.0.0 DESCRIPTION alpha LANGUAGES CXX)

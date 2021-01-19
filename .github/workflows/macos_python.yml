@@ -16,13 +16,10 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Set Python path
-        run: export PATH="$PATH:$pythonLocationBin"
-        shell: bash -l {0}
       - name: Configure
         run: |
           echo $pythonLocation
-          cmake -S . -Bbuild -DBUILD_TESTING=ON -DBUILD_PYTHON=ON -DBUILD_SHARED_LIBS=ON -DPython3_ROOT_DIR=${pythonLocation} -DPython_ROOT_DIR=${pythonLocation}
+          cmake -S . -Bbuild -DBUILD_TESTING=ON -DBUILD_PYTHON=ON -DBUILD_SHARED_LIBS=ON -DPython3_ROOT_DIR=${pythonLocation} -DPython_ROOT_DIR=${pythonLocation} -DPython3_FIND_STRATEGY=LOCATION -v
       - name: Build
         run: cmake --build build --config Release --target all -v
       - name: Run python tests

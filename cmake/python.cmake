@@ -23,7 +23,7 @@ if(UNIX AND NOT APPLE)
 endif()
 
 # Find Python using env variable from github workflows
-find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
+find_package(Python3 ${pythonVersion} REQUIRED COMPONENTS Interpreter Development)
 
 if(Python3_VERSION VERSION_GREATER_EQUAL 3)
   list(APPEND CMAKE_SWIG_FLAGS "-py3;-DPY3")
