@@ -30,5 +30,3 @@ jobs:
       run: cmake --build build --config Release --target ALL_BUILD -- /verbosity:normal /maxcpucount
     - name: Test
       run: cmake --build build --config Release --target RUN_TESTS -- /verbosity:normal /maxcpucount
-    - name: Install
-      run: cmake --build build --config Release --target INSTALL -- /verbosity:normal /maxcpucount

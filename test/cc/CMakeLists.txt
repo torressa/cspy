@@ -21,12 +21,15 @@ elseif(UNIX AND NOT APPLE)
   set_target_properties(${NAME} PROPERTIES
     INSTALL_RPATH "$ORIGIN/../${CMAKE_INSTALL_LIBDIR}")
 endif()
+
+target_include_directories(${NAME}
+  PUBLIC
+  	${PROJECT_SOURCE_DIR}/src/cc/
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>)
+
 target_link_libraries(${NAME}
   gtest
   ${PROJECT_NAME}::BiDirectionalCpp)
-target_include_directories(${NAME}
-  PRIVATE
-  ${PROJECT_SOURCE_DIR}/src/cc/
-  )
 
 add_test(NAME ${NAME} COMMAND $<TARGET_FILE:${NAME}>)

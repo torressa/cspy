@@ -1,4 +1,4 @@
-name: MacOS Release
+name: PyPI Release
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
 #  TODO add windows as per:
 # https://github.com/Niraj-Kamdar/manylinux-wheel-builder#advanced-usage
 jobs:
-  build:
+  macos-build:
     runs-on: macos-latest
     env:
       TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
@@ -43,4 +43,67 @@ jobs:
         run: |
           python3 -m pip install twine
           twine upload wheelhouse/*
+        continue-on-error: true
+
+
+  manylinux-build:
+    runs-on: ubuntu-latest
+    env:
+      TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
+      TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+    strategy:
+      matrix:
+        python-version: [3.6, 3.7, 3.8, 3.9]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Configure
+        run: cmake -S . -Bbuild -DBUILD_TESTING=ON -DBUILD_PYTHON=ON -DBUILD_SHARED_LIBS=ON
+      - name: Build
+        run: cmake --build build --config Release --target all -v
+      - name: Fix wheel and run python tests
+        run: |
+          python3 -m pip install auditwheel
+          auditwheel repair build/python/dist/*.whl --plat manylinux2014_x86_64
+          cd build
+          ctest --verbose -R python_unittest
+      - name: upload wheel
+        run: |
+          pip install twine
+          twine upload wheelhouse/*
+        continue-on-error: true
+
+  windows-build:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        python-version: [3.6, 3.7, 3.8]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Check cmake
+        run: cmake --version
+      - name: Install SWIG 4.0.2
+        run: |
+          (New-Object System.Net.WebClient).DownloadFile("http://prdownloads.sourceforge.net/swig/swigwin-4.0.2.zip","swigwin-4.0.2.zip");
+          Expand-Archive .\swigwin-4.0.2.zip .;
+          echo "$((Get-Item .).FullName)/swigwin-4.0.2" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+      - name: Check swig
+        run: swig -version
+      - name: Configure
+        run: cmake -S. -Bbuild -G "Visual Studio 16 2019" -DCMAKE_BUILD_TYPE=Release -DBUILD_PYTHON=ON
+      - name: Build
+        run: cmake --build build --config Release --target ALL_BUILD -- /verbosity:normal /maxcpucount
+      - name: Test
+        run: cmake --build build --config Release --target RUN_TESTS -- /verbosity:normal /maxcpucount
+      - name: upload wheel
+        run: |
+          pip install twine
+          twine upload build/python/dist/*
         continue-on-error: true
