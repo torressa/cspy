@@ -81,10 +81,8 @@ add_custom_target(
   # Copy setup generated file
   COMMAND ${CMAKE_COMMAND} -E copy $<CONFIG>/setup.py setup.py
   # Copy python source code
-  COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/src/python/*
+  COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_SOURCE_DIR}/src/python/
           ${PROJECT_NAME}/
-  COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/src/python/algorithms/*
-          ${PROJECT_NAME}/algorithms/
   COMMAND ${CMAKE_COMMAND} -E remove_directory dist
   COMMAND ${CMAKE_COMMAND} -E make_directory ${PROJECT_NAME}/.libs
   COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:pyBiDirectionalCpp>
@@ -93,20 +91,12 @@ add_custom_target(
   COMMAND ${CMAKE_COMMAND} -E $<IF:$<BOOL:${UNIX}>,copy,true>
           $<TARGET_FILE:BiDirectionalCpp> ${PROJECT_NAME}/.libs
   # copy swig generated python interface file
-  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/python/*.py
-          ${PROJECT_NAME}/algorithms/
-  # Install prereqs for testing
-  # COMMAND ${Python_EXECUTABLE} -m pip install -r
-  # ${PROJECT_SOURCE_DIR}/python/requirements.dev.txt
-  # # Build wheel
+  COMMAND
+    ${CMAKE_COMMAND} -E copy
+    ${CMAKE_CURRENT_BINARY_DIR}/python/pyBiDirectionalCpp.py
+    ${PROJECT_NAME}/algorithms/
+  # Build wheel
   COMMAND ${Python3_EXECUTABLE} setup.py bdist_wheel
-  # Remove setup.py (otherwise will be called again when installing
-  # COMMAND ${CMAKE_COMMAND} -E remove setup.py
-  # Must not call it in a folder containing the setup.py otherwise pip call it
-  # (i.e. "python setup.py bdist") while we want to consume the wheel package
-  # COMMAND pip3 install --user ${PROJECT_SOURCE_DIR}/build/python/dist/*.whl
-  # Copy setup generated file (again for release)
-  # COMMAND ${CMAKE_COMMAND} -E copy $<CONFIG>/setup.py setup.py
   BYPRODUCTS python/${PROJECT_NAME} python/build python/dist
              python/${PROJECT_NAME}.egg-info
   WORKING_DIRECTORY python)
