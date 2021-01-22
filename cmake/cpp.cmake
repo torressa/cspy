@@ -29,7 +29,7 @@ if(CHECK_TYPE)
 endif()
 
 if(WIN32)
-  target_link_libraries(${PROJECT_NAME} PUBLIC psapi.lib ws2_32.lib)
+  # target_link_libraries(${PROJECT_NAME} PUBLIC psapi.lib ws2_32.lib)
 endif()
 
 add_subdirectory(src/cc/)
