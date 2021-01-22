@@ -31,4 +31,4 @@ jobs:
     - name: Run python tests
       run: |
           cd build
-          ctest --verbose
+          ctest -C Release --verbose
