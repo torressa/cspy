@@ -30,9 +30,7 @@ setup(
     cmdclass={'install': InstallPlatlib},
     packages=find_packages(),
     package_data={
-        '@PROJECT_NAME@': [
-            $<$<NOT:$<PLATFORM_ID:Windows>>:'.libs/*'>, 'algorithms/*'
-        ],
+        '@PROJECT_NAME@': ['.libs/*', 'algorithms/*'],
     },
     include_package_data=True,
     install_requires=['networkx', 'numpy'],

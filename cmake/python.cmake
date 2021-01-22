@@ -88,8 +88,8 @@ add_custom_target(
   COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:pyBiDirectionalCpp>
           ${PROJECT_NAME}/algorithms/
   # Don't need to copy static lib on Windows
-  COMMAND ${CMAKE_COMMAND} -E $<IF:$<BOOL:${UNIX}>,copy,true>
-          $<TARGET_FILE:BiDirectionalCpp> ${PROJECT_NAME}/.libs
+  COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:BiDirectionalCpp>
+          ${PROJECT_NAME}/.libs
   # copy swig generated python interface file
   COMMAND
     ${CMAKE_COMMAND} -E copy
