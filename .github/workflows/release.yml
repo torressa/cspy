@@ -45,37 +45,6 @@ jobs:
           twine upload wheelhouse/*
         continue-on-error: true
 
-
-  manylinux-build:
-    runs-on: ubuntu-latest
-    env:
-      TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
-      TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
-    strategy:
-      matrix:
-        python-version: [3.6, 3.7, 3.8, 3.9]
-    steps:
-      - uses: actions/checkout@v2
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
-        with:
-          python-version: ${{ matrix.python-version }}
-      - name: Configure
-        run: cmake -S . -Bbuild -DBUILD_TESTING=ON -DBUILD_PYTHON=ON -DBUILD_SHARED_LIBS=ON
-      - name: Build
-        run: cmake --build build --config Release --target all -v
-      - name: Fix wheel and run python tests
-        run: |
-          python3 -m pip install auditwheel
-          auditwheel repair build/python/dist/*.whl --plat manylinux2014_x86_64
-          cd build
-          ctest --verbose -R python_unittest
-      - name: upload wheel
-        run: |
-          pip install twine
-          twine upload wheelhouse/*
-        continue-on-error: true
-
   windows-build:
     runs-on: windows-latest
     strategy:
@@ -97,7 +66,7 @@ jobs:
       - name: Check swig
         run: swig -version
       - name: Configure
-        run: cmake -S. -Bbuild -G "Visual Studio 16 2019" -DCMAKE_BUILD_TYPE=Release -DBUILD_PYTHON=ON
+        run: cmake -S. -Bbuild -G "Visual Studio 16 2019" -DCMAKE_BUILD_TYPE=Release -DBUILD_PYTHON=ON -DBUILD_TESTING=ON
       - name: Build
         run: cmake --build build --config Release --target ALL_BUILD -- /verbosity:normal /maxcpucount
       - name: Test
@@ -107,3 +76,35 @@ jobs:
           pip install twine
           twine upload build/python/dist/*
         continue-on-error: true
+
+
+# TODO use docker image (same os tools/python.Dockerfile
+# manylinux-build:
+#   runs-on: ubuntu-latest
+#   env:
+#     TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
+#     TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+#   strategy:
+#     matrix:
+#       python-version: [3.6, 3.7, 3.8, 3.9]
+#   steps:
+#     - uses: actions/checkout@v2
+#     - name: Set up Python ${{ matrix.python-version }}
+#       uses: actions/setup-python@v2
+#       with:
+#         python-version: ${{ matrix.python-version }}
+#     - name: Configure
+#       run: cmake -S . -Bbuild -DBUILD_TESTING=ON -DBUILD_PYTHON=ON -DBUILD_SHARED_LIBS=ON
+#     - name: Build
+#       run: cmake --build build --config Release --target all -v
+#     - name: Fix wheel and run python tests
+#       run: |
+#         python3 -m pip install auditwheel
+#         auditwheel repair build/python/dist/*.whl --plat manylinux2014_x86_64
+#         cd build
+#         ctest --verbose -R python_unittest
+#     - name: upload wheel
+#       run: |
+#         pip install twine
+#         twine upload wheelhouse/*
+#       continue-on-error: true

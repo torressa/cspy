@@ -1,5 +1,4 @@
-# From: https://github.com/Mizux/cmake-swig
-# LICENSE: Apache License 2.0
+# From: https://github.com/Mizux/cmake-swig LICENSE: Apache License 2.0
 
 # This file is just an orchestration
 cmake_minimum_required(VERSION 3.14)
@@ -20,8 +19,8 @@ if(POLICY CMP0076)
   cmake_policy(SET CMP0076 NEW)
 endif()
 
-# option() honors normal variables.
-# see: https://cmake.org/cmake/help/git-stage/policy/CMP0077.html
+# option() honors normal variables. see:
+# https://cmake.org/cmake/help/git-stage/policy/CMP0077.html
 if(POLICY CMP0077)
   cmake_policy(SET CMP0077 NEW)
 endif()
@@ -38,69 +37,88 @@ endif()
 
 # Enable Python find by location
 if(POLICY CMP0094)
-	cmake_policy(SET CMP0094 NEW)
+  cmake_policy(SET CMP0094 NEW)
 endif()
 
-
-project(cspy VERSION 1.0.0 DESCRIPTION alpha LANGUAGES CXX)
+project(
+  cspy
+  VERSION 1.0.0
+  DESCRIPTION alpha
+  LANGUAGES CXX)
 message(STATUS "project: ${PROJECT_NAME}")
 message(STATUS "version: ${PROJECT_VERSION}")
 
 # Force default build type to Release
 if(NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE "Release" CACHE STRING
-    "Choose the type of build, options are: Debug, Release (default), RelWithDebInfo and MinSizeRel."
-    FORCE)
+  set(CMAKE_BUILD_TYPE
+      "Release"
+      CACHE
+        STRING
+        "Choose the type of build, options are: Debug, Release (default), RelWithDebInfo and MinSizeRel."
+        FORCE)
 endif(NOT CMAKE_BUILD_TYPE)
 
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
-
 
 # Layout build dir like install dir
 include(GNUInstallDirs)
 if(UNIX)
   option(BUILD_SHARED_LIBS "Build shared libraries(.so or .dyld)." ON)
   set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
-  set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
-  set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
-  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
+  set(CMAKE_LIBRARY_OUTPUT_DIRECTORY
+      ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
+  set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY
+      ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
+  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY
+      ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
   # for multi-config build system (e.g. Xcode, ninja Multi-Config)
   foreach(OUTPUTCONFIG IN LISTS CMAKE_CONFIGURATION_TYPES)
     string(TOUPPER ${OUTPUTCONFIG} OUTPUTCONFIG)
-    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${CMAKE_BINARY_DIR}/${OUTPUTCONFIG}/${CMAKE_INSTALL_LIBDIR})
-    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${CMAKE_BINARY_DIR}/${OUTPUTCONFIG}/${CMAKE_INSTALL_LIBDIR})
-    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${CMAKE_BINARY_DIR}/${OUTPUTCONFIG}/${CMAKE_INSTALL_BINDIR})
+    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_${OUTPUTCONFIG}
+        ${CMAKE_BINARY_DIR}/${OUTPUTCONFIG}/${CMAKE_INSTALL_LIBDIR})
+    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${OUTPUTCONFIG}
+        ${CMAKE_BINARY_DIR}/${OUTPUTCONFIG}/${CMAKE_INSTALL_LIBDIR})
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG}
+        ${CMAKE_BINARY_DIR}/${OUTPUTCONFIG}/${CMAKE_INSTALL_BINDIR})
   endforeach()
 else()
   option(BUILD_SHARED_LIBS "Build shared libraries (.dll)." OFF)
-  set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
-  set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
-  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
+  set(CMAKE_LIBRARY_OUTPUT_DIRECTORY
+      ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
+  set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY
+      ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
+  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY
+      ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
   # for multi-config builds (e.g. msvc)
   foreach(OUTPUTCONFIG IN LISTS CMAKE_CONFIGURATION_TYPES)
     string(TOUPPER ${OUTPUTCONFIG} OUTPUTCONFIG)
-    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${CMAKE_BINARY_DIR}/${OUTPUTCONFIG}/${CMAKE_INSTALL_BINDIR})
-    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${CMAKE_BINARY_DIR}/${OUTPUTCONFIG}/${CMAKE_INSTALL_BINDIR})
-    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${CMAKE_BINARY_DIR}/${OUTPUTCONFIG}/${CMAKE_INSTALL_BINDIR})
+    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_${OUTPUTCONFIG}
+        ${CMAKE_BINARY_DIR}/${OUTPUTCONFIG}/${CMAKE_INSTALL_BINDIR})
+    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${OUTPUTCONFIG}
+        ${CMAKE_BINARY_DIR}/${OUTPUTCONFIG}/${CMAKE_INSTALL_BINDIR})
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG}
+        ${CMAKE_BINARY_DIR}/${OUTPUTCONFIG}/${CMAKE_INSTALL_BINDIR})
   endforeach()
 endif()
 
 # By default only the ortools C++ library is built.
 option(BUILD_CXX "Build C++ library" ON)
-option(BUILD_PYTHON "Build Python Library" ON)
+option(BUILD_PYTHON "Build Python Library" OFF)
+
 message(STATUS "Build C++ library: ${BUILD_CXX}")
 message(STATUS "Build Python: ${BUILD_PYTHON}")
 
-# TODO Other languages
-# option(BUILD_JAVA "Build Java Library" OFF)
-# option(BUILD_DOTNET "Build .NET Library" OFF)
-# message(STATUS "Build Java: ${BUILD_JAVA}")
-# message(STATUS "Build .Net: ${BUILD_DOTNET}")
+# TODO Other languages option(BUILD_JAVA "Build Java Library" OFF)
+# option(BUILD_DOTNET "Build .NET Library" OFF) message(STATUS "Build Java:
+# ${BUILD_JAVA}") message(STATUS "Build .Net: ${BUILD_DOTNET}")
 
 enable_testing()
 include(cpp)
 
-if(WIN32 AND (BUILD_PYTHON OR BUILD_JAVA OR BUILD_DOTNET))
+if(WIN32
+   AND (BUILD_PYTHON
+        OR BUILD_JAVA
+        OR BUILD_DOTNET))
   message(STATUS "Getting SWIG: ...")
   include(swig)
   message(STATUS "Getting SWIG: ...DONE")
@@ -108,17 +126,19 @@ endif()
 
 include(python)
 
-if (BUILD_TESTING)
+if(NOT BUILD_PYTHON)
+  # Prevent overriding the parent project's compiler/linker settings on Windows
+  set(FETCHCONTENT_QUIET OFF)
+  set(gtest_force_shared_crt
+      ON
+      CACHE BOOL "" FORCE)
   include(FetchContent)
   FetchContent_Declare(
     googletest
     GIT_REPOSITORY https://github.com/google/googletest.git
     GIT_TAG master)
   FetchContent_MakeAvailable(googletest)
-  set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
   add_subdirectory(test/cc/)
 endif()
 
-# Other languages
-# include(java)
-# include(dotnet)
+# Other languages include(java) include(dotnet)

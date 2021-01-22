@@ -18,4 +18,5 @@ ENV BUILD_RELEASE ${BUILD_RELEASE:-false}
 
 WORKDIR /root/
 COPY . .
-RUN mv tools/docker/scripts/run_tests .
+RUN mv tools/docker/scripts/run_tests . \
+&& chmod +x run_tests

@@ -28,24 +28,26 @@ if(CHECK_TYPE)
   cmake_pop_check_state()
 endif()
 
+if(WIN32)
+  target_link_libraries(${PROJECT_NAME} PUBLIC psapi.lib ws2_32.lib)
+endif()
+
 add_subdirectory(src/cc/)
 
 # Install
-install(EXPORT cspyTargets
+install(
+  EXPORT cspyTargets
   NAMESPACE cspy::
   DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/cspy
   COMPONENT Devel)
 include(CMakePackageConfigHelpers)
-configure_package_config_file(cmake/cspyConfig.cmake.in
-  "${PROJECT_BINARY_DIR}/cspyConfig.cmake"
-  INSTALL_DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/cspy"
-  )
-write_basic_package_version_file(
-  "${PROJECT_BINARY_DIR}/cspyConfigVersion.cmake"
-  COMPATIBILITY SameMajorVersion)
+configure_package_config_file(
+  cmake/cspyConfig.cmake.in "${PROJECT_BINARY_DIR}/cspyConfig.cmake"
+  INSTALL_DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/cspy")
+write_basic_package_version_file("${PROJECT_BINARY_DIR}/cspyConfigVersion.cmake"
+                                 COMPATIBILITY SameMajorVersion)
 install(
-  FILES
-  "${PROJECT_BINARY_DIR}/cspyConfig.cmake"
-  "${PROJECT_BINARY_DIR}/cspyConfigVersion.cmake"
+  FILES "${PROJECT_BINARY_DIR}/cspyConfig.cmake"
+        "${PROJECT_BINARY_DIR}/cspyConfigVersion.cmake"
   DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/cspy"
   COMPONENT Devel)
