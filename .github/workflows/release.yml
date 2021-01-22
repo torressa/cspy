@@ -76,7 +76,7 @@ jobs:
       - name: upload wheel
         run: |
           pip install twine
-          twine upload build/python/dist/*
+          twine upload .\build\python\dist\*
         continue-on-error: true
 
 
