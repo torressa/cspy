@@ -69,7 +69,7 @@ jobs:
       - name: Check swig
         run: swig -version
       - name: Configure
-        run: cmake -S. -Bbuild -G "Visual Studio 16 2019" -DCMAKE_BUILD_TYPE=Release -DBUILD_PYTHON=ON -DBUILD_TESTING=ON -DPython3_ROOT_DIR=$env:pythonLocation -DPython_ROOT_DIR=$env:pythonLocation -DPython3_FIND_STRATEGY=LOCATION
+        run: cmake -S. -Bbuild -G "Visual Studio 16 2019" -DCMAKE_BUILD_TYPE=Release -DBUILD_PYTHON=ON -DBUILD_TESTING=ON -DPython3_ROOT_DIR=$env:pythonLocation -DPython_ROOT_DIR=$env:pythonLocation -DPython3_FIND_STRATEGY=LOCATION -DPython3_FIND_REGISTRY=LAST
       - name: Build
         run: cmake --build build --config Release --target ALL_BUILD -- /verbosity:normal /maxcpucount
       - name: Run python tests
