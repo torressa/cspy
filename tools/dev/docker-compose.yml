@@ -2,6 +2,19 @@ version: "2.3"
 
 services:
 
+  boost-benchmark-builder:
+    image: boost-benchmark-docker:builder
+    build:
+      context: ../../
+      dockerfile: tools/docker/boost.Dockerfile
+      target: builder
+      cache_from:
+          - boost-benchmark-docker:builder
+    volumes:
+      - ../../build_boost:/root/benchmarks/boost/build/
+    command: ./run_boost
+
+
   cspy-dev-cpp-builder:
     image: cspy-docker:builder
     build:

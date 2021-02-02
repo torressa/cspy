@@ -1,0 +1,6 @@
+#!/bin/sh
+
+cd /root/benchmarks/boost/
+cmake -S . -Bbuild
+cmake --build build --config Release --target all -v
+./build/run_r_c_shortest_paths

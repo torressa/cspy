@@ -10,20 +10,21 @@ export BUILD_RELEASE=false
 
 usage() {
    cat <<EOF
-Usage: $0 [ -b -d -c -p] or [ ]
+Usage: $0 [ -b -d -c -p -s] or [ ]
 where:
     -b      : [not implemented] runs benchmark tests (outputs RO csv summary files to tools/dev/output see test_cc/test_benchmarks_sch.cc for more details)
     -d      : [not implemented] build docs
-	-c      : clean build (remove current build directory)
-	-p      : build python
+    -c      : clean build (remove current build directory)
+    -p      : build python
     -r      : build release in manylinux container and places wheels in build/python/wheelhouse/
+	-s      : build with boost in docker container and run example (mounts build folder to "build_boost/")
     -h      : help, display this and exit.
   no flag   : runs production tests in an alpine container mounting the build folder
 EOF
    exit 0
 }
 
-while getopts "bdcpr" opt; do
+while getopts "bdcprs" opt; do
 	case $opt in
 	b )
 		BENCHMARK_TESTS=true
@@ -40,6 +41,10 @@ while getopts "bdcpr" opt; do
     r )
         BUILD_PYTHON=true
         BUILD_RELEASE=true
+        ;;
+    s )
+ 		docker-compose up --build --remove-orphans boost-benchmark-builder
+		exit 1
         ;;
 	h )
 		usage
