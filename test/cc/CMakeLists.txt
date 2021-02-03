@@ -4,20 +4,35 @@ endif()
 
 set(NAME BiDirectional_test)
 
-file(GLOB _SRCS "src/*")
+if(BENCHMARK_TESTS)
+  if(BENCHMARK_BOOST)
+    find_package(Boost REQUIRED)
+    add_executable(${NAME} src/main.cc src/test_benchmarks_boost.cc
+                           src/test_benchmarks.cc src/utils.cc)
+    target_include_directories(
+      ${NAME}
+      PUBLIC ${PROJECT_SOURCE_DIR}/src/cc/
+             $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+             $<INSTALL_INTERFACE:include> ${Boost_INCLUDE_DIRS})
+    target_link_libraries(${NAME} ${Boost_LIBRARIES} gtest
+                          ${PROJECT_NAME}::BiDirectionalCpp)
+  else()
+    add_executable(${NAME} src/main.cc src/test_benchmarks.cc src/utils.cc)
+  endif()
+else()
+  # Unit tests
+  add_executable(
+    ${NAME}
+    src/main.cc
+    src/test_labelling.cc
+    src/test_bidirectional.cc
+    src/test_issue17.cc
+    src/test_issue22.cc
+    src/test_issue38.cc
+    src/test_issue41.cc
+    src/test_issue52.cc)
+endif()
 
-add_executable(
-  ${NAME}
-  src/main.cc
-  src/test_labelling.cc
-  src/test_bidirectional.cc
-  src/test_issue17.cc
-  src/test_issue22.cc
-  src/test_issue38.cc
-  src/test_issue41.cc
-  src/test_issue52.cc
-  # src/test_benchmarks.cc
-)
 # note: macOS is APPLE and also UNIX !
 if(APPLE)
   set_target_properties(

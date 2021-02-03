@@ -127,8 +127,8 @@ endif()
 include(python)
 
 if(NOT BUILD_PYTHON)
-  # Prevent overriding the parent project's compiler/linker settings on Windows
   set(FETCHCONTENT_QUIET OFF)
+  # Prevent overriding the parent project's compiler/linker settings on Windows
   set(gtest_force_shared_crt
       ON
       CACHE BOOL "" FORCE)

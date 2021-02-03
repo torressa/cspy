@@ -1,6 +1,8 @@
 #!/bin/sh
 
-cd /root/benchmarks/boost/
-cmake -S . -Bbuild
+set -e
+
+cmake -S . -Bbuild -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON \
+	-DBENCHMARK_TESTS=ON -DBENCHMARK_BOOST=ON -DBUILD_SHARED_LIBS=OFF
 cmake --build build --config Release --target all -v
-./build/run_r_c_shortest_paths
+cd build && ctest --verbose

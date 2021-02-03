@@ -2,7 +2,7 @@ FROM ubuntu:rolling as builder
 
 ENV PATH=/usr/local/bin:$PATH
 RUN apt-get update -qq \
-&& apt-get install -yq wget build-essential openssh-client \
+&& apt-get install -yq wget build-essential openssh-client git \
 && apt-get clean \
 && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
@@ -21,6 +21,9 @@ RUN wget -O boost_1_75_0.tar.gz \
 && cd .. \
 && rm boost_1_75_0.tar.gz \
 && rm -r boost_1_75_0
+
+ARG BENCHMARK_TESTS
+ENV BENCHMARK_TESTS ${BENCHMARK_TESTS:-false}
 
 WORKDIR /root/
 COPY . .

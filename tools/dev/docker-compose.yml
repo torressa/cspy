@@ -8,10 +8,12 @@ services:
       context: ../../
       dockerfile: tools/docker/boost.Dockerfile
       target: builder
+      args:
+        BENCHMARK_TESTS: $BENCHMARK_TESTS
       cache_from:
           - boost-benchmark-docker:builder
     volumes:
-      - ../../build_boost:/root/benchmarks/boost/build/
+      - ../../build_boost:/root/build/
     command: ./run_boost
 
 
@@ -39,8 +41,6 @@ services:
         BUILD_PYTHON: $BUILD_PYTHON
         BUILD_RELEASE: $BUILD_RELEASE
       cache_from:
-        # - cspy-docker:builder
-        # - cspy-docker:latest
         - cspy-docker-python:builder
         - cspy-docker-python:latest
     container_name: cspy-dev

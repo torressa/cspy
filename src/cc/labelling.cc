@@ -61,25 +61,30 @@ bool Label::checkDominance(
     const std::string& direction,
     const bool&        elementary) const {
   if (weight == other.weight &&
-      resource_consumption == other.resource_consumption)
+      resource_consumption == other.resource_consumption) {
     return false;
+  }
   // Compare weight
-  if (weight > other.weight)
+  if (weight > other.weight) {
     return false;
+  }
   const int& resource_size = resource_consumption.size();
   if (direction == "backward") {
     // Compare monotone resources
-    if (resource_consumption[0] < other.resource_consumption[0])
+    if (resource_consumption[0] < other.resource_consumption[0]) {
       return false;
+    }
     // Compare the rest
     for (int i = 1; i < resource_size; i++) {
-      if (resource_consumption[i] > other.resource_consumption[i])
+      if (resource_consumption[i] > other.resource_consumption[i]) {
         return false;
+      }
     }
   } else { // Forward
     for (int i = 0; i < resource_size; i++) {
-      if (resource_consumption[i] > other.resource_consumption[i])
+      if (resource_consumption[i] > other.resource_consumption[i]) {
         return false;
+      }
     }
   }
   if (elementary && unreachable_nodes.size() > 0 &&
@@ -91,10 +96,11 @@ bool Label::checkDominance(
             other.unreachable_nodes.end())) {
       // If the unreachable_nodes are the same, this leads to one equivalent
       // label to be removed
-      if (unreachable_nodes == other.unreachable_nodes)
+      if (unreachable_nodes == other.unreachable_nodes) {
         return true;
-      else
+      } else {
         return false;
+      }
     }
   }
   return true;

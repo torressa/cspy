@@ -43,6 +43,7 @@ while getopts "bdcprs" opt; do
         BUILD_RELEASE=true
         ;;
     s )
+		BENCHMARK_TESTS=true
  		docker-compose up --build --remove-orphans boost-benchmark-builder
 		exit 1
         ;;
