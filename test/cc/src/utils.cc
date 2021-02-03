@@ -12,7 +12,8 @@ void loadMaxMinRes(
     int*                 num_nodes,
     int*                 num_arcs,
     int*                 num_resources,
-    const std::string&   path_to_instance) {
+    const std::string&   path_to_instance,
+    const bool&          forward) {
   std::ifstream      instance_file(path_to_instance);
   std::istringstream iss;
   std::string        line;
@@ -20,19 +21,40 @@ void loadMaxMinRes(
   std::getline(instance_file, line);
   iss.str(line);
   iss >> *num_nodes >> *num_arcs >> *num_resources;
-  max_res->resize(*num_resources);
-  min_res->resize(*num_resources);
+
+  if (forward) {
+    max_res->resize(*num_resources);
+    min_res->resize(*num_resources);
+  } else {
+    max_res->resize(*num_resources + 1);
+    min_res->resize(*num_resources + 1);
+  }
+
   std::getline(instance_file, line);
   iss.clear();
   iss.str(line);
-  for (int i = 0; i < *num_resources; ++i) {
-    iss >> (*min_res)[i];
+  if (forward) {
+    for (int i = 0; i < *num_resources; ++i) {
+      iss >> (*min_res)[i];
+    }
+  } else {
+    (*min_res)[0] = 0.0;
+    for (int i = 1; i < *num_resources + 1; ++i) {
+      iss >> (*min_res)[i];
+    }
   }
   std::getline(instance_file, line);
   iss.clear();
   iss.str(line);
-  for (int i = 0; i < *num_resources; ++i) {
-    iss >> (*max_res)[i];
+  if (forward) {
+    for (int i = 0; i < *num_resources; ++i) {
+      iss >> (*max_res)[i];
+    }
+  } else {
+    (*max_res)[0] = *num_nodes;
+    for (int i = 1; i < *num_resources + 1; ++i) {
+      iss >> (*max_res)[i];
+    }
   }
   instance_file.close();
 }

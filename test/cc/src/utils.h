@@ -20,7 +20,8 @@ void loadMaxMinRes(
     int*                 num_nodes,
     int*                 num_arcs,
     int*                 num_resources,
-    const std::string&   path_to_instance);
+    const std::string&   path_to_instance,
+    const bool&          forward = true);
 
 // Get benchmark cost for beasley_christofides instance
 double getBestCost(const std::string& path_to_data, const int& instance_number);
