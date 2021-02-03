@@ -35,32 +35,38 @@ CPU time (ms)
 
 ### Comparison against `r_c_shortest_paths`
 
-| r_c_shortest_paths | fwd_bounds_pruning | Speed up (%)      |
-|--------------------|--------------------|-------------------|
-| 4                  | 3                  | 33.3333333333333  |
-| 4                  | 3                  | 33.3333333333333  |
-| 3                  | 5                  | -40               |
-| 3                  | 5                  | -40               |
-| 125                | 3                  | 4066.66666666667  |
-| 81                 | 3                  | 2600              |
-| 53                 | 16                 | 231.25            |
-| 16                 | 19                 | -15.7894736842105 |
-| 2                  | 2                  | 0                 |
-| 2                  | 2                  | 0                 |
-| 7                  | 8                  | -12.5             |
-| 7                  | 8                  | -12.5             |
-| 7                  | 5                  | 40                |
-| 6                  | 3                  | 100               |
-| 38                 | 28                 | 35.7142857142857  |
-| 13                 | 14                 | -7.14285714285714 |
-| 39                 | -                  |                   |
-| 37                 | -                  |                   |
-| 18                 | -                  |                   |
-| 18                 | -                  |                   |
-| 71                 | 17                 | 317.647058823529  |
-| 32                 | 16                 | 100               |
-| 4566               | 28                 | 16207.1428571429  |
-| 274                | 84                 | 226.190476190476  |
-|                    | Average Speed up   | 1193.16728401887  |
+Some instances fail with bounds_pruning=true (only in the forward direction interestingly).
+Unfair comparison as I ran the r_c_shortest_paths in docker and the others on my machine.
 
-Some instances fail for some reason. And slightly unfair comparison as I ran the `r_c_shortest_paths` in docker and the others in my machine.
+Both on docker see a lot worse results, but clear winner on hard instances (e.g. 5, 23 and 24).
+
+Will be interesting to fix direction="both" to perform as it should (faster than just forward) and see
+
+| Instance | r_c_shortest_paths (docker) | fwd_bounds_pruning (local) | Speed up (%) | fwd_bounds_pruning (docker) | Speed up (%) |
+|----------|-----------------------------|----------------------------|--------------|-----------------------------|--------------|
+| 1        | 4                           | 3                          | 25.00        | 5                           | -25.00       |
+| 2        | 4                           | 3                          | 25.00        | 5                           | -25.00       |
+| 3        | 3                           | 5                          | -66.67       | 8                           | -166.67      |
+| 4        | 3                           | 5                          | -66.67       | 8                           | -166.67      |
+| 5        | 125                         | 3                          | 97.60        | 5                           | 96.00        |
+| 6        | 81                          | 3                          | 96.30        | 5                           | 93.83        |
+| 7        | 53                          | 16                         | 69.81        | 31                          | 41.51        |
+| 8        | 16                          | 19                         | -18.75       | 45                          | -181.25      |
+| 9        | 2                           | 2                          | 0.00         | 3                           | -50.00       |
+| 10       | 2                           | 2                          | 0.00         | 3                           | -50.00       |
+| 11       | 7                           | 8                          | -14.29       | 18                          | -157.14      |
+| 12       | 7                           | 8                          | -14.29       | 18                          | -157.14      |
+| 13       | 7                           | 5                          | 28.57        | 10                          | -42.86       |
+| 14       | 6                           | 3                          | 50.00        | 7                           | -16.67       |
+| 15       | 38                          | 28                         | 26.32        | 49                          | -28.95       |
+| 16       | 13                          | 14                         | -7.69        | 21                          | -61.54       |
+| 17       | 39                          | -                          | -            | -                           | -            |
+| 18       | 37                          | -                          | -            | -                           | -            |
+| 19       | 18                          | -                          | -            | -                           | -            |
+| 20       | 18                          | -                          | -            | -                           | -            |
+| 21       | 71                          | 17                         | 76.06        | 24                          | 66.20        |
+| 22       | 32                          | 16                         | 50.00        | 22                          | 31.25        |
+| 23       | 4566                        | 28                         | 99.39        | 42                          | 99.08        |
+| 24       | 274                         | 84                         | 69.34        | 131                         | 52.19        |
+|          |                             | Average Speed up           | 26.25        |                             | -32.44       |
+
