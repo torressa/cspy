@@ -17,7 +17,19 @@ if(BENCHMARK_TESTS)
     target_link_libraries(${NAME} ${Boost_LIBRARIES} gtest
                           ${PROJECT_NAME}::BiDirectionalCpp)
   else()
-    add_executable(${NAME} src/main.cc src/test_benchmarks.cc src/utils.cc)
+    # add_executable(${NAME} src/main.cc src/test_benchmarks.cc src/utils.cc)
+    add_executable(
+      ${NAME}
+      src/main.cc
+      src/test_labelling.cc
+      src/test_bidirectional.cc
+      src/test_issue17.cc
+      src/test_issue22.cc
+      src/test_issue38.cc
+      src/test_issue41.cc
+      src/test_issue52.cc
+      src/test_benchmarks.cc
+      src/utils.cc)
   endif()
 else()
   # Unit tests

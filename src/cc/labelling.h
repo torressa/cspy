@@ -1,6 +1,7 @@
 #ifndef BIDIRECTIONAL_LABELLING_H__
 #define BIDIRECTIONAL_LABELLING_H__
 
+#include <cmath> // nan
 #include <vector>
 
 #include "digraph.h"
@@ -22,6 +23,10 @@ class Label {
   std::vector<double>      resource_consumption = {};
   std::vector<std::string> partial_path         = {};
   std::vector<std::string> unreachable_nodes    = {};
+  // For merged labels only
+  bool merged = false;
+  // Phi value from Righini and Salani (2006)
+  double phi = std::nan("nan");
 
   // constructors
   Label(){};
@@ -75,13 +80,16 @@ class Label {
    */
   bool checkFeasibility(
       const std::vector<double>& max_res,
-      const std::vector<double>& min_res) const;
+      const std::vector<double>& min_res,
+      const bool&                exclude_monotone = false) const;
 
   /// Check if weight is under the input threshold.
   bool checkThreshold(const double& threshold) const;
 
   /// Check whether the current partial path is Source - Sink
   bool checkStPath() const;
+  /// set phi attribute for merged labels from Righini and Salani (2006)
+  void setPhi(const double& phi_in) { phi = phi_in; }
 
   // opeator overloads
   Label&               operator=(const Label& other) = default;
@@ -106,8 +114,11 @@ class LabelExtension {
   ~LabelExtension();
   /// Callback to custom REF
   bidirectional::REFCallback* ref_callback = nullptr;
-  /// Set python callback for custom resource extensions
+
+  /* Methods */
+  /// Set callback for custom resource extensions
   void setREFCallback(bidirectional::REFCallback* cb);
+
   /**
    * Generate new label extentions from the current label and return only if
    * resource feasible.
@@ -205,6 +216,25 @@ bool mergePreCheck(
     const bool&               elementary);
 
 /**
+ * Returns the phi value.
+ * As defined in Righini and Salani (2006)
+ */
+double getPhiValue(
+    const labelling::Label&    fwd_label,
+    const labelling::Label&    bwd_label,
+    const std::vector<double>& max_res);
+
+/**
+ * Check whether the pair (phi, path) is already contained in all the (phi,
+ * path) pairs with a lower phi.
+ *
+ * As defined in Righini and Salani (2006)
+ */
+bool halfwayCheck(
+    const std::vector<std::pair<double, std::vector<std::string>>>& st_paths,
+    const std::pair<double, std::vector<std::string>>&              element);
+
+/**
  * Merge labels produced by a backward and forward label.
  * If an s-t compatible path can be obtained the appropriately
  * extended and merged label is returned.
@@ -220,13 +250,15 @@ Label mergeLabels(
 /* Heap operations for vector of labels */
 
 /// Initalise heap using the appropriate comparison
-/// i.e. increasing in the monotone resource forward lists, decreasing otherwise
+/// i.e. increasing in the monotone resource forward lists, decreasing
+/// otherwise
 void makeHeap(
     std::vector<labelling::Label>* labels_ptr,
     const std::string&             direction);
 
 /// Push new elements in heap using the appropriate comparison
-/// i.e. increasing in the monotone resource forward lists, decreasing otherwise
+/// i.e. increasing in the monotone resource forward lists, decreasing
+/// otherwise
 void pushHeap(
     std::vector<labelling::Label>* labels_ptr,
     const std::string&             direction);

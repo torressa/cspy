@@ -2,7 +2,7 @@ add_library(BiDirectionalCpp "")
 
 target_sources(
   BiDirectionalCpp PRIVATE bidirectional.cc digraph.cc labelling.cc
-                           preprocessing.cc ref_callback.cc search.cc)
+                           preprocessing.cc ref_callback.cc)
 target_include_directories(
   BiDirectionalCpp PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
                           $<INSTALL_INTERFACE:include>)

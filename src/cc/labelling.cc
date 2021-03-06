@@ -28,9 +28,14 @@ Label::Label(
 
 bool Label::checkFeasibility(
     const std::vector<double>& max_res,
-    const std::vector<double>& min_res) const {
+    const std::vector<double>& min_res,
+    const bool&                exclude_monotone) const {
   const int& resource_size = resource_consumption.size();
-  for (int i = 0; i < resource_size; i++) {
+  int        start_idx     = 0;
+  if (exclude_monotone) {
+    start_idx = 1;
+  }
+  for (int i = start_idx; i < resource_size; i++) {
     if (resource_consumption[i] <= max_res[i] &&
         resource_consumption[i] >= min_res[i]) {
       ;
@@ -87,6 +92,7 @@ bool Label::checkDominance(
       }
     }
   }
+  // Check for the elementary case
   if (elementary && unreachable_nodes.size() > 0 &&
       other.unreachable_nodes.size() > 0) {
     if (std::includes(
@@ -98,11 +104,11 @@ bool Label::checkDominance(
       // label to be removed
       if (unreachable_nodes == other.unreachable_nodes) {
         return true;
-      } else {
-        return false;
       }
+      return false;
     }
   }
+  // this dominates other
   return true;
 }
 
@@ -322,14 +328,40 @@ Label processBwdLabel(
   return Label(label.weight, label.vertex, new_resources, new_path);
 }
 
-bool halfwayCheck(
-    const labelling::Label&   fwd_label,
-    const labelling::Label&   bwd_label,
-    const std::vector<double> max_res) {
-  const double phi = std::abs(
+double getPhiValue(
+    const labelling::Label&    fwd_label,
+    const labelling::Label&    bwd_label,
+    const std::vector<double>& max_res) {
+  return std::abs(
       fwd_label.resource_consumption[0] -
       (max_res[0] - bwd_label.resource_consumption[0]));
-  return ((0.0 <= phi) && (phi <= 2.0));
+}
+
+bool halfwayCheck(
+    const std::vector<std::pair<double, std::vector<std::string>>>& st_paths,
+    const std::pair<double, std::vector<std::string>>& phi_path_pair) {
+  // attempt to find path is st_paths with lower phi
+  auto it = std::find_if(
+      st_paths.begin(),
+      st_paths.end(),
+      [&phi_path_pair](
+          const std::pair<double, std::vector<std::string>>& elem) {
+        // If path already seen
+        if (std::equal(
+                elem.second.begin(),
+                elem.second.end(),
+                phi_path_pair.second.begin())) {
+          // Match if phi value is lower
+          return (elem.first < phi_path_pair.first);
+        }
+        return false;
+      });
+  // Path already been found with lower phi value
+  if (it != st_paths.end()) {
+    return false;
+  }
+  // Path not been found or phi value is lower
+  return true;
 }
 
 bool mergePreCheck(
@@ -337,6 +369,7 @@ bool mergePreCheck(
     const labelling::Label&   bwd_label,
     const std::vector<double> max_res,
     const bool&               elementary) {
+  bool result = true;
   if (fwd_label.vertex.id.empty() || bwd_label.vertex.id.empty())
     return false;
   if (elementary) {
@@ -349,9 +382,11 @@ bool mergePreCheck(
     const bool& contains_duplicates =
         std::adjacent_find(path_copy.begin(), path_copy.end()) !=
         path_copy.end();
-    return !contains_duplicates;
+    result = !contains_duplicates;
   }
-  return halfwayCheck(fwd_label, bwd_label, max_res);
+  // result =
+  // halfwayCheck(fwd_label, bwd_label, max_res);
+  return result;
 }
 
 Label mergeLabels(

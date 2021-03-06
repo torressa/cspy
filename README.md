@@ -203,7 +203,7 @@ After that feel free to send a pull request.
 
 If you have a question or need help, feel free to raise an issue explaining it.
 
-Alternatively, email me at `david.sanchez@sintef.no`.
+Alternatively, email me at `d.torressanchez@lancaster.ac.uk`.
 
 ## Citing
 
