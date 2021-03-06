@@ -65,15 +65,19 @@ bool Label::checkDominance(
     const Label&       other,
     const std::string& direction,
     const bool&        elementary) const {
-  if (weight == other.weight &&
-      resource_consumption == other.resource_consumption) {
-    return false;
+  const int& resource_size = resource_consumption.size();
+
+  if (weight == other.weight) {
+    for (int i = 0; i < resource_size; i++) {
+      if (resource_consumption[i] == other.resource_consumption[i]) {
+        return false;
+      }
+    }
   }
   // Compare weight
   if (weight > other.weight) {
     return false;
   }
-  const int& resource_size = resource_consumption.size();
   if (direction == "backward") {
     // Compare monotone resources
     if (resource_consumption[0] < other.resource_consumption[0]) {

@@ -1,8 +1,8 @@
 #ifndef BIDIRECTIONAL_BIDIRECTIONAL_H__
 #define BIDIRECTIONAL_BIDIRECTIONAL_H__
 
-#include <cmath> // nan
-#include <ctime> // clock_t
+#include <chrono> // timing (e.g. time_point)
+#include <cmath>  // nan
 #include <set>
 #include <vector>
 
@@ -12,6 +12,24 @@
 #include "search.h"
 
 namespace bidirectional {
+
+/// Parameters for tuning the search
+struct SolvingOptions {
+  std::string direction = "both";
+  /// Divisor for primal resource
+  double max_res_divisor = 1.0;
+  /// string with method to determine the next direction of search
+  std::string method = "unprocessed";
+  /// double with time limit in seconds
+  double time_limit = std::nan("na");
+  /// double with threshold to stop search with total cost <= threshold
+  double threshold = std::nan("na");
+  /// bool with whether output path is required to be elementary
+  bool elementary = false;
+  /// bool with whether lower bounds based on shortest paths are used to prune
+  /// labels
+  bool bounds_pruning = false;
+};
 
 /**
  * BiDirectional algorithm. see docs
@@ -45,20 +63,8 @@ class BiDirectional {
   /// vector with upper and lower bounds for resources
   std::vector<double> max_res;
   std::vector<double> min_res;
-  /// string with direction of search
-  // Optional inputs (set manually)
-  std::string direction = "both";
-  /// string with method to determine the next direction of search
-  std::string method = "unprocessed";
-  /// double with time limit in seconds
-  double time_limit = std::nan("na");
-  /// double with threshold to stop search with total cost <= threshold
-  double threshold = std::nan("na");
-  /// bool with whether output path is required to be elementary
-  bool elementary = false;
-  /// bool with whether lower bounds based on shortest paths are used to prune
-  /// labels
-  bool bounds_pruning = false;
+  /// Search options for the algorithm
+  SolvingOptions options;
   /// DiGraph pointer (raw cause of SWIG!)
   DiGraph* graph_ptr;
 
@@ -89,9 +95,18 @@ class BiDirectional {
 
  private:
   /// Start time to ensure time limit is met
-  clock_t start_time_;
-  int     critical_resource_ = 0;
-  /// 1 single direction, 2 both directions
+  std::chrono::time_point<std::chrono::system_clock> start_time_;
+  /**
+   * All the following paremeters a size two vectors (easier access as opposed
+   * to a pair for example) containing the appropriate paramaters for the
+   * bidirectional search.
+   *
+   * - index 0: contains forward attributes
+   * - index 1: containts backward attributes
+   *
+   * In the case of single direction, the vectors have size 1 and the index
+   * correspond to the chosen direction.
+   */
   std::vector<std::string> directions_;
   int                      directions_size_ = 1;
   /// stopping criteria for each direction

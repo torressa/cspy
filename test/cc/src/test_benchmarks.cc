@@ -222,8 +222,8 @@ TEST_P(TestBenchmarks, testBoth) {
   // max_res[0] = std::ceil(max_res[0] / 2.0);
   bidirectional =
       std::make_unique<BiDirectional>(num_nodes, num_arcs, max_res, min_res);
-  bidirectional->time_limit = time_limit;
-  bidirectional->method     = "processed";
+  bidirectional->options.time_limit = time_limit;
+  bidirectional->options.method     = "processed";
   loadGraph(
       bidirectional.get(),
       num_nodes,
