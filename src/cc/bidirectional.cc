@@ -1,7 +1,6 @@
 #include "bidirectional.h"
 
 #include <algorithm> // sort, all_of, find
-#include <iostream>  // cout
 
 #include "preprocessing.h" // shortest_path, INF
 
@@ -68,14 +67,9 @@ void BiDirectional::run() {
   start_time_ = std::chrono::system_clock::now();
   initSearches();
   runPreprocessing();
-  int fwd = 0, bwd = 0;
   while (stop_[0] == false || stop_[1] == false) {
     const std::string& direction_    = getDirection();
     const int&         direction_idx = findIndex(direction_, directions_);
-    if (direction_ == "forward")
-      ++fwd;
-    else
-      ++bwd;
     if (!direction_.empty()) {
       move(direction_idx);
     } else {
@@ -85,7 +79,6 @@ void BiDirectional::run() {
       break;
     }
   }
-  std::cout << "fwd = " << fwd << " / bwd = " << bwd << "\n";
   postProcessing();
 }
 
@@ -150,7 +143,7 @@ void BiDirectional::initResourceBounds() {
   max_res_curr_ = max_res;
   // Scale the primal resource if direction is both
   if (options.direction == "both") {
-    max_res_curr_[0] = max_res_curr_[0] / options.max_res_divisor;
+    max_res_curr_[0] = std::ceil(max_res_curr_[0] / options.max_res_divisor);
   }
   // If not all lower bounds are 0, initialise variable min_res_curr to
   // vector of 0s
@@ -280,8 +273,9 @@ bool BiDirectional::terminate(
     const int&              direction_idx,
     const labelling::Label& label) {
   // Check time elapsed (if relevant)
-  double timediff_sec =
-      (std::chrono::system_clock::now() - start_time_).count();
+  std::chrono::duration<double> duration =
+      (std::chrono::system_clock::now() - start_time_);
+  double timediff_sec = duration.count();
   if (!std::isnan(options.time_limit) && timediff_sec >= options.time_limit) {
     return true;
   }
@@ -646,13 +640,6 @@ void BiDirectional::joinLabels() {
   getMinimumWeights(fwd_min.get(), bwd_min.get());
 
   std::vector<std::pair<double, std::vector<std::string>>> phi_path_pairs;
-  for (auto p : visited_vertices_[0]) {
-    std::cout << p << "\n";
-  }
-  std::cout << "backward\n";
-  for (auto p : visited_vertices_[1]) {
-    std::cout << p << "\n";
-  }
 
   // for each vertex visited forward
   for (const int& n : visited_vertices_[0]) {

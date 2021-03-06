@@ -33,12 +33,12 @@ TEST_F(TestBiDirectional, testBoth) {
 TEST_F(TestBiDirectional, testBothTimeLimit) {
   bidirectional = std::make_unique<BiDirectional>(
       number_vertices, number_edges, max_res, min_res);
-  bidirectional->options.time_limit = 0.05;
+  bidirectional->options.time_limit = 0.001;
   addEdges(bidirectional.get());
-  auto path = bidirectional->getPath();
-  ASSERT_TRUE(path.size() == 0);
+
   bidirectional->run();
-  path      = bidirectional->getPath();
+
+  auto path = bidirectional->getPath();
   auto res  = bidirectional->getConsumedResources();
   auto cost = bidirectional->getTotalCost();
 

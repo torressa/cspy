@@ -68,10 +68,15 @@ bool Label::checkDominance(
   const int& resource_size = resource_consumption.size();
 
   if (weight == other.weight) {
+    // Check if all resources are equal
+    bool all_res_equal = true;
     for (int i = 0; i < resource_size; i++) {
-      if (resource_consumption[i] == other.resource_consumption[i]) {
-        return false;
+      if (resource_consumption[i] != other.resource_consumption[i]) {
+        all_res_equal = false;
       }
+    }
+    if (all_res_equal) {
+      return false;
     }
   }
   // Compare weight

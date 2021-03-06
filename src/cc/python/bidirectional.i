@@ -23,6 +23,9 @@ using namespace bidirectional;
 %rename(BiDirectionalCpp) bidirectional::BiDirectional;
 %rename("%s") bidirectional::BiDirectional::BiDirectional;
 %rename("%s") bidirectional::BiDirectional::~BiDirectional;
+/* Expose algorithm parameters */
+%rename("%s") bidirectional::SolvingOptions;
+%rename("%s") bidirectional::BiDirectional::options;
 /* Expose graph construction and setters */
 %rename("%s") bidirectional::BiDirectional::addEdge;
 %rename("%s") bidirectional::BiDirectional::setREFCallback;

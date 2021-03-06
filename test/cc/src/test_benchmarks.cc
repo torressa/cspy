@@ -61,150 +61,150 @@ void loadGraph(
 
 // Forward only tests
 
-// TEST_P(TestBenchmarks, testForwardElementary) {
-//   const std::string path_to_instance =
-//       path_to_data + "rcsp" + std::to_string(instance_number) + ".txt";
-//   int                 num_nodes, num_arcs, num_resources;
-//   std::vector<double> max_res, min_res;
-//   loadMaxMinRes(
-//       &max_res,
-//       &min_res,
-//       &num_nodes,
-//       &num_arcs,
-//       &num_resources,
-//       path_to_instance);
-//   bidirectional =
-//       std::make_unique<BiDirectional>(num_nodes, num_arcs, max_res, min_res);
-//   bidirectional->direction  = "forward";
-//   bidirectional->elementary = true;
-//   bidirectional->time_limit = time_limit;
-//   loadGraph(
-//       bidirectional.get(),
-//       num_nodes,
-//       num_arcs,
-//       num_resources,
-//       path_to_instance);
-//   clock_t start = clock();
-//   bidirectional->run();
-//   auto cost = bidirectional->getTotalCost();
-//   ASSERT_EQ(cost, getBestCost(path_to_data, instance_number));
-//   writeToFile(
-//       output_path,
-//       "results_fwd_elem.txt",
-//       std::to_string(instance_number) + " " +
-//           std::to_string(getElapsedTime(start)));
-// }
-//
-// TEST_P(TestBenchmarks, testForward) {
-//   const std::string path_to_instance =
-//       path_to_data + "rcsp" + std::to_string(instance_number) + ".txt";
-//   int                 num_nodes, num_arcs, num_resources;
-//   std::vector<double> max_res, min_res;
-//   loadMaxMinRes(
-//       &max_res,
-//       &min_res,
-//       &num_nodes,
-//       &num_arcs,
-//       &num_resources,
-//       path_to_instance);
-//   bidirectional =
-//       std::make_unique<BiDirectional>(num_nodes, num_arcs, max_res, min_res);
-//   bidirectional->direction  = "forward";
-//   bidirectional->time_limit = time_limit;
-//   loadGraph(
-//       bidirectional.get(),
-//       num_nodes,
-//       num_arcs,
-//       num_resources,
-//       path_to_instance);
-//   clock_t start = clock();
-//   bidirectional->run();
-//   auto cost = bidirectional->getTotalCost();
-//   ASSERT_EQ(cost, getBestCost(path_to_data, instance_number));
-//   writeToFile(
-//       output_path,
-//       "results_fwd.txt",
-//       std::to_string(instance_number) + " " +
-//           std::to_string(getElapsedTime(start)));
-// }
-//
-// TEST_P(TestBenchmarks, testForwardBoundsPruning) {
-//   const std::string path_to_instance =
-//       path_to_data + "rcsp" + std::to_string(instance_number) + ".txt";
-//   int                 num_nodes, num_arcs, num_resources;
-//   std::vector<double> max_res, min_res;
-//   loadMaxMinRes(
-//       &max_res,
-//       &min_res,
-//       &num_nodes,
-//       &num_arcs,
-//       &num_resources,
-//       path_to_instance);
-//   bidirectional =
-//       std::make_unique<BiDirectional>(num_nodes, num_arcs, max_res, min_res);
-//   bidirectional->direction      = "forward";
-//   bidirectional->time_limit     = time_limit;
-//   bidirectional->bounds_pruning = true;
-//   loadGraph(
-//       bidirectional.get(),
-//       num_nodes,
-//       num_arcs,
-//       num_resources,
-//       path_to_instance);
-//
-//   clock_t start = clock();
-//   bidirectional->run();
-//   auto cost = bidirectional->getTotalCost();
-//   ASSERT_EQ(cost, getBestCost(path_to_data, instance_number));
-//   writeToFile(
-//       output_path,
-//       "results_fwd_bp.txt",
-//       std::to_string(instance_number) + " " +
-//           std::to_string(getElapsedTime(start)));
-// }
-//
-// /* Both */
-//
-// TEST_P(TestBenchmarks, testBothElementary) {
-//   const std::string path_to_instance =
-//       path_to_data + "rcsp" + std::to_string(instance_number) + ".txt";
-//   int                 num_nodes, num_arcs, num_resources;
-//   std::vector<double> max_res, min_res;
-//   loadMaxMinRes(
-//       &max_res,
-//       &min_res,
-//       &num_nodes,
-//       &num_arcs,
-//       &num_resources,
-//       path_to_instance,
-//       false);
-//   max_res[0] = std::ceil(max_res[0] / 2.0);
-//   bidirectional =
-//       std::make_unique<BiDirectional>(num_nodes, num_arcs, max_res, min_res);
-//   bidirectional->elementary = true;
-//   bidirectional->time_limit = time_limit;
-//   loadGraph(
-//       bidirectional.get(),
-//       num_nodes,
-//       num_arcs,
-//       num_resources,
-//       path_to_instance,
-//       false);
-//   clock_t start = clock();
-//   bidirectional->run();
-//   auto cost = bidirectional->getTotalCost();
-//   auto path = bidirectional->getPath();
-//   for (auto p : path) {
-//     std::cout << p << ",";
-//   }
-//   std::cout << "\n";
-//   ASSERT_EQ(cost, getBestCost(path_to_data, instance_number));
-//   writeToFile(
-//       output_path,
-//       "results_both_elem.txt",
-//       std::to_string(instance_number) + " " +
-//           std::to_string(getElapsedTime(start)));
-// }
+TEST_P(TestBenchmarks, testForwardElementary) {
+  const std::string path_to_instance =
+      path_to_data + "rcsp" + std::to_string(instance_number) + ".txt";
+  int                 num_nodes, num_arcs, num_resources;
+  std::vector<double> max_res, min_res;
+  loadMaxMinRes(
+      &max_res,
+      &min_res,
+      &num_nodes,
+      &num_arcs,
+      &num_resources,
+      path_to_instance);
+  bidirectional =
+      std::make_unique<BiDirectional>(num_nodes, num_arcs, max_res, min_res);
+  bidirectional->options.direction  = "forward";
+  bidirectional->options.elementary = true;
+  bidirectional->options.time_limit = time_limit;
+  loadGraph(
+      bidirectional.get(),
+      num_nodes,
+      num_arcs,
+      num_resources,
+      path_to_instance);
+  clock_t start = clock();
+  bidirectional->run();
+  auto cost = bidirectional->getTotalCost();
+  ASSERT_EQ(cost, getBestCost(path_to_data, instance_number));
+  writeToFile(
+      output_path,
+      "results_fwd_elem.txt",
+      std::to_string(instance_number) + " " +
+          std::to_string(getElapsedTime(start)));
+}
+
+TEST_P(TestBenchmarks, testForward) {
+  const std::string path_to_instance =
+      path_to_data + "rcsp" + std::to_string(instance_number) + ".txt";
+  int                 num_nodes, num_arcs, num_resources;
+  std::vector<double> max_res, min_res;
+  loadMaxMinRes(
+      &max_res,
+      &min_res,
+      &num_nodes,
+      &num_arcs,
+      &num_resources,
+      path_to_instance);
+  bidirectional =
+      std::make_unique<BiDirectional>(num_nodes, num_arcs, max_res, min_res);
+  bidirectional->options.direction  = "forward";
+  bidirectional->options.time_limit = time_limit;
+  loadGraph(
+      bidirectional.get(),
+      num_nodes,
+      num_arcs,
+      num_resources,
+      path_to_instance);
+  clock_t start = clock();
+  bidirectional->run();
+  auto cost = bidirectional->getTotalCost();
+  ASSERT_EQ(cost, getBestCost(path_to_data, instance_number));
+  writeToFile(
+      output_path,
+      "results_fwd.txt",
+      std::to_string(instance_number) + " " +
+          std::to_string(getElapsedTime(start)));
+}
+
+TEST_P(TestBenchmarks, testForwardBoundsPruning) {
+  const std::string path_to_instance =
+      path_to_data + "rcsp" + std::to_string(instance_number) + ".txt";
+  int                 num_nodes, num_arcs, num_resources;
+  std::vector<double> max_res, min_res;
+  loadMaxMinRes(
+      &max_res,
+      &min_res,
+      &num_nodes,
+      &num_arcs,
+      &num_resources,
+      path_to_instance);
+  bidirectional =
+      std::make_unique<BiDirectional>(num_nodes, num_arcs, max_res, min_res);
+  bidirectional->options.direction      = "forward";
+  bidirectional->options.time_limit     = time_limit;
+  bidirectional->options.bounds_pruning = true;
+  loadGraph(
+      bidirectional.get(),
+      num_nodes,
+      num_arcs,
+      num_resources,
+      path_to_instance);
+
+  clock_t start = clock();
+  bidirectional->run();
+  auto cost = bidirectional->getTotalCost();
+  ASSERT_EQ(cost, getBestCost(path_to_data, instance_number));
+  writeToFile(
+      output_path,
+      "results_fwd_bp.txt",
+      std::to_string(instance_number) + " " +
+          std::to_string(getElapsedTime(start)));
+}
+
+/* Both */
+
+TEST_P(TestBenchmarks, testBothElementary) {
+  const std::string path_to_instance =
+      path_to_data + "rcsp" + std::to_string(instance_number) + ".txt";
+  int                 num_nodes, num_arcs, num_resources;
+  std::vector<double> max_res, min_res;
+  loadMaxMinRes(
+      &max_res,
+      &min_res,
+      &num_nodes,
+      &num_arcs,
+      &num_resources,
+      path_to_instance,
+      false);
+  // max_res[0] = std::ceil(max_res[0] / 2.0);
+  bidirectional =
+      std::make_unique<BiDirectional>(num_nodes, num_arcs, max_res, min_res);
+  bidirectional->options.elementary = true;
+  bidirectional->options.time_limit = time_limit;
+  loadGraph(
+      bidirectional.get(),
+      num_nodes,
+      num_arcs,
+      num_resources,
+      path_to_instance,
+      false);
+  clock_t start = clock();
+  bidirectional->run();
+  auto cost = bidirectional->getTotalCost();
+  auto path = bidirectional->getPath();
+  for (auto p : path) {
+    std::cout << p << ",";
+  }
+  std::cout << "\n";
+  ASSERT_EQ(cost, getBestCost(path_to_data, instance_number));
+  writeToFile(
+      output_path,
+      "results_both_elem.txt",
+      std::to_string(instance_number) + " " +
+          std::to_string(getElapsedTime(start)));
+}
 
 TEST_P(TestBenchmarks, testBoth) {
   const std::string path_to_instance =
@@ -223,7 +223,6 @@ TEST_P(TestBenchmarks, testBoth) {
   bidirectional =
       std::make_unique<BiDirectional>(num_nodes, num_arcs, max_res, min_res);
   bidirectional->options.time_limit = time_limit;
-  bidirectional->options.method     = "processed";
   loadGraph(
       bidirectional.get(),
       num_nodes,
@@ -247,43 +246,43 @@ TEST_P(TestBenchmarks, testBoth) {
           std::to_string(getElapsedTime(start)));
 }
 
-// TEST_P(TestBenchmarks, testBothBoundsPruning) {
-//   const std::string path_to_instance =
-//       path_to_data + "rcsp" + std::to_string(instance_number) + ".txt";
-//   int                 num_nodes, num_arcs, num_resources;
-//   std::vector<double> max_res, min_res;
-//   loadMaxMinRes(
-//       &max_res,
-//       &min_res,
-//       &num_nodes,
-//       &num_arcs,
-//       &num_resources,
-//       path_to_instance,
-//       false);
-//   // max_res[0] = std::ceil(max_res[0] / 2.0);
-//   bidirectional =
-//       std::make_unique<BiDirectional>(num_nodes, num_arcs, max_res, min_res);
-//   bidirectional->elementary     = true;
-//   bidirectional->time_limit     = time_limit;
-//   bidirectional->bounds_pruning = true;
-//   loadGraph(
-//       bidirectional.get(),
-//       num_nodes,
-//       num_arcs,
-//       num_resources,
-//       path_to_instance,
-//       false);
-//   clock_t start = clock();
-//   bidirectional->run();
-//
-//   auto cost = bidirectional->getTotalCost();
-//   ASSERT_EQ(cost, getBestCost(path_to_data, instance_number));
-//   writeToFile(
-//       output_path,
-//       "results_both_bp.txt",
-//       std::to_string(instance_number) + " " +
-//           std::to_string(getElapsedTime(start)));
-// }
+TEST_P(TestBenchmarks, testBothBoundsPruning) {
+  const std::string path_to_instance =
+      path_to_data + "rcsp" + std::to_string(instance_number) + ".txt";
+  int                 num_nodes, num_arcs, num_resources;
+  std::vector<double> max_res, min_res;
+  loadMaxMinRes(
+      &max_res,
+      &min_res,
+      &num_nodes,
+      &num_arcs,
+      &num_resources,
+      path_to_instance,
+      false);
+  // max_res[0] = std::ceil(max_res[0] / 2.0);
+  bidirectional =
+      std::make_unique<BiDirectional>(num_nodes, num_arcs, max_res, min_res);
+  bidirectional->options.elementary     = true;
+  bidirectional->options.time_limit     = time_limit;
+  bidirectional->options.bounds_pruning = true;
+  loadGraph(
+      bidirectional.get(),
+      num_nodes,
+      num_arcs,
+      num_resources,
+      path_to_instance,
+      false);
+  clock_t start = clock();
+  bidirectional->run();
+
+  auto cost = bidirectional->getTotalCost();
+  ASSERT_EQ(cost, getBestCost(path_to_data, instance_number));
+  writeToFile(
+      output_path,
+      "results_both_bp.txt",
+      std::to_string(instance_number) + " " +
+          std::to_string(getElapsedTime(start)));
+}
 
 INSTANTIATE_TEST_SUITE_P(
     TestBenchmarksBeasley,

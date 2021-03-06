@@ -111,17 +111,17 @@ class BiDirectional:
                                                   min_res_vector)
         # pass solving attributes
         if direction != "both":
-            self.bidirectional_cpp.direction = direction
+            self.bidirectional_cpp.options.direction = direction
         if method in ["random", "generated", "processed"]:
-            self.bidirectional_cpp.method = method
+            self.bidirectional_cpp.options.method = method
         if time_limit is not None and isinstance(time_limit, (int, float)):
-            self.bidirectional_cpp.time_limit = time_limit
+            self.bidirectional_cpp.options.time_limit = time_limit
         if threshold is not None and isinstance(time_limit, (int, float)):
-            self.bidirectional_cpp.threshold = threshold
+            self.bidirectional_cpp.options.threshold = threshold
         if isinstance(elementary, bool) and elementary:
-            self.bidirectional_cpp.elementary = elementary
+            self.bidirectional_cpp.options.elementary = elementary
         if isinstance(bounds_pruning, bool) and not bounds_pruning:
-            self.bidirectional_cpp.bounds_pruning = bounds_pruning
+            self.bidirectional_cpp.options.bounds_pruning = bounds_pruning
         if isinstance(seed, int) and seed is not None:
             self.bidirectional_cpp.setSeed(seed)
         if REF_callback is not None:
