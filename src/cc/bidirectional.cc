@@ -130,21 +130,18 @@ void BiDirectional::initSearches() {
     best_labels_[s].resize(graph_ptr->number_vertices, nullptr);
   }
 
-  // Initalise resource bounds
+  // Initialise resource bounds
   initResourceBounds();
   // Initialise labels
   for (int s = 0; s < directions_size_; ++s) {
     initLabels(s);
   }
+  // Init other containers (labels heaps)
   initContainers();
 }
 
 void BiDirectional::initResourceBounds() {
   max_res_curr_ = max_res;
-  // Scale the primal resource if direction is both
-  if (options.direction == "both") {
-    max_res_curr_[0] = std::ceil(max_res_curr_[0] / options.max_res_divisor);
-  }
   // If not all lower bounds are 0, initialise variable min_res_curr to
   // vector of 0s
   bool zeros =
@@ -154,16 +151,6 @@ void BiDirectional::initResourceBounds() {
     min_res_curr_ = temp;
   } else {
     min_res_curr_ = min_res;
-  }
-}
-
-void BiDirectional::initContainers() {
-  if (options.direction != "both") {
-    labelling::makeHeap(unprocessed_labels_[0].get(), options.direction);
-  } else {
-    for (int s = 0; s < directions_size_; ++s) {
-      labelling::makeHeap(unprocessed_labels_[s].get(), directions_[s]);
-    }
   }
 }
 
@@ -189,7 +176,7 @@ void BiDirectional::initLabels(const int& direction_idx) {
   intermediate_label_[direction_idx] =
       std::make_shared<labelling::Label>(0.0, dum_vertex, res, path);
   // updateEfficientLabels();
-  unprocessed_labels_[direction_idx]->push_back(*current_label_[direction_idx]);
+  // unprocessed_labels_[direction_idx]->push_back(*current_label_[direction_idx]);
   // update heap
   labelling::pushHeap(
       unprocessed_labels_[direction_idx].get(), directions_[direction_idx]);
@@ -202,10 +189,20 @@ void BiDirectional::initLabels(const int& direction_idx) {
   visited_vertices_[direction_idx].insert(vertex.idx);
 }
 
+void BiDirectional::initContainers() {
+  if (options.direction != "both") {
+    labelling::makeHeap(unprocessed_labels_[0].get(), options.direction);
+  } else {
+    for (int s = 0; s < directions_size_; ++s) {
+      labelling::makeHeap(unprocessed_labels_[s].get(), directions_[s]);
+    }
+  }
+}
+
 /**
  * Private methods
  */
-// Initalisations
+// Initialisations
 
 std::string BiDirectional::getDirection() const {
   if (options.direction == "both") {
@@ -262,6 +259,8 @@ void BiDirectional::move(const int& direction_idx) {
   if (!bounds_exceeded) {
     extendCurrentLabel(direction_idx);
     saveCurrentBestLabel(direction_idx);
+  } else {
+    stop_[direction_idx] = true;
   }
   updateHalfWayPoints(direction_idx);
   updateCurrentLabel(direction_idx);
@@ -444,7 +443,7 @@ void BiDirectional::updateBestLabels(
   std::vector<std::shared_ptr<labelling::Label>>& best_labels =
       best_labels_[direction_idx];
 
-  if (direction_ == "foward" && vertex_idx == graph_ptr->sink.idx &&
+  if (direction_ == "forward" && vertex_idx == graph_ptr->sink.idx &&
       !candidate_label.checkFeasibility(max_res, min_res)) {
     return;
   } else if (
@@ -673,7 +672,7 @@ void BiDirectional::joinLabels() {
                    ++bwd_iter) {
                 const labelling::Label& bwd_label = *bwd_iter;
 
-                if (bwd_label.resource_consumption[0] >= HF &&
+                if (bwd_label.resource_consumption[0] > HF &&
                     (fwd_label.weight + edge_weight + bwd_label.weight <= UB) &&
                     labelling::mergePreCheck(
                         fwd_label, bwd_label, max_res, options.elementary)) {

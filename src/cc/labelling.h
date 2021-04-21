@@ -14,7 +14,7 @@ namespace labelling {
  *
  * Main functionality includes:
  *   - Checking resource feasibility
- *   - Cheking dominance
+ *   - Checking dominance
  */
 class Label {
  public:
@@ -80,8 +80,7 @@ class Label {
    */
   bool checkFeasibility(
       const std::vector<double>& max_res,
-      const std::vector<double>& min_res,
-      const bool&                exclude_monotone = false) const;
+      const std::vector<double>& min_res) const;
 
   /// Check if weight is under the input threshold.
   bool checkThreshold(const double& threshold) const;
@@ -91,7 +90,7 @@ class Label {
   /// set phi attribute for merged labels from Righini and Salani (2006)
   void setPhi(const double& phi_in) { phi = phi_in; }
 
-  // opeator overloads
+  // operator overloads
   Label&               operator=(const Label& other) = default;
   friend bool          operator<(const Label& label1, const Label& label2);
   friend bool          operator>(const Label& label1, const Label& label2);
@@ -103,10 +102,10 @@ class Label {
 };
 
 /**
- * Label extention using custom REFs if callback defined
+ * Label extension using custom REFs if callback defined
  * Holds pointer to callback.
- * All calls callback REF should do it through an instance of LabelExtension as
- * for example `label_extension.ref_callback->REF_fwd`
+ * All calls callback REF should do it through an instance of `LabelExtension`
+ * as for example `label_extension.ref_callback->REF_fwd`
  */
 class LabelExtension {
  public:
@@ -120,7 +119,7 @@ class LabelExtension {
   void setREFCallback(bidirectional::REFCallback* cb);
 
   /**
-   * Generate new label extentions from the current label and return only if
+   * Generate new label extensions from the current label and return only if
    * resource feasible.
    * The input label is a pointer as it may be modified in
    * the case that the edge / adjacent_vertex is found to be resource
@@ -249,16 +248,18 @@ Label mergeLabels(
 
 /* Heap operations for vector of labels */
 
-/// Initalise heap using the appropriate comparison
-/// i.e. increasing in the monotone resource forward lists, decreasing
-/// otherwise
+/**
+ * Initialises heap using the appropriate comparison
+ * i.e. increasing in the monotone resource forward lists, decreasing otherwise
+ */
 void makeHeap(
     std::vector<labelling::Label>* labels_ptr,
     const std::string&             direction);
 
-/// Push new elements in heap using the appropriate comparison
-/// i.e. increasing in the monotone resource forward lists, decreasing
-/// otherwise
+/**
+ * Push new elements in heap using the appropriate comparison
+ * i.e. increasing in the monotone resource forward lists, decreasing otherwise
+ */
 void pushHeap(
     std::vector<labelling::Label>* labels_ptr,
     const std::string&             direction);

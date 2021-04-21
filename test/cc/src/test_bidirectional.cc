@@ -1,6 +1,5 @@
 #include "test_bidirectional.h"
 
-#include <iostream>
 #include <numeric>
 
 namespace bidirectional {
@@ -17,11 +16,10 @@ TEST_F(TestBiDirectional, testBoth) {
   bidirectional = std::make_unique<BiDirectional>(
       number_vertices, number_edges, max_res, min_res);
   addEdges(bidirectional.get());
-  auto path = bidirectional->getPath();
-  ASSERT_TRUE(path.size() == 0);
+
   bidirectional->run();
 
-  path      = bidirectional->getPath();
+  auto path = bidirectional->getPath();
   auto res  = bidirectional->getConsumedResources();
   auto cost = bidirectional->getTotalCost();
 
@@ -68,23 +66,6 @@ TEST_F(TestBiDirectional, testBothThreshold) {
   ASSERT_TRUE(res == res_);
   ASSERT_TRUE(cost == cost_);
 }
-
-// TODO fix method="random". See issues
-// TEST_F(TestBiDirectional, testBothRandom) {
-//   bidirectional = std::make_unique<BiDirectional>(
-//       number_vertices, number_edges, max_res, min_res);
-//   bidirectional->method = "random";
-//   addEdges(bidirectional.get());
-//   auto path = bidirectional->getPath();
-//   ASSERT_TRUE(path.size() == 0);
-//   bidirectional->run();
-//   path      = bidirectional->getPath();
-//   auto res  = bidirectional->getConsumedResources();
-//   auto cost = bidirectional->getTotalCost();
-//   ASSERT_TRUE(path == final_path);
-//   ASSERT_TRUE(res == final_res);
-//   ASSERT_TRUE(cost == final_cost);
-// }
 
 TEST_F(TestBiDirectional, testBothProcessed) {
   bidirectional = std::make_unique<BiDirectional>(

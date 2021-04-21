@@ -12,13 +12,13 @@ namespace bidirectional {
 struct Vertex {
   std::string id;
   int         idx;
-  // for use in dijkstra's
+  // for use in Dijkstra's
   int distance;
 
   Vertex(){};
   Vertex(const std::string& d, const int& i) : id(d), idx(i){};
 
-  // for use in dijkstra's
+  // for use in Dijkstra's
   bool operator<(const Vertex& other) const {
     return distance < other.distance;
   }

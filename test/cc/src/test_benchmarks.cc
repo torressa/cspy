@@ -1,7 +1,6 @@
 #include "test_benchmarks.h"
 
 #include <fstream>
-#include <iostream> // cout
 #include <sstream>
 
 #include "utils.h" // loadMaxMinRes, skipLines, writeToFile, getElapsedTime, getBestCost
@@ -194,10 +193,7 @@ TEST_P(TestBenchmarks, testBothElementary) {
   bidirectional->run();
   auto cost = bidirectional->getTotalCost();
   auto path = bidirectional->getPath();
-  for (auto p : path) {
-    std::cout << p << ",";
-  }
-  std::cout << "\n";
+
   ASSERT_EQ(cost, getBestCost(path_to_data, instance_number));
   writeToFile(
       output_path,
@@ -234,10 +230,7 @@ TEST_P(TestBenchmarks, testBoth) {
   bidirectional->run();
   auto cost = bidirectional->getTotalCost();
   auto path = bidirectional->getPath();
-  for (auto p : path) {
-    std::cout << p << ",";
-  }
-  std::cout << "\n";
+
   ASSERT_EQ(cost, getBestCost(path_to_data, instance_number));
   writeToFile(
       output_path,

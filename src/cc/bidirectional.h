@@ -16,8 +16,6 @@ namespace bidirectional {
 /// Parameters for tuning the search
 struct SolvingOptions {
   std::string direction = "both";
-  /// Divisor for primal resource
-  double max_res_divisor = 1.0;
   /// string with method to determine the next direction of search
   std::string method = "unprocessed";
   /// double with time limit in seconds
@@ -59,7 +57,7 @@ class BiDirectional {
       const std::vector<double>& min_res);
   ~BiDirectional();
 
-  /* Paremeters */
+  /* Parameters */
   /// vector with upper and lower bounds for resources
   std::vector<double> max_res;
   std::vector<double> min_res;
@@ -97,12 +95,12 @@ class BiDirectional {
   /// Start time to ensure time limit is met
   std::chrono::time_point<std::chrono::system_clock> start_time_;
   /**
-   * All the following paremeters a size two vectors (easier access as opposed
-   * to a pair for example) containing the appropriate paramaters for the
+   * All the following parameters a size two vectors (easier access as opposed
+   * to a pair for example) containing the appropriate parameters for the
    * bidirectional search.
    *
    * - index 0: contains forward attributes
-   * - index 1: containts backward attributes
+   * - index 1: contains backward attributes
    *
    * In the case of single direction, the vectors have size 1 and the index
    * correspond to the chosen direction.
@@ -125,7 +123,7 @@ class BiDirectional {
   int iteration_ = 0;
   /// whether intermediate_label_fwd/bwd contains a source-sink feasible path
   bool primal_st_bound_ = false;
-  // whether the search terminated early with a valid souce-sink path
+  // whether the search terminated early with a valid source-sink path
   bool terminated_early_w_st_path_               = false;
   int  terminated_early_w_st_path_direction_idx_ = 0;
 
@@ -148,7 +146,7 @@ class BiDirectional {
   /// Label that is being extended
   std::vector<std::shared_ptr<labelling::Label>> current_label_;
   /// Intermediate current best label with possibly complete source-sink path
-  /// (shared pointer as we want to be able to substitute it without reseting)
+  /// (shared pointer as we want to be able to substitute it without resetting)
   std::vector<std::shared_ptr<labelling::Label>> intermediate_label_;
 
   /// vector with pareto optimal labels (per node)
@@ -164,11 +162,11 @@ class BiDirectional {
   std::vector<std::unique_ptr<std::vector<labelling::Label>>>
       unprocessed_labels_;
 
-  /* Initalisation Methods */
+  /* Initialisation Methods */
 
-  /// Wrapper to initialise seach in the appropriate direction
+  /// Wrapper to initialise search in the appropriate direction
   void initSearches();
-  /// Initalise labels with appropriate resources
+  /// Initialise labels with appropriate resources
   void initResourceBounds();
   /// Make `unprocessed_labels_` a heap
   void initContainers();
@@ -178,19 +176,16 @@ class BiDirectional {
   /**
    * Run preprocessing steps if required. Currently includes:
    *   - Obtain shortest paths bounds
+   * TODO:
+   *   - Bounding and adjusting of resource bounds
    */
   void runPreprocessing();
-  /// Initalise searches
-  // void initSearches();
 
   /* Search Methods */
-
   /// Get the next direction to search
   std::string getDirection() const;
   /// Advance the search in a given direction
   void move(const int& direction_idx);
-  // void checkTerminateSerial();
-  // void updateIntermediateLabel();
   /// checks if the time_limit if over (if set) or if a label under the
   /// threshold has been found (if set). Sets terminated_early_w_st_path_
   bool terminate(const int& direction_idx, const labelling::Label& label);
@@ -251,8 +246,8 @@ class BiDirectional {
   double getUB();
   /**
    * get minimum weight across all forward / backward labels
-   * @param[out] fwd_min, double, minimum accross all forward labels
-   * @param[out] bwd_min, double, minimum accross all backward labels
+   * @param[out] fwd_min, double, minimum across all forward labels
+   * @param[out] bwd_min, double, minimum across all backward labels
    */
   void getMinimumWeights(double* fwd_min, double* bwd_min);
   /**

@@ -9,7 +9,7 @@ namespace bidirectional {
 
 /**
  * Solve shortest path and set the lower_bound_weight for each node.
- * (not quite dijkstra, as it has a check to make sure it doesn't get stuck)
+ * (not quite Dijkstra, as it has a check to make sure it doesn't get stuck)
  * If the graph has been revered, the reverse shortest path gives bounds in the
  * Sink - Source direction.
  *

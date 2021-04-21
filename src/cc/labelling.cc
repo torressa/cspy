@@ -28,14 +28,9 @@ Label::Label(
 
 bool Label::checkFeasibility(
     const std::vector<double>& max_res,
-    const std::vector<double>& min_res,
-    const bool&                exclude_monotone) const {
+    const std::vector<double>& min_res) const {
   const int& resource_size = resource_consumption.size();
-  int        start_idx     = 0;
-  if (exclude_monotone) {
-    start_idx = 1;
-  }
-  for (int i = start_idx; i < resource_size; i++) {
+  for (int i = 0; i < resource_size; i++) {
     if (resource_consumption[i] <= max_res[i] &&
         resource_consumption[i] >= min_res[i]) {
       ;
@@ -393,8 +388,6 @@ bool mergePreCheck(
         path_copy.end();
     result = !contains_duplicates;
   }
-  // result =
-  // halfwayCheck(fwd_label, bwd_label, max_res);
   return result;
 }
 
