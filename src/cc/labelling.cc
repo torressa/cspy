@@ -406,12 +406,14 @@ Label mergeLabels(
   }
   std::vector<double> final_res;
   auto                bwd_label_ptr = std::make_unique<Label>();
+  // Extend resources along edge
   if (label_extension_.ref_callback == nullptr) {
     const std::vector<double>& temp_res = bidirectional::additiveForwardREF(
         fwd_label.resource_consumption,
         fwd_label.vertex.id,
         bwd_label.vertex.id,
         adj_vertex.resource_consumption);
+    // Process backward label (invert path and resources)
     auto bwd_label_ =
         std::make_unique<Label>(processBwdLabel(bwd_label, max_res, temp_res));
     final_res = bwd_label_->resource_consumption;
@@ -426,7 +428,7 @@ Label mergeLabels(
     const double bwd_res_inverted =
         max_res[0] - bwd_label.resource_consumption[0];
     // in the case when default REF_join has been called (or user hasn't added
-    // the resources appropriately)
+    // resource consumption)
     const double& bwd_monotone_edge = (adj_vertex.resource_consumption[0] == 0)
                                           ? 1
                                           : adj_vertex.resource_consumption[0];
