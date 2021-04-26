@@ -18,9 +18,7 @@ class MyCallback(REFCallback):
         # Monotone resource
         res_new[0] += 1.0
         # Increasing resource
-        if "Sink" in str(head):
-            pass
-        else:
+        if "Sink" not in str(head):
             res_new[1] += float(int(head)**2)
         # Resource reset
         res_new[2] += edge_res[1]
@@ -32,9 +30,7 @@ class MyCallback(REFCallback):
         # Monotone resource
         res_new[0] -= 1
         # Increasing resource
-        if "Sink" in str(head):
-            pass
-        else:
+        if "Sink" not in str(head):
             res_new[1] += float(int(head)**2)
         # Resource reset
         res_new[2] += edge_res[1]
