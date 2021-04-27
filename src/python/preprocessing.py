@@ -12,12 +12,16 @@ def prune_graph(G, max_res, min_res):
 
     Note
     -----
-    path_s and path_t contains all partial paths e.g.
-        {node_i: [Source, ..., node_k, node_i]}.
-    or  {node_i: [Sink, ..., node_k, node_i]}
-    Hence, if node_i is found to violate a resource bound, it is
-    because of node_k, therefore, we add path[key][-2] = node_k to
-    the dictionary of nodes to remove.
+    If the shortest path from Source to node_i has cost greater
+    than the resource limit, then node_i cannot be on the shortest
+    resource-constrained path from Source to Sink.  So we remove
+    node_i.
+
+    We cannot, however, make determinations about the minimum
+    resource constraints.  We would need to find the longest path
+    (which is NP-Hard) and compare that.  Because while the shortest
+    path might not use enough of a resource, a longer path could exist
+    that does.
     """
 
     def _check_resource(r):
@@ -27,6 +31,10 @@ def prune_graph(G, max_res, min_res):
             # returns number to use as weight for the algorithm
             return attr_dict['res_cost'][r]
 
+        def __get_weight_neg(i, j, attr_dict):
+            # returns number to use as weight for the algorithm
+            return -attr_dict['res_cost'][r]
+
         # Get paths from source to all other nodes
         length_s, path_s = single_source_bellman_ford(G,
                                                       'Source',
@@ -34,18 +42,19 @@ def prune_graph(G, max_res, min_res):
         length_t, path_t = single_source_bellman_ford(G.reverse(copy=True),
                                                       'Sink',
                                                       weight=__get_weight)
+
         try:
             # Collect nodes in paths that violate the resource bounds
             # see note above
             nodes_source.update({
-                path_s[key][-2]: (val, r)
+                path_s[key][-1]: (val, r)
                 for key, val in length_s.items()
-                if val > max_res[r] or val < min_res[r]
+                if (key != 'Source') and (val > max_res[r])
             })
             nodes_sink.update({
-                path_t[key][-2]: (val, r)
+                path_t[key][-1]: (val, r)
                 for key, val in length_t.items()
-                if val > max_res[r] or val < min_res[r]
+                if (key != 'Sink') and (val > max_res[r])
             })
         except IndexError:  # No nodes violate resource limits
             pass
@@ -55,11 +64,13 @@ def prune_graph(G, max_res, min_res):
     n_nodes = len(G.nodes())
     # Map function for each resource
     list(map(_check_resource, range(0, G.graph['n_res'])))
-    if nodes_source and nodes_sink:  # if there are nodes to remove
-        # Filter out source or sink
+    if nodes_source or nodes_sink:  # if there are nodes to remove
+        # Remove node if either direction is bad; it can't be on shortest path
         nodes_to_remove = [
-            node for node in G.nodes() if node in nodes_source and nodes_sink
+                node for node in G.nodes() if (node in nodes_source) or
+                (node in nodes_sink)
         ]
+        # Filter out source or sink
         if "Source" in nodes_to_remove or "Sink" in nodes_to_remove:
             if "Sink" in nodes_source:
                 unreachable_res = nodes_source["Sink"][1]
