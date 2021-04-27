@@ -31,10 +31,6 @@ def prune_graph(G, max_res, min_res):
             # returns number to use as weight for the algorithm
             return attr_dict['res_cost'][r]
 
-        def __get_weight_neg(i, j, attr_dict):
-            # returns number to use as weight for the algorithm
-            return -attr_dict['res_cost'][r]
-
         # Get paths from source to all other nodes
         length_s, path_s = single_source_bellman_ford(G,
                                                       'Source',
