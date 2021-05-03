@@ -22,6 +22,10 @@ RUN wget -O boost_1_75_0.tar.gz \
 && rm boost_1_75_0.tar.gz \
 && rm -r boost_1_75_0
 
+# Download and install LEMON from source
+COPY tools/docker/scripts/install_lemon .
+RUN chmod +x install_lemon && ./install_lemon
+
 ARG BENCHMARK_TESTS
 ENV BENCHMARK_TESTS ${BENCHMARK_TESTS:-false}
 

@@ -14,6 +14,7 @@ using namespace bidirectional;
 %template(DoubleVector) std::vector<double>;
 /* Needed for graph, ow causes memory leak */
 %template(StringVector) std::vector<std::string>;
+%template(IntVector) std::vector<int>;
 
 /* turn on director wrapping Callback */
 %feature("director") bidirectional::REFCallback;
@@ -27,6 +28,7 @@ using namespace bidirectional;
 %rename("%s") bidirectional::SolvingOptions;
 %rename("%s") bidirectional::BiDirectional::options;
 /* Expose graph construction and setters */
+%rename("%s") bidirectional::BiDirectional::addNodes;
 %rename("%s") bidirectional::BiDirectional::addEdge;
 %rename("%s") bidirectional::BiDirectional::setREFCallback;
 /* Expose getters */

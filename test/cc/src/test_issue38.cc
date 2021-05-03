@@ -4,22 +4,20 @@
 
 namespace bidirectional {
 
-void addEdgesIssue38(BiDirectional* bidirectional) {
-  bidirectional->addEdge("Source", "A", 0, {1, 2});
-  bidirectional->addEdge("A", "Sink", 0, {1, 10});
+void createGraphIssue38(BiDirectional* bidirectional) {
+  bidirectional->addNodes({0, 1, 2});
+  bidirectional->addEdge(0, 1, 0.0, {1, 2});
+  bidirectional->addEdge(1, 2, 0.0, {1, 10});
 }
 
 TEST_F(TestIssue38, testBoth) {
   bidirectional = std::make_unique<BiDirectional>(
-      number_vertices, number_edges, max_res, min_res);
-
-  addEdgesIssue38(bidirectional.get());
-
-  auto path = bidirectional->getPath();
-  ASSERT_TRUE(path.size() == 0);
+      number_vertices, number_edges, 0, 2, max_res, min_res);
+  createGraphIssue38(bidirectional.get());
 
   bidirectional->run();
-  path      = bidirectional->getPath();
+
+  auto path = bidirectional->getPath();
   auto res  = bidirectional->getConsumedResources();
   auto cost = bidirectional->getTotalCost();
 

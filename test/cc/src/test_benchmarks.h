@@ -14,11 +14,6 @@ class TestBenchmarks : public ::testing::TestWithParam<int> {
   int               instance_number;
   const std::string path_to_data =
       "/root/benchmarks/beasley_christofides_1989/";
-  // const std::string path_to_data =
-  //     "/home/torressa/Documents/code/cspy/benchmarks/"
-  //     "beasley_christofides_1989/";
-  // const std::string output_path =
-  // "/home/torressa/Documents/code/cspy/build3/";
   const std::string              output_path = "/root/build/";
   std::unique_ptr<BiDirectional> bidirectional;
   double                         time_limit = 30;

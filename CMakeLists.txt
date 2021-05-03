@@ -112,6 +112,19 @@ message(STATUS "Build Python: ${BUILD_PYTHON}")
 # option(BUILD_DOTNET "Build .NET Library" OFF) message(STATUS "Build Java:
 # ${BUILD_JAVA}") message(STATUS "Build .Net: ${BUILD_DOTNET}")
 
+include(FetchContent)
+set(FETCHCONTENT_QUIET OFF)
+
+# TODO: download and install lemon with FetchContent
+
+# FetchContent_Declare(lemon URL
+# http://lemon.cs.elte.hu/pub/sources/lemon-1.3.1.tar.gz)
+# option(LEMON_ENABLE_GLPK NO) option(LEMON_ENABLE_COIN NO)
+# option(LEMON_ENABLE_ILOG NO) option(LEMON_ENABLE_SOPLEX NO)
+# FetchContent_MakeAvailable(lemon)
+
+find_package(LEMON REQUIRED)
+
 enable_testing()
 include(cpp)
 
@@ -132,7 +145,6 @@ if(NOT BUILD_PYTHON)
   set(gtest_force_shared_crt
       ON
       CACHE BOOL "" FORCE)
-  include(FetchContent)
   FetchContent_Declare(
     googletest
     GIT_REPOSITORY https://github.com/google/googletest.git

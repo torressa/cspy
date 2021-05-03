@@ -18,25 +18,36 @@ namespace labelling {
  */
 class Label {
  public:
-  double                   weight               = 0.0;
-  bidirectional::Vertex    vertex               = {"", -1};
-  std::vector<double>      resource_consumption = {};
-  std::vector<std::string> partial_path         = {};
-  std::vector<std::string> unreachable_nodes    = {};
-  // For merged labels only
-  bool merged = false;
-  // Phi value from Righini and Salani (2006)
+  double                weight               = 0.0;
+  bidirectional::Vertex vertex               = {-1, -1};
+  std::vector<double>   resource_consumption = {};
+  std::vector<int>      partial_path         = {};
+  std::vector<int>      unreachable_nodes    = {};
+  // Phi value for joining algorithm from Righini and Salani (2006)
   double phi = std::nan("nan");
 
-  // constructors
+  /* Constructors */
+  /// Dummy constructor
   Label(){};
+
+  /// Constructor
   Label(
-      const double&                   weight,
-      const bidirectional::Vertex&    vertex,
-      const std::vector<double>&      resource_consumption,
-      const std::vector<std::string>& partial_path,
-      const bool&                     elementary = false);
-  // default destructor
+      const double&                weight_in,
+      const bidirectional::Vertex& vertex_in,
+      const std::vector<double>&   resource_consumption_in,
+      const std::vector<int>&      partial_path_in,
+      const bool&                  elementary_in = false);
+
+  /// @overload with phi
+  Label(
+      const double&                weight_in,
+      const bidirectional::Vertex& vertex_in,
+      const std::vector<double>&   resource_consumption_in,
+      const std::vector<int>&      partial_path_in,
+      const double&                phi_in,
+      const bool&                  elementary_in = false);
+
+  /// default destructor
   ~Label(){};
 
   /**
@@ -86,7 +97,7 @@ class Label {
   bool checkThreshold(const double& threshold) const;
 
   /// Check whether the current partial path is Source - Sink
-  bool checkStPath() const;
+  bool checkStPath(const int& source_id, const int& sink_id) const;
   /// set phi attribute for merged labels from Righini and Salani (2006)
   void setPhi(const double& phi_in) { phi = phi_in; }
 
@@ -229,9 +240,7 @@ double getPhiValue(
  *
  * As defined in Righini and Salani (2006)
  */
-bool halfwayCheck(
-    const std::vector<std::pair<double, std::vector<std::string>>>& st_paths,
-    const std::pair<double, std::vector<std::string>>&              element);
+bool halfwayCheck(const Label& label, const std::vector<Label>& labels);
 
 /**
  * Merge labels produced by a backward and forward label.
@@ -239,12 +248,13 @@ bool halfwayCheck(
  * extended and merged label is returned.
  */
 Label mergeLabels(
-    const labelling::Label&       fwd_label,
-    const labelling::Label&       bwd_label,
-    const LabelExtension&         label_extension_,
-    const bidirectional::DiGraph& graph,
-    const std::vector<double>&    max_res,
-    const std::vector<double>&    min_res);
+    const labelling::Label&         fwd_label,
+    const labelling::Label&         bwd_label,
+    const LabelExtension&           label_extension_,
+    const bidirectional::AdjVertex& adj_vertex,
+    const bidirectional::Vertex&    sink,
+    const std::vector<double>&      max_res,
+    const std::vector<double>&      min_res);
 
 /* Heap operations for vector of labels */
 

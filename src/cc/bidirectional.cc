@@ -6,44 +6,29 @@
 
 namespace bidirectional {
 
-/// Helper function to find the index of a string in a vector of strings
-int findIndex(
-    const std::string&              needle,
-    const std::vector<std::string>& haystack) {
-  std::vector<std::string>::const_iterator it =
-      std::find(haystack.cbegin(), haystack.cend(), needle);
-  if (it != haystack.cend()) {
-    return std::distance(haystack.cbegin(), it);
-  }
-  return -1;
-}
-
 /* Public methods */
 
 BiDirectional::BiDirectional(
     const int&                 number_vertices,
     const int&                 number_edges,
+    const int&                 source_id,
+    const int&                 sink_id,
     const std::vector<double>& max_res_in,
     const std::vector<double>& min_res_in)
     : max_res(max_res_in),
       min_res(min_res_in),
-      graph_ptr(new DiGraph(number_vertices, number_edges)),
-      label_extension_(std::make_unique<labelling::LabelExtension>()) {
-  Vertex           vertex = {"", -1};
-  labelling::Label label(0.0, vertex, {}, {});
-  best_label_ = std::make_shared<labelling::Label>(label);
-}
-
-BiDirectional::~BiDirectional() {
-  graph_ptr = nullptr;
-  delete graph_ptr;
-}
+      graph_ptr_(std::make_unique<DiGraph>(
+          number_vertices,
+          number_edges,
+          source_id,
+          sink_id)),
+      label_extension_(std::make_unique<labelling::LabelExtension>()) {}
 
 void BiDirectional::setREFCallback(bidirectional::REFCallback* cb) const {
   label_extension_->setREFCallback(cb);
 }
 
-std::vector<std::string> BiDirectional::getPath() const {
+std::vector<int> BiDirectional::getPath() const {
   return best_label_->partial_path;
 }
 
@@ -55,21 +40,19 @@ double BiDirectional::getTotalCost() const {
   return best_label_->weight;
 }
 
-void BiDirectional::addEdge(
-    const std::string&         tail,
-    const std::string&         head,
-    const double&              weight,
-    const std::vector<double>& resource_consumption) {
-  graph_ptr->addEdge(tail, head, weight, resource_consumption);
-}
-
 void BiDirectional::run() {
   start_time_ = std::chrono::system_clock::now();
   initSearches();
   runPreprocessing();
   while (stop_[0] == false || stop_[1] == false) {
-    const std::string& direction_    = getDirection();
-    const int&         direction_idx = findIndex(direction_, directions_);
+    const std::string& direction_ = getDirection();
+    int                direction_idx;
+    if (options.direction != "both")
+      direction_idx = 0;
+    else if (direction_ == "forward")
+      direction_idx = 0;
+    else
+      direction_idx = 1;
     if (!direction_.empty()) {
       move(direction_idx);
     } else {
@@ -85,16 +68,16 @@ void BiDirectional::run() {
 /* Private methods */
 
 void BiDirectional::runPreprocessing() {
-  if (options.direction == "both" || options.direction == "backward" ||
-      options.bounds_pruning) {
-    graph_ptr->initReversedAdjList();
-  }
+  // if (options.direction == "both" || options.direction == "backward" ||
+  //     options.bounds_pruning) {
+  //   graph_ptr_->initReversedAdjList();
+  // }
   if (options.bounds_pruning) {
     if (options.direction == "both" || options.direction == "forward") {
-      shortest_path(lower_bound_weight_[0].get(), *graph_ptr, true);
+      shortest_path(lower_bound_weight_[0].get(), *graph_ptr_, true);
     }
     if (options.direction == "both" || options.direction == "backward") {
-      shortest_path(lower_bound_weight_[1].get(), *graph_ptr, false);
+      shortest_path(lower_bound_weight_[1].get(), *graph_ptr_, false);
     }
   }
 }
@@ -124,15 +107,17 @@ void BiDirectional::initSearches() {
 
   for (int s = 0; s < directions_size_; ++s) {
     lower_bound_weight_[s] = std::make_unique<std::vector<double>>();
-    lower_bound_weight_[s]->resize(graph_ptr->number_vertices, 0.0);
+    lower_bound_weight_[s]->resize(graph_ptr_->number_vertices, 0.0);
     unprocessed_labels_[s] = std::make_unique<std::vector<labelling::Label>>();
-    efficient_labels_[s].resize(graph_ptr->number_vertices);
-    best_labels_[s].resize(graph_ptr->number_vertices, nullptr);
+    efficient_labels_[s].resize(graph_ptr_->number_vertices);
+    best_labels_[s].resize(graph_ptr_->number_vertices, nullptr);
   }
 
   // Initialise resource bounds
   initResourceBounds();
   // Initialise labels
+  labelling::Label label(0.0, {-1, -1}, {}, {});
+  best_label_ = std::make_shared<labelling::Label>(label);
   for (int s = 0; s < directions_size_; ++s) {
     initLabels(s);
   }
@@ -155,24 +140,24 @@ void BiDirectional::initResourceBounds() {
 }
 
 void BiDirectional::initLabels(const int& direction_idx) {
-  Vertex                   vertex;
-  std::vector<double>      res = min_res_curr_;
-  std::vector<std::string> path;
+  Vertex              vertex;
+  std::vector<double> res = min_res_curr_;
+  std::vector<int>    path;
 
   if (directions_[direction_idx] == "forward") {
-    vertex = graph_ptr->source;
+    vertex = graph_ptr_->source;
   } else { // backward
     // set monotone resource to upper bound
     res[0] = max_res_curr_[0];
-    vertex = graph_ptr->sink;
+    vertex = graph_ptr_->sink;
   }
-  path = {vertex.id};
+  path = {vertex.user_id};
   current_label_[direction_idx] =
       std::make_shared<labelling::Label>(0.0, vertex, res, path);
   // Final label dummy init
-  Vertex dum_vertex = {"", -1};
+  Vertex dum_vertex = {-1, -1};
   res               = {};
-  path              = {""};
+  path              = {};
   intermediate_label_[direction_idx] =
       std::make_shared<labelling::Label>(0.0, dum_vertex, res, path);
   // updateEfficientLabels();
@@ -181,12 +166,12 @@ void BiDirectional::initLabels(const int& direction_idx) {
   labelling::pushHeap(
       unprocessed_labels_[direction_idx].get(), directions_[direction_idx]);
   // Add to efficient and best labels
-  efficient_labels_[direction_idx][vertex.idx].push_back(
+  efficient_labels_[direction_idx][vertex.lemon_id].push_back(
       *current_label_[direction_idx]);
-  best_labels_[direction_idx][vertex.idx] =
+  best_labels_[direction_idx][vertex.lemon_id] =
       std::make_shared<labelling::Label>(*current_label_[direction_idx]);
   // Update vertices visited
-  visited_vertices_[direction_idx].insert(vertex.idx);
+  visited_vertices_[direction_idx].insert(vertex.lemon_id);
 }
 
 void BiDirectional::initContainers() {
@@ -285,7 +270,8 @@ bool BiDirectional::terminate(
 bool BiDirectional::checkValidLabel(
     const int&              direction_idx,
     const labelling::Label& label) {
-  if (!label.vertex.id.empty() && label.checkStPath()) {
+  if (label.vertex.lemon_id != -1 &&
+      label.checkStPath(graph_ptr_->source.user_id, graph_ptr_->sink.user_id)) {
     if (!std::isnan(options.threshold) &&
         label.checkThreshold(options.threshold)) {
       terminated_early_w_st_path_               = true;
@@ -353,37 +339,55 @@ void BiDirectional::extendCurrentLabel(const int& direction_idx) {
   const std::string&                 direction_ = directions_[direction_idx];
   std::shared_ptr<labelling::Label>& current_label =
       current_label_[direction_idx];
-  std::vector<AdjVertex> adj_vertices;
   if (direction_ == "forward") {
-    adj_vertices = graph_ptr->adjacency_list[current_label->vertex.idx];
-  } else {
-    adj_vertices =
-        graph_ptr->reversed_adjacency_list[current_label->vertex.idx];
-  }
-  // for each adjacent vertex (successors if forward predecessors if backward)
-  for (std::vector<AdjVertex>::const_iterator it = adj_vertices.begin();
-       it != adj_vertices.end();
-       ++it) {
-    const AdjVertex& adj_vertex = *it;
-    // If (node reachable | non elementary)
-    if ((options.elementary &&
-         std::find(
-             current_label->unreachable_nodes.begin(),
-             current_label->unreachable_nodes.end(),
-             adj_vertex.vertex.id) == current_label->unreachable_nodes.end()) ||
-        !options.elementary) {
-      // extend current label along edge
-      labelling::Label new_label = label_extension_->extend(
+    // For each outgoing arc from the current label
+    for (LemonGraph::OutArcIt a(
+             *graph_ptr_->lemon_graph_ptr,
+             graph_ptr_->getLNodeFromId(current_label->vertex.lemon_id));
+         a != lemon::INVALID;
+         ++a) {
+      extendSingleLabel(
           current_label.get(),
-          adj_vertex,
-          direction_,
-          options.elementary,
-          max_res_curr_,
-          min_res_curr_);
-      // If label non-empty, (only when the extension is resource-feasible)
-      if (!new_label.vertex.id.empty()) {
-        updateEfficientLabels(direction_idx, new_label);
-      }
+          direction_idx,
+          graph_ptr_->getAdjVertex(a, true));
+    }
+  } else {
+    // For each incoming arc to the current label
+    for (LemonGraph::InArcIt a(
+             *graph_ptr_->lemon_graph_ptr,
+             graph_ptr_->getLNodeFromId(current_label->vertex.lemon_id));
+         a != lemon::INVALID;
+         ++a) {
+      extendSingleLabel(
+          current_label.get(),
+          direction_idx,
+          graph_ptr_->getAdjVertex(a, false));
+    }
+  }
+}
+
+void BiDirectional::extendSingleLabel(
+    labelling::Label* label,
+    const int&        direction_idx,
+    const AdjVertex&  adj_vertex) {
+  const std::string& direction_ = directions_[direction_idx];
+  if ((options.elementary &&
+       std::find(
+           label->unreachable_nodes.begin(),
+           label->unreachable_nodes.end(),
+           adj_vertex.vertex.user_id) == label->unreachable_nodes.end()) ||
+      !options.elementary) {
+    // extend current label along edge
+    labelling::Label new_label = label_extension_->extend(
+        label,
+        adj_vertex,
+        direction_,
+        options.elementary,
+        max_res_curr_,
+        min_res_curr_);
+    // If label non-empty, (only when the extension is resource-feasible)
+    if (new_label.vertex.lemon_id != -1) {
+      updateEfficientLabels(direction_idx, new_label);
     }
   }
 }
@@ -393,13 +397,13 @@ void BiDirectional::updateEfficientLabels(
     const labelling::Label& candidate_label) {
   const std::string& direction_ = directions_[direction_idx];
   // const ref vertex index
-  const int& vertex_idx = candidate_label.vertex.idx;
+  const int& vertex_idx = candidate_label.vertex.lemon_id;
   // ref efficient_labels_ for a given vertex
   std::vector<labelling::Label>& efficient_labels_vertex =
       efficient_labels_[direction_idx][vertex_idx];
   std::unique_ptr<std::vector<labelling::Label>>& unprocessed_labels_ptr =
       unprocessed_labels_[direction_idx];
-  if (!candidate_label.vertex.id.empty()) {
+  if (candidate_label.vertex.lemon_id != -1) {
     if (std::find(
             efficient_labels_vertex.begin(),
             efficient_labels_vertex.end(),
@@ -438,16 +442,16 @@ void BiDirectional::updateBestLabels(
     const int&              direction_idx,
     const labelling::Label& candidate_label) {
   // Only save full paths when they are global resource feasible
-  const int&         vertex_idx = candidate_label.vertex.idx;
+  const int&         vertex_idx = candidate_label.vertex.lemon_id;
   const std::string& direction_ = directions_[direction_idx];
   std::vector<std::shared_ptr<labelling::Label>>& best_labels =
       best_labels_[direction_idx];
 
-  if (direction_ == "forward" && vertex_idx == graph_ptr->sink.idx &&
+  if (direction_ == "forward" && vertex_idx == graph_ptr_->sink.lemon_id &&
       !candidate_label.checkFeasibility(max_res, min_res)) {
     return;
   } else if (
-      direction_ == "backward" && vertex_idx == graph_ptr->source.idx &&
+      direction_ == "backward" && vertex_idx == graph_ptr_->source.lemon_id &&
       !candidate_label.checkFeasibility(max_res, min_res)) {
     return;
   }
@@ -467,32 +471,37 @@ void BiDirectional::saveCurrentBestLabel(const int& direction_idx) {
   const std::string&                 direction_ = directions_[direction_idx];
   std::shared_ptr<labelling::Label>& intermediate_label_ptr =
       intermediate_label_[direction_idx];
-  std::shared_ptr<labelling::Label>& current_label =
+  std::shared_ptr<labelling::Label>& current_label_ptr =
       current_label_[direction_idx];
 
-  if (intermediate_label_ptr->vertex.id.empty()) {
-    intermediate_label_ptr = std::make_shared<labelling::Label>(*current_label);
+  if (intermediate_label_ptr->vertex.lemon_id == -1) {
+    intermediate_label_ptr =
+        std::make_shared<labelling::Label>(*current_label_ptr);
     return;
   }
   // Check for global feasibility
-  if (!current_label->checkFeasibility(max_res, min_res)) {
+  if (!current_label_ptr->checkFeasibility(max_res, min_res)) {
     return;
   }
-  if (intermediate_label_ptr->vertex.idx == current_label->vertex.idx &&
-      current_label->fullDominance(
+  if (intermediate_label_ptr->vertex.lemon_id ==
+          current_label_ptr->vertex.lemon_id &&
+      current_label_ptr->fullDominance(
           *intermediate_label_ptr, direction_, options.elementary)) {
-    intermediate_label_ptr = std::make_shared<labelling::Label>(*current_label);
+    intermediate_label_ptr =
+        std::make_shared<labelling::Label>(*current_label_ptr);
   } else {
     // First source-sink path
     if ((direction_ == "forward" &&
-         (current_label->partial_path.back() == "Sink" &&
-          intermediate_label_ptr->vertex.id == "Source")) ||
-        (direction_ == "backward" &&
-         (current_label->partial_path.back() == "Source" &&
-          intermediate_label_ptr->vertex.id == "Sink"))) {
+         (current_label_ptr->partial_path.back() == graph_ptr_->sink.user_id &&
+          intermediate_label_ptr->vertex.user_id ==
+              graph_ptr_->source.user_id)) ||
+        (direction_ == "backward" && (current_label_ptr->partial_path.back() ==
+                                          graph_ptr_->source.user_id &&
+                                      intermediate_label_ptr->vertex.user_id ==
+                                          graph_ptr_->sink.user_id))) {
       // Save complete source-sink path
       intermediate_label_ptr =
-          std::make_shared<labelling::Label>(*current_label);
+          std::make_shared<labelling::Label>(*current_label_ptr);
       // Update bounds
       if (std::isnan(primal_st_bound_) ||
           intermediate_label_ptr->weight < primal_st_bound_) {
@@ -512,7 +521,7 @@ bool BiDirectional::checkPrimalBound(
   }
   if (!std::isnan(primal_st_bound_) &&
       candidate_label.weight +
-              (*lower_bound_weight)[candidate_label.vertex.idx] >
+              (*lower_bound_weight)[candidate_label.vertex.lemon_id] >
           primal_st_bound_) {
     return true;
   }
@@ -565,8 +574,8 @@ void BiDirectional::postProcessing() {
 double BiDirectional::getUB() {
   double UB = INF;
   // Extract forward and backward best labels (one's with least weight)
-  const auto& fwd_best = best_labels_[0][graph_ptr->sink.idx];
-  const auto& bwd_best = best_labels_[1][graph_ptr->source.idx];
+  const auto& fwd_best = best_labels_[0][graph_ptr_->sink.lemon_id];
+  const auto& bwd_best = best_labels_[1][graph_ptr_->source.lemon_id];
   // Upper bound must be a resource-feasible s-t path
   if (fwd_best && fwd_best->checkFeasibility(max_res, min_res)) {
     UB = fwd_best->weight;
@@ -584,7 +593,7 @@ void BiDirectional::getMinimumWeights(double* fwd_min, double* bwd_min) {
   // init
   *fwd_min = INF;
   for (const int& n : visited_vertices_[0]) {
-    if (n != graph_ptr->source.idx && best_labels_[0][n] &&
+    if (n != graph_ptr_->source.lemon_id && best_labels_[0][n] &&
         best_labels_[0][n]->weight < *fwd_min) {
       *fwd_min = best_labels_[0][n]->weight;
     }
@@ -592,7 +601,7 @@ void BiDirectional::getMinimumWeights(double* fwd_min, double* bwd_min) {
   // backward
   *bwd_min = INF;
   for (const int& n : visited_vertices_[1]) {
-    if (n != graph_ptr->sink.idx && best_labels_[1][n] &&
+    if (n != graph_ptr_->sink.lemon_id && best_labels_[1][n] &&
         best_labels_[1][n]->weight < *bwd_min) {
       *bwd_min = best_labels_[1][n]->weight;
     }
@@ -638,13 +647,13 @@ void BiDirectional::joinLabels() {
   // lower bounds on forward and backward labels
   getMinimumWeights(fwd_min.get(), bwd_min.get());
 
-  std::vector<std::pair<double, std::vector<std::string>>> phi_path_pairs;
+  std::vector<labelling::Label> merged_labels_;
 
   // for each vertex visited forward
   for (const int& n : visited_vertices_[0]) {
     // if bound check fwd_label
     if (best_labels_[0][n]->weight + *bwd_min <= UB &&
-        n != graph_ptr->sink.idx) {
+        n != graph_ptr_->sink.lemon_id) {
       // for each forward label at n
       for (auto fwd_iter = efficient_labels_[0][n].cbegin();
            fwd_iter != efficient_labels_[0][n].cend();
@@ -654,16 +663,13 @@ void BiDirectional::joinLabels() {
         if (fwd_label.resource_consumption[0] <= HF &&
             fwd_label.weight + *bwd_min <= UB) {
           // for each successor of n
-          const std::vector<AdjVertex>& adj_vertices =
-              graph_ptr->adjacency_list[n];
-          for (std::vector<AdjVertex>::const_iterator it =
-                   adj_vertices.cbegin();
-               it != adj_vertices.cend();
-               ++it) {
-            // get successor idx (m)
-            const int&    m           = (*it).vertex.idx;
-            const double& edge_weight = (*it).weight;
-            if (checkVertexVisited(1, m) && m != graph_ptr->source.idx &&
+          for (LemonGraph::OutArcIt a(
+                   *graph_ptr_->lemon_graph_ptr, graph_ptr_->getLNodeFromId(n));
+               a != lemon::INVALID;
+               ++a) {
+            const int&    m           = graph_ptr_->getId(graph_ptr_->head(a));
+            const double& edge_weight = graph_ptr_->getWeight(a);
+            if (checkVertexVisited(1, m) && m != graph_ptr_->source.lemon_id &&
                 (fwd_label.weight + edge_weight + best_labels_[1][m]->weight <=
                  UB)) {
               // for each backward label at m
@@ -671,8 +677,8 @@ void BiDirectional::joinLabels() {
                    bwd_iter != efficient_labels_[1][m].cend();
                    ++bwd_iter) {
                 const labelling::Label& bwd_label = *bwd_iter;
-
-                if (bwd_label.resource_consumption[0] > HF &&
+                // TODO: should suffice with strict > HF, but Beasley 10 fails
+                if (bwd_label.resource_consumption[0] >= HF &&
                     (fwd_label.weight + edge_weight + bwd_label.weight <= UB) &&
                     labelling::mergePreCheck(
                         fwd_label, bwd_label, max_res, options.elementary)) {
@@ -680,19 +686,14 @@ void BiDirectional::joinLabels() {
                       fwd_label,
                       bwd_label,
                       *label_extension_,
-                      *graph_ptr,
+                      graph_ptr_->getAdjVertex(a, true),
+                      graph_ptr_->sink,
                       max_res,
                       min_res);
-                  // Get phi
-                  const double& phi =
-                      labelling::getPhiValue(fwd_label, bwd_label, max_res);
-                  // Init phi_path_pair
-                  std::pair<int, std::vector<std::string>> phi_path_pair{
-                      std::make_pair(phi, merged_label.partial_path)};
-                  if (!merged_label.vertex.id.empty() &&
+                  if (merged_label.vertex.lemon_id != -1 &&
                       merged_label.checkFeasibility(max_res, min_res) &&
-                      labelling::halfwayCheck(phi_path_pairs, phi_path_pair)) {
-                    if (best_label_->vertex.id.empty() ||
+                      labelling::halfwayCheck(merged_label, merged_labels_)) {
+                    if (best_label_->vertex.lemon_id == -1 ||
                         (merged_label.fullDominance(
                              *best_label_, "forward", options.elementary) ||
                          merged_label.weight < best_label_->weight)) {
@@ -709,8 +710,8 @@ void BiDirectional::joinLabels() {
                       }
                     }
                   }
-                  // Add phi pair to list
-                  phi_path_pairs.push_back(phi_path_pair);
+                  // Add merged label to list
+                  merged_labels_.push_back(merged_label);
                 }
               }
             }

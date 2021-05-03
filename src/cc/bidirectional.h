@@ -15,6 +15,7 @@ namespace bidirectional {
 
 /// Parameters for tuning the search
 struct SolvingOptions {
+  /// string with direction of search. Either: "forward", "backward", or "both"
   std::string direction = "both";
   /// string with method to determine the next direction of search
   std::string method = "unprocessed";
@@ -25,7 +26,7 @@ struct SolvingOptions {
   /// bool with whether output path is required to be elementary
   bool elementary = false;
   /// bool with whether lower bounds based on shortest paths are used to prune
-  /// labels
+  /// labels. Experimental!
   bool bounds_pruning = false;
 };
 
@@ -53,18 +54,22 @@ class BiDirectional {
   BiDirectional(
       const int&                 number_vertices,
       const int&                 number_edges,
-      const std::vector<double>& max_res,
-      const std::vector<double>& min_res);
-  ~BiDirectional();
+      const int&                 source_id,
+      const int&                 sink_id,
+      const std::vector<double>& max_res_in,
+      const std::vector<double>& min_res_in);
+
+  /// Default destructor
+  ~BiDirectional(){};
 
   /* Parameters */
   /// vector with upper and lower bounds for resources
   std::vector<double> max_res;
   std::vector<double> min_res;
+  int                 source_id;
+  int                 sink_id;
   /// Search options for the algorithm
   SolvingOptions options;
-  /// DiGraph pointer (raw cause of SWIG!)
-  DiGraph* graph_ptr;
 
   /* Methods */
 
@@ -73,25 +78,31 @@ class BiDirectional {
   /// Pass python callback for label extensions.
   /// Note: swig needs namespace specifier
   void setREFCallback(bidirectional::REFCallback* cb) const;
+  /// Wrapper to add nodes to the graph. @see DiGraph::addNodes
+  void addNodes(const std::vector<int>& nodes) { graph_ptr_->addNodes(nodes); }
   /// Add an edge to the graph
   void addEdge(
-      const std::string&         tail,
-      const std::string&         head,
+      const int&                 tail,
+      const int&                 head,
       const double&              weight,
-      const std::vector<double>& resource_consumption);
+      const std::vector<double>& resource_consumption) {
+    graph_ptr_->addEdge(tail, head, weight, resource_consumption);
+  }
   /// run the algorithm (assumes all the appropriate options are set)
   void run();
 
   /* Getters */
 
   /// Return the final path
-  std::vector<std::string> getPath() const;
+  std::vector<int> getPath() const;
   /// Return the consumed resources
   std::vector<double> getConsumedResources() const;
   /// Return the total cost
   double getTotalCost() const;
 
  private:
+  /// Pointer to graph
+  std::unique_ptr<DiGraph> graph_ptr_;
   /// Start time to ensure time limit is met
   std::chrono::time_point<std::chrono::system_clock> start_time_;
   /**
@@ -218,6 +229,11 @@ class BiDirectional {
   /// Iterate over the neighbours for the current label node and save label
   /// extensions when appropriate. This is checked in updateEfficientLabels.
   void extendCurrentLabel(const int& direction_idx);
+  /// Helper function to extend along a given arc
+  void extendSingleLabel(
+      labelling::Label* label,
+      const int&        direction_idx,
+      const AdjVertex&  adj_vertex);
   /// Save globally best label and check if it is Source-Sink so we can use it
   /// in the bounding. Sets `final_label`
   void saveCurrentBestLabel(const int& direction_idx);

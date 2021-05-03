@@ -21,6 +21,12 @@ void loadGraph(
   skipLines(instance_file, line, 3);
   skipLines(instance_file, line, num_nodes);
 
+  std::vector<int> nodes;
+  for (int n = 1; n <= num_nodes; ++n) {
+    nodes.push_back(n);
+  }
+  bidirectional->addNodes(nodes);
+
   for (int i = 0; i < num_arcs; ++i) {
     std::getline(instance_file, line);
     iss.clear();
@@ -45,16 +51,15 @@ void loadGraph(
     // }
 
     if (tail == 1)
-      bidirectional->addEdge("Source", std::to_string(head), weight, res_cost);
+      bidirectional->addEdge(1, head, weight, res_cost);
     else if (head == 1)
       ;
     else if (head == num_nodes)
-      bidirectional->addEdge(std::to_string(tail), "Sink", weight, res_cost);
+      bidirectional->addEdge(tail, num_nodes, weight, res_cost);
     else if (tail == num_nodes)
       ;
     else
-      bidirectional->addEdge(
-          std::to_string(tail), std::to_string(head), weight, res_cost);
+      bidirectional->addEdge(tail, head, weight, res_cost);
   }
 }
 
@@ -72,8 +77,8 @@ TEST_P(TestBenchmarks, testForwardElementary) {
       &num_arcs,
       &num_resources,
       path_to_instance);
-  bidirectional =
-      std::make_unique<BiDirectional>(num_nodes, num_arcs, max_res, min_res);
+  bidirectional = std::make_unique<BiDirectional>(
+      num_nodes, num_arcs, 1, num_nodes, max_res, min_res);
   bidirectional->options.direction  = "forward";
   bidirectional->options.elementary = true;
   bidirectional->options.time_limit = time_limit;
@@ -106,8 +111,8 @@ TEST_P(TestBenchmarks, testForward) {
       &num_arcs,
       &num_resources,
       path_to_instance);
-  bidirectional =
-      std::make_unique<BiDirectional>(num_nodes, num_arcs, max_res, min_res);
+  bidirectional = std::make_unique<BiDirectional>(
+      num_nodes, num_arcs, 1, num_nodes, max_res, min_res);
   bidirectional->options.direction  = "forward";
   bidirectional->options.time_limit = time_limit;
   loadGraph(
@@ -139,8 +144,8 @@ TEST_P(TestBenchmarks, testForwardBoundsPruning) {
       &num_arcs,
       &num_resources,
       path_to_instance);
-  bidirectional =
-      std::make_unique<BiDirectional>(num_nodes, num_arcs, max_res, min_res);
+  bidirectional = std::make_unique<BiDirectional>(
+      num_nodes, num_arcs, 1, num_nodes, max_res, min_res);
   bidirectional->options.direction      = "forward";
   bidirectional->options.time_limit     = time_limit;
   bidirectional->options.bounds_pruning = true;
@@ -178,8 +183,8 @@ TEST_P(TestBenchmarks, testBothElementary) {
       path_to_instance,
       false);
   // max_res[0] = std::ceil(max_res[0] / 2.0);
-  bidirectional =
-      std::make_unique<BiDirectional>(num_nodes, num_arcs, max_res, min_res);
+  bidirectional = std::make_unique<BiDirectional>(
+      num_nodes, num_arcs, 1, num_nodes, max_res, min_res);
   bidirectional->options.elementary = true;
   bidirectional->options.time_limit = time_limit;
   loadGraph(
@@ -215,9 +220,8 @@ TEST_P(TestBenchmarks, testBoth) {
       &num_resources,
       path_to_instance,
       false);
-  // max_res[0] = std::ceil(max_res[0] / 2.0);
-  bidirectional =
-      std::make_unique<BiDirectional>(num_nodes, num_arcs, max_res, min_res);
+  bidirectional = std::make_unique<BiDirectional>(
+      num_nodes, num_arcs, 1, num_nodes, max_res, min_res);
   bidirectional->options.time_limit = time_limit;
   loadGraph(
       bidirectional.get(),
@@ -252,9 +256,8 @@ TEST_P(TestBenchmarks, testBothBoundsPruning) {
       &num_resources,
       path_to_instance,
       false);
-  // max_res[0] = std::ceil(max_res[0] / 2.0);
-  bidirectional =
-      std::make_unique<BiDirectional>(num_nodes, num_arcs, max_res, min_res);
+  bidirectional = std::make_unique<BiDirectional>(
+      num_nodes, num_arcs, 1, num_nodes, max_res, min_res);
   bidirectional->options.elementary     = true;
   bidirectional->options.time_limit     = time_limit;
   bidirectional->options.bounds_pruning = true;

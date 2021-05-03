@@ -27,12 +27,12 @@ TEST_F(TestLabelling, testThreshold) {
 }
 
 TEST_F(TestLabelling, testStPath) {
-  const Label              label(weight, node, res, path);
-  std::vector<std::string> path2 = {"Source", "Sink"};
-  const Label              label2(weight, node, res, path2);
+  const Label      label(weight, node, res, path);
+  std::vector<int> path2 = {0, 10};
+  const Label      label2(weight, node, res, path2);
 
-  ASSERT_FALSE(label.checkStPath());
-  ASSERT_TRUE(label2.checkStPath());
+  ASSERT_FALSE(label.checkStPath(0, 10));
+  ASSERT_TRUE(label2.checkStPath(0, 10));
 }
 
 TEST_F(TestLabelling, testFeasibility) {
@@ -57,16 +57,16 @@ TEST_F(TestLabelling, testExtendForward) {
   labels->push_back(new_label);
   std::push_heap(labels->begin(), labels->end(), std::greater<>{});
 
-  ASSERT_TRUE(labels->size() == 2);
+  ASSERT_EQ(labels->size(), 2);
   // Should return labels in decreasing order of the monotone resource
   Label next_label = getNextLabel(labels.get(), "forward");
-  ASSERT_TRUE(labels->size() == 1);
-  ASSERT_TRUE(next_label.resource_consumption[0] == 6);
-  ASSERT_TRUE(next_label.vertex.id == "B");
+  ASSERT_EQ(labels->size(), 1);
+  ASSERT_EQ(next_label.resource_consumption[0], 6);
+  ASSERT_EQ(next_label.vertex.lemon_id, 1);
   Label last_label = getNextLabel(labels.get(), "forward");
-  ASSERT_TRUE(labels->size() == 0);
-  ASSERT_TRUE(last_label.resource_consumption[0] == 12);
-  ASSERT_TRUE(last_label.vertex.id == "C");
+  ASSERT_EQ(labels->size(), 0);
+  ASSERT_EQ(last_label.resource_consumption[0], 12);
+  ASSERT_EQ(last_label.vertex.lemon_id, 2);
 }
 
 TEST_F(TestLabelling, testExtendBackward) {
@@ -87,14 +87,14 @@ TEST_F(TestLabelling, testExtendBackward) {
   std::push_heap(labels->begin(), labels->end());
 
   // Should return labels in increasing order of the monotone resource
-  ASSERT_TRUE(labels->size() == 2);
+  ASSERT_EQ(labels->size(), 2);
   Label next_label = getNextLabel(labels.get(), "backward");
-  ASSERT_TRUE(next_label.resource_consumption[0] == 6);
-  ASSERT_TRUE(labels->size() == 1);
+  ASSERT_EQ(next_label.resource_consumption[0], 6);
+  ASSERT_EQ(labels->size(), 1);
   Label last_label = getNextLabel(labels.get(), "backward");
-  ASSERT_TRUE(labels->size() == 0);
-  ASSERT_TRUE(last_label.resource_consumption[0] == 0);
-  ASSERT_TRUE(last_label.vertex.id == "C");
+  ASSERT_EQ(labels->size(), 0);
+  ASSERT_EQ(last_label.resource_consumption[0], 0);
+  ASSERT_EQ(last_label.vertex.lemon_id, 2);
 }
 
 TEST_F(TestLabelling, testRunDominanceForward) {
@@ -113,9 +113,9 @@ TEST_F(TestLabelling, testRunDominanceForward) {
   labels->push_back(label2);
   std::push_heap(labels->begin(), labels->end(), std::greater<>{});
 
-  ASSERT_TRUE(labels->size() == 2);
+  ASSERT_EQ(labels->size(), 2);
   runDominanceEff(labels.get(), label3, "forward", false);
-  ASSERT_TRUE(labels->size() == 0);
+  ASSERT_EQ(labels->size(), 0);
 }
 
 TEST_F(TestLabelling, testRunDominanceBackward) {
@@ -132,9 +132,9 @@ TEST_F(TestLabelling, testRunDominanceBackward) {
   labels->push_back(label2);
   std::push_heap(labels->begin(), labels->end());
 
-  ASSERT_TRUE(labels->size() == 2);
+  ASSERT_EQ(labels->size(), 2);
   runDominanceEff(labels.get(), label3, "backward", false);
-  ASSERT_TRUE(labels->size() == 0);
+  ASSERT_EQ(labels->size(), 0);
 }
 
 } // namespace labelling

@@ -12,8 +12,11 @@
 
 namespace boost {
 
-// Define all the necessary data structures
-// Based on:
+/**
+ * Define all the necessary data structures
+ * Based on:
+ * https://www.boost.org/doc/libs/1_76_0/libs/graph/example/r_c_shortest_paths_example.cpp
+ */
 struct MyVertex {
   MyVertex(const int& n = 0) : id(n) {}
   int id;
@@ -187,6 +190,8 @@ void loadGraph(
     }
   }
 }
+
+/* Instance tests */
 
 TEST_P(TestBenchmarksBoost, test_r_c_shortest_paths) {
   const std::string path_to_instance =

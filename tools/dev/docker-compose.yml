@@ -54,7 +54,8 @@ services:
       dockerfile: tools/docker/python.Dockerfile
       target: builder
       cache_from:
-        - cspy-docker:builder
+        - cspy-docker-python:builder
+        - cspy-docker-python:latest
 
   cspy-dev-python:
     image: cspy-docker-python:latest
@@ -68,9 +69,9 @@ services:
         BUILD_CLEAN : $BUILD_CLEAN
         BUILD_RELEASE: $BUILD_RELEASE
       cache_from:
-        - cspy-docker:builder
-        - cspy-docker:latest
+        - cspy-docker-python:builder
+        - cspy-docker-python:latest
     container_name: cspy-dev
     volumes:
-      - ../../build:/root/build/
+      - ../../build_python:/root/build/
     command: ./run_tests

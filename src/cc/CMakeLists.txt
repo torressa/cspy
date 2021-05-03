@@ -12,6 +12,8 @@ target_compile_features(BiDirectionalCpp PUBLIC cxx_std_17)
 set_target_properties(BiDirectionalCpp PROPERTIES CXX_EXTENSIONS TRUE
                                                   VERSION ${PROJECT_VERSION})
 
+# target_link_libraries(BiDirectionalCpp PUBLIC lemon)
+
 # target_link_libraries(BiDirectionalCpp PUBLIC ...)
 
 add_library(${PROJECT_NAME}::BiDirectionalCpp ALIAS BiDirectionalCpp)

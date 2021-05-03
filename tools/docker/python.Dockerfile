@@ -2,12 +2,17 @@ FROM quay.io/pypa/manylinux2014_x86_64 AS builder
 
 ENV PATH=/usr/local/bin:$PATH
 
-RUN yum install -y python3-devel
+RUN yum install -y python3-devel wget
 
 # Download and install SWIG from git
 RUN git clone https://github.com/swig/swig.git --branch v4.0.2 \
 && cd swig && ./autogen.sh && ./configure \
 && make && make install && cd .. && rm -rf swig/
+
+# Download and install LEMON from source
+COPY tools/docker/scripts/install_lemon .
+RUN chmod +x install_lemon && ./install_lemon
+
 
 CMD [ "/usr/bin/bash" ]
 

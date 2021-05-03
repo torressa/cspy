@@ -36,23 +36,21 @@ class TestsIssue69(unittest.TestCase):
         """
         alg = BiDirectional(self.G, self.max_res, self.min_res)
         alg.run()
-        print(alg.path, alg.total_cost, alg.consumed_resources)
         self.assertEqual(alg.path, self.result_path)
         self.assertEqual(alg.total_cost, self.total_cost)
         self.assertEqual(alg.consumed_resources, self.consumed_resources)
 
-    def test_bidirectional_forward(self):
+    def test_forward(self):
         alg = BiDirectional(self.G,
                             self.max_res,
                             self.min_res,
                             direction='forward')
         alg.run()
-        print(alg.path, alg.total_cost, alg.consumed_resources)
         self.assertEqual(alg.path, self.result_path)
         self.assertEqual(alg.total_cost, self.total_cost)
         self.assertTrue(alg.consumed_resources == self.consumed_resources)
 
-    def test_bidirectional_backward(self):
+    def test_backward(self):
         alg = BiDirectional(self.G,
                             self.max_res,
                             self.min_res,

@@ -19,9 +19,9 @@ class TestBiDirectional : public ::testing::Test {
   const int                      number_edges    = 5;
   const std::vector<double>      max_res         = {4.0, 20.0};
   const std::vector<double>      min_res         = {0.0, 0.0};
-  const std::vector<std::string> final_path = {"Source", "A", "B", "C", "Sink"};
-  const std::vector<double>      final_res  = {4.0, 15.3};
-  const double                   final_cost = -13.0;
+  const std::vector<int>         final_path      = {0, 1, 2, 3, 4};
+  const std::vector<double>      final_res       = {4.0, 15.3};
+  const double                   final_cost      = -13.0;
 };
 
 } // namespace bidirectional
