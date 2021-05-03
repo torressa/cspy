@@ -15,7 +15,7 @@ namespace bidirectional {
 
 /// Parameters for tuning the search
 struct SolvingOptions {
-  /// string with direction of search. Either: "forward", "backward", or "both"
+  /// string with direction of search. Either: forward, backward, or both
   std::string direction = "both";
   /// string with method to determine the next direction of search
   std::string method = "unprocessed";
