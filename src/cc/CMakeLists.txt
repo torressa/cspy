@@ -5,7 +5,7 @@ target_sources(
                            preprocessing.cc ref_callback.cc)
 target_include_directories(
   BiDirectionalCpp PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-                          $<INSTALL_INTERFACE:include>)
+                          ${LEMON_INCLUDE_DIR} $<INSTALL_INTERFACE:include>)
 
 target_compile_features(BiDirectionalCpp PUBLIC cxx_std_17)
 

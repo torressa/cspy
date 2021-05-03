@@ -15,15 +15,13 @@ include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(LEMON DEFAULT_MSG LEMON_LIBRARY
                                   LEMON_INCLUDE_DIR)
 
-message(STATUS "here")
-
 if(LEMON_FOUND)
   message(STATUS "Found LEMON: ${LEMON_INCLUDE_DIR}")
   set(LEMON_INCLUDE_DIRS ${LEMON_INCLUDE_DIR})
   set(LEMON_LIBRARIES ${LEMON_LIBRARY})
 endif(LEMON_FOUND)
 
-mark_as_advanced(LEMON_LIBRARY LEMON_INCLUDE_DIR)
+# mark_as_advanced(LEMON_LIBRARY LEMON_INCLUDE_DIR)
 
 add_library(lemon INTERFACE)
 add_library(lemon::lemon ALIAS lemon)
