@@ -1,15 +1,22 @@
 message(STATUS "Trying to find lemon")
 
-set(LEMON_ROOT_DIR
-    "/usr/local"
-    CACHE PATH "LEMON root directory")
+if(UNIX)
+  set(LEMON_ROOT_DIR
+      "/usr/local"
+      CACHE PATH "LEMON root directory")
+else()
+  set(LEMON_ROOT_DIR
+      "C:/Program Files (x86)/LEMON/"
+      CACHE PATH "LEMON root directory")
+endif(UNIX)
 
-find_path(LEMON_INCLUDE_DIR lemon/core.h HINTS ${LEMON_ROOT_DIR}/include
-                                               "C:/Program Files/LEMON/include")
+find_path(LEMON_INCLUDE_DIR lemon/core.h
+          HINTS ${LEMON_ROOT_DIR}/include
+                "C:/Program Files (x86)/LEMON/include")
 find_library(
   LEMON_LIBRARY
   NAMES lemon emon
-  HINTS ${LEMON_ROOT_DIR}/lib "C:/Program Files/LEMON/lib")
+  HINTS ${LEMON_ROOT_DIR}/lib "C:/Program Files (x86)/LEMON/lib")
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(LEMON DEFAULT_MSG LEMON_LIBRARY
