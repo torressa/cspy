@@ -18,7 +18,7 @@ jobs:
         run: |
           cp tools/docker/scripts/install_lemon .
           chmod u+x install_lemon
-          ./install_lemon
+          sudo ./install_lemon
       - name: Configure
         run: |
           echo $pythonLocation
