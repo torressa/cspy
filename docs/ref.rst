@@ -13,21 +13,16 @@ For assumption 1, the resource can be either artificial,
 such as the number of edges in the graph, or real, for example time.
 This allows for the monotone resource to be comparable for the forward and backward directions.
 In practice, this means, that ``res_cost[0]``, ``max_res[0]``,
-and ``min_res[0]`` correspond to the monotone resource;
-and that we must have at least two resources
-(the monotone one and the one you wish to model; otherwise you might as well use a standard
-shortest path algorithm!) (i.e. ``n_res = len(max_res) = len(min_res)``:math:`\geq 2`),
-and that the first element in both edge attributes and input limits refer to the monotone
-resource.
+and ``min_res[0]`` correspond to the monotone resource.
 
 The bounds chosen for the monotone resource
 (``max_res[0]`` and ``min_res[0]``), effectively represent the halfway points for the
-algorithm. Hence unless ``max_res[0]``:math`>```min_res[0]``, the searches will not reach
+algorithm. Hence unless ``max_res[0]`` :math`>` ``min_res[0]``, the searches will not reach
 either end of the graph and the resulting path will be erroneous.
 Additionally, occasionally, the resource limits do not allow for a feasible path to be found.
 Some preprocessing routines have been implemented for the case of additive REFs.
 
-For assumption 2, if resource extension functions are additive, these are easily invertible (i.e. add in the forward direction and subtract in the backward direction).
+For assumption 2, if resource extension functions are additive, these are clearly invertible.
 However, when using custom resource extension functions (discussed below),
 it is up to the user to define them appropriately!
 
@@ -86,21 +81,21 @@ some custom REFs can be defined according to the following template:
 
 First, for forward and backward REFs, the overload requires several inputs:
 
- 1. ``cumulative_res``, a cumulative resource array,
- 2. Some edge attributes to consider for the extension of the current partial path:
-     1. ``tail``, tail node (in str format)
-     2. ``head``, head node (in str format)
-     3. ``edge_res``, the resource consumption along the edge (in tuple format)
-     4. ``partial_path``, the current partial path (in tuple format)
-     5. ``cumul_cost``, the current partial path (float)
+1. ``cumulative_res``, a cumulative resource array,
+2. Some edge attributes to consider for the extension of the current partial path:
+  1. ``tail``, tail node (in str format)
+  2. ``head``, head node (in str format)
+  3. ``edge_res``, the resource consumption along the edge (in tuple format)
+  4. ``partial_path``, the current partial path (in tuple format)
+  5. ``cumul_cost``, the current partial path (float)
 
 Second, for specifying label joining operations, ``REF_join`` requires several inputs
 
- 1. ``fwd_resources``, ``bwd_resources``, cumulative resources for the forward and backward labels being joined
- 2. And, similary as before, some edge attributes (along the edge being joined):
-     1. ``tail``, tail node (in str format)
-     2. ``head``, head node (in str format)
-     3. ``edge_res``, the resource consumption along the edge (in tuple format)
+1. ``fwd_resources``, ``bwd_resources``, cumulative resources for the forward and backward labels being joined
+2. And, similarly as before, some edge attributes (along the edge being joined):
+  1. ``tail``, tail node (in str format)
+  2. ``head``, head node (in str format)
+  3. ``edge_res``, the resource consumption along the edge (in tuple format)
 
 Depending on the application, you may choose not to use all of the arguments provided.
 
@@ -113,7 +108,7 @@ Depending on the application, you may choose not to use all of the arguments pro
 
 As a word of warning, it is up to the user to ensure the custom REF behaves appropriately.
 Otherwise, you will most likely either stall the algorithms, get an exception saying that a resource
-feasible path could not be found, or get a path that's not very meaningfull.
+feasible path could not be found, or get a path that's not very meaningful.
 
 A full skeleton with custom attributes could be as follows:
 
@@ -160,6 +155,6 @@ For more advanced examples, see the `examples`_ folder.
 .. _cgar: https://github.com/torressa/cspy/blob/master/examples/cgar/cgar.pdf
 .. _Tilk et al 2017: https://www.sciencedirect.com/science/article/pii/S0377221717302035
 .. _Inrich 2005: https://www.researchgate.net/publication/227142556_Shortest_Path_Problems_with_Resource_Constraints
-.. _unittest: https://github.com/torressa/cspy/tree/master/tests/tests_issue32.py
+.. _unittest: https://github.com/torressa/cspy/tree/master/test/python/tests_issue32.py
 .. _Input Requirements: https://cspy.readthedocs.io/en/latest/how_to.html#input-requirements
 .. _examples: https://github.com/torressa/cspy/tree/master/examples/

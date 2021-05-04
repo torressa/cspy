@@ -193,14 +193,6 @@ bool operator==(const Label& label1, const Label& label2) {
  * LabelExtension
  */
 
-/* Con(de)structors */
-
-LabelExtension::LabelExtension() {}
-LabelExtension::~LabelExtension() {
-  ref_callback = nullptr;
-  delete ref_callback;
-}
-
 /* Public methods */
 
 void LabelExtension::setREFCallback(bidirectional::REFCallback* cb) {

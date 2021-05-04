@@ -115,13 +115,16 @@ class Label {
 /**
  * Label extension using custom REFs if callback defined
  * Holds pointer to callback.
- * All calls callback REF should do it through an instance of `LabelExtension`
- * as for example `label_extension.ref_callback->REF_fwd`
+ * All calls to callback REF should be done through an instance of
+ * `LabelExtension` as `label_extension.ref_callback->REF_fwd`
  */
 class LabelExtension {
  public:
-  LabelExtension();
-  ~LabelExtension();
+  LabelExtension(){};
+  ~LabelExtension() {
+    ref_callback = nullptr;
+    delete ref_callback;
+  };
   /// Callback to custom REF
   bidirectional::REFCallback* ref_callback = nullptr;
 
@@ -217,7 +220,7 @@ Label processBwdLabel(
 
 /**
  * Check whether a pair of forward and backward labels are suitable for merging.
- * To be used before attempting to merge
+ * To be used before attempting to merge.
  */
 bool mergePreCheck(
     const labelling::Label&   fwd_label,
@@ -246,6 +249,8 @@ bool halfwayCheck(const Label& label, const std::vector<Label>& labels);
  * Merge labels produced by a backward and forward label.
  * If an s-t compatible path can be obtained the appropriately
  * extended and merged label is returned.
+ *
+ * @return merged label with updated attributes and new phi value.
  */
 Label mergeLabels(
     const labelling::Label&         fwd_label,
@@ -256,6 +261,7 @@ Label mergeLabels(
     const std::vector<double>&      max_res,
     const std::vector<double>&      min_res);
 
+// TODO: Use bucket-heap
 /* Heap operations for vector of labels */
 
 /**
