@@ -56,4 +56,4 @@ html_static_path = ['_static']
 
 breathe_projects = {}
 subprocess.call('doxygen', shell=True)
-breathe_projects['cspy'] = "_build/xml"
+breathe_projects['cspy'] = "xml"

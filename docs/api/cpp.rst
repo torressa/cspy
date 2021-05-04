@@ -2,5 +2,5 @@ C++ API
 =======
 
 .. doxygenindex::
-   :project: cspy 
-   :path: _build/xml 
+   :project: cspy
+   :path: xml
