@@ -126,14 +126,15 @@ void wrap() {
   const int                 number_vertices = 5;
   const int                 number_edges    = 5;
   auto                      bidirectional   = std::make_unique<BiDirectional>(
-      number_vertices, number_edges, max_res, min_res);
+      number_vertices, number_edges, 0, 4, max_res, min_res);
 
   // Populate graph
-  bidirectional->addEdge("Source", "A", 0, {1, 2});
-  bidirectional->addEdge("A", "B", 0, {1, 0.3});
-  bidirectional->addEdge("B", "C", -10, {1, 3});
-  bidirectional->addEdge("B", "Sink", 10, {1, 2});
-  bidirectional->addEdge("C", "Sink", 0, {1, 10});
+  bidirectional->addNodes({0, 1, 2, 3, 4});
+  bidirectional->addEdge(0, 1, 0.0, {1, 2});
+  bidirectional->addEdge(1, 2, 0.0, {1, 0.3});
+  bidirectional->addEdge(2, 3, -10.0, {1, 3});
+  bidirectional->addEdge(2, 4, 10.0, {1, 2});
+  bidirectional->addEdge(3, 4, 0.0, {1, 10});
 
   // Run and query attributes
   bidirectional->run();
