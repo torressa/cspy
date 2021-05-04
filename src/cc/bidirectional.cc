@@ -129,8 +129,8 @@ void BiDirectional::initResourceBounds() {
   max_res_curr_ = max_res;
   // If not all lower bounds are 0, initialise variable min_res_curr to
   // vector of 0s
-  bool zeros =
-      std::all_of(min_res.begin(), min_res.end(), [](int i) { return i == 0; });
+  bool zeros = std::all_of(
+      min_res.begin(), min_res.end(), [](const double& d) { return d == 0.0; });
   if (zeros == false) {
     std::vector<double> temp(min_res.size(), 0.0);
     min_res_curr_ = temp;

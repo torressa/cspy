@@ -25,6 +25,7 @@ void shortest_path(
         *graph.lemon_graph_ptr, *graph.weight_map_ptr);
     BF.distMap(distance_map);
     BF.run(source, graph.number_edges);
+
     // TODO: Fix wizard version on MACOS
     // bellmanFord(*graph.lemon_graph_ptr, *graph.weight_map_ptr)
     //     .distMap(distance_map)
