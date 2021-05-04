@@ -13,22 +13,21 @@ RUN git clone https://github.com/swig/swig.git --branch v4.0.2 \
 COPY tools/docker/scripts/install_lemon .
 RUN chmod +x install_lemon && ./install_lemon
 
-
 CMD [ "/usr/bin/bash" ]
 
 FROM builder AS dev
 
-ARG BENCHMARK_TESTS
+# Input arguments
 ARG BUILD_DOCS
 ARG BUILD_CLEAN
 ARG BUILD_RELEASE
-ARG BUILD_PYTHON
 
+# Define environment variables (may differ from arguments)
 ENV BENCHMARK_TESTS ${BENCHMARK_TESTS:-false}
 ENV BUILD_DOCS ${BUILD_DOCS:-false}
 ENV BUILD_CLEAN ${BUILD_CLEAN:-false}
-ENV BUILD_PYTHON ${BUILD_PYTHON:-true}
 ENV BUILD_RELEASE ${BUILD_RELEASE:-false}
+ENV BUILD_PYTHON ${BUILD_PYTHON:-true}
 
 WORKDIR /root/
 COPY . .

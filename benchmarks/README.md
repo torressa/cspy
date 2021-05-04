@@ -34,3 +34,12 @@ instance | both | fwd | best | boost
 24 | 240 | 291 | 240 | 330
 average | 82.38 | 132.25 | 77.875 | 228.42
 
+### Replicate results
+
+```bash
+cd tools/dev/
+./build -s
+cat ../../build_boost/results_boost.txt
+cat ../../build_boost/results_both.txt
+cat ../../build_boost/results_fwd.txt
+```

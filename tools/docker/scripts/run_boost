@@ -1,8 +1,0 @@
-#!/bin/sh
-
-set -e
-
-cmake -S . -Bbuild -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON \
-	-DBENCHMARK_TESTS=ON -DBENCHMARK_BOOST=ON -DBUILD_SHARED_LIBS=OFF
-cmake --build build --config Release --target all -v
-cd build && ctest --verbose
