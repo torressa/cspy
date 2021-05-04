@@ -100,6 +100,7 @@ class BiDirectional:
         # Preprocess and save graph
         self.G: DiGraph = preprocess_graph(G, max_res, min_res, preprocess,
                                            REF_callback)
+        # Vertex id with source/sink
         self._source_id: int = None
         self._sink_id: int = None
 

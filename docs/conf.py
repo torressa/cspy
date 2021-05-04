@@ -12,6 +12,7 @@
 #
 import os
 import sys
+import subprocess
 # sys.path.insert(0, os.path.abspath('..'))
 
 # -- Project information -----------------------------------------------------
@@ -20,14 +21,17 @@ copyright = '2020, David Torres Sanchez'
 author = 'David Torres Sanchez'
 
 # The full version, including alpha/beta/rc tags
-release = '1.0.0-alpha'
+release = '1.0.0'
 
 # -- General configuration ---------------------------------------------------
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.mathjax', 'sphinx.ext.imgmath']
+extensions = [
+    'sphinx.ext.autodoc', 'sphinx.ext.mathjax', 'sphinx.ext.imgmath', 'breathe'
+]
+breathe_default_project = "cspy"
 pngmath_use_preview = True
 master_doc = 'index'
 # Add any paths that contain templates here, relative to this directory.
@@ -49,3 +53,7 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
+
+breathe_projects = {}
+subprocess.call('doxygen', shell=True)
+breathe_projects['cspy'] = "_build/xml"
