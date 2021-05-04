@@ -1,4 +1,5 @@
 networkx
 numpy
 pandas
+parameterized
 breathe
