@@ -38,13 +38,15 @@ void shortest_path(
       (*lower_bound_weight)[id] = distance_map[v];
     }
   } else {
+    lemon::ReverseDigraph<const LemonGraph> RG(*graph.lemon_graph_ptr);
     lemon::ReverseDigraph<const LemonGraph>::NodeMap<double> distance_map_rev(
         *graph.lemon_graph_ptr);
     const LemonNode& sink = graph.getLNodeFromId(graph.sink.lemon_id);
+
     lemon::BellmanFord<
         lemon::ReverseDigraph<const LemonGraph>,
         LemonGraph::ArcMap<double>>
-        BF(reverseDigraph(*graph.lemon_graph_ptr), *graph.weight_map_ptr);
+        BF(RG, *graph.weight_map_ptr);
     BF.distMap(distance_map_rev);
     BF.run(sink, graph.number_edges);
 
@@ -59,7 +61,7 @@ void shortest_path(
     for (LemonGraph::NodeIt v(*graph.lemon_graph_ptr); v != lemon::INVALID;
          ++v) {
       const int& id = graph.getId(v);
-      // std::cout << "dist[" << id << "] = " << distance_map[v] << "\n";
+      // std::cout << "dist[" << id << "] = " << distance_map_rev[v] << "\n";
       (*lower_bound_weight)[id] = distance_map_rev[v];
     }
   }
