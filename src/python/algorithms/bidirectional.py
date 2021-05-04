@@ -1,7 +1,7 @@
 # Wrapper for BiDirectionalCpp
 from typing import List, Optional, Union
 
-from networkx import DiGraph
+from networkx import DiGraph, convert_node_labels_to_integers
 from numpy.random import RandomState
 
 from cspy.preprocessing import preprocess_graph
@@ -13,7 +13,7 @@ from .pyBiDirectionalCpp import BiDirectionalCpp, REFCallback, DoubleVector
 
 class BiDirectional:
     """
-    Implementation of the bidirectional labeling algorithm with dynamic
+    Implementation of the bidirectional labelling algorithm with dynamic
     half-way point (`Tilk 2017`_).
     Depending on the range of values for bounds for the first resource, we get
     four different algorithms. See ``self.name_algorithm`` and Notes.
@@ -97,31 +97,37 @@ class BiDirectional:
         # Check inputs
         check(G, max_res, min_res, direction, REF_callback, __name__)
         # check_seed(seed, __name__)
-        # Preprocess graph
-        G = preprocess_graph(G, max_res, min_res, preprocess, REF_callback)
-        # To save original node type (for conversion at the end)
-        self._original_node_type: str = None
+        # Preprocess and save graph
+        self.G: DiGraph = preprocess_graph(G, max_res, min_res, preprocess,
+                                           REF_callback)
+        # Vertex id with source/sink
+        self._source_id: int = None
+        self._sink_id: int = None
 
         max_res_vector = _convert_list_to_double_vector(max_res)
         min_res_vector = _convert_list_to_double_vector(min_res)
 
-        self.bidirectional_cpp = BiDirectionalCpp(len(G.nodes()),
-                                                  len(G.edges()),
-                                                  max_res_vector,
+        # Pass graph
+        self._init_graph()
+        self.bidirectional_cpp = BiDirectionalCpp(len(self.G.nodes()),
+                                                  len(self.G.edges()),
+                                                  self._source_id,
+                                                  self._sink_id, max_res_vector,
                                                   min_res_vector)
+        self._load_graph()
         # pass solving attributes
         if direction != "both":
-            self.bidirectional_cpp.direction = direction
+            self.bidirectional_cpp.options.direction = direction
         if method in ["random", "generated", "processed"]:
-            self.bidirectional_cpp.method = method
+            self.bidirectional_cpp.options.method = method
         if time_limit is not None and isinstance(time_limit, (int, float)):
-            self.bidirectional_cpp.time_limit = time_limit
+            self.bidirectional_cpp.options.time_limit = time_limit
         if threshold is not None and isinstance(time_limit, (int, float)):
-            self.bidirectional_cpp.threshold = threshold
+            self.bidirectional_cpp.options.threshold = threshold
         if isinstance(elementary, bool) and elementary:
-            self.bidirectional_cpp.elementary = elementary
+            self.bidirectional_cpp.options.elementary = elementary
         if isinstance(bounds_pruning, bool) and not bounds_pruning:
-            self.bidirectional_cpp.bounds_pruning = bounds_pruning
+            self.bidirectional_cpp.options.bounds_pruning = bounds_pruning
         if isinstance(seed, int) and seed is not None:
             self.bidirectional_cpp.setSeed(seed)
         if REF_callback is not None:
@@ -129,9 +135,6 @@ class BiDirectional:
             # disown it first by calling __disown__).
             # see: https://github.com/swig/swig/blob/b6c2438d7d7aac5711376a106a156200b7ff1056/Examples/python/callback/runme.py#L36
             self.bidirectional_cpp.setREFCallback(REF_callback.__disown__())
-
-        # Pass graph
-        self._init_graph(G)
 
     def run(self):
         'Run the algorithm in series'
@@ -152,15 +155,9 @@ class BiDirectional:
             return None
 
         _path = []
-        # Convert path to its original types and return
+        # Convert path to original labels and return
         for p in path:
-            if p in ["Source", "Sink"]:
-                _path.append(p)
-            else:
-                if "int" in self._original_node_type.__name__:
-                    _path.append(int(p))
-                elif "str" in self._original_node_type.__name__:
-                    _path.append(str(p))
+            _path.append(self.G.nodes[p]["original_label"])
         return _path
 
     @property
@@ -181,15 +178,29 @@ class BiDirectional:
         else:
             return None
 
-    def _init_graph(self, G):
-        # Save original node type for later conversion
-        self._original_node_type = type(
-            [n for n in G.nodes() if n not in ["Source", "Sink"]][0])
-        # Convert each edge with attributes independently.
-        for edge in G.edges(data=True):
+    def _init_graph(self):
+        # Convert node label to integers and saves original labels in
+        # new node attribute "original_label"
+        self.G = convert_node_labels_to_integers(
+            self.G, label_attribute="original_label")
+        # Save source and sink node ids (integers)
+        self._source_id = [
+            n for n in self.G.nodes()
+            if self.G.nodes[n]["original_label"] == "Source"
+        ][0]
+        self._sink_id = [
+            n for n in self.G.nodes()
+            if self.G.nodes[n]["original_label"] == "Sink"
+        ][0]
+
+    def _load_graph(self):
+        # Load nodes
+        self.bidirectional_cpp.addNodes(list(self.G.nodes()))
+        # Load each edge independently
+        for edge in self.G.edges(data=True):
             res_cost = _convert_list_to_double_vector(edge[2]["res_cost"])
-            self.bidirectional_cpp.addEdge(str(edge[0]), str(edge[1]),
-                                           edge[2]["weight"], res_cost)
+            self.bidirectional_cpp.addEdge(edge[0], edge[1], edge[2]["weight"],
+                                           res_cost)
 
 
 def _convert_list_to_double_vector(input_list: List[float]):

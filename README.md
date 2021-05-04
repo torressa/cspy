@@ -153,30 +153,42 @@ void wrap() {
 - [`jpath`](examples/jpath) : Simple example showing the necessary graph adptations and the use of custom resource extension functions.
 
 
-## Running the tests
+## Building
 
-### Prerequisites
+### Docker
 
-- Docker, docker-compose
+Using docker, docker-compose is the easiest way.
 
 To run the tests first, clone the repository into a path in your machine `~/path/newfolder` by running
 
 ```none
 git clone https://github.com/torressa/cspy.git ~/path/newfolder
 ```
-### Running the Cpp tests
+
+#### Running the Cpp tests
 
 ```
 cd ~/path/newfolder/tools/dev
 ./build
 ```
 
-### Running the Python tests
+#### Running the Python tests
 
 ```
 cd ~/path/newfolder/tools/dev
 ./build -c -p
 ```
+
+### Locally
+
+Requirements:
+
+- CMake (>=v3.14)
+- Standard C++ toolchain
+- [LEMON](https://lemon.cs.elte.hu/trac/lemon) installed (see [`tools/docker/scripts/install_lemon`](tools/docker/scripts/install_lemon))
+- Python (>=3.6)
+
+Then use the [`Makefile`] e.g. `make` in the root dir runs the unit tests
 
 ## License
 
@@ -203,7 +215,7 @@ After that feel free to send a pull request.
 
 If you have a question or need help, feel free to raise an issue explaining it.
 
-Alternatively, email me at `david.sanchez@sintef.no`.
+Alternatively, email me at `d.torressanchez@lancaster.ac.uk`.
 
 ## Citing
 

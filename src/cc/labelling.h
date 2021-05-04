@@ -1,6 +1,7 @@
 #ifndef BIDIRECTIONAL_LABELLING_H__
 #define BIDIRECTIONAL_LABELLING_H__
 
+#include <cmath> // nan
 #include <vector>
 
 #include "digraph.h"
@@ -13,25 +14,40 @@ namespace labelling {
  *
  * Main functionality includes:
  *   - Checking resource feasibility
- *   - Cheking dominance
+ *   - Checking dominance
  */
 class Label {
  public:
-  double                   weight               = 0.0;
-  bidirectional::Vertex    vertex               = {"", -1};
-  std::vector<double>      resource_consumption = {};
-  std::vector<std::string> partial_path         = {};
-  std::vector<std::string> unreachable_nodes    = {};
+  double                weight               = 0.0;
+  bidirectional::Vertex vertex               = {-1, -1};
+  std::vector<double>   resource_consumption = {};
+  std::vector<int>      partial_path         = {};
+  std::vector<int>      unreachable_nodes    = {};
+  // Phi value for joining algorithm from Righini and Salani (2006)
+  double phi = std::nan("nan");
 
-  // constructors
+  /* Constructors */
+  /// Dummy constructor
   Label(){};
+
+  /// Constructor
   Label(
-      const double&                   weight,
-      const bidirectional::Vertex&    vertex,
-      const std::vector<double>&      resource_consumption,
-      const std::vector<std::string>& partial_path,
-      const bool&                     elementary = false);
-  // default destructor
+      const double&                weight_in,
+      const bidirectional::Vertex& vertex_in,
+      const std::vector<double>&   resource_consumption_in,
+      const std::vector<int>&      partial_path_in,
+      const bool&                  elementary_in = false);
+
+  /// @overload with phi
+  Label(
+      const double&                weight_in,
+      const bidirectional::Vertex& vertex_in,
+      const std::vector<double>&   resource_consumption_in,
+      const std::vector<int>&      partial_path_in,
+      const double&                phi_in,
+      const bool&                  elementary_in = false);
+
+  /// default destructor
   ~Label(){};
 
   /**
@@ -81,9 +97,11 @@ class Label {
   bool checkThreshold(const double& threshold) const;
 
   /// Check whether the current partial path is Source - Sink
-  bool checkStPath() const;
+  bool checkStPath(const int& source_id, const int& sink_id) const;
+  /// set phi attribute for merged labels from Righini and Salani (2006)
+  void setPhi(const double& phi_in) { phi = phi_in; }
 
-  // opeator overloads
+  // operator overloads
   Label&               operator=(const Label& other) = default;
   friend bool          operator<(const Label& label1, const Label& label2);
   friend bool          operator>(const Label& label1, const Label& label2);
@@ -95,21 +113,27 @@ class Label {
 };
 
 /**
- * Label extention using custom REFs if callback defined
+ * Label extension using custom REFs if callback defined
  * Holds pointer to callback.
- * All calls callback REF should do it through an instance of LabelExtension as
- * for example `label_extension.ref_callback->REF_fwd`
+ * All calls to callback REF should be done through an instance of
+ * `LabelExtension` as `label_extension.ref_callback->REF_fwd`
  */
 class LabelExtension {
  public:
-  LabelExtension();
-  ~LabelExtension();
+  LabelExtension(){};
+  ~LabelExtension() {
+    ref_callback = nullptr;
+    delete ref_callback;
+  };
   /// Callback to custom REF
   bidirectional::REFCallback* ref_callback = nullptr;
-  /// Set python callback for custom resource extensions
+
+  /* Methods */
+  /// Set callback for custom resource extensions
   void setREFCallback(bidirectional::REFCallback* cb);
+
   /**
-   * Generate new label extentions from the current label and return only if
+   * Generate new label extensions from the current label and return only if
    * resource feasible.
    * The input label is a pointer as it may be modified in
    * the case that the edge / adjacent_vertex is found to be resource
@@ -196,7 +220,7 @@ Label processBwdLabel(
 
 /**
  * Check whether a pair of forward and backward labels are suitable for merging.
- * To be used before attempting to merge
+ * To be used before attempting to merge.
  */
 bool mergePreCheck(
     const labelling::Label&   fwd_label,
@@ -205,28 +229,53 @@ bool mergePreCheck(
     const bool&               elementary);
 
 /**
+ * Returns the phi value.
+ * As defined in Righini and Salani (2006)
+ */
+double getPhiValue(
+    const labelling::Label&    fwd_label,
+    const labelling::Label&    bwd_label,
+    const std::vector<double>& max_res);
+
+/**
+ * Check whether the pair (phi, path) is already contained in all the (phi,
+ * path) pairs with a lower phi.
+ *
+ * As defined in Righini and Salani (2006)
+ */
+bool halfwayCheck(const Label& label, const std::vector<Label>& labels);
+
+/**
  * Merge labels produced by a backward and forward label.
  * If an s-t compatible path can be obtained the appropriately
  * extended and merged label is returned.
+ *
+ * @return merged label with updated attributes and new phi value.
  */
 Label mergeLabels(
-    const labelling::Label&       fwd_label,
-    const labelling::Label&       bwd_label,
-    const LabelExtension&         label_extension_,
-    const bidirectional::DiGraph& graph,
-    const std::vector<double>&    max_res,
-    const std::vector<double>&    min_res);
+    const labelling::Label&         fwd_label,
+    const labelling::Label&         bwd_label,
+    const LabelExtension&           label_extension_,
+    const bidirectional::AdjVertex& adj_vertex,
+    const bidirectional::Vertex&    sink,
+    const std::vector<double>&      max_res,
+    const std::vector<double>&      min_res);
 
+// TODO: Use bucket-heap
 /* Heap operations for vector of labels */
 
-/// Initalise heap using the appropriate comparison
-/// i.e. increasing in the monotone resource forward lists, decreasing otherwise
+/**
+ * Initialises heap using the appropriate comparison
+ * i.e. increasing in the monotone resource forward lists, decreasing otherwise
+ */
 void makeHeap(
     std::vector<labelling::Label>* labels_ptr,
     const std::string&             direction);
 
-/// Push new elements in heap using the appropriate comparison
-/// i.e. increasing in the monotone resource forward lists, decreasing otherwise
+/**
+ * Push new elements in heap using the appropriate comparison
+ * i.e. increasing in the monotone resource forward lists, decreasing otherwise
+ */
 void pushHeap(
     std::vector<labelling::Label>* labels_ptr,
     const std::string&             direction);

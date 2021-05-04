@@ -3,7 +3,7 @@ version: 2
 python:
   version: 3.7
   install:
-    - requirements: docs/requirements.txt
+    - requirements: docs/requirements.dev.txt
 
 submodules:
   exclude: all

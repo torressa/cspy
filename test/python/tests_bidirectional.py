@@ -3,7 +3,6 @@ from time import time
 
 from networkx import DiGraph
 from numpy import array
-from parameterized import parameterized
 
 from cspy import BiDirectional
 

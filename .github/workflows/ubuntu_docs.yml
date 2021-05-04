@@ -20,7 +20,11 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.8
-
+      - name: Install LEMON
+        run: |
+          cp tools/docker/scripts/install_lemon .
+          chmod u+x install_lemon
+          sudo ./install_lemon
       - name: Configure
         run: cmake -S . -Bbuild -DBUILD_TESTING=ON -DBUILD_PYTHON=ON -DBUILD_SHARED_LIBS=ON
       - name: Install rtds-action

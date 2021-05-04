@@ -9,28 +9,22 @@ cd /root/
 # Clear contents of build dir
 if $BUILD_CLEAN
 then
+	echo "Cleaning build directory"
 	rm -rf build/*
 fi
 
-case $BUILD_PYTHON:$BUILD_RELEASE in
-	true:true)
-	    cmake -S . -Bbuild -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON \
-            -DBUILD_PYTHON=ON -DBUILD_SHARED_LIBS=ON
-		;;
-	true:false)
-	    cmake -S . -Bbuild -DBUILD_PYTHON=ON -DBUILD_SHARED_LIBS=ON -DBUILD_TESTING=ON
-		;;
-	false:false)
-    	cmake -S . -Bbuild -DBUILD_TESTING=ON -DCMAKE_BUILD_TYPE=Release \
-					-DBUILD_PYTHON=OFF -DBUILD_SHARED_LIBS=OFF
-		;;
-esac
+# Configure using environment variables set in docker-compose / Dockerfile
+cmake -S . -Bbuild -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON \
+	-DBUILD_PYTHON=${BUILD_PYTHON} -DBUILD_SHARED_LIBS=${BUILD_PYTHON} \
+	-DBENCHMARK_TESTS=${BENCHMARK_TESTS}
 
 cmake --build build --config Release --target all -v
 
 if $BUILD_RELEASE
 then
+	echo "Building Python manylinux wheels for release"
 	./build_manylinux_wheels
 else
+	# Run tests
 	cd build && ctest --verbose
 fi
