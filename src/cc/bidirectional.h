@@ -129,11 +129,9 @@ class BiDirectional {
   /// Number of labels generated (includes the possibly infeasible extensions)
   std::vector<int> generated_count_;
   /// Current primal bound for a complete source-sink path
-  double primal_bound_ = std::nan("nan");
+  double primal_st_bound_ = std::nan("nan");
   /// iteration number
   int iteration_ = 0;
-  /// whether intermediate_label_fwd/bwd contains a source-sink feasible path
-  bool primal_st_bound_ = false;
   // whether the search terminated early with a valid source-sink path
   bool terminated_early_w_st_path_               = false;
   int  terminated_early_w_st_path_direction_idx_ = 0;

@@ -52,13 +52,18 @@ class DiGraph {
   /// int. Number of nodes/vertices in the graph.
   int number_vertices;
   /// int. Number of arcs/edges in the graph.
-  int                                                      number_edges;
-  Vertex                                                   source;
-  Vertex                                                   sink;
-  std::unique_ptr<LemonGraph>                              lemon_graph_ptr;
-  std::unique_ptr<LemonGraph::ArcMap<double>>              weight_map_ptr;
+  int number_edges;
+  /// Source and sink vertices
+  Vertex source;
+  Vertex sink;
+  /// Pointer to lemon graph (in this case lemon::SmartDigraph)
+  std::unique_ptr<LemonGraph> lemon_graph_ptr;
+  /// Pointer to lemon map containing arc weights/costs
+  std::unique_ptr<LemonGraph::ArcMap<double>> weight_map_ptr;
+  /// Pointer to lemon map containing arc resource consumptions
   std::unique_ptr<LemonGraph::ArcMap<std::vector<double>>> res_map_ptr;
-  std::vector<Vertex>                                      vertices;
+  /// Vector with vertices
+  std::vector<Vertex> vertices;
 
   /**
    * Constructor.

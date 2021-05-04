@@ -28,8 +28,10 @@ void DiGraph::addNodes(const std::vector<int>& user_nodes) {
   bool source_saved = false, sink_saved = false;
   for (const int& user_node : user_nodes) {
     lemon_graph_ptr->addNode();
+    // Create and save vertex (lemon id is just count)
     const Vertex new_vertex = {count, user_node};
     vertices[count]         = new_vertex;
+    // Save source/sink
     if (!source_saved && user_node == source_id_) {
       source       = new_vertex;
       source_saved = true;
