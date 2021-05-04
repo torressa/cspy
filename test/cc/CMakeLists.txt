@@ -60,6 +60,6 @@ target_include_directories(
          $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
          $<INSTALL_INTERFACE:include>)
 
-target_link_libraries(${NAME} gtest ${PROJECT_NAME}::BiDirectionalCpp)
+target_link_libraries(${NAME} gtest ${PROJECT_NAME}::BiDirectionalCpp lemon)
 
 add_test(NAME ${NAME} COMMAND $<TARGET_FILE:${NAME}>)
