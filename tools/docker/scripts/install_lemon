@@ -11,6 +11,6 @@ cd lemon-1.3.1
 cmake -S. -Bbuild -DLEMON_ENABLE_GLPK=NO -DLEMON_ENABLE_COIN=NO \
   -DLEMON_ENABLE_ILOG=NO -DLEMON_ENABLE_SOPLEX=NO
 cmake --build build --config Release --target all -v
-cmake --build build --config Release --target check -v
+# cmake --build build --config Release --target check -v
 cmake --build build --config Release --target install -v
 cd ../ && rm -rf lemon-1.3.1 && rm lemon-1.3.1.tar.gz
