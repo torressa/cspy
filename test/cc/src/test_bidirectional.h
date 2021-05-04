@@ -10,8 +10,6 @@
 
 namespace bidirectional {
 
-void addEdges(BiDirectional* bidirectional);
-
 class TestBiDirectional : public ::testing::Test {
  protected:
   std::unique_ptr<BiDirectional> bidirectional;

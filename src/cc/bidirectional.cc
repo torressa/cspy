@@ -67,6 +67,8 @@ void BiDirectional::run() {
 
 /* Private methods */
 
+/* Preprocessing */
+
 void BiDirectional::runPreprocessing() {
   // if (options.direction == "both" || options.direction == "backward" ||
   //     options.bounds_pruning) {
@@ -184,10 +186,7 @@ void BiDirectional::initContainers() {
   }
 }
 
-/**
- * Private methods
- */
-// Initialisations
+/* Search */
 
 std::string BiDirectional::getDirection() const {
   if (options.direction == "both") {
@@ -267,21 +266,6 @@ bool BiDirectional::terminate(
   return checkValidLabel(direction_idx, label);
 }
 
-bool BiDirectional::checkValidLabel(
-    const int&              direction_idx,
-    const labelling::Label& label) {
-  if (label.vertex.lemon_id != -1 &&
-      label.checkStPath(graph_ptr_->source.user_id, graph_ptr_->sink.user_id)) {
-    if (!std::isnan(options.threshold) &&
-        label.checkThreshold(options.threshold)) {
-      terminated_early_w_st_path_               = true;
-      terminated_early_w_st_path_direction_idx_ = direction_idx;
-      return true;
-    }
-  }
-  return false;
-}
-
 void BiDirectional::updateCurrentLabel(const int& direction_idx) {
   if (unprocessed_labels_[direction_idx]->size() > 0) {
     // Get next label and removes current_label from heap
@@ -297,6 +281,22 @@ void BiDirectional::updateCurrentLabel(const int& direction_idx) {
   } else {
     stop_[direction_idx] = true;
   }
+}
+
+/* Checks */
+bool BiDirectional::checkValidLabel(
+    const int&              direction_idx,
+    const labelling::Label& label) {
+  if (label.vertex.lemon_id != -1 &&
+      label.checkStPath(graph_ptr_->source.user_id, graph_ptr_->sink.user_id)) {
+    if (!std::isnan(options.threshold) &&
+        label.checkThreshold(options.threshold)) {
+      terminated_early_w_st_path_               = true;
+      terminated_early_w_st_path_direction_idx_ = direction_idx;
+      return true;
+    }
+  }
+  return false;
 }
 
 bool BiDirectional::checkBounds(const int& direction_idx) {
@@ -317,6 +317,32 @@ bool BiDirectional::checkBounds(const int& direction_idx) {
   }
   return false;
 }
+
+bool BiDirectional::checkPrimalBound(
+    const int&              direction_idx,
+    const labelling::Label& candidate_label) const {
+  const std::unique_ptr<std::vector<double>>& lower_bound_weight =
+      lower_bound_weight_[direction_idx];
+  if (!options.bounds_pruning) {
+    return false;
+  }
+  if (!std::isnan(primal_st_bound_) &&
+      candidate_label.weight +
+              (*lower_bound_weight)[candidate_label.vertex.lemon_id] >
+          primal_st_bound_) {
+    return true;
+  }
+  return false;
+}
+
+bool BiDirectional::checkVertexVisited(
+    const int& direction_idx,
+    const int& vertex_idx) const {
+  return (
+      visited_vertices_[direction_idx].find(vertex_idx) !=
+      visited_vertices_[direction_idx].end());
+}
+
 void BiDirectional::updateHalfWayPoints(const int& direction_idx) {
   const std::string& direction_ = directions_[direction_idx];
   if (direction_ == "forward") {
@@ -511,23 +537,6 @@ void BiDirectional::saveCurrentBestLabel(const int& direction_idx) {
   }
 }
 
-bool BiDirectional::checkPrimalBound(
-    const int&              direction_idx,
-    const labelling::Label& candidate_label) const {
-  const std::unique_ptr<std::vector<double>>& lower_bound_weight =
-      lower_bound_weight_[direction_idx];
-  if (!options.bounds_pruning) {
-    return false;
-  }
-  if (!std::isnan(primal_st_bound_) &&
-      candidate_label.weight +
-              (*lower_bound_weight)[candidate_label.vertex.lemon_id] >
-          primal_st_bound_) {
-    return true;
-  }
-  return false;
-}
-
 /**
  * Post-processing methods
  */
@@ -608,32 +617,26 @@ void BiDirectional::getMinimumWeights(double* fwd_min, double* bwd_min) {
   }
 }
 
-bool BiDirectional::checkVertexVisited(
-    const int& direction_idx,
-    const int& vertex_idx) const {
-  return (
-      visited_vertices_[direction_idx].find(vertex_idx) !=
-      visited_vertices_[direction_idx].end());
-}
-
-void BiDirectional::cleanUp() {
-  for (int s = 0; s < directions_size_; ++s) {
-    const std::string& direction_ = directions_[s];
-    for (const int n : visited_vertices_[s]) {
-      if (efficient_labels_[n].size() > 0) {
-        if (direction_ == "forward") {
-          std::sort(
-              efficient_labels_[s][n].begin(), efficient_labels_[s][n].end());
-        } else {
-          std::sort(
-              efficient_labels_[s][n].begin(),
-              efficient_labels_[s][n].end(),
-              std::greater<>{});
-        }
-      }
-    }
-  }
-}
+// Not used as it takes too long
+// void BiDirectional::cleanUp() {
+//   for (int s = 0; s < directions_size_; ++s) {
+//     const std::string& direction_ = directions_[s];
+//     for (const int n : visited_vertices_[s]) {
+//       if (efficient_labels_[n].size() > 0) {
+//         if (direction_ == "forward") {
+//           std::sort(
+//               efficient_labels_[s][n].begin(),
+//               efficient_labels_[s][n].end());
+//         } else {
+//           std::sort(
+//               efficient_labels_[s][n].begin(),
+//               efficient_labels_[s][n].end(),
+//               std::greater<>{});
+//         }
+//       }
+//     }
+//   }
+// }
 
 void BiDirectional::joinLabels() {
   // one can sort the labels prior to joining then use this to break joining but

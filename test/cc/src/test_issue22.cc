@@ -27,9 +27,9 @@ TEST_F(TestIssue22, testBoth) {
   auto res  = bidirectional->getConsumedResources();
   auto cost = bidirectional->getTotalCost();
 
-  ASSERT_TRUE(path == final_path);
-  ASSERT_TRUE(res == final_res);
-  ASSERT_TRUE(cost == final_cost);
+  ASSERT_EQ(path, final_path);
+  ASSERT_EQ(res, final_res);
+  ASSERT_EQ(cost, final_cost);
 }
 
 } // namespace bidirectional

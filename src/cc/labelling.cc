@@ -328,22 +328,15 @@ Label processBwdLabel(
   std::vector<double> new_resources(label.resource_consumption);
   // Invert monotone resource
   new_resources[0] = max_res[0] - new_resources[0];
-  // Elementwise cumulative_resource + new_resources
-  std::transform(
-      new_resources.begin(),
-      new_resources.end(),
-      cumulative_resource.begin(),
-      new_resources.begin(),
-      std::plus<double>());
-  if (invert_min_res) {
-    // invert minimum resource from original resources and place in
-    // new_resources
+
+  if (!invert_min_res) {
+    // Elementwise cumulative_resource + new_resources
     std::transform(
-        new_resources.cbegin() + 1,
-        new_resources.cend(),
-        cumulative_resource.begin() + 1,
-        new_resources.begin() + 1,
-        std::minus<double>());
+        new_resources.begin(),
+        new_resources.end(),
+        cumulative_resource.begin(),
+        new_resources.begin(),
+        std::plus<double>());
   }
   return Label(label.weight, label.vertex, new_resources, new_path);
 }

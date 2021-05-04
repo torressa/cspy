@@ -10,8 +10,6 @@
 
 namespace bidirectional {
 
-void addEdgesIssue52(BiDirectional* bidirectional);
-
 class TestIssue52 : public ::testing::Test {
  protected:
   const int                      number_vertices = 5;

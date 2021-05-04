@@ -30,9 +30,9 @@ TEST_F(TestIssue17, testBoth) {
   auto res  = bidirectional->getConsumedResources();
   auto cost = bidirectional->getTotalCost();
 
-  ASSERT_TRUE(path == final_path);
-  ASSERT_TRUE(res == final_res);
-  ASSERT_TRUE(cost == final_cost);
+  ASSERT_EQ(path, final_path);
+  ASSERT_EQ(res, final_res);
+  ASSERT_EQ(cost, final_cost);
 }
 
 TEST_F(TestIssue17, testBothElementary) {
@@ -47,9 +47,9 @@ TEST_F(TestIssue17, testBothElementary) {
   auto res  = bidirectional->getConsumedResources();
   auto cost = bidirectional->getTotalCost();
 
-  ASSERT_TRUE(path == final_path);
-  ASSERT_TRUE(res == final_res);
-  ASSERT_TRUE(cost == final_cost);
+  ASSERT_EQ(path, final_path);
+  ASSERT_EQ(res, final_res);
+  ASSERT_EQ(cost, final_cost);
 }
 
 TEST_F(TestIssue17, testBothUnprocessed) {
@@ -64,9 +64,9 @@ TEST_F(TestIssue17, testBothUnprocessed) {
   auto res  = bidirectional->getConsumedResources();
   auto cost = bidirectional->getTotalCost();
 
-  ASSERT_TRUE(path == final_path);
-  ASSERT_TRUE(res == final_res);
-  ASSERT_TRUE(cost == final_cost);
+  ASSERT_EQ(path, final_path);
+  ASSERT_EQ(res, final_res);
+  ASSERT_EQ(cost, final_cost);
 }
 
 TEST_F(TestIssue17, testBothProcessed) {
@@ -81,9 +81,9 @@ TEST_F(TestIssue17, testBothProcessed) {
   auto res  = bidirectional->getConsumedResources();
   auto cost = bidirectional->getTotalCost();
 
-  ASSERT_TRUE(path == final_path);
-  ASSERT_TRUE(res == final_res);
-  ASSERT_TRUE(cost == final_cost);
+  ASSERT_EQ(path, final_path);
+  ASSERT_EQ(res, final_res);
+  ASSERT_EQ(cost, final_cost);
 }
 
 TEST_F(TestIssue17, testBothGenerated) {
@@ -98,9 +98,9 @@ TEST_F(TestIssue17, testBothGenerated) {
   auto res  = bidirectional->getConsumedResources();
   auto cost = bidirectional->getTotalCost();
 
-  ASSERT_TRUE(path == final_path);
-  ASSERT_TRUE(res == final_res);
-  ASSERT_TRUE(cost == final_cost);
+  ASSERT_EQ(path, final_path);
+  ASSERT_EQ(res, final_res);
+  ASSERT_EQ(cost, final_cost);
 }
 
 TEST_F(TestIssue17, testForward) {
@@ -115,9 +115,9 @@ TEST_F(TestIssue17, testForward) {
   auto res  = bidirectional->getConsumedResources();
   auto cost = bidirectional->getTotalCost();
 
-  ASSERT_TRUE(path == final_path);
-  ASSERT_TRUE(res == final_res);
-  ASSERT_TRUE(cost == final_cost);
+  ASSERT_EQ(path, final_path);
+  ASSERT_EQ(res, final_res);
+  ASSERT_EQ(cost, final_cost);
 }
 
 TEST_F(TestIssue17, testForwardElementary) {
@@ -133,9 +133,9 @@ TEST_F(TestIssue17, testForwardElementary) {
   auto res  = bidirectional->getConsumedResources();
   auto cost = bidirectional->getTotalCost();
 
-  ASSERT_TRUE(path == final_path);
-  ASSERT_TRUE(res == final_res);
-  ASSERT_TRUE(cost == final_cost);
+  ASSERT_EQ(path, final_path);
+  ASSERT_EQ(res, final_res);
+  ASSERT_EQ(cost, final_cost);
 }
 
 TEST_F(TestIssue17, testBackward) {
@@ -150,9 +150,9 @@ TEST_F(TestIssue17, testBackward) {
   auto res  = bidirectional->getConsumedResources();
   auto cost = bidirectional->getTotalCost();
 
-  ASSERT_TRUE(path == final_path);
-  ASSERT_TRUE(res == final_res);
-  ASSERT_TRUE(cost == final_cost);
+  ASSERT_EQ(path, final_path);
+  ASSERT_EQ(res, final_res);
+  ASSERT_EQ(cost, final_cost);
 }
 
 TEST_F(TestIssue17, testBackwardElementary) {
@@ -168,9 +168,9 @@ TEST_F(TestIssue17, testBackwardElementary) {
   auto res  = bidirectional->getConsumedResources();
   auto cost = bidirectional->getTotalCost();
 
-  ASSERT_TRUE(path == final_path);
-  ASSERT_TRUE(res == final_res);
-  ASSERT_TRUE(cost == final_cost);
+  ASSERT_EQ(path, final_path);
+  ASSERT_EQ(res, final_res);
+  ASSERT_EQ(cost, final_cost);
 }
 
 } // namespace bidirectional

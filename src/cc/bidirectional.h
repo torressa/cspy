@@ -105,29 +105,6 @@ class BiDirectional {
   std::unique_ptr<DiGraph> graph_ptr_;
   /// Start time to ensure time limit is met
   std::chrono::time_point<std::chrono::system_clock> start_time_;
-  /**
-   * All the following parameters a size two vectors (easier access as opposed
-   * to a pair for example) containing the appropriate parameters for the
-   * bidirectional search.
-   *
-   * - index 0: contains forward attributes
-   * - index 1: contains backward attributes
-   *
-   * In the case of single direction, the vectors have size 1 and the index
-   * correspond to the chosen direction.
-   */
-  std::vector<std::string> directions_;
-  int                      directions_size_ = 1;
-  /// stopping criteria for each direction
-  std::vector<bool> stop_;
-  /// stopping criteria for each direction
-  std::vector<bool> bound_exceeded_;
-  /// Number of unprocessed labels generated
-  std::vector<int> unprocessed_count_;
-  /// Number of labels processed
-  std::vector<int> processed_count_;
-  /// Number of labels generated (includes the possibly infeasible extensions)
-  std::vector<int> generated_count_;
   /// Current primal bound for a complete source-sink path
   double primal_st_bound_ = std::nan("nan");
   /// iteration number
@@ -136,13 +113,40 @@ class BiDirectional {
   bool terminated_early_w_st_path_               = false;
   int  terminated_early_w_st_path_direction_idx_ = 0;
 
+  /**
+   * All the following members that are vectors are size two vectors (easier
+   * access as opposed to a pair for example) containing the appropriate
+   * parameters for the bidirectional search.
+   *
+   * - index 0: contains forward attributes
+   * - index 1: contains backward attributes
+   *
+   * This index is passed in the functions as `direction_idx`.
+   * In the case of single direction, the vectors have size 1 and the index
+   * corresponds to the chosen direction.
+   */
+  /// Vector with directions as string
+  std::vector<std::string> directions_;
+  int                      directions_size_ = 1;
+  /// Stopping criteria for each direction
+  std::vector<bool> stop_;
+  /// Stopping criteria for each direction
+  std::vector<bool> bound_exceeded_;
+  /// Number of unprocessed labels generated
+  std::vector<int> unprocessed_count_;
+  /// Number of labels processed
+  std::vector<int> processed_count_;
+  /// Number of labels generated (includes the possibly infeasible extensions)
+  std::vector<int> generated_count_;
+
   /* Search-related parameters */
 
   /// Lower bounds from any node to sink
   std::vector<std::unique_ptr<std::vector<double>>> lower_bound_weight_;
   /// vector with indices of vertices visited
   std::vector<std::set<int>> visited_vertices_;
-  // current resources
+  /// Vectors with current maximum and minimum resources (first entry contains
+  /// the dynamic halfway point).
   std::vector<double> max_res_curr_, min_res_curr_;
 
   /* labels and containers */
@@ -152,15 +156,16 @@ class BiDirectional {
   /// @see labelling::LabelExtension
   std::unique_ptr<labelling::LabelExtension> label_extension_;
 
-  /// Label that is being extended
+  /// Label that is being considered in each direction
   std::vector<std::shared_ptr<labelling::Label>> current_label_;
   /// Intermediate current best label with possibly complete source-sink path
   /// (shared pointer as we want to be able to substitute it without resetting)
   std::vector<std::shared_ptr<labelling::Label>> intermediate_label_;
 
-  /// vector with pareto optimal labels (per node)
+  /// vector with pareto optimal labels (per node) in each direction
   std::vector<std::vector<std::vector<labelling::Label>>> efficient_labels_;
-  /// vector with pointer to label with least weight (per node)
+  /// vector with pointer to label with least weight (per node) in each
+  /// direction
   std::vector<std::vector<std::shared_ptr<labelling::Label>>> best_labels_;
   /**
    * heap vector to keep unprocessed labels ordered.
@@ -185,28 +190,60 @@ class BiDirectional {
   /**
    * Run preprocessing steps if required. Currently includes:
    *   - Obtain shortest paths bounds
-   * TODO:
-   *   - Bounding and adjusting of resource bounds
+   *   - TODO: Bounding and adjusting of resource bounds
    */
   void runPreprocessing();
 
   /* Search Methods */
   /// Get the next direction to search
   std::string getDirection() const;
+
   /// Advance the search in a given direction
   void move(const int& direction_idx);
+
   /// checks if the time_limit if over (if set) or if a label under the
   /// threshold has been found (if set). Sets terminated_early_w_st_path_
   bool terminate(const int& direction_idx, const labelling::Label& label);
+
+  /* checks */
+
+  /// Wrapper to check whether a label is valid. Checks s-t path + threshold.
   bool checkValidLabel(const int& direction_idx, const labelling::Label& label);
+
   /// Returns true if half-way points are being violated. False otherwise
   bool checkBounds(const int& direction_idx);
+
+  /**
+   * If bounds_pruning is true then check whether an input label plus a lower
+   * bound for the path (from the node of the label to the source/sink) violates
+   * the current primal bound.
+   *
+   * @return true if primal bound is violated, false otherwise.
+   * i.e. if true, then input label cannot appear in the optimal solution.
+   */
+  bool checkPrimalBound(
+      const int&              direction_idx,
+      const labelling::Label& candidate_label) const;
+
+  /**
+   * checks if a given vertex has been visited in a given direction
+   *
+   * @param[in] direction_idx, int. Index of direction in directions
+   * (0->forward, 1->backward)
+   * @param[in] vertex_idx, int. Lemon id of vertex to check.
+   * @return true if it has been visited false otherwise
+   */
+  bool checkVertexVisited(const int& direction_idx, const int& vertex_idx)
+      const;
+
   /// Call labelling::getNextLabel to get next label in the heap
   /// (unprocessed_labels_) and update the current_label member
   void updateCurrentLabel(const int& direction_idx);
+
   /// Update half-way points and check if the current labels violates them, in
   /// which case sets the stop member to true.
   void updateHalfWayPoints(const int& direction_idx);
+
   /**
    * Given a candidate_label by looking at the vector of labels (bucket) for
    * that node, we can check if the candidate_label has already been saved or it
@@ -220,65 +257,62 @@ class BiDirectional {
   void updateEfficientLabels(
       const int&              direction_idx,
       const labelling::Label& candidate_label);
-  /// Update `best_labels` entry by node with the current label if appropriate
+
+  /// Update `best_labels` entry by node with the candidate_label if appropriate
   void updateBestLabels(
       const int&              direction_idx,
       const labelling::Label& candidate_label);
-  /// Iterate over the neighbours for the current label node and save label
-  /// extensions when appropriate. This is checked in updateEfficientLabels.
+
+  /**
+   * Iterate over the neighbours for the current label node and extends it when
+   * appropriate.
+   */
   void extendCurrentLabel(const int& direction_idx);
+
   /// Helper function to extend along a given arc
   void extendSingleLabel(
       labelling::Label* label,
       const int&        direction_idx,
       const AdjVertex&  adj_vertex);
-  /// Save globally best label and check if it is Source-Sink so we can use it
-  /// in the bounding. Sets `final_label`
-  void saveCurrentBestLabel(const int& direction_idx);
+
   /**
-   * If bounds_pruning is true then check whether an input label plus a lower
-   * bound for the path (from the node of the label to the source/sink) violates
-   * the current primal bound.
-   *
-   * @return true if primal bound is violated, false otherwise.
-   * i.e. if true, then input label cannot appear in the optimal solution.
+   * Saves/updates globally best label and check if it is Source-Sink so we can
+   * use it in the bounding.
+   * Sets `final_label`
    */
-  bool checkPrimalBound(
-      const int&              direction_idx,
-      const labelling::Label& candidate_label) const;
+  void saveCurrentBestLabel(const int& direction_idx);
 
   /* Post processing */
 
   /**
-   * Wrapper to process of output path. Either saves appropriate label
-   * (single-direction search or early termination) or calls joinLabels to merge
-   * forward + backward labels
+   * Wrapper to process of output path.
+   * Either saves appropriate label (single-direction search or early
+   * termination)
+   * or, calls joinLabels to merge forward + backward labels
    */
   void postProcessing();
-  /// get upper bound using a valid source-sink path (looks at both forward and
-  /// backward source-sink paths)
+
+  /**
+   * get upper bound using a valid source-sink path (minimum of both forward and
+   * backward source-sink paths)
+   * @return double with upper bound
+   */
   double getUB();
+
   /**
    * get minimum weight across all forward / backward labels
+   *
    * @param[out] fwd_min, double, minimum across all forward labels
    * @param[out] bwd_min, double, minimum across all backward labels
    */
   void getMinimumWeights(double* fwd_min, double* bwd_min);
+
   /**
    * The procedure "Join" or Algorithm 3 from Righini and Salani (2006).
    *
-   * @return: list with the final path.
    * @see: https://www.sciencedirect.com/science/article/pii/S1572528606000417
    */
   void joinLabels();
-  /// Sorts efficient_labels for each vertex (not used as it takes too long)
-  void cleanUp();
-  /// checks if a given vertex has been visited
-  /// @return true if it has been visited false otherwise
-  bool checkVertexVisited(const int& direction_idx, const int& vertex_idx)
-      const;
-  /// returns halfway point
-  double getHalfWayPoint() const;
 };
 
 } // namespace bidirectional

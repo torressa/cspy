@@ -10,8 +10,6 @@
 
 namespace bidirectional {
 
-void addEdgesIssue17(BiDirectional* bidirectional);
-
 class TestIssue17 : public ::testing::Test {
  protected:
   const bool                     elementary      = true;
