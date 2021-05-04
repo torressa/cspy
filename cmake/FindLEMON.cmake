@@ -34,3 +34,14 @@ add_library(lemon INTERFACE)
 add_library(lemon::lemon ALIAS lemon)
 target_include_directories(lemon INTERFACE ${LEMON_INCLUDE_DIRS})
 target_link_libraries(lemon INTERFACE ${LEMON_LIBRARIES})
+
+# Install
+include(GNUInstallDirs)
+install(
+  TARGETS lemon
+  EXPORT ${PROJECT_NAME}Targets
+  PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/lemon
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} # RUNTIME DESTINATION
+          # ${CMAKE_INSTALL_BINDIR}
+)
