@@ -13,7 +13,10 @@ on:
 # https://github.com/Niraj-Kamdar/manylinux-wheel-builder#advanced-usage
 jobs:
   macos-build:
-    runs-on: macos-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest, macos-10.14]
     env:
       TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
       TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
