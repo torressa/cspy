@@ -17,12 +17,10 @@ jobs:
     strategy:
       matrix:
         os: [macos-latest, macos-10.14]
+        python-version: [3.6, 3.7, 3.8, 3.9]
     env:
       TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
       TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
-    strategy:
-      matrix:
-        python-version: [3.6, 3.7, 3.8, 3.9]
     steps:
       - uses: actions/checkout@v2
       - name: Swig install
