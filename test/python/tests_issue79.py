@@ -26,8 +26,11 @@ class TestsIssue79(unittest.TestCase):
         self.result_path = ['Source', 'Sink']
         self.total_cost = 3.0
         self.consumed_resources = [2.0, 2.0]
+        # Hypothetical nodes that could be missorted
+        self.nodes = ['ZZ', 'AA', 'Sink', 'Source']
+        self.expected_nodes = ['Source', 'AA', 'ZZ', 'Sink']
 
-    def test_psolgent(self):
+    def test_direct_connect(self):
         """
         Test PSOLGENT can find path of Source directly connected to Sink
         """
@@ -35,4 +38,12 @@ class TestsIssue79(unittest.TestCase):
         alg.run()
         self.assertEqual(alg.path, self.result_path)
         self.assertEqual(alg.total_cost, self.total_cost)
-        self.assertIsNone(testing.assert_allclose(alg.consumed_resources, self.consumed_resources))
+        self.assertIsNone(testing.assert_allclose(alg.consumed_resources,
+                          self.consumed_resources))
+
+    def test_sorting_nodes(self):
+        """
+        Test PSOLGENT sorts nodes into correct order
+        """
+        sorted_nodes = PSOLGENT._sort_nodes(self.nodes)
+        self.assertListEqual(sorted_nodes, self.expected_nodes)

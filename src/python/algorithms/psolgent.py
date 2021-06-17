@@ -346,7 +346,7 @@ class PSOLGENT(PathBase):
     def _sort_nodes(nodes):
         """
         Sort nodes between Source and Sink. If node data allows sorting,
-        edit the line below to pass `list(self.G.nodes(data=True))` and used that
+        edit the line below to pass `list(self.G.nodes(data=True))` and use that
         in the sorting function below.
 
         For example, if nodes have an attribute `pos` a tuple that contains
@@ -354,6 +354,6 @@ class PSOLGENT(PathBase):
         `return sorted(nodes, key=lambda n: n[1]['pos'][0])`
         edit the sorting function to make use of it.
         """
-        order_dict = {'Source': '0', 'Sink': 'Z{}'.format(len(nodes))}
-        return sorted(nodes,
-                      key=lambda x: order_dict[x] if x in order_dict else x)
+        return ['Source'] + \
+               sorted([n for n in nodes if n not in ['Source', 'Sink']]) + \
+               ['Sink']
