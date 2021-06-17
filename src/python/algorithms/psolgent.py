@@ -134,8 +134,8 @@ class PSOLGENT(PathBase):
         self.swarm_size = swarm_size
         self.member_size = member_size if member_size else len(G.nodes())
         self.hood_size = neighbourhood_size
-        self.lower_bound = zeros(member_size)
-        self.upper_bound = ones(member_size)
+        self.lower_bound = -2 * ones(member_size)
+        self.upper_bound = 2 * ones(member_size)
         self.c1 = float(c1)
         self.c2 = float(c2)
         self.c3 = float(c3)
@@ -158,6 +158,8 @@ class PSOLGENT(PathBase):
         while (self.iter < self.max_iter and
                not check_time_limit_breached(start, self.time_limit)):
             pos_new = self.pos + self._get_vel()
+            # Force Source and Sink to be selected
+            pos_new[:,[0,-1]] = 10 * self.lower_bound
             self._update_best(self.pos, pos_new)
             self.pos = pos_new
             self.fitness = self._get_fitness(self.pos)
@@ -187,6 +189,8 @@ class PSOLGENT(PathBase):
             self.lower_bound - self.upper_bound,
             self.upper_bound - self.lower_bound,
             size=(self.swarm_size, self.member_size))
+        # Force Source and Sink to be selected
+        self.pos[:,[0,-1]] = 10 * self.lower_bound
         self.fitness = self._get_fitness(self.pos)
         self.best = copy(self.pos)
         self._global_best()
@@ -271,7 +275,7 @@ class PSOLGENT(PathBase):
     @staticmethod
     def _discretise_solution(member, rand):
         sig = array(1 / (1 + exp(-member)))
-        return array([1 if s < rand else 0 for s in sig])
+        return (sig < rand) * 1
 
     def _update_current_nodes(self, arr):
         """

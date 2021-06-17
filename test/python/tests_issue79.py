@@ -1,6 +1,6 @@
 import unittest
 
-from numpy import array, testing
+from numpy import array, testing, min
 from networkx import DiGraph
 
 from cspy import PSOLGENT
@@ -29,6 +29,7 @@ class TestsIssue79(unittest.TestCase):
         # Hypothetical nodes that could be missorted
         self.nodes = ['ZZ', 'AA', 'Sink', 'Source']
         self.expected_nodes = ['Source', 'AA', 'ZZ', 'Sink']
+        self.pos_limit = -20
 
     def test_direct_connect(self):
         """
@@ -40,6 +41,10 @@ class TestsIssue79(unittest.TestCase):
         self.assertEqual(alg.total_cost, self.total_cost)
         self.assertIsNone(testing.assert_allclose(alg.consumed_resources,
                           self.consumed_resources))
+        # Check that all considered paths include source/sink
+        self.assertLessEqual(np.max(alg.pos[:,[0,-1]]),
+                          self.pos_limit)
+
 
     def test_sorting_nodes(self):
         """
@@ -47,3 +52,5 @@ class TestsIssue79(unittest.TestCase):
         """
         sorted_nodes = PSOLGENT._sort_nodes(self.nodes)
         self.assertListEqual(sorted_nodes, self.expected_nodes)
+
+
