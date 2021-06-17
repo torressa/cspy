@@ -1,6 +1,6 @@
 import unittest
 
-from numpy import array
+from numpy import array, testing
 from networkx import DiGraph
 
 from cspy import PSOLGENT
@@ -27,7 +27,7 @@ class TestsIssue79(unittest.TestCase):
         self.total_cost = 3.0
         self.consumed_resources = [2.0, 2.0]
 
-    def test_bidirectional(self):
+    def test_psolgent(self):
         """
         Test PSOLGENT can find path of Source directly connected to Sink
         """
@@ -35,4 +35,4 @@ class TestsIssue79(unittest.TestCase):
         alg.run()
         self.assertEqual(alg.path, self.result_path)
         self.assertEqual(alg.total_cost, self.total_cost)
-        self.assertEqual(alg.consumed_resources, self.consumed_resources)
+        self.assertIsNone(testing.assert_allclose(alg.consumed_resources, self.consumed_resources))
