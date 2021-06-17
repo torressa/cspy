@@ -330,7 +330,7 @@ class PSOLGENT(PathBase):
         """
         if not path:
             return False
-        if len(path) > 2 and (path[0] == 'Source' and path[-1] == 'Sink'):
+        if len(path) >= 2 and (path[0] == 'Source' and path[-1] == 'Sink'):
             base_cost = sum(edge[2]['weight'] for edge in edges)
             self.st_path = path
             if self.check_feasibility() is True:
