@@ -37,7 +37,7 @@ class TestsIssue79(unittest.TestCase):
         """
         Test PSOLGENT can find path of Source directly connected to Sink
         """
-        alg = PSOLGENT(self.G, self.max_res, self.min_res)
+        alg = PSOLGENT(self.G, self.max_res, self.min_res, seed=42)
         alg.run()
         self.assertEqual(alg.path, self.result_path)
         self.assertEqual(alg.total_cost, self.total_cost)
@@ -48,7 +48,7 @@ class TestsIssue79(unittest.TestCase):
         """
         Test PSOLGENT can find path of Source directly connected to Sink
         """
-        alg = PSOLGENT(self.G, self.max_res, self.min_res,
+        alg = PSOLGENT(self.G, self.max_res, self.min_res, seed=42
                        lower_bound=-2, upper_bound=2)
         alg.run()
         # Check that all considered paths include source/sink
