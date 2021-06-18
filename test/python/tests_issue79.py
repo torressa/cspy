@@ -1,6 +1,6 @@
 import unittest
 
-from numpy import array, testing, min
+from numpy import array, testing
 from networkx import DiGraph
 
 from cspy import PSOLGENT

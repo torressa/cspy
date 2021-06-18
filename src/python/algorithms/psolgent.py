@@ -12,6 +12,7 @@ from networkx import DiGraph
 from numpy.random import RandomState
 from numpy import (argmin, array, copy, diag_indices_from, exp, dot, zeros,
                    ones, where)
+import numpy as np
 
 # Local imports
 from cspy.algorithms.path_base import PathBase
