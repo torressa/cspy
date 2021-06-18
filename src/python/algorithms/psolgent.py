@@ -76,6 +76,12 @@ class PSOLGENT(PathBase):
     neighbourhood_size : int, optional
         size of neighbourhood. Default : 10.
 
+    lower_bound : float, optional
+        lower bound of initial positions. Default : 0.
+
+    upper_bound : float, optional
+        upper bound of initial positions. Default : 0.
+
 
     c1 : float, optional
         constant for 1st term in the velocity equation.
@@ -119,6 +125,8 @@ class PSOLGENT(PathBase):
                  swarm_size: Optional[int] = 50,
                  member_size: Optional[int] = None,
                  neighbourhood_size: Optional[int] = 10,
+                 lower_bound: Optional[float] = 0.,
+                 upper_bound: Optional[float] = 1.,
                  c1: Optional[float] = 1.35,
                  c2: Optional[float] = 1.35,
                  c3: Optional[float] = 1.4,
@@ -134,12 +142,15 @@ class PSOLGENT(PathBase):
         self.swarm_size = swarm_size
         self.member_size = member_size if member_size else len(G.nodes())
         self.hood_size = neighbourhood_size
-        self.lower_bound = -2 * ones(member_size)
-        self.upper_bound = 2 * ones(member_size)
+        self.lower_bound = lower_bound * ones(member_size)
+        self.upper_bound = upper_bound * ones(member_size)
         self.c1 = float(c1)
         self.c2 = float(c2)
         self.c3 = float(c3)
         self.random_state = check_seed(seed)
+        self.rands = ones(swarm_size)
+        self.local_rands = ones(swarm_size)
+        self.global_rands = ones(swarm_size)
         # PSO Specific Parameters
         self.iter = 0
         self.pos = None
@@ -159,7 +170,7 @@ class PSOLGENT(PathBase):
                not check_time_limit_breached(start, self.time_limit)):
             pos_new = self.pos + self._get_vel()
             # Force Source and Sink to be selected
-            pos_new[:,[0,-1]] = 10 * self.lower_bound
+            pos_new[:,[0,-1]] = min(10 * self.lower_bound, np.min(pos_new))
             self._update_best(self.pos, pos_new)
             self.pos = pos_new
             self.fitness = self._get_fitness(self.pos)
@@ -190,7 +201,7 @@ class PSOLGENT(PathBase):
             self.upper_bound - self.lower_bound,
             size=(self.swarm_size, self.member_size))
         # Force Source and Sink to be selected
-        self.pos[:,[0,-1]] = 10 * self.lower_bound
+        self.pos[:,[0,-1]] = min(10 * self.lower_bound, np.min(self.pos))
         self.fitness = self._get_fitness(self.pos)
         self.best = copy(self.pos)
         self._global_best()
@@ -247,6 +258,7 @@ class PSOLGENT(PathBase):
             self.global_best = array([self.pos[argmin(self.fitness)]] *
                                      self.swarm_size)
             self.best_fit = min(self.fitness)  # update best fitness
+            self.global_rand = self.rands[argmin(self.fitness)]
 
     def _local_best(self, i):
         """
@@ -260,15 +272,17 @@ class PSOLGENT(PathBase):
         _range = list(range(bottom, top + 1))
         min_idx = _range[argmin(self.fitness[bottom:top])]
         self.local_best[i] = self.pos[min_idx]
+        self.local_rands[i] = self.rands[min_idx]
 
     # Fitness #
     # Fitness conversion to path representation of solutions and evaluation
     def _get_fitness(self, pos):
         # Applies objective function to all members of swarm
-        return list(map(self._evaluate_member, pos))
+        return [self._evaluate_member(pos, idx) for idx, pos in enumerate(pos)]
 
-    def _evaluate_member(self, member):
+    def _evaluate_member(self, member, idx):
         rand = self.random_state.uniform(0, 1)
+        self.rands[idx] = rand
         self._update_current_nodes(self._discretise_solution(member, rand))
         return self._get_fitness_member()
 

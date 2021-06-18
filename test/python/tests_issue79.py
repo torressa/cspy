@@ -22,14 +22,15 @@ class TestsIssue79(unittest.TestCase):
         self.G.add_edge('1', "Sink", res_cost=array([5, 3]), weight=1)
         self.G.add_edge('2', "Sink", res_cost=array([1, 1]), weight=2)
         self.G.add_edge("Source", "Sink", res_cost=array([2, 2]), weight=3)
-        # Expected results
+        # Expected CSP results
         self.result_path = ['Source', 'Sink']
         self.total_cost = 3.0
         self.consumed_resources = [2.0, 2.0]
+        # Maximum value of position for source/sink
+        self.pos_limit = -20
         # Hypothetical nodes that could be missorted
         self.nodes = ['ZZ', 'AA', 'Sink', 'Source']
         self.expected_nodes = ['Source', 'AA', 'ZZ', 'Sink']
-        self.pos_limit = -20
 
     def test_direct_connect(self):
         """
@@ -41,10 +42,17 @@ class TestsIssue79(unittest.TestCase):
         self.assertEqual(alg.total_cost, self.total_cost)
         self.assertIsNone(testing.assert_allclose(alg.consumed_resources,
                           self.consumed_resources))
+
+    def test_include_source_sink(self):
+        """
+        Test PSOLGENT can find path of Source directly connected to Sink
+        """
+        alg = PSOLGENT(self.G, self.max_res, self.min_res,
+                       lower_bound=-2, upper_bound=2)
+        alg.run()
         # Check that all considered paths include source/sink
         self.assertLessEqual(np.max(alg.pos[:,[0,-1]]),
                           self.pos_limit)
-
 
     def test_sorting_nodes(self):
         """
