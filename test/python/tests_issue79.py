@@ -1,6 +1,7 @@
 import unittest
 
 from numpy import array, testing
+import numpy as np
 from networkx import DiGraph
 
 from cspy import PSOLGENT
