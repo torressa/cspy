@@ -141,7 +141,7 @@ class PSOLGENT(PathBase):
         self.time_limit = time_limit
         self.threshold = threshold
         self.swarm_size = swarm_size
-        self.member_size = member_size if member_size else len(G.nodes())
+        self.member_size = member_size or len(G.nodes())
         self.hood_size = neighbourhood_size
         self.lower_bound = lower_bound * ones(member_size)
         self.upper_bound = upper_bound * ones(member_size)
@@ -359,12 +359,11 @@ class PSOLGENT(PathBase):
         if len(path) >= 2 and (path[0] == 'Source' and path[-1] == 'Sink'):
             base_cost = sum(edge[2]['weight'] for edge in edges)
             self.st_path = path
-            if self.check_feasibility() is True:
-                log.debug("Resource feasible path found")
-                return base_cost
-            else:
+            if self.check_feasibility() is not True:
                 # penalty for resource infeasible valid path
                 return 1e5 + base_cost
+            log.debug("Resource feasible path found")
+            return base_cost
         else:
             return False
 
