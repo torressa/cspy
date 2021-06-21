@@ -126,7 +126,7 @@ class PSOLGENT(PathBase):
                  swarm_size: Optional[int] = 50,
                  member_size: Optional[int] = None,
                  neighbourhood_size: Optional[int] = 10,
-                 lower_bound: Optional[float] = 0.,
+                 lower_bound: Optional[float] = -1.,
                  upper_bound: Optional[float] = 1.,
                  c1: Optional[float] = 1.35,
                  c2: Optional[float] = 1.35,
@@ -170,11 +170,13 @@ class PSOLGENT(PathBase):
         while (self.iter < self.max_iter and
                not check_time_limit_breached(start, self.time_limit)):
             pos_new = self.pos + self._get_vel()
+            new_rands = self.random_state.uniform(0, 1, size=self.swarm_size)
             # Force Source and Sink to be selected
             pos_new[:,[0,-1]] = min(10 * self.lower_bound, np.min(pos_new))
-            self._update_best(self.pos, pos_new)
+            self._update_best(self.pos, pos_new, self.rands, new_rands)
             self.pos = pos_new
-            self.fitness = self._get_fitness(self.pos)
+            self.rands = new_rands
+            self.fitness = self._get_fitness(self.pos, self.rands)
             self._global_best()
             # Update local best for each particle
             for i in range(self.swarm_size):
@@ -197,13 +199,14 @@ class PSOLGENT(PathBase):
                                              self.upper_bound,
                                              size=(self.swarm_size,
                                                    self.member_size))
+        self.rands = self.random_state.uniform(0, 1, size=self.swarm_size)
         self.vel = self.random_state.uniform(
             self.lower_bound - self.upper_bound,
             self.upper_bound - self.lower_bound,
             size=(self.swarm_size, self.member_size))
         # Force Source and Sink to be selected
         self.pos[:,[0,-1]] = min(10 * self.lower_bound, np.min(self.pos))
-        self.fitness = self._get_fitness(self.pos)
+        self.fitness = self._get_fitness(self.pos, self.rands)
         self.best = copy(self.pos)
         self._global_best()
         self.local_best = copy(self.pos)
@@ -234,11 +237,12 @@ class PSOLGENT(PathBase):
                 (self.c2 * dot(u2, (self.global_best - self.pos))) +
                 (self.c3 * dot(u3, (self.local_best - self.pos))))
 
-    def _update_best(self, old, new):
+    def _update_best(self, old, new, old_rands, new_rands):
         # Updates the best objective function values for each member
-        old_fitness = array(self._get_fitness(old))
-        new_fitness = array(self._get_fitness(new))
-        best = zeros(shape=old.shape)
+        old_fitness = array(self._get_fitness(old, old_rands))
+        new_fitness = array(self._get_fitness(new, new_rands))
+        best = zeros(shape=old.shape)# * np.nan
+        best_rands = zeros(shape=old_rands.shape)# * np.nan
         if any(of < nf for of, nf in zip(old_fitness, new_fitness)):
             # replace indices in best with old members if lower fitness
             idx_old = [
@@ -246,12 +250,17 @@ class PSOLGENT(PathBase):
                 if val[0] < val[1]
             ]
             best[idx_old] = old[idx_old]
-            idx_new = where(best == 0)
+            best_rands[idx_old] = old_rands[idx_old]
+            # replace this with just find the rows where it is all zero
+            idx_new = np.all(best == 0, axis=1)
             # replace indices in best with new members if lower fitness
             best[idx_new] = new[idx_new]
+            best_rands[idx_new] = old_rands[idx_new]
         else:
             best = new
+            best_rands = new_rands
         self.best = array(best)
+        self.best_rands = array(best_rands)
 
     def _global_best(self):
         # Updates the global best across swarm
@@ -277,13 +286,11 @@ class PSOLGENT(PathBase):
 
     # Fitness #
     # Fitness conversion to path representation of solutions and evaluation
-    def _get_fitness(self, pos):
+    def _get_fitness(self, pos, rands):
         # Applies objective function to all members of swarm
-        return [self._evaluate_member(pos, idx) for idx, pos in enumerate(pos)]
+        return [self._evaluate_member(pos, rands[idx], idx) for idx, pos in enumerate(pos)]
 
-    def _evaluate_member(self, member, idx):
-        rand = self.random_state.uniform(0, 1)
-        self.rands[idx] = rand
+    def _evaluate_member(self, member, rand, idx):
         self._update_current_nodes(self._discretise_solution(member, rand))
         return self._get_fitness_member()
 
