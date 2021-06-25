@@ -137,7 +137,7 @@ class PathBase:
             depth += 1
         return _path
 
-    def check_feasibility(self, return_edge=True):
+    def check_feasibility(self, return_edge=True, save=True):
         """
         Checks for feasibility for a valid source-sink path.
         If the path (in the st_path attribute) is feasible, then it
@@ -169,7 +169,8 @@ class PathBase:
                 break
         else:
             # Fesible path found. Save attributes.
-            self.save(total_res, cost)
+            if save:
+                self.save(total_res, cost)
             return True
         # Return infeasible edge unless specified
         if return_edge:

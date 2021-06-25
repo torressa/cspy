@@ -16,6 +16,7 @@ import numpy as np
 
 # Local imports
 from cspy.algorithms.path_base import PathBase
+from cspy.algorithms.grasp import Solution, GRASP
 from cspy.checking import check_seed, check_time_limit_breached
 
 log = getLogger(__name__)
@@ -57,6 +58,9 @@ class PSOLGENT(PathBase):
 
     max_iter : int, optional
         Maximum number of iterations for algorithm. Default : 100.
+
+    max_localiter : int, optional
+        Maximum number of local search iterations. Default : 10.
 
     time_limit : int, optional
         time limit in seconds.
@@ -121,6 +125,7 @@ class PSOLGENT(PathBase):
                  min_res: List[float],
                  preprocess: Optional[bool] = False,
                  max_iter: Optional[int] = 100,
+                 max_localiter: Optional[int] = 10,
                  time_limit: Optional[int] = None,
                  threshold: Optional[float] = None,
                  swarm_size: Optional[int] = 50,
@@ -138,6 +143,7 @@ class PSOLGENT(PathBase):
                          REF_callback)
         # Inputs
         self.max_iter = max_iter
+        self.max_localiter = max_localiter
         self.time_limit = time_limit
         self.threshold = threshold
         self.swarm_size = swarm_size
@@ -162,6 +168,11 @@ class PSOLGENT(PathBase):
         self.local_best = None
         self.global_best = None
 
+    def _pos2path(self, pos, rands):
+        new_disc = self._discretise_solution(pos, rands)
+        current_nodes = self._update_current_nodes(new_disc)
+        return current_nodes
+
     def run(self):
         """Calculate shortest path with resource constraints.
         """
@@ -173,11 +184,19 @@ class PSOLGENT(PathBase):
             new_rands = self.random_state.uniform(0, 1, size=self.swarm_size)
             # Force Source and Sink to be selected
             pos_new[:,[0,-1]] = min(10 * self.lower_bound, np.min(pos_new))
-            self._update_best(self.pos, pos_new, self.rands, new_rands)
+            paths_new = np.empty(len(pos_new), dtype='object')
+            paths_new[:] = [self._pos2path(p, r) for p,r in
+                              zip(pos_new, new_rands)]
+            self._update_best(self.pos, pos_new,
+                              self.rands, new_rands,
+                              self.paths, paths_new)
             self.pos = pos_new
             self.rands = new_rands
-            self.fitness = self._get_fitness(self.pos, self.rands)
+            self.fitness = self._get_fitness(self.paths)
             self._global_best()
+            # Save best results
+            self.st_path = self.best_path
+            self.check_feasibility() # works on st_path
             # Update local best for each particle
             for i in range(self.swarm_size):
                 self._local_best(i)
@@ -206,7 +225,10 @@ class PSOLGENT(PathBase):
             size=(self.swarm_size, self.member_size))
         # Force Source and Sink to be selected
         self.pos[:,[0,-1]] = min(10 * self.lower_bound, np.min(self.pos))
-        self.fitness = self._get_fitness(self.pos, self.rands)
+        self.paths = np.empty(len(self.pos), dtype='object')
+        self.paths[:] = [self._pos2path(p, r) for p,r in
+                          zip(self.pos, self.rands)]
+        self.fitness = self._get_fitness(self.paths)
         self.best = copy(self.pos)
         self._global_best()
         self.local_best = copy(self.pos)
@@ -237,12 +259,15 @@ class PSOLGENT(PathBase):
                 (self.c2 * dot(u2, (self.global_best - self.pos))) +
                 (self.c3 * dot(u3, (self.local_best - self.pos))))
 
-    def _update_best(self, old, new, old_rands, new_rands):
+    # also implicitly updates self.best_path
+    def _update_best(self, old, new, old_rands, new_rands, old_paths, new_paths):
         # Updates the best objective function values for each member
-        old_fitness = array(self._get_fitness(old, old_rands))
-        new_fitness = array(self._get_fitness(new, new_rands))
+        old_fitness = array(self._get_fitness(old_paths))
+        new_fitness = array(self._get_fitness(new_paths))
         best = zeros(shape=old.shape)# * np.nan
         best_rands = zeros(shape=old_rands.shape)# * np.nan
+        best_paths = zeros(shape=len(old_paths), dtype='object')
+        best_fitness = zeros(shape=len(old))
         if any(of < nf for of, nf in zip(old_fitness, new_fitness)):
             # replace indices in best with old members if lower fitness
             idx_old = [
@@ -251,24 +276,37 @@ class PSOLGENT(PathBase):
             ]
             best[idx_old] = old[idx_old]
             best_rands[idx_old] = old_rands[idx_old]
+            best_paths[idx_old] = old_paths[idx_old]
+            best_fitness[idx_old] = old_fitness[idx_old]
             # replace this with just find the rows where it is all zero
             idx_new = np.all(best == 0, axis=1)
             # replace indices in best with new members if lower fitness
             best[idx_new] = new[idx_new]
-            best_rands[idx_new] = old_rands[idx_new]
+            best_rands[idx_new] = new_rands[idx_new]
+            best_paths[idx_new] = new_paths[idx_new]
+            best_fitness[idx_new] = new_fitness[idx_new]
         else:
             best = new
             best_rands = new_rands
+            best_paths = new_paths
+            best_fitness = new_fitness
         self.best = array(best)
         self.best_rands = array(best_rands)
+        self.best_paths = array(best_paths)
+        self.best_fitness = array(best_fitness)
+        # Update best known path if better
+        if not self.best_fit or self.best_fit > min(self.best_fitness):
+            self.best_path = list(self.best_paths[argmin(best_fitness)][:])
 
     def _global_best(self):
-        # Updates the global best across swarm
+        # Updates the current global best across swarm
         if not self.best_fit or self.best_fit > min(self.fitness):
             self.global_best = array([self.pos[argmin(self.fitness)]] *
                                      self.swarm_size)
             self.best_fit = min(self.fitness)  # update best fitness
             self.global_rand = self.rands[argmin(self.fitness)]
+            self.global_path = self.paths[argmin(self.fitness)]
+            self.best_path = list(self.global_path[:])
 
     def _local_best(self, i):
         """
@@ -286,13 +324,12 @@ class PSOLGENT(PathBase):
 
     # Fitness #
     # Fitness conversion to path representation of solutions and evaluation
-    def _get_fitness(self, pos, rands):
+    def _get_fitness(self, paths):
         # Applies objective function to all members of swarm
-        return [self._evaluate_member(pos, rands[idx], idx) for idx, pos in enumerate(pos)]
+        return [self._evaluate_member(p) for p in paths]
 
-    def _evaluate_member(self, member, rand, idx):
-        self._update_current_nodes(self._discretise_solution(member, rand))
-        return self._get_fitness_member()
+    def _evaluate_member(self, path):
+        return self._get_fitness_member(path)
 
     @staticmethod
     def _discretise_solution(member, rand):
@@ -305,13 +342,15 @@ class PSOLGENT(PathBase):
         0 not present, 1 present.
         """
         nodes = self._sort_nodes(list(self.G.nodes()))
-        self.current_nodes = [
+        current_nodes = [
             nodes[i] for i in range(len(nodes)) if arr[i] == 1
         ]
+        soln = Solution(current_nodes, np.inf)
+        return self._local_search(soln).path
 
-    def _get_fitness_member(self):
+    def _get_fitness_member(self, path):
         # Returns the objective for a given path
-        return self._fitness(self.current_nodes)
+        return self._fitness(path)
 
     def _fitness(self, nodes):
         edges = self._get_edges(nodes)
@@ -358,12 +397,16 @@ class PSOLGENT(PathBase):
             return False
         if len(path) >= 2 and (path[0] == 'Source' and path[-1] == 'Sink'):
             base_cost = sum(edge[2]['weight'] for edge in edges)
-            self.st_path = path
-            if self.check_feasibility() is True:
+            # save st_path to reload later
+            old_path = self.st_path
+            self.st_path = path[:]
+            if self.check_feasibility(save=False) is True:
                 log.debug("Resource feasible path found")
+                self.st_path = old_path
                 return base_cost
             else:
                 # penalty for resource infeasible valid path
+                self.st_path = old_path
                 return 1e5 + base_cost
         else:
             return False
@@ -383,3 +426,23 @@ class PSOLGENT(PathBase):
         return ['Source'] + \
                sorted([n for n in nodes if n not in ['Source', 'Sink']]) + \
                ['Sink']
+
+    def _local_search(self, solution):
+        it = 0  # init local iteration counter
+        while it < self.max_localiter:  # Local search phase
+            # Init candidate solution using random valid path generator
+            candidate = Solution(
+                GRASP._find_alternative_paths(self.G,
+                    solution.path,
+                    self.random_state),
+                0)
+            # evaluate candidate solution
+            candidate.cost = self._fitness(candidate.path)
+            # Update solution with candidate if lower cost and resource feasible
+            if (candidate.path and (candidate.cost or candidate.cost == 0)
+                    and candidate.cost < solution.cost):
+                solution = candidate
+            it += 1
+        return solution
+
+

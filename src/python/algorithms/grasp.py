@@ -8,6 +8,7 @@ from typing import List, Optional, Callable
 
 from networkx import DiGraph
 from numpy.random import choice
+import numpy as np
 
 # Local imports
 from cspy.algorithms.path_base import PathBase
@@ -188,27 +189,39 @@ class GRASP(PathBase):
             return False
 
     @staticmethod
-    def _find_alternative_paths(G, path):
+    def _find_alternative_paths(G, path, rng=None):
         """
         Static Method used in local search to randomly generate valid paths.
         Using a subset of edges, it generates a connected path starting at
         the source node.
         """
-        n_permutations = int(factorial(len(path)) / factorial(len(path) - 2))
-        sample_size = randint(3, n_permutations)
-        selection = sample(deque(permutations(path, 2)), sample_size)
-        path_edges = dict([edge for edge in selection if edge in G.edges()])
-        elem = 'Source'  # start point in the new list
-        new_list = []
-        for _ in path_edges:
-            try:
-                new_list.append((elem, path_edges[elem]))
-                elem = path_edges[elem]
-            except KeyError:
-                pass
-        if new_list:
-            nodes_to_keep = [t[0] for t in new_list]
-            nodes_to_keep.append(new_list[-1][1])
+        # get all edges involving only these nodes
+        poss_edges = G.subgraph(path).edges()
+        if poss_edges:
+            sample_size = randint(1, len(poss_edges))
+            if rng:
+                tmp = np.empty(len(poss_edges), dtype='object')
+                tmp[:] = poss_edges
+                selection = rng.choice(tmp,
+                        replace=False,
+                        size=sample_size).tolist()
+            else:
+                selection = sample(deque(poss_edges), sample_size)
+            # will use last value tried with given key
+            path_edges = dict([edge for edge in selection if edge in G.edges()])
+            elem = 'Source'  # start point in the new list
+            new_list = []
+            for _ in path_edges:
+                try:
+                    new_list.append((elem, path_edges[elem]))
+                    elem = path_edges[elem]
+                except KeyError:
+                    pass
+            if new_list:
+                nodes_to_keep = [t[0] for t in new_list]
+                nodes_to_keep.append(new_list[-1][1])
+            else:
+                nodes_to_keep = []
         else:
             nodes_to_keep = []
         return nodes_to_keep
