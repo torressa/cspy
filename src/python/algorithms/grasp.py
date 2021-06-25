@@ -136,8 +136,7 @@ class GRASP(PathBase):
         return solution
 
     def _local_search(self, solution):
-        it = 0  # init local iteration counter
-        while it < self.max_localiter:  # Local search phase
+        for _ in range(self.max_localiter):  # Local search phase
             # Init candidate solution using random valid path generator
             candidate = Solution(
                 self._find_alternative_paths(self.G, solution.path), 0)
@@ -147,7 +146,6 @@ class GRASP(PathBase):
             if (candidate.path and candidate.cost < solution.cost and
                     self._check_path(candidate)):
                 solution = candidate
-            it += 1
         return solution
 
     def _update_best(self, solution):

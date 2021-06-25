@@ -100,8 +100,6 @@ class PathBase:
         inspected, whichever occurs first. In this case, the path with lowest
         cost is returned.
         """
-        depth = 0
-
         # Create two copies of the simple path generator
         paths, paths_backup = tee(shortest_simple_paths(self.G, source, 'Sink'),
                                   2)
@@ -124,17 +122,15 @@ class PathBase:
         except KeyError:
             return
 
-        for p in paths:
+        for depth, p in enumerate(paths):
             c = sum(self.G[i][j]["weight"] for i, j in zip(p, p[1:]))
             if c <= cost_min:
-                if not paths_reduced:
-                    _path = p
-                    cost_min = c
-                else:
+                if paths_reduced:
                     return p
+                _path = p
+                cost_min = c
             if depth > max_depth:
                 return _path
-            depth += 1
         return _path
 
     def check_feasibility(self, return_edge=True, save=True):

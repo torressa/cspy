@@ -147,7 +147,7 @@ class PSOLGENT(PathBase):
         self.time_limit = time_limit
         self.threshold = threshold
         self.swarm_size = swarm_size
-        self.member_size = member_size if member_size else len(G.nodes())
+        self.member_size = member_size or len(G.nodes())
         self.hood_size = neighbourhood_size
         self.lower_bound = lower_bound * ones(member_size)
         self.upper_bound = upper_bound * ones(member_size)
@@ -170,8 +170,7 @@ class PSOLGENT(PathBase):
 
     def _pos2path(self, pos, rands):
         new_disc = self._discretise_solution(pos, rands)
-        current_nodes = self._update_current_nodes(new_disc)
-        return current_nodes
+        return self._update_current_nodes(new_disc)
 
     def run(self):
         """Calculate shortest path with resource constraints.
@@ -428,8 +427,7 @@ class PSOLGENT(PathBase):
                ['Sink']
 
     def _local_search(self, solution):
-        it = 0  # init local iteration counter
-        while it < self.max_localiter:  # Local search phase
+        for _ in range(self.max_localiter):  # Local search phase
             # Init candidate solution using random valid path generator
             candidate = Solution(
                 GRASP._find_alternative_paths(self.G,
@@ -442,7 +440,6 @@ class PSOLGENT(PathBase):
             if (candidate.path and (candidate.cost or candidate.cost == 0)
                     and candidate.cost < solution.cost):
                 solution = candidate
-            it += 1
         return solution
 
 
