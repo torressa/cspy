@@ -21,7 +21,7 @@ class MyCallback(REFCallback):
         res_new[0] += 1.0
         tail_original, head_original = self._get_original_node_label(tail, head)
         # Increasing resource
-        if "Sink" != head_original:
+        if head_original != "Sink":
             res_new[1] += float(int(head_original)**2)
         # Resource reset
         res_new[2] += edge_res[1]
@@ -34,7 +34,7 @@ class MyCallback(REFCallback):
         # Monotone resource
         res_new[0] -= 1
         # Increasing resource
-        if "Sink" != head_original:
+        if head_original != "Sink":
             res_new[1] += float(int(head_original)**2)
         # Resource reset
         res_new[2] += edge_res[1]
@@ -50,7 +50,7 @@ class MyCallback(REFCallback):
         # Compute merged resources
         merged_res = [0] * len(fwd_res)
         merged_res[0] = fwd_res[0] + bwd_res[0]
-        if "Sink" != head_original:
+        if head_original != "Sink":
             merged_res[1] = fwd_res[1] + bwd_res[1] + float(
                 int(head_original)**2)
         else:

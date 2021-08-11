@@ -170,11 +170,7 @@ class BiDirectional:
         if len(path) <= 0:
             return None
 
-        _path = []
-        # Convert path to original labels and return
-        for p in path:
-            _path.append(self.G.nodes[p]["original_label"])
-        return _path
+        return [self.G.nodes[p]["original_label"] for p in path]
 
     @property
     def total_cost(self):
