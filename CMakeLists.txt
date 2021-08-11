@@ -42,7 +42,7 @@ endif()
 
 project(
   cspy
-  VERSION 1.0.0
+  VERSION 1.0.1
   LANGUAGES CXX)
 message(STATUS "project: ${PROJECT_NAME}")
 message(STATUS "version: ${PROJECT_VERSION}")

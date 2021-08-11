@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [unreleased]
 
+## [v1.0.1]
+
+### Changed
+
+ - Fix minimum number of nodes on path condition for PSOLGENT.
+ - Force node sorting to start with "Source" and end with "Sink" in PSOLGENT.
+ - Force inclusion of Source and Sink nodes in PSOLGENT paths.
+
+### Added
+ - Record `rand` value used to generate PSOLGENT paths from positions.
+ - Make upper and lower bound of PSOLGENT initial positions optional arguments.
+
+### Fixed
+ - Issue #79
+
 ## [v1.0.0]
 
 ### Changed
