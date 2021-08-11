@@ -59,12 +59,13 @@ and, increased efficiency
    :caption: C++ API
 
    cc_api/BiDirectional
+   cc_api/Search
+   cc_api/REFCallback
    cc_api/params
    cc_api/DiGraph
    cc_api/Vertex
-   cc_api/Search
-   cc_api/REFCallback
    cc_api/Label
+   cc_api/preprocessing
 
 
 
