@@ -30,7 +30,8 @@ else()
     src/test_issue22.cc
     src/test_issue38.cc
     src/test_issue41.cc
-    src/test_issue52.cc)
+    src/test_issue52.cc
+    src/test_issue69.cc)
 endif()
 
 # note: macOS is APPLE and also UNIX !
@@ -48,6 +49,6 @@ target_include_directories(
          $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
          $<INSTALL_INTERFACE:include>)
 
-target_link_libraries(${NAME} gtest ${PROJECT_NAME}::BiDirectionalCpp)
+target_link_libraries(${NAME} gtest ${PROJECT_NAME}::BiDirectionalCpp lemon)
 
 add_test(NAME ${NAME} COMMAND $<TARGET_FILE:${NAME}>)

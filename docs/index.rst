@@ -44,15 +44,28 @@ and, increased efficiency
 
 .. toctree::
    :maxdepth: 1
-   :caption: API
+   :caption: Python API
 
-   api/cspy.BiDirectional
-   api/cspy.Tabu
-   api/cspy.GreedyElim
-   api/cspy.GRASP
-   api/cspy.PSOLGENT
-   api/cspy.preprocess_graph
-   api/cspy.check
+   python_api/cspy.BiDirectional
+   python_api/cspy.Tabu
+   python_api/cspy.GreedyElim
+   python_api/cspy.GRASP
+   python_api/cspy.PSOLGENT
+   python_api/cspy.preprocess_graph
+   python_api/cspy.check
+
+.. toctree::
+   :maxdepth: 1
+   :caption: C++ API
+
+   cc_api/BiDirectional
+   cc_api/params
+   cc_api/DiGraph
+   cc_api/Vertex
+   cc_api/Search
+   cc_api/REFCallback
+   cc_api/Label
+   cc_api/LabelExtension
 
 
 

@@ -5,66 +5,92 @@
 #include <set>
 
 #include "digraph.h"
+#include "lemon/adaptors.h"     // reverseDigraph
+#include "lemon/bellman_ford.h" // BellmanFord
+#include "lemon/maps.h"
 
 namespace bidirectional {
 
-void shortest_path(
+// TODO Use explicit types when calling BF to avoid error on MACOS
+void lowerBoundWeight(
     std::vector<double>* lower_bound_weight,
     const DiGraph&       graph,
-    const double&        reverse) {
-  const int&    number_vertices = graph.number_vertices;
-  std::set<int> visited;
-  // vertices have idx and distance
-  std::vector<Vertex> vertices = graph.vertices;
-  for (int i = 0; i < number_vertices; ++i) {
-    vertices[i].distance = INF;
-  }
-  int source_idx;
-  if (reverse) {
-    // init heap with source
-    source_idx = graph.sink.idx;
+    const bool&          forward) {
+  // Create map to store distances
+  if (forward) {
+    // Instantiate algorithm with normal graph
+    LemonGraph::NodeMap<double> distance_map(*graph.lemon_graph_ptr);
+    const LemonNode& source = graph.getLNodeFromId(graph.source.lemon_id);
+    lemon::BellmanFord<LemonGraph, LemonGraph::ArcMap<double>> BF(
+        *graph.lemon_graph_ptr, *graph.weight_map_ptr);
+    BF.distMap(distance_map);
+    BF.run(source, graph.number_edges);
+
+    // TODO: Fix wizard version on MACOS
+    // bellmanFord(*graph.lemon_graph_ptr, *graph.weight_map_ptr)
+    //     .distMap(distance_map)
+    //     .run(source, sink);
+
+    // Extract shortest path distance to each node, if available, ow lemon::inf
+    for (LemonGraph::NodeIt v(*graph.lemon_graph_ptr); v != lemon::INVALID;
+         ++v) {
+      const int& id = graph.getId(v);
+      // std::cout << "dist[" << id << "] = " << distance_map[v] << "\n";
+      (*lower_bound_weight)[id] = distance_map[v];
+    }
   } else {
-    // init heap with source
-    source_idx = graph.source.idx;
-  }
-  std::priority_queue<Vertex> queue;
-  vertices[source_idx].distance = 0;
-  queue.push(vertices[source_idx]);
-  // run algorithm
-  while (!queue.empty()) {
-    const Vertex min_vertex = queue.top();
-    queue.pop();
-    std::vector<AdjVertex> adj_vertices;
-    if (reverse) {
-      adj_vertices = graph.reversed_adjacency_list[min_vertex.idx];
-    } else {
-      adj_vertices = graph.adjacency_list[min_vertex.idx];
+    lemon::ReverseDigraph<const LemonGraph> RG(*graph.lemon_graph_ptr);
+    lemon::ReverseDigraph<const LemonGraph>::NodeMap<double> distance_map_rev(
+        *graph.lemon_graph_ptr);
+    const LemonNode& sink = graph.getLNodeFromId(graph.sink.lemon_id);
+
+    lemon::BellmanFord<
+        lemon::ReverseDigraph<const LemonGraph>,
+        LemonGraph::ArcMap<double>>
+        BF(RG, *graph.weight_map_ptr);
+    BF.distMap(distance_map_rev);
+    BF.run(sink, graph.number_edges);
+
+    // TODO: Fix wizard version on MACOS
+    // Instantiate algorithm with reversed digraph
+    // bellmanFord(reverseDigraph(*graph.lemon_graph_ptr),
+    // *graph.weight_map_ptr)
+    //     .distMap(distance_map)
+    //     .run(sink, source);
+
+    // Extract distance using reverse map
+    for (LemonGraph::NodeIt v(*graph.lemon_graph_ptr); v != lemon::INVALID;
+         ++v) {
+      const int& id = graph.getId(v);
+      // std::cout << "dist[" << id << "] = " << distance_map_rev[v] << "\n";
+      (*lower_bound_weight)[id] = distance_map_rev[v];
     }
-    for (std::vector<AdjVertex>::const_iterator it = adj_vertices.begin();
-         it != adj_vertices.end();
-         ++it) {
-      // Get edge
-      const AdjVertex& adj_vertex  = *it;
-      Vertex&          next_vertex = vertices[adj_vertex.vertex.idx];
-      //  If there is shorter path to next_vertex through min_vertex.
-      if (min_vertex.distance + adj_vertex.weight < next_vertex.distance) {
-        // Updating distance of next_vertex
-        next_vertex.distance = min_vertex.distance + adj_vertex.weight;
-        // std::cout << "Setting vertex " << next_vertex.id << " distance to "
-        //           << next_vertex.distance << "\n";
-        if (visited.find(next_vertex.idx) == visited.end()) {
-          queue.push(next_vertex);
-        }
-      }
+  }
+}
+
+int getCriticalRes(const std::vector<double>& max_res, const DiGraph& graph) {
+  // Create map to store distances
+  int        critical_res     = 0;
+  double     max_diff         = 0.0;
+  const int& number_resources = max_res.size();
+  if (number_resources == 0)
+    return critical_res;
+  for (int r = 0; r < number_resources; ++r) {
+    LemonGraph::NodeMap<double> distance_map(*graph.lemon_graph_ptr);
+    const LemonNode& source = graph.getLNodeFromId(graph.source.lemon_id);
+    const LemonNode& sink   = graph.getLNodeFromId(graph.sink.lemon_id);
+    ResourceMap      m      = graph.getResourceMap(r);
+    lemon::BellmanFord<LemonGraph, ResourceMap> BF(*graph.lemon_graph_ptr, m);
+    BF.distMap(distance_map);
+    BF.run(source, graph.number_edges);
+    const double dist = BF.dist(sink);
+    const double diff = std::abs(dist) - max_res[r];
+    if (diff > max_diff) {
+      max_diff     = diff;
+      critical_res = r;
     }
-    visited.insert(min_vertex.idx);
   }
-  // std::cout << "Shortest path " << reverse << "\n";
-  for (int i = 0; i < number_vertices; ++i) {
-    // std::cout << "i = " << i << ", id = " << vertices[i].id
-    //           << ", d = " << vertices[i].distance << "\n";
-    (*lower_bound_weight)[i] = vertices[i].distance;
-  }
+  return critical_res;
 }
 
 } // namespace bidirectional

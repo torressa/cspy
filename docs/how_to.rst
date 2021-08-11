@@ -160,19 +160,32 @@ and the edge that is being considered for an extension of a path ``edge``
 .. code-block:: python
 
         from numpy import array
-        def jane_REF(res, edge, **kwargs):
-            arr = array(res)  # local array
-            i, j, edge_data = edge[:]  # unpack edge
-            # i, j : string, edge_data : dict
-            # Update 'sights' resource
-            arr[0] += edge_data['res_cost'][0]
-            # Update 'travel-time' resource (distance/speed)
-            arr[2] += - edge_data['weight'] / float(WALKING_SPEED)
-            # Update 'delivery-time' resource
-            arr[3] += edge_data['res_cost'][3]
-            # Update 'shift' resource
-            arr[1] += (arr[2] + arr[3])  # travel-time + delivery-time
-            return arr
+        from cspy import REFCallback
+
+        WALKING_SPEED = 3
+
+        class MyCallback(REFCallback):
+
+            def __init__(self):
+                REFCallback.__init__(self)
+                # Empty attribute for later
+                self.G = None
+
+            def REF_fwd(self, cumul_res, tail, head, edge_res, partial_path,
+                        cumul_cost):
+                new_res = list(cumul_res)
+                i, j = tail, head
+                # Monotone resource
+                new_res[0] += 1
+                # Update 'sights' resource
+                new_res[1] += self.G.edges[i,j]['res_cost'][1]
+                # Extract the 'travel-time' resource (distance/speed)
+                new_res[3] = - self.G.edges[i,j]['weight'] / float(WALKING_SPEED)
+                # # Update 'delivery-time' resource
+                new_res[4] = self.G.edges[i,j]['res_cost'][4]
+                # # Update 'shift' resource
+              new_res[2] += (new_res[3] + new_res[4])  # travel-time + delivery-time
+              return new_res
 
 
 Hence, each resource is restricted and updated as follows:
@@ -189,24 +202,31 @@ Using ``cspy``, Jane can obtain a route ``path`` and subject to her constraints 
 
 .. code-block:: python
 
-        from cspy import Tabu
-        SHIFT_DURATION = 5
+        from cspy import Tabu, BiDirectional
+
         n_edges = len(G.edges())  # number of edges in network
-        # Maximum resources
-        max_res = [n_edges, SHIFT_DURATION, SHIFT_DURATION, SHIFT_DURATION]
-        # Minimum resources
-        min_res = [0, 0, 0, 0]
-        # Use Tabu Algorithm
-        tabu = Tabu(G, max_res, min_res, REF=jane_REF).run()
-        print(tabu.path)  # print route
+        max_res = [n_edges, 5*n_edges, 5, 5, 5]
+        min_res = [0, 0, 0, 0, 0]
+
+        my_callback = MyCallback()
+        alg = BiDirectional(G,
+                            max_res,
+                            min_res,
+                            REF_callback=my_callback,
+                            direction="forward",
+                            elementary=True)
+        # Pass preprocessed graph
+        my_callback.G = alg1.G
+        alg.run()
+        print(alg.path)  # print route
 
 
 Additionally, we can query other useful attributes as
 
 .. code-block:: python
 
-        tabu.total_cost
-        tabu.consumed_resources
+        alg.total_cost
+        alg.consumed_resources
 
 
 
@@ -214,5 +234,5 @@ Additionally, we can query other useful attributes as
 .. _cgar: https://github.com/torressa/cspy/blob/master/examples/cgar/cgar.pdf
 .. _Tilk et al 2017: https://www.sciencedirect.com/science/article/pii/S0377221717302035
 .. _Inrich 2005: https://www.researchgate.net/publication/227142556_Shortest_Path_Problems_with_Resource_Constraints
-.. _unittest: https://github.com/torressa/cspy/tree/master/tests/tests_issue32.py
+.. _unittest: https://github.com/torressa/cspy/tree/master/test/python/tests_issue32.py
 .. _Input Requirements: https://cspy.readthedocs.io/en/latest/how_to.html#input-requirements

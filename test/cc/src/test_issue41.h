@@ -10,8 +10,6 @@
 
 namespace bidirectional {
 
-void addEdgesIssue41(BiDirectional* bidirectional);
-
 class TestIssue41 : public ::testing::Test {
  protected:
   const int                      number_vertices = 5;
@@ -21,9 +19,9 @@ class TestIssue41 : public ::testing::Test {
   std::unique_ptr<BiDirectional> bidirectional;
 
   // expected solution
-  const std::vector<std::string> final_path = {"Source", "A", "C", "Sink"};
-  const std::vector<double>      final_res  = {3.0, 3.0};
-  const double                   final_cost = 20.0;
+  const std::vector<int>    final_path = {0, 1, 3, 4};
+  const std::vector<double> final_res  = {3.0, 3.0};
+  const double              final_cost = 20.0;
 };
 
 } // namespace bidirectional

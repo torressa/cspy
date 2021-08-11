@@ -46,6 +46,7 @@ configure_package_config_file(
   INSTALL_DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/cspy")
 write_basic_package_version_file("${PROJECT_BINARY_DIR}/cspyConfigVersion.cmake"
                                  COMPATIBILITY SameMajorVersion)
+
 install(
   FILES "${PROJECT_BINARY_DIR}/cspyConfig.cmake"
         "${PROJECT_BINARY_DIR}/cspyConfigVersion.cmake"

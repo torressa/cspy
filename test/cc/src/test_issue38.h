@@ -10,8 +10,6 @@
 
 namespace bidirectional {
 
-void addEdgesIssue38(BiDirectional* bidirectional);
-
 class TestIssue38 : public ::testing::Test {
  protected:
   const bool                     elementary      = true;
@@ -20,7 +18,7 @@ class TestIssue38 : public ::testing::Test {
   const std::vector<double>      max_res         = {4.0, 20.0};
   const std::vector<double>      min_res         = {0.0, 0.0};
   std::unique_ptr<BiDirectional> bidirectional;
-  const std::vector<std::string> final_path = {"Source", "A", "Sink"};
+  const std::vector<int>         final_path = {0, 1, 2};
   const std::vector<double>      final_res  = {2.0, 12.0};
   const double                   final_cost = 0.0;
 };

@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [unreleased]
 
+## [v1.0.0]
+
+### Changed
+
+ - Graph implementation replaced with [LEMON](https://lemon.cs.elte.hu/trac/lemon). This brings significant improvement.
+
+### Added
+ - Benchmarks against boost's r_c_shortest_paths (#65)
+
+### Fixed
+ - Issues #66, #68, #69, #72
+
+## [v1.0.0-alpha]
+
 ### Changed
 
 Rewrite of the bidirectional algorithm in C++ interfaced with Python using SWIG.
@@ -236,7 +250,9 @@ path using `networkx.shortest_simple_paths`.
 - Docstring modifications to include maths.
 - Updated README.
 
-[unreleased]: https://github.com/torressa/cspy/compare/v0.1.2...HEAD
+[unreleased]: https://github.com/torressa/cspy/compare/v1.0.0...HEAD
+[v1.0.0]: https://github.com/torressa/cspy/compare/v1.0.0-alpha...v1.0.0
+[v1.0.0-alpha]: https://github.com/torressa/cspy/compare/v0.1.2...v1.0.0-alpha
 [v0.1.2]: https://github.com/torressa/cspy/compare/v0.1.1...v0.1.2
 [v0.1.1]: https://github.com/torressa/cspy/compare/v0.1.0...v0.1.1
 [v0.1.0]: https://github.com/torressa/cspy/compare/v0.0.14...v0.1.0

@@ -1,12 +1,29 @@
 #include "test_benchmarks.h"
 
 #include <fstream>
-#include <iostream> // cout
 #include <sstream>
 
 #include "utils.h" // loadMaxMinRes, skipLines, writeToFile, getElapsedTime, getBestCost
 
 namespace bidirectional {
+
+/// Set critical resources by hand
+void setCriticalRes(BiDirectional* bidirectional, int instance_number) {
+  if (instance_number == 5 || instance_number == 6)
+    bidirectional->setCriticalRes(7);
+  if (instance_number == 7)
+    bidirectional->setCriticalRes(1);
+  if (instance_number == 8)
+    bidirectional->setCriticalRes(2);
+  if (instance_number == 13)
+    bidirectional->setCriticalRes(3);
+  if (instance_number == 14)
+    bidirectional->setCriticalRes(0);
+  if (instance_number == 15 || instance_number == 16)
+    bidirectional->setCriticalRes(2);
+  if (instance_number == 23 || instance_number == 24)
+    bidirectional->setCriticalRes(7);
+}
 
 void loadGraph(
     BiDirectional*     bidirectional,
@@ -22,6 +39,12 @@ void loadGraph(
   skipLines(instance_file, line, 3);
   skipLines(instance_file, line, num_nodes);
 
+  std::vector<int> nodes;
+  for (int n = 1; n <= num_nodes; ++n) {
+    nodes.push_back(n);
+  }
+  bidirectional->addNodes(nodes);
+
   for (int i = 0; i < num_arcs; ++i) {
     std::getline(instance_file, line);
     iss.clear();
@@ -31,33 +54,30 @@ void loadGraph(
     std::vector<double> res_cost;
     iss >> tail >> head >> weight;
 
-    if (forward) {
-      res_cost.resize(num_resources);
-      for (int j = 0; j < num_resources; ++j) {
-        iss >> res_cost[j];
-      }
-    } else {
-      // Monotone resource
-      res_cost.resize(num_resources + 1);
-      res_cost[0] = 1.0;
-      for (int j = 1; j < num_resources + 1; ++j) {
-        iss >> res_cost[j];
-      }
+    // if (forward) {
+    res_cost.resize(num_resources);
+    for (int j = 0; j < num_resources; ++j) {
+      iss >> res_cost[j];
     }
+    // } else {
+    //   // Monotone resource
+    //   res_cost.resize(num_resources + 1);
+    //   res_cost[0] = 1.0;
+    //   for (int j = 1; j < num_resources + 1; ++j) {
+    //     iss >> res_cost[j];
+    //   }
+    // }
 
     if (tail == 1)
-      bidirectional->addEdge("Source", std::to_string(head), weight, res_cost);
+      bidirectional->addEdge(1, head, weight, res_cost);
     else if (head == 1)
       ;
-    // bidirectional->addEdge(std::to_string(tail), "Source", weight, res_cost);
     else if (head == num_nodes)
-      bidirectional->addEdge(std::to_string(tail), "Sink", weight, res_cost);
+      bidirectional->addEdge(tail, num_nodes, weight, res_cost);
     else if (tail == num_nodes)
       ;
-    // bidirectional->addEdge("Sink", std::to_string(head), weight, res_cost);
     else
-      bidirectional->addEdge(
-          std::to_string(tail), std::to_string(head), weight, res_cost);
+      bidirectional->addEdge(tail, head, weight, res_cost);
   }
 }
 
@@ -75,11 +95,11 @@ TEST_P(TestBenchmarks, testForwardElementary) {
       &num_arcs,
       &num_resources,
       path_to_instance);
-  bidirectional =
-      std::make_unique<BiDirectional>(num_nodes, num_arcs, max_res, min_res);
-  bidirectional->direction  = "forward";
-  bidirectional->elementary = true;
-  bidirectional->time_limit = time_limit;
+  bidirectional = std::make_unique<BiDirectional>(
+      num_nodes, num_arcs, 1, num_nodes, max_res, min_res);
+  bidirectional->setDirection("forward");
+  bidirectional->setElementary(true);
+  bidirectional->setTimeLimit(time_limit);
   loadGraph(
       bidirectional.get(),
       num_nodes,
@@ -91,7 +111,7 @@ TEST_P(TestBenchmarks, testForwardElementary) {
   auto cost = bidirectional->getTotalCost();
   ASSERT_EQ(cost, getBestCost(path_to_data, instance_number));
   writeToFile(
-      "/root/build/",
+      output_path,
       "results_fwd_elem.txt",
       std::to_string(instance_number) + " " +
           std::to_string(getElapsedTime(start)));
@@ -109,10 +129,10 @@ TEST_P(TestBenchmarks, testForward) {
       &num_arcs,
       &num_resources,
       path_to_instance);
-  bidirectional =
-      std::make_unique<BiDirectional>(num_nodes, num_arcs, max_res, min_res);
-  bidirectional->direction  = "forward";
-  bidirectional->time_limit = time_limit;
+  bidirectional = std::make_unique<BiDirectional>(
+      num_nodes, num_arcs, 1, num_nodes, max_res, min_res);
+  bidirectional->setDirection("forward");
+  bidirectional->setTimeLimit(time_limit);
   loadGraph(
       bidirectional.get(),
       num_nodes,
@@ -124,7 +144,7 @@ TEST_P(TestBenchmarks, testForward) {
   auto cost = bidirectional->getTotalCost();
   ASSERT_EQ(cost, getBestCost(path_to_data, instance_number));
   writeToFile(
-      "/root/build/",
+      output_path,
       "results_fwd.txt",
       std::to_string(instance_number) + " " +
           std::to_string(getElapsedTime(start)));
@@ -142,11 +162,11 @@ TEST_P(TestBenchmarks, testForwardBoundsPruning) {
       &num_arcs,
       &num_resources,
       path_to_instance);
-  bidirectional =
-      std::make_unique<BiDirectional>(num_nodes, num_arcs, max_res, min_res);
-  bidirectional->direction      = "forward";
-  bidirectional->time_limit     = time_limit;
-  bidirectional->bounds_pruning = true;
+  bidirectional = std::make_unique<BiDirectional>(
+      num_nodes, num_arcs, 1, num_nodes, max_res, min_res);
+  bidirectional->setDirection("forward");
+  bidirectional->setTimeLimit(time_limit);
+  bidirectional->setBoundsPruning(true);
   loadGraph(
       bidirectional.get(),
       num_nodes,
@@ -159,13 +179,14 @@ TEST_P(TestBenchmarks, testForwardBoundsPruning) {
   auto cost = bidirectional->getTotalCost();
   ASSERT_EQ(cost, getBestCost(path_to_data, instance_number));
   writeToFile(
-      "/root/build/",
+      output_path,
       "results_fwd_bp.txt",
       std::to_string(instance_number) + " " +
           std::to_string(getElapsedTime(start)));
 }
 
-// Both
+/* Both */
+
 TEST_P(TestBenchmarks, testBothElementary) {
   const std::string path_to_instance =
       path_to_data + "rcsp" + std::to_string(instance_number) + ".txt";
@@ -179,11 +200,13 @@ TEST_P(TestBenchmarks, testBothElementary) {
       &num_resources,
       path_to_instance,
       false);
-  max_res[0] = std::ceil(max_res[0] / 2.0);
-  bidirectional =
-      std::make_unique<BiDirectional>(num_nodes, num_arcs, max_res, min_res);
-  bidirectional->elementary = true;
-  bidirectional->time_limit = time_limit;
+  // max_res[0] = std::ceil(max_res[0] / 2.0);
+  bidirectional = std::make_unique<BiDirectional>(
+      num_nodes, num_arcs, 1, num_nodes, max_res, min_res);
+  bidirectional->setElementary(true);
+  bidirectional->setTimeLimit(time_limit);
+  bidirectional->setFindCriticalRes(true);
+  // setCriticalRes(bidirectional.get(), instance_number);
   loadGraph(
       bidirectional.get(),
       num_nodes,
@@ -194,9 +217,11 @@ TEST_P(TestBenchmarks, testBothElementary) {
   clock_t start = clock();
   bidirectional->run();
   auto cost = bidirectional->getTotalCost();
+  auto path = bidirectional->getPath();
+
   ASSERT_EQ(cost, getBestCost(path_to_data, instance_number));
   writeToFile(
-      "/root/build/",
+      output_path,
       "results_both_elem.txt",
       std::to_string(instance_number) + " " +
           std::to_string(getElapsedTime(start)));
@@ -215,11 +240,11 @@ TEST_P(TestBenchmarks, testBoth) {
       &num_resources,
       path_to_instance,
       false);
-  max_res[0] = std::ceil(max_res[0] / 2.0);
-  bidirectional =
-      std::make_unique<BiDirectional>(num_nodes, num_arcs, max_res, min_res);
-  bidirectional->elementary = true;
-  bidirectional->time_limit = time_limit;
+  bidirectional = std::make_unique<BiDirectional>(
+      num_nodes, num_arcs, 1, num_nodes, max_res, min_res);
+  bidirectional->setTimeLimit(time_limit);
+  // setCriticalRes(bidirectional.get(), instance_number);
+  bidirectional->setFindCriticalRes(true);
   loadGraph(
       bidirectional.get(),
       num_nodes,
@@ -229,10 +254,13 @@ TEST_P(TestBenchmarks, testBoth) {
       false);
   clock_t start = clock();
   bidirectional->run();
+  bidirectional->checkCriticalRes();
   auto cost = bidirectional->getTotalCost();
+  auto path = bidirectional->getPath();
+
   ASSERT_EQ(cost, getBestCost(path_to_data, instance_number));
   writeToFile(
-      "/root/build/",
+      output_path,
       "results_both.txt",
       std::to_string(instance_number) + " " +
           std::to_string(getElapsedTime(start)));
@@ -251,12 +279,13 @@ TEST_P(TestBenchmarks, testBothBoundsPruning) {
       &num_resources,
       path_to_instance,
       false);
-  max_res[0] = std::ceil(max_res[0] / 2.0);
-  bidirectional =
-      std::make_unique<BiDirectional>(num_nodes, num_arcs, max_res, min_res);
-  bidirectional->elementary     = true;
-  bidirectional->time_limit     = time_limit;
-  bidirectional->bounds_pruning = true;
+  bidirectional = std::make_unique<BiDirectional>(
+      num_nodes, num_arcs, 1, num_nodes, max_res, min_res);
+  bidirectional->setElementary(true);
+  bidirectional->setTimeLimit(time_limit);
+  bidirectional->setBoundsPruning(true);
+  // setCriticalRes(bidirectional.get(), instance_number);
+  bidirectional->setFindCriticalRes(true);
   loadGraph(
       bidirectional.get(),
       num_nodes,
@@ -270,7 +299,7 @@ TEST_P(TestBenchmarks, testBothBoundsPruning) {
   auto cost = bidirectional->getTotalCost();
   ASSERT_EQ(cost, getBestCost(path_to_data, instance_number));
   writeToFile(
-      "/root/build/",
+      output_path,
       "results_both_bp.txt",
       std::to_string(instance_number) + " " +
           std::to_string(getElapsedTime(start)));

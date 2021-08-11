@@ -18,45 +18,43 @@ class REFCallback {
 
   /// Default implementation of a forward REF
   virtual std::vector<double> REF_fwd(
-      const std::vector<double>&      cumulative_resource,
-      const std::string&              tail,
-      const std::string&              head,
-      const std::vector<double>&      edge_resource_consumption,
-      const std::vector<std::string>& partial_path,
-      const double&                   accummulated_cost) const;
+      const std::vector<double>& cumulative_resource,
+      const int&                 tail,
+      const int&                 head,
+      const std::vector<double>& edge_resource_consumption,
+      const std::vector<int>&    partial_path,
+      const double&              accummulated_cost) const;
 
-  /// Default implementation of a backward REF
+  /// Default implementation of a backward REF (note that critical resource
+  /// information is not an argument)
   virtual std::vector<double> REF_bwd(
-      const std::vector<double>&      cumulative_resource,
-      const std::string&              tail,
-      const std::string&              head,
-      const std::vector<double>&      edge_resource_consumption,
-      const std::vector<std::string>& partial_path,
-      const double&                   accummulated_cost) const;
+      const std::vector<double>& cumulative_resource,
+      const int&                 tail,
+      const int&                 head,
+      const std::vector<double>& edge_resource_consumption,
+      const std::vector<int>&    partial_path,
+      const double&              accummulated_cost) const;
 
   /// Default implementation of a joining REF (used to merge forward and
   /// backward paths)
   virtual std::vector<double> REF_join(
       const std::vector<double>& fwd_resource,
       const std::vector<double>& bwd_resource,
-      const std::string&         tail,
-      const std::string&         head,
+      const int&                 tail,
+      const int&                 head,
       const std::vector<double>& edge_resource_consumption) const;
 };
 
 /// Default additive REF for forward labels
 std::vector<double> additiveForwardREF(
     const std::vector<double>& cumulative_resource,
-    const std::string&         tail,
-    const std::string&         head,
     const std::vector<double>& edge_resource_consumption);
 
 /// Default additive REF for backward labels
 std::vector<double> additiveBackwardREF(
     const std::vector<double>& cumulative_resource,
-    const std::string&         tail,
-    const std::string&         head,
-    const std::vector<double>& edge_resource_consumption);
+    const std::vector<double>& edge_resource_consumption,
+    const int&                 critical_res = 0);
 
 } // namespace bidirectional
 

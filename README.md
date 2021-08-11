@@ -126,14 +126,15 @@ void wrap() {
   const int                 number_vertices = 5;
   const int                 number_edges    = 5;
   auto                      bidirectional   = std::make_unique<BiDirectional>(
-      number_vertices, number_edges, max_res, min_res);
+      number_vertices, number_edges, 0, 4, max_res, min_res);
 
   // Populate graph
-  bidirectional->addEdge("Source", "A", 0, {1, 2});
-  bidirectional->addEdge("A", "B", 0, {1, 0.3});
-  bidirectional->addEdge("B", "C", -10, {1, 3});
-  bidirectional->addEdge("B", "Sink", 10, {1, 2});
-  bidirectional->addEdge("C", "Sink", 0, {1, 10});
+  bidirectional->addNodes({0, 1, 2, 3, 4});
+  bidirectional->addEdge(0, 1, 0.0, {1, 2});
+  bidirectional->addEdge(1, 2, 0.0, {1, 0.3});
+  bidirectional->addEdge(2, 3, -10.0, {1, 3});
+  bidirectional->addEdge(2, 4, 10.0, {1, 2});
+  bidirectional->addEdge(3, 4, 0.0, {1, 10});
 
   // Run and query attributes
   bidirectional->run();
@@ -153,30 +154,42 @@ void wrap() {
 - [`jpath`](examples/jpath) : Simple example showing the necessary graph adptations and the use of custom resource extension functions.
 
 
-## Running the tests
+## Building
 
-### Prerequisites
+### Docker
 
-- Docker, docker-compose
+Using docker, docker-compose is the easiest way.
 
 To run the tests first, clone the repository into a path in your machine `~/path/newfolder` by running
 
 ```none
 git clone https://github.com/torressa/cspy.git ~/path/newfolder
 ```
-### Running the Cpp tests
+
+#### Running the Cpp tests
 
 ```
 cd ~/path/newfolder/tools/dev
 ./build
 ```
 
-### Running the Python tests
+#### Running the Python tests
 
 ```
 cd ~/path/newfolder/tools/dev
 ./build -c -p
 ```
+
+### Locally
+
+Requirements:
+
+- CMake (>=v3.14)
+- Standard C++ toolchain
+- [LEMON](https://lemon.cs.elte.hu/trac/lemon) installed (see [`tools/docker/scripts/install_lemon`](tools/docker/scripts/install_lemon))
+- Python (>=3.6)
+
+Then use the [`Makefile`] e.g. `make` in the root dir runs the unit tests
 
 ## License
 
@@ -203,7 +216,7 @@ After that feel free to send a pull request.
 
 If you have a question or need help, feel free to raise an issue explaining it.
 
-Alternatively, email me at `david.sanchez@sintef.no`.
+Alternatively, email me at `d.torressanchez@lancaster.ac.uk`.
 
 ## Citing
 

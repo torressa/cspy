@@ -2,7 +2,6 @@ import unittest
 
 from numpy import array
 from networkx import DiGraph
-from parameterized import parameterized
 
 from cspy import BiDirectional
 
@@ -50,9 +49,7 @@ class TestsIssue41(unittest.TestCase):
         Test BiDirectional with randomly chosen sequence of directions
         for a range of seeds.
         """
-        alg = BiDirectional(self.G,
-                            self.max_res,
-                            self.min_res)
+        alg = BiDirectional(self.G, self.max_res, self.min_res)
         alg.run()
         self.assertEqual(alg.path, self.result_path)
         self.assertEqual(alg.total_cost, self.total_cost)

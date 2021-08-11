@@ -4,82 +4,79 @@
 
 namespace bidirectional {
 
-DiGraph::DiGraph(const int& n_v, const int& n_e)
-    : number_vertices(n_v), number_edges(n_e) {
-  vertices.resize(number_vertices);
-  adjacency_list.resize(number_vertices);
-  adjacency_matrix.resize(
-      number_vertices,
-      std::vector<std::shared_ptr<AdjVertex>>(number_vertices, nullptr));
-};
+DiGraph::DiGraph(
+    const int& num_nodes_in,
+    const int& num_arcs_in,
+    const int& source_id_in,
+    const int& sink_id_in)
+    : number_vertices(num_nodes_in),
+      number_edges(num_arcs_in),
+      lemon_graph_ptr(std::make_unique<LemonGraph>()),
+      weight_map_ptr(
+          std::make_unique<LemonGraph::ArcMap<double>>(*lemon_graph_ptr)),
+      res_map_ptr(std::make_unique<LemonGraph::ArcMap<std::vector<double>>>(
+          *lemon_graph_ptr)),
+      source_id_(source_id_in),
+      sink_id_(sink_id_in) {
+  lemon_graph_ptr->reserveNode(num_nodes_in);
+  lemon_graph_ptr->reserveArc(num_arcs_in);
+  vertices.resize(num_nodes_in);
+}
 
-Vertex DiGraph::addVertex(const std::string& id) {
-  const int idx = number_vertices_added_;
-  Vertex    vertex;
-  // Check if vertex with matching id already present
-  auto it =
-      std::find_if(vertices.begin(), vertices.end(), [&id](const Vertex& v) {
-        return (v.id == id);
-      });
-  // vertex doesn't already exist
-  if (it == vertices.end()) {
-    // fill new vertex attributes
-    vertex.idx = idx;
-    vertex.id  = id;
-    // Add new vertex
-    vertices[idx] = vertex;
-    ++number_vertices_added_;
-  } else {
-    // Retrieve existing vertex
-    vertex = *it;
+void DiGraph::addNodes(const std::vector<int>& user_nodes) {
+  int  count        = 0;
+  bool source_saved = false, sink_saved = false;
+  for (const int& user_node : user_nodes) {
+    lemon_graph_ptr->addNode();
+    // Create and save vertex (lemon id is just count)
+    const Vertex new_vertex = {count, user_node};
+    vertices[count]         = new_vertex;
+    // Save source/sink
+    if (!source_saved && user_node == source_id_) {
+      source       = new_vertex;
+      source_saved = true;
+    } else if (!sink_saved && user_node == sink_id_) {
+      sink       = new_vertex;
+      sink_saved = true;
+    }
+    ++count;
   }
-  // Save source / sink if appropriate
-  if (!source_saved_ && id == "Source") {
-    source        = vertex;
-    source_saved_ = true;
-  } else if (!sink_saved_ && id == "Sink") {
-    sink        = vertex;
-    sink_saved_ = true;
-  }
-  return vertex;
 }
 
 void DiGraph::addEdge(
-    const std::string&         tail,
-    const std::string&         head,
+    const int&                 tail,
+    const int&                 head,
     const double&              weight,
     const std::vector<double>& resource_consumption) {
   // Get vertices
-  const Vertex& tail_vertex = addVertex(tail);
-  const Vertex& head_vertex = addVertex(head);
-  // Create edge
-  auto adj_vertex_ptr =
-      std::make_shared<AdjVertex>(head_vertex, weight, resource_consumption);
-  // add to list
-  adjacency_list[tail_vertex.idx].push_back(*adj_vertex_ptr);
-  // add to matrix as pointer
-  adjacency_matrix[tail_vertex.idx][head_vertex.idx].swap(adj_vertex_ptr);
+  const LemonNode& tail_lnode = getLNodeFromUserId(tail);
+  const LemonNode& head_lnode = getLNodeFromUserId(head);
+  const LemonArc&  arc        = lemon_graph_ptr->addArc(tail_lnode, head_lnode);
+  (*weight_map_ptr)[arc]      = weight;
+  (*res_map_ptr)[arc]         = resource_consumption;
 }
 
-bool DiGraph::checkEdge(const int& tail, const int& head) const {
-  return (adjacency_matrix[tail][head] != nullptr);
-};
-
-AdjVertex DiGraph::getAdjVertex(const int& tail, const int& head) const {
-  if (checkEdge(tail, head)) {
-    return *adjacency_matrix[tail][head];
+AdjVertex DiGraph::getAdjVertex(const LemonArc& arc, const bool& forward)
+    const {
+  LemonNode node;
+  if (forward) {
+    node = head(arc);
+  } else {
+    node = tail(arc);
   }
-  return AdjVertex(); // empty
+  const Vertex&              vertex               = getVertexFromLNode(node);
+  const double&              weight               = getWeight(arc);
+  const std::vector<double>& resource_consumption = getRes(arc);
+  return AdjVertex(vertex, weight, resource_consumption);
 }
 
-void DiGraph::initReversedAdjList() {
-  reversed_adjacency_list.resize(number_vertices);
-  for (int i = 0; i < number_vertices; ++i) {
-    for (const AdjVertex& adj_vertex : adjacency_list[i]) {
-      reversed_adjacency_list[adj_vertex.vertex.idx].emplace_back(
-          vertices[i], adj_vertex.weight, adj_vertex.resource_consumption);
-    }
-  }
+/// For conversion between user node labels and LemonGraph internal
+int DiGraph::getNodeIdFromUserId(const int& user_id) const {
+  auto it = std::find_if(
+      vertices.begin(), vertices.end(), [&user_id](const Vertex& v) {
+        return (v.user_id == user_id);
+      });
+  return it->lemon_id;
 }
 
 } // namespace bidirectional
