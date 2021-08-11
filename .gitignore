@@ -1,4 +1,7 @@
 build*/*
+html
+latex
+xml
 
 *.pyc
 
