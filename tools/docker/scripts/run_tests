@@ -16,7 +16,8 @@ fi
 # Configure using environment variables set in docker-compose / Dockerfile
 cmake -S . -Bbuild -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON \
 	-DBUILD_PYTHON=${BUILD_PYTHON} -DBUILD_SHARED_LIBS=${BUILD_PYTHON} \
-	-DBENCHMARK_TESTS=${BENCHMARK_TESTS}
+	-DBENCHMARK_TESTS=${BENCHMARK_TESTS} -DPython3_ROOT_DIR="/usr/" \
+  -DPython3_FIND_STRATEGY="LOCATION"
 
 cmake --build build --config Release --target all -v
 

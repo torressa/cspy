@@ -19,13 +19,16 @@ function repair_wheel {
 
 # Remove python3.5 as not supported
 rm -rf /opt/python/cp35*
+rm -rf /opt/python/cp310*
+rm -rf /opt/python/pp37*
 
 cd build/python/
-mkdir wheelhouse
+# mkdir wheelhouse
 
 # Build each wheel
 for PYBIN in /opt/python/*/bin; do
-	"${PYBIN}/pip" install -r ../../python/requirements.dev.txt
+  echo $PYBIN
+	"${PYBIN}/pip" install --prefer-binary -r ../../python/requirements.dev.txt
 	"${PYBIN}/python3" setup.py sdist bdist_wheel
 done
 
