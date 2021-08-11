@@ -273,7 +273,8 @@ path using `networkx.shortest_simple_paths`.
 - Docstring modifications to include maths.
 - Updated README.
 
-[unreleased]: https://github.com/torressa/cspy/compare/v1.0.0...HEAD
+[unreleased]: https://github.com/torressa/cspy/compare/v1.0.1...HEAD
+[v1.0.1]: https://github.com/torressa/cspy/compare/v1.0.0...v1.0.1
 [v1.0.0]: https://github.com/torressa/cspy/compare/v1.0.0-alpha...v1.0.0
 [v1.0.0-alpha]: https://github.com/torressa/cspy/compare/v0.1.2...v1.0.0-alpha
 [v0.1.2]: https://github.com/torressa/cspy/compare/v0.1.1...v0.1.2
