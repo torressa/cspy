@@ -5,7 +5,7 @@ Params
    :project: cspy
    :path: xml
 
-.. doxygenstruct:: bidirectional::SolvingParams
+.. doxygenstruct:: bidirectional::Params
    :project: cspy
    :members:
    :path: xml

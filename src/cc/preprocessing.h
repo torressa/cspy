@@ -8,8 +8,9 @@
 namespace bidirectional {
 
 /**
- * Solve shortest path and set the lower_bound_weight for each node.
- * Uses LEMON's Bellman-Ford (just in case of negative weights)
+ * Solve shortest path using the distance provided as input and set the
+ * lower_bound_weight for each node.  Uses LEMON's Bellman-Ford (just in case of
+ * negative weights)
  * @see: https://lemon.cs.elte.hu/pub/doc/latest/a00038.html
  *
  * @param[out] lower_bound_weight, vector of double that contains the lower

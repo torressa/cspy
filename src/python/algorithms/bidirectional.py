@@ -64,8 +64,14 @@ class BiDirectional:
     bounds_pruning : bool, optional
         whether lower bounds based on shortest paths are used when pruning labels
         using primal bounds.
-        Note this is an experimental feauture. See issues.
+        Note this is an experimental feature. See issues.
         Default: False
+
+    find_critical_res : bool, optional
+        bool with whether critical resource is found at the preprocessing stage.
+        Note1: this is an experimental feature. See issues.
+        Note2: overrides critical_res value.
+        Default false.
 
     critical_res : int, optional
         Resource index to use as primary resource. Note: corresponding resource
@@ -97,6 +103,7 @@ class BiDirectional:
             threshold: Optional[float] = None,
             elementary: Optional[bool] = False,
             bounds_pruning: Optional[bool] = False,
+            find_critical_res: Optional[bool] = False,
             critical_res: Optional[int] = None,
             # seed: Union[int] = None,
             REF_callback: Optional[REFCallback] = None):
@@ -131,9 +138,11 @@ class BiDirectional:
         if threshold is not None and isinstance(time_limit, (int, float)):
             self.bidirectional_cpp.setThreshold(threshold)
         if isinstance(elementary, bool) and elementary:
-            self.bidirectional_cpp.setElementary(elementary)
+            self.bidirectional_cpp.setElementary(True)
         if isinstance(bounds_pruning, bool) and not bounds_pruning:
             self.bidirectional_cpp.setBoundsPruning(bounds_pruning)
+        if isinstance(find_critical_res, bool) and critical_res:
+            self.bidirectional_cpp.setFindCriticalRes(True)
         if isinstance(critical_res, int) and critical_res != 0:
             self.bidirectional_cpp.setCriticalRes(critical_res)
         if REF_callback is not None:

@@ -65,7 +65,6 @@ and, increased efficiency
    cc_api/Search
    cc_api/REFCallback
    cc_api/Label
-   cc_api/LabelExtension
 
 
 

@@ -11,13 +11,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
- - Fix minimum number of nodes on path condition for PSOLGENT.
- - Force node sorting to start with "Source" and end with "Sink" in PSOLGENT.
- - Force inclusion of Source and Sink nodes in PSOLGENT paths.
+ - Fix minimum number of nodes on path condition for `PSOLGENT`.
+ - Force node sorting to start with "Source" and end with "Sink" in `PSOLGENT`.
+ - Force inclusion of Source and Sink nodes in `PSOLGENT` paths.
+
+ - Clean up:
+  1. `BiDirectional` to use search objects again.
+  2. `labelling.*` remove `LabelExtension` unified with `Params`.
 
 ### Added
- - Record `rand` value used to generate PSOLGENT paths from positions.
- - Make upper and lower bound of PSOLGENT initial positions optional arguments.
+ - Record `rand` value used to generate `PSOLGENT` paths from positions.
+ - Make upper and lower bound of `PSOLGENT` initial positions optional arguments.
+ - 2opt in `PSOLGENT` for better evaluation of solutions.
+
+ - Critical resource as a parameter to `BiDirectional`
+ - [EXPERIMENTAL] Add critical resource preprocessing attempt using longest paths
 
 ### Fixed
  - Issue #79
