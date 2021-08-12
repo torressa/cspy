@@ -79,10 +79,10 @@ class PSOLGENT(PathBase):
         size of neighbourhood. Default : 10.
 
     lower_bound : float, optional
-        lower bound of initial positions. Default : 0.
+        lower bound of initial positions. Default : -1.
 
     upper_bound : float, optional
-        upper bound of initial positions. Default : 0.
+        upper bound of initial positions. Default : 1.
 
 
     c1 : float, optional
