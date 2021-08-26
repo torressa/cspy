@@ -40,7 +40,7 @@ Therefore, this library is of interest to the operational research community, st
 
 Currently, the exact and metaheuristic algorithms implemented include:
 
-- [x] Bidirectional labeling algorithm with dynamic halfway point (exact) (also monodirectional) [Tilk et al. )2017)](https://www.sciencedirect.com/science/article/pii/S0377221717302035);
+- [x] Bidirectional labeling algorithm with dynamic halfway point (exact) (also monodirectional) [Tilk et al. (2017)](https://www.sciencedirect.com/science/article/pii/S0377221717302035);
 - [x] Heuristic Tabu search (metaheuristic);
 - [x] Greedy elimination procedure (metaheuristic);
 - [x] Greedy Randomised Adaptive Search Procedure (GRASP) (metaheuristic). Adapted from [Ferone et al. (2019)](https://www.tandfonline.com/doi/full/10.1080/10556788.2018.1548015);
