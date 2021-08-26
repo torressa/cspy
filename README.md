@@ -40,21 +40,15 @@ Therefore, this library is of interest to the operational research community, st
 
 Currently, the exact and metaheuristic algorithms implemented include:
 
-- [x] Monodirectional forward labeling algorithm (exact);
-- [x] Monodirectional backward labeling algorithm (exact);
-- [x] Bidirectional labeling algorithm with dynamic halfway point (exact) [Tilk et al. (2017)](https://www.sciencedirect.com/science/article/pii/S0377221717302035);
+- [x] Bidirectional labeling algorithm with dynamic halfway point (exact) (also monodirectional) [Tilk et al. )2017)](https://www.sciencedirect.com/science/article/pii/S0377221717302035);
 - [x] Heuristic Tabu search (metaheuristic);
 - [x] Greedy elimination procedure (metaheuristic);
 - [x] Greedy Randomised Adaptive Search Procedure (GRASP) (metaheuristic). Adapted from [Ferone et al. (2019)](https://www.tandfonline.com/doi/full/10.1080/10556788.2018.1548015);
 - [x] Particle Swarm Optimization with combined Local and Global Expanding Neighborhood Topology (PSOLGENT) (metaheuristic) [Marinakis et al. (2017)](https://www.sciencedirect.com/science/article/pii/S0377221717302357).
 
-Please see the individual algorithms API Documentation for some toy examples and more details:
+Please see the [docs](https://cspy.readthedocs.io/en/latest/index.html) for individual algorithms Python or C++ API documentation, as well as some toy examples and further details.
 
-- [Bidirectional and monodirectional algorithms](https://cspy.readthedocs.io/en/latest/api/cspy.BiDirectional.html)
-- [Heuristic Tabu Search](https://cspy.readthedocs.io/en/latest/api/cspy.Tabu.html)
-- [Greedy Elimination Procedure](https://cspy.readthedocs.io/en/latest/api/cspy.GreedyElim.html)
-- [GRASP](https://cspy.readthedocs.io/en/latest/api/cspy.GRASP.html)
-- [PSOLGENT](https://cspy.readthedocs.io/en/latest/api/cspy.PSOLGENT.html)
+
 ## Getting Started
 
 ### Prerequisites
@@ -112,6 +106,8 @@ print(bidirec.total_cost)
 print(bidirec.consumed_resources)
 ```
 
+For more details see the [Python API](https://cspy.readthedocs.io/en/latest/python_api/cspy.BiDirectional.html)
+
 #### Cpp
 
 ```cpp
@@ -147,10 +143,11 @@ void wrap() {
 } // namespace bidirectional
 ```
 
+For more details see the [C++ API](https://cspy.readthedocs.io/en/latest/cc_api/BiDirectional.html)
+
 ### Examples
 
 - [`vrpy`](https://github.com/Kuifje02/vrpy) : External vehicle routing framework which uses `cspy` to solve different variants of the vehicle routing problem using column generation. Particulatly, see  [`subproblem_cspy.py`](https://github.com/Kuifje02/vrpy/blob/master/vrpy/subproblem_cspy.py).
-- [`cgar`](examples/cgar) : [needs revising] Complex example use of `cspy` in a column generation example applied to the aircraft recovery problem.
 - [`jpath`](examples/jpath) : Simple example showing the necessary graph adptations and the use of custom resource extension functions.
 
 
