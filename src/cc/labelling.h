@@ -2,6 +2,7 @@
 #define BIDIRECTIONAL_LABELLING_H__
 
 #include <cmath> // nan
+#include <set>
 #include <vector>
 
 #include "digraph.h" // AdjVertex
@@ -18,12 +19,13 @@ namespace labelling {
  */
 class Label {
  public:
-  double                 weight               = 0.0;
-  bidirectional::Vertex  vertex               = {-1, -1};
-  std::vector<double>    resource_consumption = {};
-  std::vector<int>       partial_path         = {};
-  std::vector<int>       unreachable_nodes    = {};
-  bidirectional::Params* params_ptr           = nullptr;
+  double                weight               = 0.0;
+  bidirectional::Vertex vertex               = {-1, -1};
+  std::vector<double>   resource_consumption = {};
+  std::vector<int>      partial_path         = {};
+  /// Set of unreachable nodes. This is only used in the elementary case.
+  std::set<int>          unreachable_nodes = {};
+  bidirectional::Params* params_ptr        = nullptr;
   // Phi value for joining algorithm from Righini and Salani (2006)
   double phi = std::nan("nan");
 
@@ -32,15 +34,6 @@ class Label {
   Label(){};
 
   /// Constructor
-  // Label(
-  //     const double&                weight_in,
-  //     const bidirectional::Vertex& vertex_in,
-  //     const std::vector<double>&   resource_consumption_in,
-  //     const std::vector<int>&      partial_path_in,
-  //     const bool&                  elementary,
-  //     const int&                   critical_res);
-
-  /// @overload
   Label(
       const double&                weight_in,
       const bidirectional::Vertex& vertex_in,

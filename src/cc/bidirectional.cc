@@ -81,7 +81,6 @@ void BiDirectional::run() {
 void BiDirectional::runPreprocessing() {
   if (params_ptr_->direction == BOTH && params_ptr_->find_critical_res) {
     const int c = getCriticalRes(max_res, *graph_ptr_);
-    std::cout << "c = " << c << "\n";
     setCriticalRes(c);
   }
   if (params_ptr_->bounds_pruning) {
@@ -404,10 +403,8 @@ void BiDirectional::extendSingleLabel(
     const Directions& direction,
     const AdjVertex&  adj_vertex) {
   if ((params_ptr_->elementary &&
-       std::find(
-           label->unreachable_nodes.begin(),
-           label->unreachable_nodes.end(),
-           adj_vertex.vertex.user_id) == label->unreachable_nodes.end()) ||
+       label->unreachable_nodes.find(adj_vertex.vertex.user_id) ==
+           label->unreachable_nodes.end()) ||
       !params_ptr_->elementary) {
     // extend current label along edge
     labelling::Label new_label =

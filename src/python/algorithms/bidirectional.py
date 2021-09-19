@@ -141,9 +141,10 @@ class BiDirectional:
             self.bidirectional_cpp.setElementary(True)
         if isinstance(bounds_pruning, bool) and not bounds_pruning:
             self.bidirectional_cpp.setBoundsPruning(bounds_pruning)
-        if isinstance(find_critical_res, bool) and critical_res:
+        if isinstance(find_critical_res, bool) and find_critical_res:
             self.bidirectional_cpp.setFindCriticalRes(True)
         if isinstance(critical_res, int) and critical_res != 0:
+            print("Setting critical res to ", critical_res)
             self.bidirectional_cpp.setCriticalRes(critical_res)
         if REF_callback is not None:
             # Add a Python callback (caller owns the callback, so we

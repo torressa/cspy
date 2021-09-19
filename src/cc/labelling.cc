@@ -22,10 +22,10 @@ Label::Label(
       resource_consumption(resource_consumption_in),
       partial_path(partial_path_in),
       params_ptr(params_ptr_in) {
-  if (params_ptr->elementary) {
-    unreachable_nodes = partial_path;
-    std::sort(unreachable_nodes.begin(), unreachable_nodes.end());
-  }
+  if (params_ptr->elementary)
+    // Insert elements of partial_path
+    for (const int& p : partial_path)
+      unreachable_nodes.insert(p);
 };
 
 // Label::Label(
@@ -103,13 +103,14 @@ Label Label::extend(
           weight);
     }
   }
-  // Check feasibility before creating
+  // Create new label
   Label new_label(
       weight + adjacent_vertex.weight,
       new_node,
       new_resources,
       new_partial_path,
       params_ptr);
+  // Check feasibility before returning
   if (new_label.checkFeasibility(max_res, min_res)) {
     return new_label;
   } else {
@@ -117,9 +118,7 @@ Label Label::extend(
     if (params_ptr->elementary) {
       // Push new node (direction doesn't matter here as edges have been
       // reversed for backward extensions)
-      unreachable_nodes.push_back(new_node.user_id);
-      // Keep them sorted for comparison
-      std::sort(unreachable_nodes.begin(), unreachable_nodes.end());
+      unreachable_nodes.insert(new_node.user_id);
     }
   }
   return Label();
