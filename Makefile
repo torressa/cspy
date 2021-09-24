@@ -18,6 +18,12 @@ p:
 	cmake --build build --config Release --target all -v
 	cd build && ctest --verbose -R python_unittest
 
+d:
+	cmake -S . -Bbuild -DCMAKE_BUILD_TYPE=Release  -DBUILD_TESTING=ON \
+      -DBUILD_DOTNET=ON -DBUILD_SHARED_LIBS=ON
+	cmake --build build --config Release --target all -v
+	cd build && ctest --verbose 
+
 # Run benchmarks using boost (as well as cspy)
 benchmarks_boost:
 	cmake -S . -Bbuild -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON \

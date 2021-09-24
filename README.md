@@ -1,24 +1,30 @@
-| OS     | C++ | Python |
-|:-------|-----|--------|
-| Linux  | [![Status][cpp_linux_svg]][cpp_linux_link] | [![Status][python_linux_svg]][python_linux_link] |
-| macOS  | [![Status][cpp_osx_svg]][cpp_osx_link] | [![Status][python_osx_svg]][python_osx_link] |
-| Windows  | [![Status][cpp_win_svg]][cpp_win_link] | [![Status][python_win_svg]][python_win_link] |
+| OS     | C++ | Python | Dotnet |
+|:-------|-----|--------|--------|
+| Linux  | [![Status][cpp_linux_svg]][cpp_linux_link] | [![Status][python_linux_svg]][python_linux_link]| [![Status][dotnet_linux_svg]][dotnet_linux_link] |
+| macOS  | [![Status][cpp_osx_svg]][cpp_osx_link] | [![Status][python_osx_svg]][python_osx_link] | [![Status][dotnet_osx_svg]][dotnet_osx_link] |
+| Windows  | [![Status][cpp_win_svg]][cpp_win_link] | [![Status][python_win_svg]][python_win_link] |[![Status][dotnet_win_svg]][dotnet_win_link] |
 
 
 [cpp_linux_svg]: https://github.com/torressa/cspy/workflows/Ubuntu%20Cpp/badge.svg
 [cpp_linux_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22Ubuntu+Cpp%22
 [python_linux_svg]: https://github.com/torressa/cspy/workflows/Ubuntu%20Python/badge.svg
 [python_linux_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22Ubuntu+Python%22
+[dotnet_linux_svg]: https://github.com/torressa/cspy/workflows/Ubuntu%20Python/badge.svg
+[dotnet_linux_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22Ubuntu+Dotnet%22
 
 [cpp_osx_svg]: https://github.com/torressa/cspy/workflows/MacOS%20Cpp/badge.svg
 [cpp_osx_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22MacOS+Cpp%22
 [python_osx_svg]: https://github.com/torressa/cspy/workflows/MacOS%20Python/badge.svg
 [python_osx_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22MacOS+Python%22
+[dotnet_osx_svg]: https://github.com/torressa/cspy/workflows/MacOS%20Dotnet/badge.svg
+[dotnet_osx_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22MacOS+Dotnet%22
 
 [cpp_win_svg]: https://github.com/torressa/cspy/workflows/Windows%20Cpp/badge.svg
 [cpp_win_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22Windows+Cpp%22
 [python_win_svg]: https://github.com/torressa/cspy/workflows/Windows%20Python/badge.svg
 [python_win_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22Windows+Python%22
+[dotnet_win_svg]: https://github.com/torressa/cspy/workflows/Windows%20Dotnet/badge.svg
+[dotnet_win_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22Windows+Dotnet%22
 
 [![Documentation Status](https://readthedocs.org/projects/cspy/badge/?version=latest)](https://cspy.readthedocs.io/en/latest/?badge=latest)
 [![PyPI version](https://badge.fury.io/py/cspy.svg)](https://badge.fury.io/py/cspy)
@@ -145,6 +151,32 @@ void wrap() {
 }
 
 } // namespace bidirectional
+```
+
+#### C#
+
+```csharp
+DoubleVector max_res = new DoubleVector(new List<double>() {4.0, 20.0});
+DoubleVector min_res = new DoubleVector(new List<double>() {0.0, 0.0});
+int number_vertices = 5;
+int number_edges = 5;
+BiDirectionalCpp alg = new BiDirectionalCpp(number_vertices, number_edges, 0, 4, max_res, min_res);
+
+// Populate graph
+alg.addNodes(new IntVector(new List<int>() {0, 1, 2, 3, 4}));
+alg.addEdge(0, 1, -1.0, new DoubleVector(new List<double>() {1, 2}));
+alg.addEdge(1, 2, -1.0, new DoubleVector(new List<double>() {1, 0.3}));
+alg.addEdge(2, 3, -10.0, new DoubleVector(new List<double>() {1, 3}));
+alg.addEdge(2, 4, 10.0, new DoubleVector(new List<double>() {1, 2}));
+alg.addEdge(3, 4, -1.0, new DoubleVector(new List<double>() {1, 10}));
+alg.setDirection("forward");
+
+// Run and query attributes
+alg.run();
+
+IntVector path = alg.getPath();
+DoubleVector res = alg.getConsumedResources();
+double cost = alg.getTotalCost();
 ```
 
 ### Examples

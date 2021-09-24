@@ -103,9 +103,11 @@ endif()
 # By default only the ortools C++ library is built.
 option(BUILD_CXX "Build C++ library" ON)
 option(BUILD_PYTHON "Build Python Library" OFF)
+option(BUILD_DOTNET "Build Dotnet Library" OFF)
 
 message(STATUS "Build C++ library: ${BUILD_CXX}")
 message(STATUS "Build Python: ${BUILD_PYTHON}")
+message(STATUS "Build Dotnet: ${BUILD_DOTNET}")
 
 # TODO Other languages option(BUILD_JAVA "Build Java Library" OFF)
 # option(BUILD_DOTNET "Build .NET Library" OFF) message(STATUS "Build Java:
@@ -137,8 +139,9 @@ if(WIN32
 endif()
 
 include(python)
+include(dotnet)
 
-if(NOT BUILD_PYTHON)
+if(NOT (BUILD_PYTHON OR BUILD_DOTNET))
   set(FETCHCONTENT_QUIET OFF)
   # Prevent overriding the parent project's compiler/linker settings on Windows
   set(gtest_force_shared_crt
@@ -151,5 +154,3 @@ if(NOT BUILD_PYTHON)
   FetchContent_MakeAvailable(googletest)
   add_subdirectory(test/cc/)
 endif()
-
-# Other languages include(java) include(dotnet)

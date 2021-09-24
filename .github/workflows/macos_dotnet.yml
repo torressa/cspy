@@ -1,0 +1,22 @@
+name: MacOS Dotnet
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install LEMON
+      run: |
+        cp tools/docker/scripts/install_lemon .
+        chmod u+x install_lemon
+        ./install_lemon
+    - name: Configure
+      run: cmake -S . -Bbuild -DBUILD_TESTING=ON -DCMAKE_BUILD_TYPE=Release -DBUILD_DOTNET=ON -DBUILD_SHARED_LIBS=ON
+    - name: Build
+      run: cmake --build build --config Release --target all -v
+    - name: Test
+      run: cd build && ctest --verbose
+    - name: Install
+      run: cmake --build build --config Release --target install -v -- DESTDIR=install
