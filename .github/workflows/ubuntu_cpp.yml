@@ -24,3 +24,4 @@ jobs:
       uses: RafikFarhad/clang-format-github-action@v1.0.1
       with:
         sources: "src/**/*.h,src/**/*.cc,test/**/*.cc,test/**/*.h"
+        style: file
