@@ -20,3 +20,7 @@ jobs:
       run: cd build && ctest --verbose
     - name: Install
       run: cmake --build build --config Release --target install -v -- DESTDIR=install
+    - name: clang-format
+      uses: RafikFarhad/clang-format-github-action@v1.0.1
+      with:
+        sources: "src/**/*.h,src/**/*.cc,test/**/*.cc,test/**/*.h"
