@@ -9,7 +9,7 @@
 [cpp_linux_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22Ubuntu+Cpp%22
 [python_linux_svg]: https://github.com/torressa/cspy/workflows/Ubuntu%20Python/badge.svg
 [python_linux_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22Ubuntu+Python%22
-[dotnet_linux_svg]: https://github.com/torressa/cspy/workflows/Ubuntu%20Python/badge.svg
+[dotnet_linux_svg]: https://github.com/torressa/cspy/workflows/Ubuntu%20Dotnet/badge.svg
 [dotnet_linux_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22Ubuntu+Dotnet%22
 
 [cpp_osx_svg]: https://github.com/torressa/cspy/workflows/MacOS%20Cpp/badge.svg

@@ -7,7 +7,7 @@
     <Version>@PROJECT_VERSION@</Version>
 
     <!-- Nuget Properties -->
-    <Description>.NET wrapper for the Foo C++ project</Description>
+    <Description>.NET wrapper for the cspy BiDirection algorithm</Description>
 
     <!-- Pack Option -->
     <Title>@DOTNET_PROJECT@ v@PROJECT_VERSION@</Title>
@@ -53,4 +53,3 @@
     <PackageReference Include="@DOTNET_PROJECT@.runtime.win-x64"   Version="@PROJECT_VERSION@" Condition="Exists('@(RuntimeWin)')"  />
   </ItemGroup>
 </Project>
-
