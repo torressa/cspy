@@ -120,6 +120,10 @@ class BiDirectional {
   void setREFCallback(bidirectional::REFCallback* cb) {
     params_ptr_->setREFCallback(cb);
   }
+  void setPDPairs(
+      const std::vector<std::pair<int, int>>& pickup_delivery_pairs) {
+    params_ptr_->setPDPairs(pickup_delivery_pairs);
+  }
   /// set random using a given seed
   // void setSeed(const int& seed) { std::srand(seed); }
 

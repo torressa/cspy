@@ -152,6 +152,31 @@ bool Label::checkStPath(const int& source_id, const int& sink_id) const {
   return false;
 }
 
+std::set<int> Label::getOpenRequests() const {
+  const std::vector<std::pair<int, int>>& pd_pairs =
+      params_ptr->pickup_delivery_pairs;
+  std::set<int> open_requests;
+  for (const int& n1 : partial_path) {
+    auto pd_pair_iter = std::find_if(
+        pd_pairs.begin(),
+        pd_pairs.end(),
+        [&n1](const std::pair<int, int>& elem) { return elem.first == n1; });
+    bool pd_pair_open = true;
+    if (pd_pair_iter != pd_pairs.end()) {
+      for (const int& n2 : partial_path) {
+        // Pickup node in partial_path!
+        // Check if delivery node already seen
+        if (n2 == pd_pair_iter->second) {
+          pd_pair_open = false;
+          break;
+        }
+      }
+      if (pd_pair_open)
+        open_requests.insert(pd_pair_iter->first);
+    }
+  }
+  return open_requests;
+}
 bool Label::checkDominance(
     const Label&                     other,
     const bidirectional::Directions& direction) const {
@@ -174,8 +199,16 @@ bool Label::checkDominance(
   if (weight > other.weight) {
     return false;
   }
-  if (direction == bidirectional::BWD) {
-    // Compare monotone resources
+  if (direction == bidirectional::FWD) {
+    // Forward
+    for (int i = 0; i < resource_size; i++) {
+      if (resource_consumption[i] > other.resource_consumption[i]) {
+        return false;
+      }
+    }
+  } else {
+    // Backward
+    // Compare critical resource
     if (resource_consumption[c_res] < other.resource_consumption[c_res]) {
       return false;
     }
@@ -188,27 +221,33 @@ bool Label::checkDominance(
         }
       }
     }
-  } else { // Forward
-    for (int i = 0; i < resource_size; i++) {
-      if (resource_consumption[i] > other.resource_consumption[i]) {
-        return false;
-      }
-    }
   }
   // Check for the elementary case
   if (params_ptr->elementary && unreachable_nodes.size() > 0 &&
       other.unreachable_nodes.size() > 0) {
-    if (std::includes(
+    // if !(unreachable_nodes \subseteq other.unreachable_nodes)
+    if (!std::includes(
             unreachable_nodes.begin(),
             unreachable_nodes.end(),
             other.unreachable_nodes.begin(),
-            other.unreachable_nodes.end())) {
-      // If the unreachable_nodes are the same, this leads to one equivalent
-      // label to be removed
-      if (unreachable_nodes == other.unreachable_nodes) {
-        return true;
-      }
+            other.unreachable_nodes.end()) &&
+        !(unreachable_nodes == other.unreachable_nodes)) {
       return false;
+    }
+  }
+  if (params_ptr->pickup_delivery_pairs.size() > 0) {
+    std::set<int> this_open_nodes  = getOpenRequests();
+    std::set<int> other_open_nodes = other.getOpenRequests();
+    if (this_open_nodes.size() > 0 && other_open_nodes.size() > 0) {
+      // if !(this_open_nodes \subseteq other_open_nodes)
+      if (!std::includes(
+              this_open_nodes.begin(),
+              this_open_nodes.end(),
+              other_open_nodes.begin(),
+              other_open_nodes.end()) &&
+          !(this_open_nodes == other_open_nodes)) {
+        return false;
+      }
     }
   }
   // this dominates other

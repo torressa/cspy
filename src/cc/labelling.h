@@ -138,6 +138,9 @@ class Label {
   friend bool          operator!=(const Label& label1, const Label& label2) {
     return !(label1 == label2);
   }
+
+ private:
+  std::set<int> getOpenRequests() const;
 };
 
 /**

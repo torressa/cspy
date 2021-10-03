@@ -46,9 +46,10 @@ class Params {
   /// Resource id for the critical resource used in dominance checks and
   /// choosing the halfway point. Default is 0.
   int critical_res = 0;
-
   /// Callback to custom REF
   bidirectional::REFCallback* ref_callback = nullptr;
+  /// Vector of (pickup, delivery) nodes
+  std::vector<std::pair<int, int>> pickup_delivery_pairs = {};
 
   /* Constructors */
 
@@ -82,6 +83,10 @@ class Params {
   }
   /// Set callback for custom resource extensions
   void setREFCallback(bidirectional::REFCallback* cb) { ref_callback = cb; };
+  void setPDPairs(
+      const std::vector<std::pair<int, int>>& pickup_delivery_pairs_in) {
+    pickup_delivery_pairs = pickup_delivery_pairs_in;
+  }
 };
 
 } // namespace bidirectional
