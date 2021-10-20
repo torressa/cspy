@@ -181,7 +181,7 @@ cd ~/path/newfolder/tools/dev
 
 Requirements:
 
-- CMake (>=v3.14)
+- [CMake](https://cmake.org/download/) (>=v3.14)
 - Standard C++ toolchain
 - [LEMON](https://lemon.cs.elte.hu/trac/lemon) installed (see [`tools/docker/scripts/install_lemon`](tools/docker/scripts/install_lemon))
 - Python (>=3.6)
