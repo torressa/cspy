@@ -16,7 +16,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-latest] # 10.14 and 11 don't work
+        os: [macos-11] # 10.14 and 11 don't work
         python-version: [3.6, 3.7, 3.8, 3.9]
     env:
       TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
