@@ -123,8 +123,12 @@ set(FETCHCONTENT_QUIET OFF)
 # option(LEMON_ENABLE_GLPK NO) option(LEMON_ENABLE_COIN NO)
 # option(LEMON_ENABLE_ILOG NO) option(LEMON_ENABLE_SOPLEX NO)
 # FetchContent_MakeAvailable(lemon)
-
-find_package(LEMON REQUIRED)
+FetchContent_Declare(
+  LEMON
+  GIT_REPOSITORY "https://github.com/MultiFlow/LEMON.git"
+  GIT_TAG "multiflow/dev")
+FetchContent_MakeAvailable(LEMON)
+# find_package(LEMON REQUIRED)
 
 enable_testing()
 include(cpp)
@@ -149,8 +153,8 @@ if(NOT (BUILD_PYTHON OR BUILD_DOTNET))
       CACHE BOOL "" FORCE)
   FetchContent_Declare(
     googletest
-    GIT_REPOSITORY https://github.com/google/googletest.git
-    GIT_TAG master)
+    GIT_REPOSITORY "https://github.com/google/googletest.git"
+    GIT_TAG "main")
   FetchContent_MakeAvailable(googletest)
   add_subdirectory(test/cc/)
 endif()
