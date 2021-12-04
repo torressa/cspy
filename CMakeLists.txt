@@ -115,20 +115,13 @@ message(STATUS "Build Dotnet: ${BUILD_DOTNET}")
 
 include(FetchContent)
 set(FETCHCONTENT_QUIET OFF)
+set(LEMON_BUILD_TESTING OFF)
 
-# TODO: download and install lemon with FetchContent
-
-# FetchContent_Declare(lemon URL
-# http://lemon.cs.elte.hu/pub/sources/lemon-1.3.1.tar.gz)
-# option(LEMON_ENABLE_GLPK NO) option(LEMON_ENABLE_COIN NO)
-# option(LEMON_ENABLE_ILOG NO) option(LEMON_ENABLE_SOPLEX NO)
-# FetchContent_MakeAvailable(lemon)
 FetchContent_Declare(
   LEMON
   GIT_REPOSITORY "https://github.com/MultiFlow/LEMON.git"
   GIT_TAG "multiflow/dev")
 FetchContent_MakeAvailable(LEMON)
-# find_package(LEMON REQUIRED)
 
 enable_testing()
 include(cpp)
