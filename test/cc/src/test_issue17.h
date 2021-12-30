@@ -1,5 +1,0 @@
-#ifndef TEST_TEST_ISSUE17_H__
-#define TEST_TEST_ISSUE17_H__
-
-
-#endif // TEST_TEST_ISSUE17_H__

@@ -1,5 +1,3 @@
-#include "test_issue38.h"
-
 #include <memory>
 #include <numeric>
 #include <tuple>
