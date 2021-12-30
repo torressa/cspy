@@ -1,5 +1,3 @@
-#include "test_benchmarks_boost.h"
-
 #include <boost/config.hpp>
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/r_c_shortest_paths.hpp>
@@ -8,9 +6,21 @@
 #include <sstream>
 #include <vector>
 
+#include "gtest/gtest.h"
 #include "utils.h" // loadMaxMinRes, skipLines, writeToFile, getElapsedTime, getBestCost
 
 namespace boost {
+
+/**
+ * TestBenchmarks fixture class for unittests. Inherits from gtest.
+ */
+class TestBenchmarksBoost : public ::testing::TestWithParam<int> {
+ public:
+  int               instance_number;
+  const std::string path_to_data =
+      "/root/benchmarks/beasley_christofides_1989/";
+  void SetUp() override { instance_number = GetParam(); }
+};
 
 /**
  * Define all the necessary data structures

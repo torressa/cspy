@@ -2,7 +2,7 @@
 #define BIDIRECTIONAL_PARAMS_H__
 
 #include <cmath> // nan
-#include <memory>
+#include <unordered_map>
 #include <vector>
 
 #include "ref_callback.h"
@@ -12,13 +12,13 @@ namespace bidirectional {
 /// Internal enum for directions
 enum Directions {
   /// Forward
-  FWD = 0,
+  FWD,
   /// Backward
-  BWD = 1,
+  BWD,
   /// Both
-  BOTH = 2,
+  BOTH,
   /// No direction
-  NODIR = 3
+  NODIR
 };
 
 /**
@@ -29,7 +29,8 @@ class Params {
  public:
   /// Direction for search
   Directions direction = bidirectional::BOTH;
-  /// string with method to determine the next direction of search
+  /// string with method to determine the next direction of search. Options
+  /// are: unprocessed, processed and generated.
   std::string method = "unprocessed";
   /// double with time limit in seconds
   double time_limit = std::nan("na");
@@ -49,7 +50,7 @@ class Params {
   /// Callback to custom REF
   bidirectional::REFCallback* ref_callback = nullptr;
   /// Vector of (pickup, delivery) nodes
-  std::vector<std::pair<int, int>> pickup_delivery_pairs = {};
+  std::unordered_map<int, int> pickup_delivery_pairs = {};
 
   /* Constructors */
 
@@ -85,7 +86,9 @@ class Params {
   void setREFCallback(bidirectional::REFCallback* cb) { ref_callback = cb; };
   void setPDPairs(
       const std::vector<std::pair<int, int>>& pickup_delivery_pairs_in) {
-    pickup_delivery_pairs = pickup_delivery_pairs_in;
+    for (const auto& pair : pickup_delivery_pairs_in) {
+      pickup_delivery_pairs[pair.first] = pair.second;
+    }
   }
 };
 

@@ -116,12 +116,14 @@ message(STATUS "Build Dotnet: ${BUILD_DOTNET}")
 include(FetchContent)
 set(FETCHCONTENT_QUIET OFF)
 set(LEMON_BUILD_TESTING OFF)
+set(BUILD_SHARED_LIBS OFF)
 
 FetchContent_Declare(
   LEMON
   GIT_REPOSITORY "https://github.com/MultiFlow/LEMON.git"
   GIT_TAG "multiflow/dev")
 FetchContent_MakeAvailable(LEMON)
+set(BUILD_SHARED_LIBS ON)
 
 enable_testing()
 include(cpp)

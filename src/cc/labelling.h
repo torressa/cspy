@@ -5,8 +5,8 @@
 #include <set>
 #include <vector>
 
-#include "digraph.h" // AdjVertex
-#include "params.h"  // Directions, Params
+#include "src/cc/digraph.h" // AdjVertex
+#include "src/cc/params.h"  // Directions, Params
 
 namespace labelling {
 
@@ -140,6 +140,9 @@ class Label {
   }
 
  private:
+  // Vector of open pickup nodes (no need to keep the pair).
+  std::set<int> open_requests_;
+  void          updateOpenRequests(const int& new_node_user_id);
   std::set<int> getOpenRequests() const;
 };
 

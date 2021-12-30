@@ -1,9 +1,27 @@
-#include "test_issue41.h"
-
 #include <iostream>
+#include <memory>
 #include <numeric>
+#include <tuple>
+#include <vector>
+
+#include "gtest/gtest.h"
+#include "src/cc/bidirectional.h"
 
 namespace bidirectional {
+
+class TestIssue41 : public ::testing::Test {
+ protected:
+  const int                      number_vertices = 5;
+  const int                      number_edges    = 6;
+  const std::vector<double>      max_res         = {3.0, 3.0};
+  const std::vector<double>      min_res         = {0.0, 3.0};
+  std::unique_ptr<BiDirectional> bidirectional;
+
+  // expected solution
+  const std::vector<int>    final_path = {0, 1, 3, 4};
+  const std::vector<double> final_res  = {3.0, 3.0};
+  const double              final_cost = 20.0;
+};
 
 void createGraphIssue41(BiDirectional* bidirectional) {
   bidirectional->addNodes({0, 1, 2, 3, 4});

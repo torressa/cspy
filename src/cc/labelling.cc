@@ -1,6 +1,6 @@
 #include "labelling.h"
 
-#include <algorithm> // sort, includes, copy_if, find, push/make_heap, adj_vertex
+#include <algorithm> // sort, includes, copy_if, push/make_heap
 #include <iostream>  // ostream
 
 namespace labelling {
@@ -22,25 +22,14 @@ Label::Label(
       resource_consumption(resource_consumption_in),
       partial_path(partial_path_in),
       params_ptr(params_ptr_in) {
-  if (params_ptr->elementary)
+  if (params_ptr->elementary) {
     // Insert elements of partial_path
     for (const int& p : partial_path)
       unreachable_nodes.insert(p);
+  }
+  if (params_ptr->pickup_delivery_pairs.size() > 0)
+    updateOpenRequests(vertex_in.user_id);
 };
-
-// Label::Label(
-//     const double&                weight_in,
-//     const bidirectional::Vertex& vertex_in,
-//     const std::vector<double>&   resource_consumption_in,
-//     const std::vector<int>&      partial_path_in,
-//     const bidirectional::Params& params)
-//     : Label(
-//           weight_in,
-//           vertex_in,
-//           resource_consumption_in,
-//           partial_path_in,
-//           params.elementary,
-//           params.critical_res) {}
 
 Label::Label(
     const double&                weight_in,
@@ -153,30 +142,42 @@ bool Label::checkStPath(const int& source_id, const int& sink_id) const {
 }
 
 std::set<int> Label::getOpenRequests() const {
-  const std::vector<std::pair<int, int>>& pd_pairs =
-      params_ptr->pickup_delivery_pairs;
-  std::set<int> open_requests;
-  for (const int& n1 : partial_path) {
-    auto pd_pair_iter = std::find_if(
-        pd_pairs.begin(),
-        pd_pairs.end(),
-        [&n1](const std::pair<int, int>& elem) { return elem.first == n1; });
-    bool pd_pair_open = true;
-    if (pd_pair_iter != pd_pairs.end()) {
-      for (const int& n2 : partial_path) {
-        // Pickup node in partial_path!
-        // Check if delivery node already seen
-        if (n2 == pd_pair_iter->second) {
-          pd_pair_open = false;
-          break;
-        }
-      }
-      if (pd_pair_open)
-        open_requests.insert(pd_pair_iter->first);
-    }
-  }
-  return open_requests;
+  return open_requests_;
 }
+
+void Label::updateOpenRequests(const int& new_node_user_id) {
+  const std::unordered_map<int, int>& pd_pairs =
+      params_ptr->pickup_delivery_pairs;
+  // Find pair with new node as pickup node (if it exists).
+  auto delivery_node_iter = pd_pairs.find(new_node_user_id);
+  int  delivery_node;
+  if (delivery_node_iter != pd_pairs.end()) {
+    delivery_node = delivery_node_iter->second;
+  } else {
+    return;
+  }
+  //  std::find_if(
+  //    pd_pairs.begin(),
+  //    pd_pairs.end(),
+  //    [&new_node_user_id](const std::pair<int, int>& elem) {
+  //      return elem.first == new_node_user_id;
+  //    });
+  bool pd_pair_open = true;
+  for (const int& n2 : partial_path) {
+    // Pickup node in partial_path!
+    // Check if delivery node already seen
+    if (n2 == delivery_node) {
+      // Stop as both pick up and delivery have been served.
+      pd_pair_open = false;
+      break;
+    }
+    // If delivery node not in partial path, then we have an open request.
+    // We only save the pickup node (first element in pair).
+    if (pd_pair_open)
+      open_requests_.insert(new_node_user_id);
+  }
+}
+
 bool Label::checkDominance(
     const Label&                     other,
     const bidirectional::Directions& direction) const {
@@ -235,6 +236,7 @@ bool Label::checkDominance(
       return false;
     }
   }
+  // Check for pickup delivery case
   if (params_ptr->pickup_delivery_pairs.size() > 0) {
     std::set<int> this_open_nodes  = getOpenRequests();
     std::set<int> other_open_nodes = other.getOpenRequests();
