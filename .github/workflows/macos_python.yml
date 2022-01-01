@@ -7,16 +7,11 @@ jobs:
     runs-on: macos-latest
     strategy:
       matrix:
-        python-version: [3.6, 3.7, 3.8, 3.9, 3.10]
+        python-version: [3.6, 3.7, 3.8, 3.9, "3.10"]
     steps:
       - uses: actions/checkout@v2
       - name: Swig install
         run: brew install swig
-      - name: Install LEMON
-        run: |
-          cp tools/docker/scripts/install_lemon .
-          chmod u+x install_lemon
-          ./install_lemon
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:

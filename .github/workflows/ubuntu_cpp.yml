@@ -7,11 +7,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Install LEMON
-      run: |
-        cp tools/docker/scripts/install_lemon .
-        chmod u+x install_lemon
-        sudo ./install_lemon
     - name: Configure
       run: cmake -S . -Bbuild -DBUILD_TESTING=ON -DCMAKE_BUILD_TYPE=Release -DBUILD_PYTHON=OFF -DBUILD_SHARED_LIBS=OFF
     - name: Build
