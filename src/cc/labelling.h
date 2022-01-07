@@ -119,7 +119,8 @@ class Label {
    */
   bool checkFeasibility(
       const std::vector<double>& max_res,
-      const std::vector<double>& min_res) const;
+      const std::vector<double>& min_res,
+      const bool&                bypass_min_res = false) const;
 
   /// Check if weight is under the input threshold.
   bool checkThreshold(const double& threshold) const;

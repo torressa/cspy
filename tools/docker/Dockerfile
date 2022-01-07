@@ -3,10 +3,6 @@ FROM alpine:latest AS builder
 ENV PATH=/usr/local/bin:$PATH
 RUN apk add --no-cache git build-base linux-headers cmake wget
 
-# Download and install LEMON from source
-COPY tools/docker/scripts/install_lemon .
-RUN chmod +x install_lemon && ./install_lemon
-
 CMD [ "/bin/sh" ]
 
 FROM builder AS dev

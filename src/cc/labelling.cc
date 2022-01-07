@@ -115,12 +115,17 @@ Label Label::extend(
 
 bool Label::checkFeasibility(
     const std::vector<double>& max_res,
-    const std::vector<double>& min_res) const {
+    const std::vector<double>& min_res,
+    const bool&                bypass_min_res) const {
   const int& resource_size = resource_consumption.size();
   for (int i = 0; i < resource_size; i++) {
-    if (resource_consumption[i] <= max_res[i] &&
-        resource_consumption[i] >= min_res[i]) {
-      ;
+    if (resource_consumption[i] <= max_res[i]) {
+      if (!bypass_min_res)
+        if (resource_consumption[i] >= min_res[i]) {
+          ;
+        } else {
+          return false;
+        }
     } else {
       return false;
     }
@@ -313,9 +318,11 @@ bool operator>(const Label& label1, const Label& label2) {
 std::ostream& operator<<(std::ostream& os, const Label& label) {
   const int& c_res = label.params_ptr->critical_res;
   os << "Label(node=" << label.vertex.user_id << ", weight= " << label.weight
-     << ", res[" << c_res << "]=" << label.resource_consumption[c_res]
-     << ", partial_path=[";
-  for (auto n : label.partial_path)
+     << ", res[";
+  for (const auto& r : label.resource_consumption)
+    os << r << ",";
+  os << "], partial_path=[";
+  for (const auto& n : label.partial_path)
     os << n << ",";
   os << "])\n";
   return os;

@@ -14,6 +14,6 @@ set_target_properties(
              SWIG_USE_TARGET_INCLUDE_DIRECTORIES ON
              POSITION_INDEPENDENT_CODE ON)
 
-target_link_libraries(BiDirectionalDotnet PRIVATE BiDirectionalCpp)
+target_link_libraries(BiDirectionalDotnet PRIVATE BiDirectionalCpp LEMON::LEMON)
 target_include_directories(BiDirectionalDotnet
                            PRIVATE ${PROJECT_SOURCE_DIR}/src/cc)

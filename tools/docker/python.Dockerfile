@@ -9,10 +9,6 @@ RUN git clone https://github.com/swig/swig.git --branch v4.0.2 \
 && cd swig && ./autogen.sh && ./configure \
 && make && make install && cd .. && rm -rf swig/
 
-# Download and install LEMON from source
-COPY tools/docker/scripts/install_lemon .
-RUN chmod +x install_lemon && ./install_lemon
-
 CMD [ "/usr/bin/bash" ]
 
 FROM builder AS dev
