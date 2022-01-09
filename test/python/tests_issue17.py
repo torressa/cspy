@@ -1,13 +1,13 @@
-import unittest
-
 from networkx import DiGraph
 from numpy import array
 
 from cspy.algorithms.tabu import Tabu
 from cspy.algorithms.bidirectional import BiDirectional
 
+from utils import TestingBase
 
-class TestsIssue17(unittest.TestCase):
+
+class TestsIssue17(TestingBase):
     """
     Tests for issue #17
     https://github.com/torressa/cspy/issues/17
@@ -50,9 +50,8 @@ class TestsIssue17(unittest.TestCase):
                             direction='forward',
                             elementary=True)
         alg.run()
-        self.assertEqual(alg.path, self.result_path)
-        self.assertEqual(alg.total_cost, self.total_cost)
-        self.assertTrue(alg.consumed_resources == self.consumed_resources)
+        self.check_result(alg, self.result_path, self.total_cost,
+                          self.consumed_resources)
         self.assertTrue(
             all(e in self.G.edges() for e in zip(alg.path, alg.path[1:])))
 
@@ -63,17 +62,14 @@ class TestsIssue17(unittest.TestCase):
                             direction='backward',
                             elementary=True)
         alg.run()
-        self.assertEqual(alg.path, self.result_path)
-        self.assertEqual(alg.total_cost, self.total_cost)
-        self.assertTrue(alg.consumed_resources == self.consumed_resources)
+        self.check_result(alg, self.result_path, self.total_cost,
+                          self.consumed_resources)
         self.assertTrue(
             all(e in self.G.edges() for e in zip(alg.path, alg.path[1:])))
 
     def test_tabu(self):
         alg = Tabu(self.G, self.max_res, self.min_res)
         alg.run()
-        self.assertEqual(alg.total_cost, 1)
-        self.assertEqual(alg.path, ['Source', 2, 5, 4, 'Sink'])
-        self.assertTrue(all(alg.consumed_resources == [4, 4]))
+        self.check_result(alg, ['Source', 2, 5, 4, 'Sink'], 1, [4, 4])
         self.assertTrue(
             all(e in self.G.edges() for e in zip(alg.path, alg.path[1:])))

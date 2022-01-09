@@ -1,13 +1,13 @@
-import unittest
-
 from networkx import DiGraph
 from numpy import array
 from numpy.random import RandomState
 
 from cspy.algorithms.psolgent import PSOLGENT
 
+from utils import TestingBase
 
-class TestsPSOLGENT(unittest.TestCase):
+
+class TestsPSOLGENT(TestingBase):
     """
     Tests for finding the resource constrained shortest
     path of simple DiGraph using the PSOLGENT algorithm.
@@ -39,6 +39,9 @@ class TestsPSOLGENT(unittest.TestCase):
         # Resource infeasible edge
         self.G.add_edge('F', 'Sink', res_cost=array([10, 1]), weight=1)
         self.G.add_edge('E', 'Sink', res_cost=array([1, 1]), weight=1)
+        self.result_path = ['Source', 'A', 'C', 'D', 'E', 'Sink']
+        self.total_cost = 3
+        self.consumed_resources = [5, 5]
 
     def testPSOLGENT(self):
         psolgent = PSOLGENT(self.G,
@@ -53,17 +56,9 @@ class TestsPSOLGENT(unittest.TestCase):
         self.assertTrue("run()" in str(context.exception))
         # Run and test results
         psolgent.run()
-        path = psolgent.path
-        cost = psolgent.total_cost
-        total_res = psolgent.consumed_resources
-        self.assertEqual(path, ['Source', 'A', 'C', 'D', 'E', 'Sink'])
-        self.assertEqual(cost, 3)
-        self.assertTrue(all(total_res == [5, 5]))
+        self.check_result(psolgent, self.result_path, self.total_cost,
+                          self.consumed_resources)
 
     def testInputExceptions(self):
         # Check whether wrong input raises exceptions
         self.assertRaises(Exception, PSOLGENT, self.G, 'x', [1, 'foo'], 'up')
-
-
-if __name__ == '__main__':
-    unittest.main()

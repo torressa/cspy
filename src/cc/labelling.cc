@@ -99,8 +99,8 @@ Label Label::extend(
       new_resources,
       new_partial_path,
       params_ptr);
-  // Check feasibility before returning
-  if (new_label.checkFeasibility(max_res, min_res)) {
+  // Check feasibility (soft=true) before returning label
+  if (new_label.checkFeasibility(max_res, min_res, true)) {
     return new_label;
   } else {
     // Update current labels unreachable_nodes
@@ -116,20 +116,32 @@ Label Label::extend(
 bool Label::checkFeasibility(
     const std::vector<double>& max_res,
     const std::vector<double>& min_res,
-    const bool&                bypass_min_res) const {
+    const bool&                soft) const {
   const int& resource_size = resource_consumption.size();
+  const int& c_res         = params_ptr->critical_res;
   for (int i = 0; i < resource_size; i++) {
+    // Always check maximum resources
     if (resource_consumption[i] <= max_res[i]) {
-      if (!bypass_min_res)
+      // Check against minimum resources only if:
+      // 1. `i` is the index of the critical resource (as the value will carry
+      // the halfway point and should always be checked).
+      // 2. The check is not soft.
+      // 3. The check is soft and value is <= 0 (in case we have negative
+      // minimum resources).
+      if (i == c_res || !soft || (soft && min_res[i] <= 0))
         if (resource_consumption[i] >= min_res[i]) {
           ;
         } else {
+          // The label is infeasible because of violating a minimum resource
+          // bound
           return false;
         }
     } else {
+      // The label is infeasible because of violating a maximum resource bound
       return false;
     }
   }
+  // The label is feasible
   return true;
 }
 

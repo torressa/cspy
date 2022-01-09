@@ -28,6 +28,7 @@ void createGraphIssue90(BiDirectional* bidirectional) {
   bidirectional->addNodes({0, 1, 2, 3, 4, 5});
   bidirectional->addEdge(0, 1, 1.0, {1, -1});
   bidirectional->addEdge(1, 2, 1.0, {1, 1});
+  bidirectional->addEdge(2, 3, 1.0, {1, 1});
   bidirectional->addEdge(3, 4, 1.0, {1, 1});
   bidirectional->addEdge(4, 5, 1.0, {1, 1});
 }

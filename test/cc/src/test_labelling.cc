@@ -60,6 +60,17 @@ TEST_F(TestLabelling, testFeasibility) {
   ASSERT_FALSE(label.checkFeasibility(min_res, max_res));
 }
 
+TEST_F(TestLabelling, testFeasibilitySoft) {
+  const Label               label(weight, node, res, path, params_ptr.get());
+  const std::vector<double> min_res = {6.0, 10.0};
+
+  // Soft passes as critical resource is at index 0 and res[0] = 6.0 <=
+  // min_res[0] = 6.0, and index 1 is not checked as bound is not <= 0
+  ASSERT_TRUE(label.checkFeasibility(max_res, min_res, true));
+  // Hard fails as res[1] = 5.0 is not >= min_res[1] = 10.0
+  ASSERT_FALSE(label.checkFeasibility(max_res, min_res));
+}
+
 TEST_F(TestLabelling, testExtendForward) {
   Label label(weight, node, res, path, params_ptr.get());
   auto  labels                         = std::make_unique<std::vector<Label>>();

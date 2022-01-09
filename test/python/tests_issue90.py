@@ -1,9 +1,8 @@
-import unittest
-
-from numpy import testing
 from networkx import DiGraph
 
 from cspy import BiDirectional
+
+from utils import TestingBase
 
 
 def createG():
@@ -12,11 +11,10 @@ def createG():
     H.add_edge(2, 3, res_cost=[1, 1], weight=1)
     H.add_edge(3, 4, res_cost=[1, 1], weight=1)
     H.add_edge(4, 'Sink', res_cost=[1, 1], weight=1)
-
     return H
 
 
-class TestsIssue90(unittest.TestCase):
+class TestsIssue90(TestingBase):
     """
     Tests for issue #90
     https://github.com/torressa/cspy/issues/90
@@ -39,7 +37,7 @@ class TestsIssue90(unittest.TestCase):
         self.total_cost = 5.0
         self.consumed_resources = [5.0, 3.0]
 
-    def test_forward(self):
+    def test_forward_elementary(self):
         alg = BiDirectional(self.H,
                             self.max_res,
                             self.min_res,
@@ -47,48 +45,61 @@ class TestsIssue90(unittest.TestCase):
                             direction="forward")
 
         alg.run()
-        print()
-        print(alg.path)
-        print()
-        self.assertEqual(alg.path, self.result_path)
-        self.assertEqual(alg.total_cost, self.total_cost)
-        self.assertIsNone(
-            testing.assert_allclose(alg.consumed_resources,
-                                    self.consumed_resources))
+        self.check_result(alg, self.result_path, self.total_cost,
+                          self.consumed_resources)
 
-    def test_both(self):
+    def test_forward(self):
+        alg = BiDirectional(self.H,
+                            self.max_res,
+                            self.min_res,
+                            direction="forward")
+
+        alg.run()
+        self.check_result(alg, self.result_path, self.total_cost,
+                          self.consumed_resources)
+
+    def test_both_elementary(self):
         alg = BiDirectional(self.H, self.max_res, self.min_res, elementary=True)
         alg.run()
-        print(alg.path)
-        self.assertEqual(alg.path, self.result_path)
-        self.assertEqual(alg.total_cost, self.total_cost)
-        self.assertIsNone(
-            testing.assert_allclose(alg.consumed_resources,
-                                    self.consumed_resources))
+        self.check_result(alg, self.result_path, self.total_cost,
+                          self.consumed_resources)
 
-    def test_H2_forward(self):
+    def test_both(self):
+        alg = BiDirectional(self.H, self.max_res, self.min_res)
+        alg.run()
+        self.check_result(alg, self.result_path, self.total_cost,
+                          self.consumed_resources)
+
+    def test_H2_forward_elementary(self):
         alg = BiDirectional(self.H2,
                             self.max_res,
                             self.min_res,
                             elementary=True,
                             direction="forward")
         alg.run()
-        print("h2 forward", alg.path)
-        self.assertEqual(alg.path, self.result_path)
-        self.assertEqual(alg.total_cost, self.total_cost)
-        self.assertIsNone(
-            testing.assert_allclose(alg.consumed_resources,
-                                    self.consumed_resources))
+        self.check_result(alg, self.result_path, self.total_cost,
+                          self.consumed_resources)
 
-    def test_H2_both(self):
+    def test_H2_forward(self):
+        alg = BiDirectional(self.H2,
+                            self.max_res,
+                            self.min_res,
+                            direction="forward")
+        alg.run()
+        self.check_result(alg, self.result_path, self.total_cost,
+                          self.consumed_resources)
+
+    def test_H2_both_elementary(self):
         alg = BiDirectional(self.H2,
                             self.max_res,
                             self.min_res,
                             elementary=True)
         alg.run()
-        print("h2 both", alg.path)
-        self.assertEqual(alg.path, self.result_path)
-        self.assertEqual(alg.total_cost, self.total_cost)
-        self.assertIsNone(
-            testing.assert_allclose(alg.consumed_resources,
-                                    self.consumed_resources))
+        self.check_result(alg, self.result_path, self.total_cost,
+                          self.consumed_resources)
+
+    def test_H2_both(self):
+        alg = BiDirectional(self.H2, self.max_res, self.min_res)
+        alg.run()
+        self.check_result(alg, self.result_path, self.total_cost,
+                          self.consumed_resources)

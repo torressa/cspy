@@ -1,9 +1,9 @@
-import unittest
-
 from numpy import array
 from networkx import DiGraph
 
 from cspy import BiDirectional, Tabu, GreedyElim, REFCallback
+
+from utils import TestingBase
 
 
 class MyCallback(REFCallback):
@@ -64,7 +64,7 @@ class MyCallback(REFCallback):
         return _tail, _head
 
 
-class TestsIssue32(unittest.TestCase):
+class TestsIssue32(TestingBase):
     """
     Tests for issue #32
     https://github.com/torressa/cspy/issues/32
@@ -103,9 +103,8 @@ class TestsIssue32(unittest.TestCase):
         # Overwrite graph as original labelling won't match
         self.my_callback.G = alg.G
         alg.run()
-        self.assertEqual(alg.path, self.result_path)
-        self.assertEqual(alg.total_cost, self.total_cost)
-        self.assertEqual(alg.consumed_resources, self.consumed_resources)
+        self.check_result(alg, self.result_path, self.total_cost,
+                          self.consumed_resources)
 
     def test_forward(self):
         """
@@ -118,9 +117,8 @@ class TestsIssue32(unittest.TestCase):
                             REF_callback=self.my_callback)
         self.my_callback.G = alg.G
         alg.run()
-        self.assertEqual(alg.path, self.result_path)
-        self.assertEqual(alg.total_cost, self.total_cost)
-        self.assertEqual(alg.consumed_resources, self.consumed_resources)
+        self.check_result(alg, self.result_path, self.total_cost,
+                          self.consumed_resources)
 
     # def test_tabu(self):
     #     alg = Tabu(self.G,

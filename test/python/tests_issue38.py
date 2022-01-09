@@ -1,12 +1,12 @@
-import unittest
-
 from numpy import array
 from networkx import DiGraph
 
 from cspy.algorithms.bidirectional import BiDirectional
 
+from utils import TestingBase
 
-class TestsIssue38(unittest.TestCase):
+
+class TestsIssue38(TestingBase):
     """
     Tests for issue #38
     https://github.com/torressa/cspy/issues/38
@@ -20,10 +20,12 @@ class TestsIssue38(unittest.TestCase):
         self.G = DiGraph(directed=True, n_res=2)
         self.G.add_edge("Source", "A", res_cost=array([1, 2]), weight=0)
         self.G.add_edge("A", "Sink", res_cost=array([1, 10]), weight=0)
+        self.result_path = ['Source', "A", 'Sink']
+        self.total_cost = 0
+        self.consumed_resources = [2, 12]
 
     def test_bidirectional(self):
         alg = BiDirectional(self.G, self.max_res, self.min_res)
         alg.run()
-        self.assertEqual(alg.path, ['Source', "A", 'Sink'])
-        self.assertEqual(alg.total_cost, 0)
-        self.assertTrue(alg.consumed_resources == [2, 12])
+        self.check_result(alg, self.result_path, self.total_cost,
+                          self.consumed_resources)

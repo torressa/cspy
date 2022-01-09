@@ -131,28 +131,12 @@ void BiDirectional::initSearch(const Directions& direction) {
 
 void BiDirectional::initResourceBounds() {
   max_res_curr_ = max_res;
-  // If not all lower bounds are 0, initialise variable min_res_curr to
-  // vector of 0s
-  bool zeros = std::all_of(
-      min_res.begin(), min_res.end(), [](const double& d) { return d == 0.0; });
-  if (zeros == false) {
-    std::vector<double> temp(min_res.size(), 0.0);
-    // temp[0]          = 0.0;
-    min_res_curr_ = temp;
-    // const int& resource_size = min_res.size();
-    // min_res_curr_.resize(resource_size);
-    // for (int i = 0; i < resource_size; i++) {
-    //   min_res_curr_[i] = std::min(min_res[i], 0.0);
-    // }
-    // min_res_curr_[0] = 0.0;
-  } else {
-    min_res_curr_ = min_res;
-  }
+  min_res_curr_ = min_res;
 }
 
 void BiDirectional::initLabels(const Directions& direction) {
   Vertex              vertex;
-  std::vector<double> res = min_res_curr_;
+  std::vector<double> res(min_res.size(), 0.0);
   std::vector<int>    path;
   Search*             search_ptr = getSearchPtr(direction);
 
@@ -262,7 +246,6 @@ void BiDirectional::move(const Directions& direction) {
 }
 
 bool BiDirectional::terminate(const Directions& direction) {
-  // Check time elapsed (if relevant)
   Search* search_ptr = getSearchPtr(direction);
   return terminate(direction, *search_ptr->intermediate_label);
 }
@@ -278,7 +261,6 @@ bool BiDirectional::terminate(
       timediff_sec >= params_ptr_->time_limit) {
     return true;
   }
-  // Check input label
   return checkValidLabel(direction, label);
 }
 
@@ -390,8 +372,8 @@ void BiDirectional::extendCurrentLabel(const Directions& direction) {
              graph_ptr_->getLNodeFromId(current_label->vertex.lemon_id));
          a != lemon::INVALID;
          ++a) {
-      extendSingleLabel(
-          current_label.get(), direction, graph_ptr_->getAdjVertex(a, true));
+      const AdjVertex& adj_v = graph_ptr_->getAdjVertex(a, true);
+      extendSingleLabel(current_label.get(), direction, adj_v);
     }
   } else {
     // For each incoming arc to the current label
@@ -400,8 +382,8 @@ void BiDirectional::extendCurrentLabel(const Directions& direction) {
              graph_ptr_->getLNodeFromId(current_label->vertex.lemon_id));
          a != lemon::INVALID;
          ++a) {
-      extendSingleLabel(
-          current_label.get(), direction, graph_ptr_->getAdjVertex(a, false));
+      const AdjVertex& adj_v = graph_ptr_->getAdjVertex(a, false);
+      extendSingleLabel(current_label.get(), direction, adj_v);
     }
   }
 }

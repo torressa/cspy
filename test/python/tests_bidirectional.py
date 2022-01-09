@@ -1,13 +1,13 @@
-import unittest
 from time import time
 
 from networkx import DiGraph
 from numpy import array
 
 from cspy import BiDirectional
+from utils import TestingBase
 
 
-class TestsBiDirectional(unittest.TestCase):
+class TestsBiDirectional(TestingBase):
     """
     Tests for finding the resource constrained shortest
     path of simple DiGraph using the BiDirectional algorithm.
@@ -29,21 +29,6 @@ class TestsBiDirectional(unittest.TestCase):
         self.total_cost = -13
         self.consumed_resources = [4, 15.3]
 
-    # TODO fix method="random" see issues
-    # @parameterized.expand(zip(range(100), range(100)))
-    # def test_random(self, _, seed):
-    #     'Test method = "random" for a range of seeds'
-    #     alg = BiDirectional(self.G,
-    #                         self.max_res,
-    #                         self.min_res,
-    #                         method="random",
-    #                         seed=seed)
-    #     # Run and test results
-    #     alg.run()
-    #     self.assertEqual(alg.path, self.result_path)
-    #     self.assertEqual(alg.total_cost, self.total_cost)
-    #     self.assertTrue(alg.consumed_resources == self.consumed_resources)
-
     def test_generated(self):
         'Test method = "generated"'
         alg = BiDirectional(self.G,
@@ -51,9 +36,8 @@ class TestsBiDirectional(unittest.TestCase):
                             self.min_res,
                             method="generated")
         alg.run()
-        self.assertEqual(alg.path, self.result_path)
-        self.assertEqual(alg.total_cost, self.total_cost)
-        self.assertTrue(alg.consumed_resources == self.consumed_resources)
+        self.check_result(alg, self.result_path, self.total_cost,
+                          self.consumed_resources)
 
     def test_processed(self):
         'Test method = "processed"'
@@ -62,12 +46,8 @@ class TestsBiDirectional(unittest.TestCase):
                             self.min_res,
                             method="processed")
         alg.run()
-        path = alg.path
-        cost = alg.total_cost
-        total_res = alg.consumed_resources
-        self.assertEqual(path, self.result_path)
-        self.assertEqual(cost, self.total_cost)
-        self.assertTrue(total_res == self.consumed_resources)
+        self.check_result(alg, self.result_path, self.total_cost,
+                          self.consumed_resources)
 
     def test_unprocessed(self):
         'Test method = "unprocessed"'
@@ -76,9 +56,8 @@ class TestsBiDirectional(unittest.TestCase):
                             self.min_res,
                             method="unprocessed")
         alg.run()
-        self.assertEqual(alg.path, self.result_path)
-        self.assertEqual(alg.total_cost, self.total_cost)
-        self.assertTrue(alg.consumed_resources == self.consumed_resources)
+        self.check_result(alg, self.result_path, self.total_cost,
+                          self.consumed_resources)
 
     def test_unprocessed_time_limit(self):
         'Test time_limit parameter'
@@ -90,9 +69,8 @@ class TestsBiDirectional(unittest.TestCase):
         start = time()
         alg.run()
         self.assertTrue(time() - start <= 0.001 + 1e-3)
-        self.assertEqual(alg.path, self.result_path)
-        self.assertEqual(alg.total_cost, self.total_cost)
-        self.assertTrue(alg.consumed_resources == self.consumed_resources)
+        self.check_result(alg, self.result_path, self.total_cost,
+                          self.consumed_resources)
 
     def test_unprocessed_threshold(self):
         'Test threshold parameter'
@@ -102,9 +80,8 @@ class TestsBiDirectional(unittest.TestCase):
                             method="unprocessed",
                             threshold=0)
         alg.run()
-        self.assertEqual(alg.path, self.result_path)
-        self.assertEqual(alg.total_cost, self.total_cost)
-        self.assertTrue(alg.consumed_resources == self.consumed_resources)
+        self.check_result(alg, self.result_path, self.total_cost,
+                          self.consumed_resources)
 
     def test_unprocessed_time_limit_threshold(self):
         'Test time_limit and threshold parameters'
@@ -117,9 +94,8 @@ class TestsBiDirectional(unittest.TestCase):
         start = time()
         alg.run()
         self.assertTrue(time() - start <= 0.001 + 1e-3)
-        self.assertEqual(alg.path, self.result_path)
-        self.assertEqual(alg.total_cost, self.total_cost)
-        self.assertTrue(alg.consumed_resources == self.consumed_resources)
+        self.check_result(alg, self.result_path, self.total_cost,
+                          self.consumed_resources)
 
     def test_forward(self):
         alg = BiDirectional(self.G,
@@ -127,9 +103,8 @@ class TestsBiDirectional(unittest.TestCase):
                             self.min_res,
                             direction='forward')
         alg.run()
-        self.assertEqual(alg.path, self.result_path)
-        self.assertEqual(alg.total_cost, self.total_cost)
-        self.assertTrue(alg.consumed_resources == self.consumed_resources)
+        self.check_result(alg, self.result_path, self.total_cost,
+                          self.consumed_resources)
 
     def test_backward(self):
         alg = BiDirectional(self.G,
@@ -138,9 +113,8 @@ class TestsBiDirectional(unittest.TestCase):
                             direction='backward')
         # Check path
         alg.run()
-        self.assertEqual(alg.path, self.result_path)
-        self.assertEqual(alg.total_cost, self.total_cost)
-        self.assertTrue(alg.consumed_resources == self.consumed_resources)
+        self.check_result(alg, self.result_path, self.total_cost,
+                          self.consumed_resources)
 
     def test_input_exceptions(self):
         # Check whether wrong input raises exceptions

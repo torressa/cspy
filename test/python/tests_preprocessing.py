@@ -39,7 +39,6 @@ class TestsPreprocessing(unittest.TestCase):
         self.F.add_edge('A', 'B', res_cost=array([10]), weight=1)
         self.F.add_edge('A', 'Sink', res_cost=array([1]), weight=1)
 
-
     def testUnreachable(self):
         """
         Tests if the unreachable node 'E' is removed.
