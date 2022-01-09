@@ -116,6 +116,8 @@ message(STATUS "Build Dotnet: ${BUILD_DOTNET}")
 include(FetchContent)
 set(FETCHCONTENT_QUIET OFF)
 set(LEMON_BUILD_TESTING OFF)
+# Remove shared libs for LEMON
+set(BUILD_SHARED_LIBS_OLD ${BUILD_SHARED_LIBS})
 set(BUILD_SHARED_LIBS OFF)
 
 FetchContent_Declare(
@@ -123,7 +125,7 @@ FetchContent_Declare(
   GIT_REPOSITORY "https://github.com/MultiFlow/LEMON.git"
   GIT_TAG "multiflow/dev")
 FetchContent_MakeAvailable(LEMON)
-set(BUILD_SHARED_LIBS ON)
+set(BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS_OLD})
 
 enable_testing()
 include(cpp)
