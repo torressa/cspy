@@ -1,7 +1,7 @@
 from numpy import array
 from networkx import DiGraph
 
-from cspy import BiDirectional, Tabu, GreedyElim, REFCallback
+from cspy import BiDirectional, GreedyElim, REFCallback
 
 from utils import TestingBase
 
@@ -19,7 +19,7 @@ class MyCallback(REFCallback):
         res_new = list(cumul_res)
         # Monotone resource
         res_new[0] += 1.0
-        tail_original, head_original = self._get_original_node_label(tail, head)
+        _, head_original = self._get_original_node_label(tail, head)
         # Increasing resource
         if head_original != "Sink":
             res_new[1] += float(int(head_original)**2)
@@ -30,7 +30,7 @@ class MyCallback(REFCallback):
     def REF_bwd(self, cumul_res, tail, head, edge_res, partial_path,
                 cumul_cost):
         res_new = list(cumul_res)
-        tail_original, head_original = self._get_original_node_label(tail, head)
+        _, head_original = self._get_original_node_label(tail, head)
         # Monotone resource
         res_new[0] -= 1
         # Increasing resource
@@ -45,8 +45,7 @@ class MyCallback(REFCallback):
         # local copies
         fwd_res = list(fwd_resources)
         bwd_res = list(bwd_resources)
-        edge_res = list(edge_resources)
-        tail_original, head_original = self._get_original_node_label(tail, head)
+        _, head_original = self._get_original_node_label(tail, head)
         # Compute merged resources
         merged_res = [0] * len(fwd_res)
         merged_res[0] = fwd_res[0] + bwd_res[0]

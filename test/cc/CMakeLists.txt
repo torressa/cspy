@@ -24,6 +24,7 @@ else()
   add_executable(
     ${NAME}
     src/main.cc
+    src/utils.cc
     src/test_labelling.cc
     src/test_bidirectional.cc
     src/test_issue17.cc

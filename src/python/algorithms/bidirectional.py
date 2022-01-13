@@ -3,10 +3,8 @@ from typing import List, Optional, Tuple, Union
 
 from networkx import (DiGraph, convert_node_labels_to_integers,
                       get_node_attributes)
-from numpy.random import RandomState
-
 from cspy.preprocessing import preprocess_graph
-from cspy.checking import check, check_seed
+from cspy.checking import check
 
 # Import from the SWIG output file
 from .pyBiDirectionalCpp import (BiDirectionalCpp, REFCallback, DoubleVector,

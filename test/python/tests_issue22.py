@@ -1,5 +1,4 @@
 from numpy import array
-from random import randint
 from networkx import DiGraph, astar_path
 
 from cspy.algorithms.tabu import Tabu

@@ -215,9 +215,9 @@ Label processBwdLabel(
  * To be used before attempting to merge.
  */
 bool mergePreCheck(
-    const labelling::Label&   fwd_label,
-    const labelling::Label&   bwd_label,
-    const std::vector<double> max_res);
+    const labelling::Label&    fwd_label,
+    const labelling::Label&    bwd_label,
+    const std::vector<double>& max_res);
 
 /**
  * Returns the phi value.

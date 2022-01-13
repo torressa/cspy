@@ -5,6 +5,7 @@
 
 #include "gtest/gtest.h"
 #include "src/cc/bidirectional.h"
+#include "test/cc/src/utils.h"
 
 namespace bidirectional {
 
@@ -18,155 +19,71 @@ class TestBiDirectional : public ::testing::Test {
   const std::vector<int>         final_path      = {0, 1, 2, 3, 4};
   const std::vector<double>      final_res       = {4.0, 15.3};
   const double                   final_cost      = -13.0;
+
+  void SetUp() override {
+    bidirectional = std::make_unique<BiDirectional>(
+        number_vertices, number_edges, 0, 4, max_res, min_res);
+    // Create graph
+    bidirectional->addNodes({0, 1, 2, 3, 4});
+    // Add edges
+    bidirectional->addEdge(0, 1, -1, {1, 2});
+    bidirectional->addEdge(1, 2, -1, {1, 0.3});
+    bidirectional->addEdge(2, 3, -10, {1, 3});
+    bidirectional->addEdge(2, 4, 10, {1, 2});
+    bidirectional->addEdge(3, 4, -1, {1, 10});
+  }
 };
 
-void createGraph(BiDirectional* bidirectional) {
-  bidirectional->addNodes({0, 1, 2, 3, 4});
-  // Add edges
-  bidirectional->addEdge(0, 1, -1, {1, 2});
-  bidirectional->addEdge(1, 2, -1, {1, 0.3});
-  bidirectional->addEdge(2, 3, -10, {1, 3});
-  bidirectional->addEdge(2, 4, 10, {1, 2});
-  bidirectional->addEdge(3, 4, -1, {1, 10});
-}
-
 TEST_F(TestBiDirectional, testBoth) {
-  bidirectional = std::make_unique<BiDirectional>(
-      number_vertices, number_edges, 0, 4, max_res, min_res);
-  createGraph(bidirectional.get());
-
   bidirectional->run();
-
-  auto path = bidirectional->getPath();
-  auto res  = bidirectional->getConsumedResources();
-  auto cost = bidirectional->getTotalCost();
-
-  ASSERT_EQ(path, final_path);
-  ASSERT_EQ(res, final_res);
-  ASSERT_EQ(cost, final_cost);
+  checkResult(*bidirectional, final_path, final_res, final_cost);
 }
 
 TEST_F(TestBiDirectional, testBothTimeLimit) {
-  bidirectional = std::make_unique<BiDirectional>(
-      number_vertices, number_edges, 0, 4, max_res, min_res);
   bidirectional->setTimeLimit(0.001);
-  createGraph(bidirectional.get());
-
   bidirectional->run();
-
-  auto path = bidirectional->getPath();
-  auto res  = bidirectional->getConsumedResources();
-  auto cost = bidirectional->getTotalCost();
-
-  ASSERT_EQ(path, final_path);
-  ASSERT_EQ(res, final_res);
-  ASSERT_EQ(cost, final_cost);
+  checkResult(*bidirectional, final_path, final_res, final_cost);
 }
 
 TEST_F(TestBiDirectional, testBothThreshold) {
-  bidirectional = std::make_unique<BiDirectional>(
-      number_vertices, number_edges, 0, 4, max_res, min_res);
   bidirectional->setThreshold(100);
-  createGraph(bidirectional.get());
-
   bidirectional->run();
-
-  auto path = bidirectional->getPath();
-  auto res  = bidirectional->getConsumedResources();
-  auto cost = bidirectional->getTotalCost();
 
   std::vector<int>    path_ = {0, 1, 2, 4};
   std::vector<double> res_  = {3.0, 4.3};
   double              cost_ = 8;
 
-  ASSERT_EQ(path, path_);
-  ASSERT_EQ(res, res_);
-  ASSERT_EQ(cost, cost_);
+  checkResult(*bidirectional, path_, res_, cost_);
 }
 
 TEST_F(TestBiDirectional, testBothProcessed) {
-  bidirectional = std::make_unique<BiDirectional>(
-      number_vertices, number_edges, 0, 4, max_res, min_res);
   bidirectional->setMethod("processed");
-  createGraph(bidirectional.get());
-
   bidirectional->run();
-
-  auto path = bidirectional->getPath();
-  auto res  = bidirectional->getConsumedResources();
-  auto cost = bidirectional->getTotalCost();
-
-  ASSERT_EQ(path, final_path);
-  ASSERT_EQ(res, final_res);
-  ASSERT_EQ(cost, final_cost);
+  checkResult(*bidirectional, final_path, final_res, final_cost);
 }
 
 TEST_F(TestBiDirectional, testBothGenerated) {
-  bidirectional = std::make_unique<BiDirectional>(
-      number_vertices, number_edges, 0, 4, max_res, min_res);
   bidirectional->setMethod("generated");
-  createGraph(bidirectional.get());
-
   bidirectional->run();
-
-  auto path = bidirectional->getPath();
-  auto res  = bidirectional->getConsumedResources();
-  auto cost = bidirectional->getTotalCost();
-
-  ASSERT_EQ(path, final_path);
-  ASSERT_EQ(res, final_res);
-  ASSERT_EQ(cost, final_cost);
+  checkResult(*bidirectional, final_path, final_res, final_cost);
 }
 
 TEST_F(TestBiDirectional, testBothBoundsPruning) {
-  bidirectional = std::make_unique<BiDirectional>(
-      number_vertices, number_edges, 0, 4, max_res, min_res);
   bidirectional->setBoundsPruning(true);
-  createGraph(bidirectional.get());
-
   bidirectional->run();
-
-  auto path = bidirectional->getPath();
-  auto res  = bidirectional->getConsumedResources();
-  auto cost = bidirectional->getTotalCost();
-
-  ASSERT_EQ(path, final_path);
-  ASSERT_EQ(res, final_res);
-  ASSERT_EQ(cost, final_cost);
+  checkResult(*bidirectional, final_path, final_res, final_cost);
 }
 
 TEST_F(TestBiDirectional, testForward) {
-  bidirectional = std::make_unique<BiDirectional>(
-      number_vertices, number_edges, 0, 4, max_res, min_res);
   bidirectional->setDirection("forward");
-  createGraph(bidirectional.get());
-
   bidirectional->run();
-
-  auto path = bidirectional->getPath();
-  auto res  = bidirectional->getConsumedResources();
-  auto cost = bidirectional->getTotalCost();
-
-  ASSERT_EQ(path, final_path);
-  ASSERT_EQ(res, final_res);
-  ASSERT_EQ(cost, final_cost);
+  checkResult(*bidirectional, final_path, final_res, final_cost);
 }
 
 TEST_F(TestBiDirectional, testBackward) {
-  bidirectional = std::make_unique<BiDirectional>(
-      number_vertices, number_edges, 0, 4, max_res, min_res);
   bidirectional->setDirection("backward");
-  createGraph(bidirectional.get());
-
   bidirectional->run();
-
-  auto path = bidirectional->getPath();
-  auto res  = bidirectional->getConsumedResources();
-  auto cost = bidirectional->getTotalCost();
-
-  ASSERT_EQ(path, final_path);
-  ASSERT_EQ(res, final_res);
-  ASSERT_EQ(cost, final_cost);
+  checkResult(*bidirectional, final_path, final_res, final_cost);
 }
 
 } // namespace bidirectional

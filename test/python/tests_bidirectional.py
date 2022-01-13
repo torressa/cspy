@@ -1,7 +1,6 @@
 from time import time
 
 from networkx import DiGraph
-from numpy import array
 
 from cspy import BiDirectional
 from utils import TestingBase
