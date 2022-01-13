@@ -13,6 +13,8 @@ on:
 # https://github.com/Niraj-Kamdar/manylinux-wheel-builder#advanced-usage
 jobs:
   macos-build:
+      - name: Swig install
+        run: brew install swig
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -23,8 +25,6 @@ jobs:
       TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
     steps:
       - uses: actions/checkout@v2
-      - name: Swig install
-        run: brew install swig
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:

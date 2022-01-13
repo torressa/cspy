@@ -6,8 +6,8 @@ jobs:
   build:
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
-        fail-fast: false
         python-version: [3.6, 3.7, 3.8, 3.9, "3.10"]
         os: [macos-11, macos-10.15, ubuntu-latest]
     steps:
