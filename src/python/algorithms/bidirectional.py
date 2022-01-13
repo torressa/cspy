@@ -7,8 +7,7 @@ from cspy.preprocessing import preprocess_graph
 from cspy.checking import check
 
 # Import from the SWIG output file
-from .pyBiDirectionalCpp import (BiDirectionalCpp, REFCallback, DoubleVector,
-                                 IntPair, IntPairVector)
+from .pyBiDirectionalCpp import (BiDirectionalCpp, REFCallback, DoubleVector)
 
 
 class BiDirectional:
@@ -86,10 +85,6 @@ class BiDirectional:
         Custom resource extension callback. See `REFs`_ for more details.
         Default : None
 
-    pickup_delivery_pairs : list of tuples, optional
-        List with pickup delivery node pairs.
-        Default : None
-
     .. _REFs : https://cspy.readthedocs.io/en/latest/ref.html
     .. _Tilk 2017: https://www.sciencedirect.com/science/article/pii/S0377221717302035
     .. _Righini and Salani (2006): https://www.sciencedirect.com/science/article/pii/S1572528606000417
@@ -110,8 +105,7 @@ class BiDirectional:
             find_critical_res: Optional[bool] = False,
             critical_res: Optional[int] = None,
             # seed: Union[int] = None,
-            REF_callback: Optional[REFCallback] = None,
-            pickup_delivery_pairs: List[Tuple[int, int]] = None):
+            REF_callback: Optional[REFCallback] = None):
         # Check inputs
         check(G, max_res, min_res, direction, REF_callback, __name__)
         # check_seed(seed, __name__)
@@ -160,11 +154,6 @@ class BiDirectional:
             self.bidirectional_cpp.setREFCallback(REF_callback.__disown__())
         # if isinstance(seed, int) and seed is not None:
         #     self.bidirectional_cpp.setSeed(seed)
-        if pickup_delivery_pairs is not None:
-            # convert list of tuple for C++
-            pickup_delivery_pairs = self._update_pairs(pickup_delivery_pairs)
-            self.bidirectional_cpp.setPDPairs(
-                _list_of_tuple_to_int_pair_vector(pickup_delivery_pairs))
 
     def run(self):
         'Run the algorithm in series'
@@ -228,14 +217,6 @@ class BiDirectional:
             res_cost = _list_to_double_vector(edge[2]["res_cost"])
             self.bidirectional_cpp.addEdge(edge[0], edge[1], edge[2]["weight"],
                                            res_cost)
-
-    def _update_pairs(self, pickup_delivery_pairs):
-        new_pickup_delivery_pairs = []
-        for (u, v) in pickup_delivery_pairs:
-            u_new = self._get_original_node_label(u)
-            v_new = self._get_original_node_label(v)
-            new_pickup_delivery_pairs.append((u_new, v_new))
-        return new_pickup_delivery_pairs
 
     def _get_original_node_label(self, node_label):
         matching_labels = [

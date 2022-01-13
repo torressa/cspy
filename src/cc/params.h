@@ -49,8 +49,6 @@ class Params {
   int critical_res = 0;
   /// Callback to custom REF
   bidirectional::REFCallback* ref_callback = nullptr;
-  /// Vector of (pickup, delivery) nodes
-  std::unordered_map<int, int> pickup_delivery_pairs = {};
 
   /* Constructors */
 
@@ -84,12 +82,6 @@ class Params {
   }
   /// Set callback for custom resource extensions
   void setREFCallback(bidirectional::REFCallback* cb) { ref_callback = cb; };
-  void setPDPairs(
-      const std::vector<std::pair<int, int>>& pickup_delivery_pairs_in) {
-    for (const auto& pair : pickup_delivery_pairs_in) {
-      pickup_delivery_pairs[pair.first] = pair.second;
-    }
-  }
 };
 
 } // namespace bidirectional

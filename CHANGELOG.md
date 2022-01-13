@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [unreleased]
 
+### Changed
+
+ - Refactored Python and C++ unittests.
+ - Added C# interface.
+
+### Added
+ - [WIP] New functionality to select monotonic resources.
+ - [WIP] Detection of monotonic resources.
+
 ## [v1.0.1]
 
 ### Changed

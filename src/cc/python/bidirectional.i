@@ -14,8 +14,6 @@ using namespace bidirectional;
 
 %template(DoubleVector) std::vector<double>;
 %template(IntVector) std::vector<int>;
-%template(IntPair) std::pair<int,int>;
-%template(IntPairVector) std::vector<std::pair<int,int>>;
 
 /* turn on director wrapping REFCallback */
 %feature("director") bidirectional::REFCallback;
@@ -50,7 +48,6 @@ using namespace bidirectional;
 %rename("%s") bidirectional::BiDirectional::setFindCriticalRes;
 %rename("%s") bidirectional::BiDirectional::setCriticalRes;
 %rename("%s") bidirectional::BiDirectional::setREFCallback;
-%rename("%s") bidirectional::BiDirectional::setPDPairs;
 /* Expose getters */
 %rename("%s") bidirectional::BiDirectional::getPath;
 %rename("%s") bidirectional::BiDirectional::getTotalCost;

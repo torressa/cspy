@@ -1,13 +1,15 @@
-name: Ubuntu Python
+name: Python
 
 on: [push, pull_request]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
+        fail-fast: false
         python-version: [3.6, 3.7, 3.8, 3.9, "3.10"]
+        os: [macos-11, macos-10.15, ubuntu-latest]
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python ${{ matrix.python-version }}
@@ -17,10 +19,11 @@ jobs:
       - name: Configure
         run: |
           echo $pythonLocation
-          cmake -S . -Bbuild -DBUILD_TESTING=ON -DBUILD_PYTHON=ON -DBUILD_SHARED_LIBS=ON
+          echo $pythonVersion
+          cmake -S . -Bbuild -DBUILD_TESTING=ON -DBUILD_PYTHON=ON -DBUILD_SHARED_LIBS=ON -DPython3_ROOT_DIR=${pythonLocation} -DPython_ROOT_DIR=${pythonLocation} -DPython3_FIND_STRATEGY=LOCATION
       - name: Build
         run: cmake --build build --config Release --target all -v
       - name: Run python tests
         run: |
-          cd build/
+          cd build
           ctest --verbose -R python_unittest

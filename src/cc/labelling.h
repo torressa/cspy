@@ -144,12 +144,6 @@ class Label {
   friend bool          operator!=(const Label& label1, const Label& label2) {
     return !(label1 == label2);
   }
-
- private:
-  // Vector of open pickup nodes (no need to keep the pair).
-  std::set<int> open_requests_;
-  void          updateOpenRequests(const int& new_node_user_id);
-  std::set<int> getOpenRequests() const;
 };
 
 /**

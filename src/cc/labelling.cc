@@ -27,8 +27,6 @@ Label::Label(
     for (const int& p : partial_path)
       unreachable_nodes.insert(p);
   }
-  if (params_ptr->pickup_delivery_pairs.size() > 0)
-    updateOpenRequests(vertex_in.user_id);
 };
 
 Label::Label(
@@ -158,43 +156,6 @@ bool Label::checkStPath(const int& source_id, const int& sink_id) const {
   return false;
 }
 
-std::set<int> Label::getOpenRequests() const {
-  return open_requests_;
-}
-
-void Label::updateOpenRequests(const int& new_node_user_id) {
-  const std::unordered_map<int, int>& pd_pairs =
-      params_ptr->pickup_delivery_pairs;
-  // Find pair with new node as pickup node (if it exists).
-  auto delivery_node_iter = pd_pairs.find(new_node_user_id);
-  int  delivery_node;
-  if (delivery_node_iter != pd_pairs.end()) {
-    delivery_node = delivery_node_iter->second;
-  } else {
-    return;
-  }
-  //  std::find_if(
-  //    pd_pairs.begin(),
-  //    pd_pairs.end(),
-  //    [&new_node_user_id](const std::pair<int, int>& elem) {
-  //      return elem.first == new_node_user_id;
-  //    });
-  bool pd_pair_open = true;
-  for (const int& n2 : partial_path) {
-    // Pickup node in partial_path!
-    // Check if delivery node already seen
-    if (n2 == delivery_node) {
-      // Stop as both pick up and delivery have been served.
-      pd_pair_open = false;
-      break;
-    }
-    // If delivery node not in partial path, then we have an open request.
-    // We only save the pickup node (first element in pair).
-    if (pd_pair_open)
-      open_requests_.insert(new_node_user_id);
-  }
-}
-
 bool Label::checkDominance(
     const Label&                     other,
     const bidirectional::Directions& direction) const {
@@ -251,22 +212,6 @@ bool Label::checkDominance(
             other.unreachable_nodes.end()) &&
         !(unreachable_nodes == other.unreachable_nodes)) {
       return false;
-    }
-  }
-  // Check for pickup delivery case
-  if (params_ptr->pickup_delivery_pairs.size() > 0) {
-    std::set<int> this_open_nodes  = getOpenRequests();
-    std::set<int> other_open_nodes = other.getOpenRequests();
-    if (this_open_nodes.size() > 0 && other_open_nodes.size() > 0) {
-      // if !(this_open_nodes \subseteq other_open_nodes)
-      if (!std::includes(
-              this_open_nodes.begin(),
-              this_open_nodes.end(),
-              other_open_nodes.begin(),
-              other_open_nodes.end()) &&
-          !(this_open_nodes == other_open_nodes)) {
-        return false;
-      }
     }
   }
   // this dominates other

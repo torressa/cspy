@@ -1,17 +1,22 @@
-name: MacOS Cpp
+name: Cpp
 
 on: [push, pull_request]
 
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-11, macos-10.15, ubuntu-latest]
     steps:
     - uses: actions/checkout@v2
     - name: Configure
-      run: cmake -S . -Bbuild -DBUILD_TESTING=ON -DCMAKE_BUILD_TYPE=Release -DBUILD_PYTHON=OFF -DBUILD_SHARED_LIBS=OFF
+      run: cmake -S . -Bbuild -DBUILD_TESTING=ON -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF
     - name: Build
       run: cmake --build build --config Release --target all -v
     - name: Test
       run: cd build && ctest --verbose
     - name: Install
       run: cmake --build build --config Release --target install -v -- DESTDIR=install
+      continue-on-error: true
