@@ -164,12 +164,10 @@ bool Label::checkDominance(
 
   if (weight == other.weight) {
     // Check if all resources are equal
-    bool all_res_equal = true;
-    for (int i = 0; i < resource_size; i++) {
-      if (resource_consumption[i] != other.resource_consumption[i]) {
-        all_res_equal = false;
-      }
-    }
+    bool all_res_equal = std::equal(
+        resource_consumption.cbegin(),
+        resource_consumption.cend(),
+        other.resource_consumption.cbegin());
     if (all_res_equal) {
       return false;
     }
@@ -204,17 +202,20 @@ bool Label::checkDominance(
   // Check for the elementary case
   if (params_ptr->elementary && unreachable_nodes.size() > 0 &&
       other.unreachable_nodes.size() > 0) {
-    // if !(unreachable_nodes \subseteq other.unreachable_nodes)
-    if (!std::includes(
-            unreachable_nodes.begin(),
-            unreachable_nodes.end(),
-            other.unreachable_nodes.begin(),
-            other.unreachable_nodes.end()) &&
-        !(unreachable_nodes == other.unreachable_nodes)) {
+    // if other.unreachable_nodes \subset unreachable_nodes (strict)
+    if (std::includes(
+            other.unreachable_nodes.cbegin(),
+            other.unreachable_nodes.cend(),
+            unreachable_nodes.cbegin(),
+            unreachable_nodes.cend()) &&
+        !std::equal(
+            unreachable_nodes.cbegin(),
+            unreachable_nodes.cend(),
+            other.unreachable_nodes.cbegin())) {
       return false;
     }
   }
-  // this dominates other
+  //  this dominates other
   return true;
 }
 

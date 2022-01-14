@@ -10,7 +10,6 @@ using namespace bidirectional;
 /* Type templates */
 %include <std_string.i>
 %include <std_vector.i>
-%include <std_pair.i>
 
 %template(DoubleVector) std::vector<double>;
 %template(IntVector) std::vector<int>;

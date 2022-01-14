@@ -2,7 +2,6 @@
 #define BIDIRECTIONAL_PARAMS_H__
 
 #include <cmath> // nan
-#include <unordered_map>
 #include <vector>
 
 #include "ref_callback.h"
