@@ -13,12 +13,10 @@ on:
 # https://github.com/Niraj-Kamdar/manylinux-wheel-builder#advanced-usage
 jobs:
   macos-build:
-      - name: Swig install
-        run: brew install swig
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-10.15] # 10.14 and 11 don't work
+        os: [macos-10.15, macos-11] # 10.14 and 11 don't work
         python-version: [3.6, 3.7, 3.8, 3.9, "3.10"]
     env:
       TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
