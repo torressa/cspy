@@ -202,12 +202,12 @@ bool Label::checkDominance(
   // Check for the elementary case
   if (params_ptr->elementary && unreachable_nodes.size() > 0 &&
       other.unreachable_nodes.size() > 0) {
-    // if other.unreachable_nodes \subset unreachable_nodes (strict)
+    // check other.unreachable_nodes \subset unreachable_nodes (strict)
     if (std::includes(
-            other.unreachable_nodes.cbegin(),
-            other.unreachable_nodes.cend(),
             unreachable_nodes.cbegin(),
-            unreachable_nodes.cend()) &&
+            unreachable_nodes.cend(),
+            other.unreachable_nodes.cbegin(),
+            other.unreachable_nodes.cend()) &&
         !std::equal(
             unreachable_nodes.cbegin(),
             unreachable_nodes.cend(),
