@@ -38,15 +38,15 @@ while getopts "bdcprs" opt; do
 	p )
 		BUILD_PYTHON=true
 		;;
-    r )
-        BUILD_PYTHON=true
-        BUILD_RELEASE=true
-        ;;
-    s )
+  r )
+    BUILD_PYTHON=true
+    BUILD_RELEASE=true
+    ;;
+  s )
 		BENCHMARK_TESTS=true
  		docker-compose up --build --remove-orphans boost-benchmark
 		exit 1
-        ;;
+    ;;
 	h )
 		usage
 		exit 1

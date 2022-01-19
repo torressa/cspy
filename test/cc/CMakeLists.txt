@@ -24,6 +24,7 @@ else()
   add_executable(
     ${NAME}
     src/main.cc
+    src/utils.cc
     src/test_labelling.cc
     src/test_bidirectional.cc
     src/test_issue17.cc
@@ -31,7 +32,8 @@ else()
     src/test_issue38.cc
     src/test_issue41.cc
     src/test_issue52.cc
-    src/test_issue69.cc)
+    src/test_issue69.cc
+    src/test_issue90.cc)
 endif()
 
 # note: macOS is APPLE and also UNIX !

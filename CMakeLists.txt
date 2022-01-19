@@ -109,22 +109,18 @@ message(STATUS "Build C++ library: ${BUILD_CXX}")
 message(STATUS "Build Python: ${BUILD_PYTHON}")
 message(STATUS "Build Dotnet: ${BUILD_DOTNET}")
 
-# TODO Other languages option(BUILD_JAVA "Build Java Library" OFF)
-# option(BUILD_DOTNET "Build .NET Library" OFF) message(STATUS "Build Java:
-# ${BUILD_JAVA}") message(STATUS "Build .Net: ${BUILD_DOTNET}")
-
 include(FetchContent)
 set(FETCHCONTENT_QUIET OFF)
-
-# TODO: download and install lemon with FetchContent
-
-# FetchContent_Declare(lemon URL
-# http://lemon.cs.elte.hu/pub/sources/lemon-1.3.1.tar.gz)
-# option(LEMON_ENABLE_GLPK NO) option(LEMON_ENABLE_COIN NO)
-# option(LEMON_ENABLE_ILOG NO) option(LEMON_ENABLE_SOPLEX NO)
-# FetchContent_MakeAvailable(lemon)
-
-find_package(LEMON REQUIRED)
+set(LEMON_BUILD_TESTING OFF)
+# Remove shared libs for LEMON
+set(BUILD_SHARED_LIBS_OLD ${BUILD_SHARED_LIBS})
+set(BUILD_SHARED_LIBS OFF)
+FetchContent_Declare(
+  LEMON
+  GIT_REPOSITORY "https://github.com/MultiFlow/LEMON.git"
+  GIT_TAG "multiflow/dev")
+FetchContent_MakeAvailable(LEMON)
+set(BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS_OLD})
 
 enable_testing()
 include(cpp)
@@ -141,7 +137,8 @@ endif()
 include(python)
 include(dotnet)
 
-if(NOT (BUILD_PYTHON OR BUILD_DOTNET))
+# Fetch googletest and add C++ tests only if required
+if(NOT (BUILD_PYTHON OR BUILD_DOTNET) AND BUILD_TESTING)
   set(FETCHCONTENT_QUIET OFF)
   # Prevent overriding the parent project's compiler/linker settings on Windows
   set(gtest_force_shared_crt
@@ -149,8 +146,8 @@ if(NOT (BUILD_PYTHON OR BUILD_DOTNET))
       CACHE BOOL "" FORCE)
   FetchContent_Declare(
     googletest
-    GIT_REPOSITORY https://github.com/google/googletest.git
-    GIT_TAG master)
+    GIT_REPOSITORY "https://github.com/google/googletest.git"
+    GIT_TAG "main")
   FetchContent_MakeAvailable(googletest)
   add_subdirectory(test/cc/)
 endif()

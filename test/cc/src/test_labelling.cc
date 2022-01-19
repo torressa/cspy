@@ -1,9 +1,25 @@
-#include "test_labelling.h"
-
 #include <algorithm> // make_heap, push_heap
 #include <memory>    // make_unique
 
+#include "gtest/gtest.h"
+#include "src/cc/bidirectional.h"
+#include "src/cc/digraph.h"
+#include "src/cc/labelling.h"
+
 namespace labelling {
+
+class TestLabelling : public ::testing::Test {
+ protected:
+  double                                 weight     = 10.0;
+  bidirectional::Vertex                  node       = {1, 1}; // B
+  bidirectional::Vertex                  other_node = {2, 2}; // C
+  std::vector<double>                    res        = {6.0, 5.0};
+  std::vector<int>                       path       = {0};
+  std::vector<double>                    max_res    = {20.0, 20.0};
+  std::vector<double>                    min_res    = {0.0, 0.0};
+  std::unique_ptr<bidirectional::Params> params_ptr =
+      std::make_unique<bidirectional::Params>();
+};
 
 TEST_F(TestLabelling, testDominance) {
   const Label         label(weight, node, res, path, params_ptr.get());
@@ -15,6 +31,41 @@ TEST_F(TestLabelling, testDominance) {
   ASSERT_FALSE(label.checkDominance(label2, bidirectional::FWD));
   ASSERT_TRUE(label3.checkDominance(label, bidirectional::BWD));
   ASSERT_FALSE(label3.checkDominance(label2, bidirectional::BWD));
+}
+
+TEST_F(TestLabelling, testDominanceElementary) {
+  params_ptr->elementary = true;
+  // L1
+  Label label(weight, node, res, path, params_ptr.get());
+  label.unreachable_nodes = std::set<int>({1, 2, 3});
+  // L2
+  std::vector<double> res2 = {6.0, 4.0};
+  Label               label2(weight, node, res2, path, params_ptr.get());
+  // Unrelated U2
+  label2.unreachable_nodes = std::set<int>({4, 5, 6});
+
+  // L2 dominates (due to resources)
+  ASSERT_FALSE(label.checkDominance(label2, bidirectional::FWD));
+  ASSERT_TRUE(label2.checkDominance(label, bidirectional::FWD));
+
+  // Make U2 \subset U1
+  label2.unreachable_nodes = std::set<int>({1, 2});
+  // L2 still dominates L1 now as U2 \subset U1
+  ASSERT_FALSE(label.checkDominance(label2, bidirectional::FWD));
+  ASSERT_TRUE(label2.checkDominance(label, bidirectional::FWD));
+
+  // Make U1 \subset U2
+  label2.unreachable_nodes = std::set<int>({1, 2, 3, 4});
+  // Neither dominate. As U2 is not a \subset U1
+  ASSERT_FALSE(label.checkDominance(label2, bidirectional::FWD));
+  ASSERT_FALSE(label2.checkDominance(label, bidirectional::FWD));
+
+  // Make U1 = U2
+  label2.unreachable_nodes = std::set<int>({1, 2, 3});
+  // L2 dominates as tie breaker because of resources. If we don't check for
+  // equality in checkDominance, neither would dominate.
+  ASSERT_FALSE(label.checkDominance(label2, bidirectional::FWD));
+  ASSERT_TRUE(label2.checkDominance(label, bidirectional::FWD));
 }
 
 TEST_F(TestLabelling, testThreshold) {
@@ -42,6 +93,17 @@ TEST_F(TestLabelling, testFeasibility) {
 
   ASSERT_TRUE(label.checkFeasibility(max_res, min_res));
   ASSERT_FALSE(label.checkFeasibility(min_res, max_res));
+}
+
+TEST_F(TestLabelling, testFeasibilitySoft) {
+  const Label               label(weight, node, res, path, params_ptr.get());
+  const std::vector<double> min_res = {6.0, 10.0};
+
+  // Soft passes as critical resource is at index 0 and res[0] = 6.0 <=
+  // min_res[0] = 6.0, and index 1 is not checked as bound is not <= 0
+  ASSERT_TRUE(label.checkFeasibility(max_res, min_res, true));
+  // Hard fails as res[1] = 5.0 is not >= min_res[1] = 10.0
+  ASSERT_FALSE(label.checkFeasibility(max_res, min_res));
 }
 
 TEST_F(TestLabelling, testExtendForward) {

@@ -1,14 +1,13 @@
-import unittest
-
 from numpy import array
-from random import randint
 from networkx import DiGraph, astar_path
 
 from cspy.algorithms.tabu import Tabu
 from cspy.algorithms.bidirectional import BiDirectional
 
+from utils import TestingBase
 
-class TestsIssue22(unittest.TestCase):
+
+class TestsIssue22(TestingBase):
     """
     Tests for issue #22
     https://github.com/torressa/cspy/issues/22
@@ -37,9 +36,8 @@ class TestsIssue22(unittest.TestCase):
         """
         alg = Tabu(self.G, self.max_res, self.min_res)
         alg.run()
-        self.assertEqual(alg.path, self.result_path)
-        self.assertEqual(alg.total_cost, self.total_cost)
-        self.assertTrue(all(alg.consumed_resources == self.consumed_resources))
+        self.check_result(alg, self.result_path, self.total_cost,
+                          self.consumed_resources)
         self.assertTrue(
             all(e in self.G.edges() for e in zip(alg.path, alg.path[1:])))
         # Check networkx's astar_path
@@ -56,9 +54,8 @@ class TestsIssue22(unittest.TestCase):
                             self.min_res,
                             elementary=False)
         alg.run()
-        self.assertEqual(alg.path, self.result_path)
-        self.assertEqual(alg.total_cost, self.total_cost)
-        self.assertEqual(alg.consumed_resources, self.consumed_resources)
+        self.check_result(alg, self.result_path, self.total_cost,
+                          self.consumed_resources)
 
     def test_bidirectional_forward(self):
         """
@@ -71,9 +68,8 @@ class TestsIssue22(unittest.TestCase):
                             direction='forward',
                             elementary=True)
         alg.run()
-        self.assertEqual(alg.path, self.result_path)
-        self.assertEqual(alg.total_cost, self.total_cost)
-        self.assertTrue(alg.consumed_resources == self.consumed_resources)
+        self.check_result(alg, self.result_path, self.total_cost,
+                          self.consumed_resources)
 
     def test_bidirectional_backward(self):
         """
@@ -86,6 +82,5 @@ class TestsIssue22(unittest.TestCase):
                             direction='backward',
                             elementary=True)
         alg.run()
-        self.assertEqual(alg.path, self.result_path)
-        self.assertEqual(alg.total_cost, self.total_cost)
-        self.assertTrue(alg.consumed_resources == self.consumed_resources)
+        self.check_result(alg, self.result_path, self.total_cost,
+                          self.consumed_resources)

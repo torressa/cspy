@@ -29,7 +29,7 @@ elseif(UNIX)
     pyBiDirectionalCpp PROPERTIES INSTALL_RPATH
                                   "$ORIGIN:$ORIGIN/../../${PROJECT_NAME}/.libs")
 endif()
-target_link_libraries(pyBiDirectionalCpp PRIVATE BiDirectionalCpp)
+target_link_libraries(pyBiDirectionalCpp PRIVATE BiDirectionalCpp LEMON::LEMON)
 
 # Variable PYTHON_LIBRARIES can contains keyword `optimized` which won't be
 # interpreted inside a generator expression. i.e. we can't use:

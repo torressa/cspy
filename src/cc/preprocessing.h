@@ -1,8 +1,6 @@
 #ifndef BIDIRECTIONAL_PREPROCESSING_H__
 #define BIDIRECTIONAL_PREPROCESSING_H__
 
-#define INF 10000.0
-
 #include "digraph.h"
 
 namespace bidirectional {

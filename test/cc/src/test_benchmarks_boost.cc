@@ -1,16 +1,28 @@
-#include "test_benchmarks_boost.h"
-
 #include <boost/config.hpp>
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/r_c_shortest_paths.hpp>
 #include <fstream>
 #include <iostream> // cout
+#include <limits>   // numeric_limits
 #include <sstream>
 #include <vector>
 
+#include "gtest/gtest.h"
 #include "utils.h" // loadMaxMinRes, skipLines, writeToFile, getElapsedTime, getBestCost
 
 namespace boost {
+
+/**
+ * TestBenchmarks fixture class for unittests. Inherits from gtest.
+ */
+class TestBenchmarksBoost : public ::testing::TestWithParam<int> {
+ public:
+  int               instance_number;
+  const int         number_repetitions = 100;
+  const std::string path_to_data =
+      "/root/benchmarks/beasley_christofides_1989/";
+  void SetUp() override { instance_number = GetParam(); }
+};
 
 /**
  * Define all the necessary data structures
@@ -206,50 +218,54 @@ TEST_P(TestBenchmarksBoost, test_r_c_shortest_paths) {
       &num_resources,
       path_to_instance);
 
-  MyGraph my_graph;
-  loadGraph(my_graph, num_nodes, num_arcs, num_resources, path_to_instance);
+  double average_time = 0.0;
+  for (int i = 1; i < number_repetitions + 1; ++i) {
+    MyGraph my_graph;
+    loadGraph(my_graph, num_nodes, num_arcs, num_resources, path_to_instance);
 
-  clock_t start = clock();
-  std::vector<std::vector<graph_traits<MyGraph>::edge_descriptor>>
-                                   opt_solutions;
-  std::vector<MyResourceContainer> pareto_opt;
-  // Source, sink
-  graph_traits<MyGraph>::vertex_descriptor s = 1;
-  graph_traits<MyGraph>::vertex_descriptor t = num_nodes;
+    clock_t start = clock();
+    std::vector<std::vector<graph_traits<MyGraph>::edge_descriptor>>
+                                     opt_solutions;
+    std::vector<MyResourceContainer> pareto_opt;
+    // Source, sink
+    graph_traits<MyGraph>::vertex_descriptor s = 1;
+    graph_traits<MyGraph>::vertex_descriptor t = num_nodes;
 
-  std::vector<double> zeros(num_resources, 0.0);
+    std::vector<double> zeros(num_resources, 0.0);
 
-  r_c_shortest_paths(
-      my_graph,
-      get(&MyVertex::id, my_graph),
-      get(&MyAdjVertex::id, my_graph),
-      s,
-      t,
-      opt_solutions,
-      pareto_opt,
-      MyResourceContainer(0.0, zeros, min_res, max_res),
-      MyResourceExtensionFunction(),
-      MyDominanceFunction(),
-      std::allocator<r_c_shortest_paths_label<MyGraph, MyResourceContainer>>(),
-      default_r_c_shortest_paths_visitor());
+    r_c_shortest_paths(
+        my_graph,
+        get(&MyVertex::id, my_graph),
+        get(&MyAdjVertex::id, my_graph),
+        s,
+        t,
+        opt_solutions,
+        pareto_opt,
+        MyResourceContainer(0.0, zeros, min_res, max_res),
+        MyResourceExtensionFunction(),
+        MyDominanceFunction(),
+        std::allocator<
+            r_c_shortest_paths_label<MyGraph, MyResourceContainer>>(),
+        default_r_c_shortest_paths_visitor());
 
-  double     cost               = 1000000.0;
-  const int& opt_solutions_size = opt_solutions.size();
-  for (int i = 0; i < opt_solutions_size; ++i) {
-    if (pareto_opt[i].weight < cost) {
-      cost = pareto_opt[i].weight;
+    double     cost               = std::numeric_limits<double>::infinity();
+    const int& opt_solutions_size = opt_solutions.size();
+    for (int i = 0; i < opt_solutions_size; ++i) {
+      if (pareto_opt[i].weight < cost) {
+        cost = pareto_opt[i].weight;
+      }
     }
-  }
-  if (instance_number == 14) {
-    ASSERT_EQ(opt_solutions_size, 0);
-  } else {
-    ASSERT_EQ(cost, getBestCost(path_to_data, instance_number));
+    if (instance_number == 14) {
+      ASSERT_EQ(opt_solutions_size, 0);
+    } else {
+      ASSERT_EQ(cost, getBestCost(path_to_data, instance_number));
+    }
+    average_time += (getElapsedTime(start) - average_time) / i;
   }
   writeToFile(
       "/root/build/",
       "results_boost.txt",
-      std::to_string(instance_number) + " " +
-          std::to_string(getElapsedTime(start)));
+      std::to_string(instance_number) + " " + std::to_string(average_time));
 }
 
 INSTANTIATE_TEST_SUITE_P(

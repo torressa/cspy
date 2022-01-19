@@ -1,11 +1,31 @@
-#include "test_benchmarks.h"
-
 #include <fstream>
 #include <sstream>
 
+#include "gtest/gtest.h"
+#include "src/cc/bidirectional.h"
 #include "utils.h" // loadMaxMinRes, skipLines, writeToFile, getElapsedTime, getBestCost
 
 namespace bidirectional {
+
+/**
+ * TestBenchmarks fixture class for unittests. Inherits from gtest.
+ */
+class TestBenchmarks : public ::testing::TestWithParam<int> {
+ public:
+  int               instance_number;
+  const int         number_repetitions = 100;
+  const std::string path_to_data =
+      "/root/benchmarks/beasley_christofides_1989/";
+  const std::string output_path = "/root/build/";
+  // const std::string path_to_data =
+  //     "/home/torressa/Documents/code/cspy/benchmarks/"
+  //     "beasley_christofides_1989/";
+  // const std::string output_path =
+  // "/home/torressa/Documents/code/cspy/build/";
+  std::unique_ptr<BiDirectional> bidirectional;
+
+  void SetUp() override { instance_number = GetParam(); }
+};
 
 /// Set critical resources by hand
 void setCriticalRes(BiDirectional* bidirectional, int instance_number) {
@@ -95,26 +115,29 @@ TEST_P(TestBenchmarks, testForwardElementary) {
       &num_arcs,
       &num_resources,
       path_to_instance);
-  bidirectional = std::make_unique<BiDirectional>(
-      num_nodes, num_arcs, 1, num_nodes, max_res, min_res);
-  bidirectional->setDirection("forward");
-  bidirectional->setElementary(true);
-  bidirectional->setTimeLimit(time_limit);
-  loadGraph(
-      bidirectional.get(),
-      num_nodes,
-      num_arcs,
-      num_resources,
-      path_to_instance);
-  clock_t start = clock();
-  bidirectional->run();
-  auto cost = bidirectional->getTotalCost();
-  ASSERT_EQ(cost, getBestCost(path_to_data, instance_number));
+  double average_time = 0.0;
+  for (int i = 1; i < number_repetitions + 1; ++i) {
+    bidirectional = std::make_unique<BiDirectional>(
+        num_nodes, num_arcs, 1, num_nodes, max_res, min_res);
+    bidirectional->setDirection("forward");
+    bidirectional->setElementary(true);
+    loadGraph(
+        bidirectional.get(),
+        num_nodes,
+        num_arcs,
+        num_resources,
+        path_to_instance);
+    clock_t start = clock();
+    bidirectional->run();
+    const double elapsed_time = getElapsedTime(start);
+    average_time += (elapsed_time - average_time) / i;
+    auto cost = bidirectional->getTotalCost();
+    ASSERT_EQ(cost, getBestCost(path_to_data, instance_number));
+  }
   writeToFile(
       output_path,
       "results_fwd_elem.txt",
-      std::to_string(instance_number) + " " +
-          std::to_string(getElapsedTime(start)));
+      std::to_string(instance_number) + " " + std::to_string(average_time));
 }
 
 TEST_P(TestBenchmarks, testForward) {
@@ -129,25 +152,27 @@ TEST_P(TestBenchmarks, testForward) {
       &num_arcs,
       &num_resources,
       path_to_instance);
-  bidirectional = std::make_unique<BiDirectional>(
-      num_nodes, num_arcs, 1, num_nodes, max_res, min_res);
-  bidirectional->setDirection("forward");
-  bidirectional->setTimeLimit(time_limit);
-  loadGraph(
-      bidirectional.get(),
-      num_nodes,
-      num_arcs,
-      num_resources,
-      path_to_instance);
-  clock_t start = clock();
-  bidirectional->run();
-  auto cost = bidirectional->getTotalCost();
-  ASSERT_EQ(cost, getBestCost(path_to_data, instance_number));
+  double average_time = 0.0;
+  for (int i = 1; i < number_repetitions + 1; ++i) {
+    bidirectional = std::make_unique<BiDirectional>(
+        num_nodes, num_arcs, 1, num_nodes, max_res, min_res);
+    bidirectional->setDirection("forward");
+    loadGraph(
+        bidirectional.get(),
+        num_nodes,
+        num_arcs,
+        num_resources,
+        path_to_instance);
+    clock_t start = clock();
+    bidirectional->run();
+    average_time += (getElapsedTime(start) - average_time) / i;
+    auto cost = bidirectional->getTotalCost();
+    ASSERT_EQ(cost, getBestCost(path_to_data, instance_number));
+  }
   writeToFile(
       output_path,
       "results_fwd.txt",
-      std::to_string(instance_number) + " " +
-          std::to_string(getElapsedTime(start)));
+      std::to_string(instance_number) + " " + std::to_string(average_time));
 }
 
 TEST_P(TestBenchmarks, testForwardBoundsPruning) {
@@ -162,27 +187,29 @@ TEST_P(TestBenchmarks, testForwardBoundsPruning) {
       &num_arcs,
       &num_resources,
       path_to_instance);
-  bidirectional = std::make_unique<BiDirectional>(
-      num_nodes, num_arcs, 1, num_nodes, max_res, min_res);
-  bidirectional->setDirection("forward");
-  bidirectional->setTimeLimit(time_limit);
-  bidirectional->setBoundsPruning(true);
-  loadGraph(
-      bidirectional.get(),
-      num_nodes,
-      num_arcs,
-      num_resources,
-      path_to_instance);
+  double average_time = 0.0;
+  for (int i = 1; i < number_repetitions + 1; ++i) {
+    bidirectional = std::make_unique<BiDirectional>(
+        num_nodes, num_arcs, 1, num_nodes, max_res, min_res);
+    bidirectional->setDirection("forward");
+    bidirectional->setBoundsPruning(true);
+    loadGraph(
+        bidirectional.get(),
+        num_nodes,
+        num_arcs,
+        num_resources,
+        path_to_instance);
 
-  clock_t start = clock();
-  bidirectional->run();
-  auto cost = bidirectional->getTotalCost();
-  ASSERT_EQ(cost, getBestCost(path_to_data, instance_number));
+    clock_t start = clock();
+    bidirectional->run();
+    average_time += (getElapsedTime(start) - average_time) / i;
+    auto cost = bidirectional->getTotalCost();
+    ASSERT_EQ(cost, getBestCost(path_to_data, instance_number));
+  }
   writeToFile(
       output_path,
       "results_fwd_bp.txt",
-      std::to_string(instance_number) + " " +
-          std::to_string(getElapsedTime(start)));
+      std::to_string(instance_number) + " " + std::to_string(average_time));
 }
 
 /* Both */
@@ -201,30 +228,30 @@ TEST_P(TestBenchmarks, testBothElementary) {
       path_to_instance,
       false);
   // max_res[0] = std::ceil(max_res[0] / 2.0);
-  bidirectional = std::make_unique<BiDirectional>(
-      num_nodes, num_arcs, 1, num_nodes, max_res, min_res);
-  bidirectional->setElementary(true);
-  bidirectional->setTimeLimit(time_limit);
-  bidirectional->setFindCriticalRes(true);
-  // setCriticalRes(bidirectional.get(), instance_number);
-  loadGraph(
-      bidirectional.get(),
-      num_nodes,
-      num_arcs,
-      num_resources,
-      path_to_instance,
-      false);
-  clock_t start = clock();
-  bidirectional->run();
-  auto cost = bidirectional->getTotalCost();
-  auto path = bidirectional->getPath();
-
-  ASSERT_EQ(cost, getBestCost(path_to_data, instance_number));
+  double average_time = 0.0;
+  for (int i = 1; i < number_repetitions + 1; ++i) {
+    bidirectional = std::make_unique<BiDirectional>(
+        num_nodes, num_arcs, 1, num_nodes, max_res, min_res);
+    bidirectional->setElementary(true);
+    // bidirectional->setFindCriticalRes(true);
+    // setCriticalRes(bidirectional.get(), instance_number);
+    loadGraph(
+        bidirectional.get(),
+        num_nodes,
+        num_arcs,
+        num_resources,
+        path_to_instance,
+        false);
+    clock_t start = clock();
+    bidirectional->run();
+    average_time += (getElapsedTime(start) - average_time) / i;
+    auto cost = bidirectional->getTotalCost();
+    ASSERT_EQ(cost, getBestCost(path_to_data, instance_number));
+  }
   writeToFile(
       output_path,
       "results_both_elem.txt",
-      std::to_string(instance_number) + " " +
-          std::to_string(getElapsedTime(start)));
+      std::to_string(instance_number) + " " + std::to_string(average_time));
 }
 
 TEST_P(TestBenchmarks, testBoth) {
@@ -240,30 +267,64 @@ TEST_P(TestBenchmarks, testBoth) {
       &num_resources,
       path_to_instance,
       false);
-  bidirectional = std::make_unique<BiDirectional>(
-      num_nodes, num_arcs, 1, num_nodes, max_res, min_res);
-  bidirectional->setTimeLimit(time_limit);
-  // setCriticalRes(bidirectional.get(), instance_number);
-  bidirectional->setFindCriticalRes(true);
-  loadGraph(
-      bidirectional.get(),
-      num_nodes,
-      num_arcs,
-      num_resources,
-      path_to_instance,
-      false);
-  clock_t start = clock();
-  bidirectional->run();
-  bidirectional->checkCriticalRes();
-  auto cost = bidirectional->getTotalCost();
-  auto path = bidirectional->getPath();
-
-  ASSERT_EQ(cost, getBestCost(path_to_data, instance_number));
+  double average_time = 0.0;
+  for (int i = 1; i < number_repetitions + 1; ++i) {
+    bidirectional = std::make_unique<BiDirectional>(
+        num_nodes, num_arcs, 1, num_nodes, max_res, min_res);
+    loadGraph(
+        bidirectional.get(),
+        num_nodes,
+        num_arcs,
+        num_resources,
+        path_to_instance,
+        false);
+    clock_t start = clock();
+    bidirectional->run();
+    average_time += (getElapsedTime(start) - average_time) / i;
+    auto cost = bidirectional->getTotalCost();
+    ASSERT_EQ(cost, getBestCost(path_to_data, instance_number));
+  }
   writeToFile(
       output_path,
       "results_both.txt",
-      std::to_string(instance_number) + " " +
-          std::to_string(getElapsedTime(start)));
+      std::to_string(instance_number) + " " + std::to_string(average_time));
+}
+
+TEST_P(TestBenchmarks, testBothFindCriticalRes) {
+  const std::string path_to_instance =
+      path_to_data + "rcsp" + std::to_string(instance_number) + ".txt";
+  int                 num_nodes, num_arcs, num_resources;
+  std::vector<double> max_res, min_res;
+  loadMaxMinRes(
+      &max_res,
+      &min_res,
+      &num_nodes,
+      &num_arcs,
+      &num_resources,
+      path_to_instance,
+      false);
+  double average_time = 0.0;
+  for (int i = 1; i < number_repetitions + 1; ++i) {
+    bidirectional = std::make_unique<BiDirectional>(
+        num_nodes, num_arcs, 1, num_nodes, max_res, min_res);
+    bidirectional->setFindCriticalRes(true);
+    loadGraph(
+        bidirectional.get(),
+        num_nodes,
+        num_arcs,
+        num_resources,
+        path_to_instance,
+        false);
+    clock_t start = clock();
+    bidirectional->run();
+    average_time += (getElapsedTime(start) - average_time) / i;
+    auto cost = bidirectional->getTotalCost();
+    ASSERT_EQ(cost, getBestCost(path_to_data, instance_number));
+  }
+  writeToFile(
+      output_path,
+      "results_both_critical.txt",
+      std::to_string(instance_number) + " " + std::to_string(average_time));
 }
 
 TEST_P(TestBenchmarks, testBothBoundsPruning) {
@@ -279,30 +340,31 @@ TEST_P(TestBenchmarks, testBothBoundsPruning) {
       &num_resources,
       path_to_instance,
       false);
-  bidirectional = std::make_unique<BiDirectional>(
-      num_nodes, num_arcs, 1, num_nodes, max_res, min_res);
-  bidirectional->setElementary(true);
-  bidirectional->setTimeLimit(time_limit);
-  bidirectional->setBoundsPruning(true);
-  // setCriticalRes(bidirectional.get(), instance_number);
-  bidirectional->setFindCriticalRes(true);
-  loadGraph(
-      bidirectional.get(),
-      num_nodes,
-      num_arcs,
-      num_resources,
-      path_to_instance,
-      false);
-  clock_t start = clock();
-  bidirectional->run();
-
-  auto cost = bidirectional->getTotalCost();
-  ASSERT_EQ(cost, getBestCost(path_to_data, instance_number));
+  double average_time = 0.0;
+  for (int i = 1; i < number_repetitions + 1; ++i) {
+    bidirectional = std::make_unique<BiDirectional>(
+        num_nodes, num_arcs, 1, num_nodes, max_res, min_res);
+    bidirectional->setElementary(true);
+    bidirectional->setBoundsPruning(true);
+    // setCriticalRes(bidirectional.get(), instance_number);
+    bidirectional->setFindCriticalRes(true);
+    loadGraph(
+        bidirectional.get(),
+        num_nodes,
+        num_arcs,
+        num_resources,
+        path_to_instance,
+        false);
+    clock_t start = clock();
+    bidirectional->run();
+    average_time += (getElapsedTime(start) - average_time) / i;
+    auto cost = bidirectional->getTotalCost();
+    ASSERT_EQ(cost, getBestCost(path_to_data, instance_number));
+  }
   writeToFile(
       output_path,
       "results_both_bp.txt",
-      std::to_string(instance_number) + " " +
-          std::to_string(getElapsedTime(start)));
+      std::to_string(instance_number) + " " + std::to_string(average_time));
 }
 
 INSTANTIATE_TEST_SUITE_P(

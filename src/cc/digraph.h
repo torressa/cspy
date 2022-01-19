@@ -17,6 +17,7 @@ namespace bidirectional {
 /// Vertex to hold lemon id in the graph and the corresponding user id (may be
 /// different)
 struct Vertex {
+ public:
   int lemon_id;
   int user_id;
 };
@@ -26,6 +27,7 @@ struct Vertex {
  * (this way it can be used both forward and backward directions)
  */
 struct AdjVertex {
+ public:
   /// Tail/head vertex
   Vertex vertex;
   /// Double with weight/cost for the arc
@@ -209,9 +211,7 @@ class DiGraph {
 
  private:
   /// int. User id corresponding to the source_node in the graph.
-  int source_id_;
-  /// int. User id corresponding to the sink node in the graph.
-  int sink_id_;
+  int source_id_, sink_id_;
 
   /**
    * Extract arc resource consumption from arc map

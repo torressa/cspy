@@ -1,8 +1,9 @@
 #include "bidirectional.h"
 
 #include <algorithm> // sort, all_of, find
+#include <limits>    // numeric_limits
 
-#include "preprocessing.h" // lowerBoundWeight, getCriticalRes, INF
+#include "preprocessing.h" // lowerBoundWeight, getCriticalRes
 
 namespace bidirectional {
 
@@ -41,7 +42,7 @@ double BiDirectional::getTotalCost() const {
 
 void BiDirectional::checkCriticalRes() const {
   const std::vector<double>& res      = best_label_->resource_consumption;
-  double                     min_diff = INF;
+  double                     min_diff = std::numeric_limits<double>::infinity();
   int                        min_r    = 0;
   for (int r = 0; r < res.size(); r++) {
     const double& diff = max_res[r] - res[r];
@@ -130,21 +131,12 @@ void BiDirectional::initSearch(const Directions& direction) {
 
 void BiDirectional::initResourceBounds() {
   max_res_curr_ = max_res;
-  // If not all lower bounds are 0, initialise variable min_res_curr to
-  // vector of 0s
-  bool zeros = std::all_of(
-      min_res.begin(), min_res.end(), [](const double& d) { return d == 0.0; });
-  if (zeros == false) {
-    std::vector<double> temp(min_res.size(), 0.0);
-    min_res_curr_ = temp;
-  } else {
-    min_res_curr_ = min_res;
-  }
+  min_res_curr_ = min_res;
 }
 
 void BiDirectional::initLabels(const Directions& direction) {
   Vertex              vertex;
-  std::vector<double> res = min_res_curr_;
+  std::vector<double> res(min_res.size(), 0.0);
   std::vector<int>    path;
   Search*             search_ptr = getSearchPtr(direction);
 
@@ -254,7 +246,6 @@ void BiDirectional::move(const Directions& direction) {
 }
 
 bool BiDirectional::terminate(const Directions& direction) {
-  // Check time elapsed (if relevant)
   Search* search_ptr = getSearchPtr(direction);
   return terminate(direction, *search_ptr->intermediate_label);
 }
@@ -270,7 +261,6 @@ bool BiDirectional::terminate(
       timediff_sec >= params_ptr_->time_limit) {
     return true;
   }
-  // Check input label
   return checkValidLabel(direction, label);
 }
 
@@ -382,8 +372,8 @@ void BiDirectional::extendCurrentLabel(const Directions& direction) {
              graph_ptr_->getLNodeFromId(current_label->vertex.lemon_id));
          a != lemon::INVALID;
          ++a) {
-      extendSingleLabel(
-          current_label.get(), direction, graph_ptr_->getAdjVertex(a, true));
+      const AdjVertex& adj_v = graph_ptr_->getAdjVertex(a, true);
+      extendSingleLabel(current_label.get(), direction, adj_v);
     }
   } else {
     // For each incoming arc to the current label
@@ -392,8 +382,8 @@ void BiDirectional::extendCurrentLabel(const Directions& direction) {
              graph_ptr_->getLNodeFromId(current_label->vertex.lemon_id));
          a != lemon::INVALID;
          ++a) {
-      extendSingleLabel(
-          current_label.get(), direction, graph_ptr_->getAdjVertex(a, false));
+      const AdjVertex& adj_v = graph_ptr_->getAdjVertex(a, false);
+      extendSingleLabel(current_label.get(), direction, adj_v);
     }
   }
 }
@@ -404,11 +394,12 @@ void BiDirectional::extendSingleLabel(
     const AdjVertex&  adj_vertex) {
   if ((params_ptr_->elementary &&
        label->unreachable_nodes.find(adj_vertex.vertex.user_id) ==
-           label->unreachable_nodes.end()) ||
+           label->unreachable_nodes.cend()) ||
       !params_ptr_->elementary) {
     // extend current label along edge
     labelling::Label new_label =
         label->extend(adj_vertex, direction, max_res_curr_, min_res_curr_);
+
     // If label non-empty, (only when the extension is resource-feasible)
     if (new_label.vertex.lemon_id != -1) {
       updateEfficientLabels(direction, new_label);
@@ -564,7 +555,7 @@ void BiDirectional::postProcessing() {
 }
 
 double BiDirectional::getUB() {
-  double UB = INF;
+  double UB = std::numeric_limits<double>::infinity();
   // Extract forward and backward best labels (one's with least weight)
   const auto& fwd_best =
       fwd_search_ptr_->best_labels[graph_ptr_->sink.lemon_id];
@@ -585,7 +576,7 @@ double BiDirectional::getUB() {
 void BiDirectional::getMinimumWeights(double* fwd_min, double* bwd_min) {
   // Forward
   // init
-  *fwd_min = INF;
+  *fwd_min = std::numeric_limits<double>::infinity();
   for (const int& n : fwd_search_ptr_->visited_vertices) {
     if (n != graph_ptr_->source.lemon_id && fwd_search_ptr_->best_labels[n] &&
         fwd_search_ptr_->best_labels[n]->weight < *fwd_min) {
@@ -593,7 +584,7 @@ void BiDirectional::getMinimumWeights(double* fwd_min, double* bwd_min) {
     }
   }
   // backward
-  *bwd_min = INF;
+  *bwd_min = std::numeric_limits<double>::infinity();
   for (const int& n : bwd_search_ptr_->visited_vertices) {
     if (n != graph_ptr_->sink.lemon_id && bwd_search_ptr_->best_labels[n] &&
         bwd_search_ptr_->best_labels[n]->weight < *bwd_min) {

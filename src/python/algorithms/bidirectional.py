@@ -1,14 +1,13 @@
 # Wrapper for BiDirectionalCpp
-from typing import List, Optional, Union
+from typing import List, Optional, Tuple, Union
 
-from networkx import DiGraph, convert_node_labels_to_integers
-from numpy.random import RandomState
-
+from networkx import (DiGraph, convert_node_labels_to_integers,
+                      get_node_attributes)
 from cspy.preprocessing import preprocess_graph
-from cspy.checking import check, check_seed
+from cspy.checking import check
 
 # Import from the SWIG output file
-from .pyBiDirectionalCpp import BiDirectionalCpp, REFCallback, DoubleVector
+from .pyBiDirectionalCpp import (BiDirectionalCpp, REFCallback, DoubleVector)
 
 
 class BiDirectional:
@@ -113,12 +112,14 @@ class BiDirectional:
         # Preprocess and save graph
         self.G: DiGraph = preprocess_graph(G, max_res, min_res, preprocess,
                                            REF_callback)
+        # Dictionary with graph label -> original label
+        self._original_node_labels = None
         # Vertex id with source/sink
         self._source_id: int = None
         self._sink_id: int = None
 
-        max_res_vector = _convert_list_to_double_vector(max_res)
-        min_res_vector = _convert_list_to_double_vector(min_res)
+        max_res_vector = _list_to_double_vector(max_res)
+        min_res_vector = _list_to_double_vector(min_res)
 
         # Pass graph
         self._init_graph()
@@ -170,7 +171,6 @@ class BiDirectional:
         # format as list on return as SWIG returns "tuple"
         if len(path) <= 0:
             return None
-
         return [self.G.nodes[p]["original_label"] for p in path]
 
     @property
@@ -203,27 +203,39 @@ class BiDirectional:
         # new node attribute "original_label"
         self.G = convert_node_labels_to_integers(
             self.G, label_attribute="original_label")
+        self._original_node_labels = get_node_attributes(
+            self.G, "original_label")
         # Save source and sink node ids (integers)
-        self._source_id = [
-            n for n in self.G.nodes()
-            if self.G.nodes[n]["original_label"] == "Source"
-        ][0]
-        self._sink_id = [
-            n for n in self.G.nodes()
-            if self.G.nodes[n]["original_label"] == "Sink"
-        ][0]
+        self._source_id = self._get_original_node_label("Source")
+        self._sink_id = self._get_original_node_label("Sink")
 
     def _load_graph(self):
         # Load nodes
         self.bidirectional_cpp.addNodes(list(self.G.nodes()))
         # Load each edge independently
         for edge in self.G.edges(data=True):
-            res_cost = _convert_list_to_double_vector(edge[2]["res_cost"])
+            res_cost = _list_to_double_vector(edge[2]["res_cost"])
             self.bidirectional_cpp.addEdge(edge[0], edge[1], edge[2]["weight"],
                                            res_cost)
 
+    def _get_original_node_label(self, node_label):
+        matching_labels = [
+            k for k, v in self._original_node_labels.items() if v == node_label
+        ]
+        if len(matching_labels) == 1:
+            return matching_labels[0]
+        else:
+            raise Exception("Node label not found")
 
-def _convert_list_to_double_vector(input_list: List[float]):
+
+def _list_of_tuple_to_int_pair_vector(input_list: List[Tuple[int, int]]):
+    int_pair_vector = IntPairVector()
+    for (elem1, elem2) in input_list:
+        int_pair_vector.append(IntPair(elem1, elem2))
+    return int_pair_vector
+
+
+def _list_to_double_vector(input_list: List[float]):
     double_vector = DoubleVector()
     for elem in input_list:
         double_vector.append(float(elem))

@@ -8,7 +8,7 @@ jobs:
     runs-on: windows-latest
     strategy:
       matrix:
-        python-version: [3.6, 3.7, 3.8, 3.9]
+        python-version: [3.6, 3.7, 3.8, 3.9, "3.10"]
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
@@ -24,14 +24,6 @@ jobs:
         echo "$((Get-Item .).FullName)/swigwin-4.0.2" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
     - name: Check swig
       run: swig -version
-    - name: Install LEMON 1.3.1
-      run: |
-        (New-Object System.Net.WebClient).DownloadFile("http://lemon.cs.elte.hu/pub/sources/lemon-1.3.1.zip","lemon-1.3.1.zip");
-        Expand-Archive .\lemon-1.3.1.zip .;
-        cd lemon-1.3.1;
-        cmake -S. -Bbuild -G "Visual Studio 16 2019" -DCMAKE_BUILD_TYPE=Release -DLEMON_ENABLE_GLPK=NO -DLEMON_ENABLE_COIN=NO -DLEMON_ENABLE_ILOG=NO;
-        cmake --build build --config Release --target ALL_BUILD -- /verbosity:normal /maxcpucounte;
-        cmake --build build --config Release --target INSTALL -- /verbosity:normal /maxcpucount
     - name: Configure
       run: cmake -S. -Bbuild -G "Visual Studio 16 2019" -DCMAKE_BUILD_TYPE=Release -DBUILD_PYTHON=ON -DBUILD_TESTING=ON -DPython3_ROOT_DIR=$env:pythonLocation -DPython_ROOT_DIR=$env:pythonLocation -DPython3_FIND_STRATEGY=LOCATION -DPython3_FIND_REGISTRY=LAST
     - name: Build

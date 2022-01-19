@@ -1,12 +1,12 @@
-import unittest
-
 from numpy import array
 from networkx import DiGraph
 
 from cspy import BiDirectional
 
+from utils import TestingBase
 
-class TestsIssue52(unittest.TestCase):
+
+class TestsIssue52(TestingBase):
     """
     Tests for issue #52
     https://github.com/torressa/cspy/issues/52
@@ -34,9 +34,8 @@ class TestsIssue52(unittest.TestCase):
         """
         alg = BiDirectional(self.G, self.max_res, self.min_res)
         alg.run()
-        self.assertEqual(alg.path, self.result_path)
-        self.assertEqual(alg.total_cost, self.total_cost)
-        self.assertEqual(alg.consumed_resources, self.consumed_resources)
+        self.check_result(alg, self.result_path, self.total_cost,
+                          self.consumed_resources)
 
     def test_bidirectional_forward(self):
         alg = BiDirectional(self.G,
@@ -44,9 +43,8 @@ class TestsIssue52(unittest.TestCase):
                             self.min_res,
                             direction='forward')
         alg.run()
-        self.assertEqual(alg.path, self.result_path)
-        self.assertEqual(alg.total_cost, self.total_cost)
-        self.assertTrue(alg.consumed_resources == self.consumed_resources)
+        self.check_result(alg, self.result_path, self.total_cost,
+                          self.consumed_resources)
 
     def test_bidirectional_backward(self):
         alg = BiDirectional(self.G,
@@ -54,6 +52,5 @@ class TestsIssue52(unittest.TestCase):
                             self.min_res,
                             direction='backward')
         alg.run()
-        self.assertEqual(alg.path, self.result_path)
-        self.assertEqual(alg.total_cost, self.total_cost)
-        self.assertTrue(alg.consumed_resources == self.consumed_resources)
+        self.check_result(alg, self.result_path, self.total_cost,
+                          self.consumed_resources)

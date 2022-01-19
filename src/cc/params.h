@@ -2,7 +2,6 @@
 #define BIDIRECTIONAL_PARAMS_H__
 
 #include <cmath> // nan
-#include <memory>
 #include <vector>
 
 #include "ref_callback.h"
@@ -12,13 +11,13 @@ namespace bidirectional {
 /// Internal enum for directions
 enum Directions {
   /// Forward
-  FWD = 0,
+  FWD,
   /// Backward
-  BWD = 1,
+  BWD,
   /// Both
-  BOTH = 2,
+  BOTH,
   /// No direction
-  NODIR = 3
+  NODIR
 };
 
 /**
@@ -29,7 +28,8 @@ class Params {
  public:
   /// Direction for search
   Directions direction = bidirectional::BOTH;
-  /// string with method to determine the next direction of search
+  /// string with method to determine the next direction of search. Options
+  /// are: unprocessed, processed and generated.
   std::string method = "unprocessed";
   /// double with time limit in seconds
   double time_limit = std::nan("na");
@@ -46,7 +46,6 @@ class Params {
   /// Resource id for the critical resource used in dominance checks and
   /// choosing the halfway point. Default is 0.
   int critical_res = 0;
-
   /// Callback to custom REF
   bidirectional::REFCallback* ref_callback = nullptr;
 

@@ -8,7 +8,7 @@
 #include <string>
 #include <vector>
 
-// File related
+#include "src/cc/bidirectional.h"
 
 // Skip a number of lines in a file
 void skipLines(std::ifstream& file, std::string& line, const int& num_lines);
@@ -35,5 +35,11 @@ void writeToFile(
 
 // Get elapsed time since start time in milliseconds
 int getElapsedTime(const clock_t& start_time);
+
+void checkResult(
+    const bidirectional::BiDirectional& alg,
+    const std::vector<int>&             path,
+    const std::vector<double>&          consumed_resources,
+    const double&                       cost);
 
 #endif // TEST_UTILS_H__

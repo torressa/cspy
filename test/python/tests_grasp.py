@@ -1,12 +1,12 @@
-import unittest
-
 from networkx import DiGraph
 from numpy import array
 
 from cspy.algorithms.grasp import GRASP
 
+from utils import TestingBase
 
-class TestsGRASP(unittest.TestCase):
+
+class TestsGRASP(TestingBase):
     """
     Tests for finding the resource constrained shortest
     path of simple DiGraph using the GRASP algorithm.
@@ -51,9 +51,8 @@ class TestsGRASP(unittest.TestCase):
                     max_iter=50,
                     max_localiter=10)
         alg.run()
-        self.assertEqual(alg.path, self.result_path)
-        self.assertEqual(alg.total_cost, self.total_cost)
-        self.assertTrue(all(alg.consumed_resources == self.consumed_resources))
+        self.check_result(alg, self.result_path, self.total_cost,
+                          self.consumed_resources)
 
     def test_input_exceptions(self):
         # Check whether wrong input raises exceptions

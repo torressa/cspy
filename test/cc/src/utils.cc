@@ -1,5 +1,7 @@
 #include "utils.h"
 
+#include "gtest/gtest.h"
+
 void skipLines(std::ifstream& file, std::string& line, const int& num_lines) {
   for (int i = 0; i < num_lines; ++i) {
     std::getline(file, line);
@@ -98,4 +100,14 @@ int getElapsedTime(const clock_t& start_time) {
   const clock_t timediff    = clock() - start_time;
   const double  timediff_ms = ((double)timediff) / 1000.0;
   return std::ceil(timediff_ms);
+}
+
+void checkResult(
+    const bidirectional::BiDirectional& alg,
+    const std::vector<int>&             path,
+    const std::vector<double>&          consumed_resources,
+    const double&                       cost) {
+  ASSERT_EQ(alg.getPath(), path);
+  ASSERT_EQ(alg.getConsumedResources(), consumed_resources);
+  ASSERT_EQ(alg.getTotalCost(), cost);
 }

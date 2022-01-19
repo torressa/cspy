@@ -1,22 +1,17 @@
-name: MacOS Python
+name: Python
 
 on: [push, pull_request]
 
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
-        python-version: [3.6, 3.7, 3.8, 3.9]
+        python-version: [3.6, 3.7, 3.8, 3.9, "3.10"]
+        os: [macos-11, macos-10.15, ubuntu-latest]
     steps:
       - uses: actions/checkout@v2
-      - name: Swig install
-        run: brew install swig
-      - name: Install LEMON
-        run: |
-          cp tools/docker/scripts/install_lemon .
-          chmod u+x install_lemon
-          ./install_lemon
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:

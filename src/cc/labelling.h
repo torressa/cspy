@@ -5,8 +5,8 @@
 #include <set>
 #include <vector>
 
-#include "digraph.h" // AdjVertex
-#include "params.h"  // Directions, Params
+#include "src/cc/digraph.h" // AdjVertex
+#include "src/cc/params.h"  // Directions, Params
 
 namespace labelling {
 
@@ -108,18 +108,24 @@ class Label {
       const bidirectional::Directions& direction) const;
 
   /**
-   * Check resource feasibility of current label i.e.
-   * min_res[i] <= resource_consumption[i] <= max_res[i]
-   * for i in 0..resource_consumption.size()
+   * Check resource feasibility of current label i.e. `min_res[i] <=
+   * resource_consumption[i] <= max_res[i]` for `i` in
+   * `0,...,resource_consumption.size()`.
+   * If "soft" check, then the lower bound is only checked if either: resource
+   * index `i` is the index of the critical resource or `min_res[i]<= 0`(See
+   * issue #90). If not "soft", then all lower bounds are checked as expected.
    *
    * @param[in] max_res, vector of double with upper bound(s) for resource
-   * consumption
+   * consumption. Checks values are <= bound
    * @param[in] min_res, vector of double with lower bound(s) for resource
-   * consumption
+   * consumption. Checks values are >= bound
+   * @param[in] soft, bool with whether the minimum resources should be checked
+   * "softly". Default is false.
    */
   bool checkFeasibility(
       const std::vector<double>& max_res,
-      const std::vector<double>& min_res) const;
+      const std::vector<double>& min_res,
+      const bool&                soft = false) const;
 
   /// Check if weight is under the input threshold.
   bool checkThreshold(const double& threshold) const;
@@ -203,9 +209,9 @@ Label processBwdLabel(
  * To be used before attempting to merge.
  */
 bool mergePreCheck(
-    const labelling::Label&   fwd_label,
-    const labelling::Label&   bwd_label,
-    const std::vector<double> max_res);
+    const labelling::Label&    fwd_label,
+    const labelling::Label&    bwd_label,
+    const std::vector<double>& max_res);
 
 /**
  * Returns the phi value.

@@ -21,7 +21,7 @@ function repair_wheel {
 rm -rf /opt/python/cp35*
 
 cd build/python/
-mkdir wheelhouse
+mkdir -p wheelhouse
 
 # Build each wheel
 for PYBIN in /opt/python/*/bin; do
