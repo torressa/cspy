@@ -10,7 +10,7 @@ set -x
 
 apt-get update
 apt-get -y install git rsync python3-sphinx python3-sphinx-rtd-theme \
-  python3-git python3-pip python3-virtualenv python3-setuptools
+  python3-git python3-pip python3-virtualenv python3-setuptools doxygen
 
 #####################
 # DECLARE VARIABLES #
@@ -26,7 +26,7 @@ export SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)
 
 # Steps from RTD
 python3 -m pip install --upgrade --no-cache-dir pip setuptools
-python3 -m pip install --upgrade --no-cache-dir mock pillow alabaster \
+python3 -m pip install --upgrade --no-cache-dir mock pillow \
   commonmark recommonmark sphinx sphinx-rtd-theme readthedocs-sphinx-ext
 python3 -m pip install -r docs/requirements.txt
 cd docs
@@ -41,7 +41,8 @@ git config --global user.name "${GITHUB_ACTOR}"
 git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
 
 docroot=`mktemp -d`
-rsync -av "docs/_build/html/" "${docroot}/"
+cp -r docs/_build/html ${docroot}/
+cp -r docs/ ${docroot}/docs/
 
 pushd "${docroot}"
 
@@ -54,8 +55,9 @@ git checkout -b gh-pages
 # that start with an underscore (_), such as our "_content" dir..
 touch .nojekyll
 
+# TODO: fix issues with custom domain
 # Add CNAME - this is required for GitHub to know what our custom domain is
-echo "cspy.docs" > CNAME
+# echo "cspy.docs" > CNAME
 
 # Add README
 cat > README.md <<EOF
