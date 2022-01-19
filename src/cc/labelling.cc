@@ -211,7 +211,8 @@ bool Label::checkDominance(
         !std::equal(
             unreachable_nodes.cbegin(),
             unreachable_nodes.cend(),
-            other.unreachable_nodes.cbegin())) {
+            other.unreachable_nodes.cbegin(),
+            other.unreachable_nodes.cend())) {
       return false;
     }
   }
