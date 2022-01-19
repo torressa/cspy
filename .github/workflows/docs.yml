@@ -28,6 +28,6 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GH_PAGES_TOKEN }}
       run: |
-        cd ${GITHUB_REPOSITORY}
+        cd cspy
         docs/build_docs.sh
       shell: bash
