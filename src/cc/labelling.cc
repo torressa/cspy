@@ -24,8 +24,7 @@ Label::Label(
       params_ptr(params_ptr_in) {
   if (params_ptr->elementary) {
     // Insert elements of partial_path
-    for (const int& p : partial_path)
-      unreachable_nodes.insert(p);
+    unreachable_nodes.insert(partial_path.cbegin(), partial_path.cend());
   }
 };
 
@@ -167,7 +166,8 @@ bool Label::checkDominance(
     bool all_res_equal = std::equal(
         resource_consumption.cbegin(),
         resource_consumption.cend(),
-        other.resource_consumption.cbegin());
+        other.resource_consumption.cbegin(),
+        other.resource_consumption.cend());
     if (all_res_equal) {
       return false;
     }
