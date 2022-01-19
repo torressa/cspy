@@ -1,23 +1,15 @@
 | OS     | C++ | Python | Dotnet |
 |:-------|-----|--------|--------|
-| Linux  | [![Status][cpp_linux_svg]][cpp_linux_link] | [![Status][python_linux_svg]][python_linux_link]| [![Status][dotnet_linux_svg]][dotnet_linux_link] |
-| macOS  | [![Status][cpp_osx_svg]][cpp_osx_link] | [![Status][python_osx_svg]][python_osx_link] | [![Status][dotnet_osx_svg]][dotnet_osx_link] |
+| Unix (linux + macos) | [![Status][cpp_unix_svg]][cpp_unix_link] | [![Status][python_unix_svg]][python_unix_link]| [![Status][dotnet_unix_svg]][dotnet_unix_link] |
 | Windows  | [![Status][cpp_win_svg]][cpp_win_link] | [![Status][python_win_svg]][python_win_link] |[![Status][dotnet_win_svg]][dotnet_win_link] |
 
 
-[cpp_linux_svg]: https://github.com/torressa/cspy/workflows/Ubuntu%20Cpp/badge.svg
-[cpp_linux_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22Ubuntu+Cpp%22
-[python_linux_svg]: https://github.com/torressa/cspy/workflows/Ubuntu%20Python/badge.svg
-[python_linux_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22Ubuntu+Python%22
-[dotnet_linux_svg]: https://github.com/torressa/cspy/workflows/Ubuntu%20Dotnet/badge.svg
-[dotnet_linux_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22Ubuntu+Dotnet%22
-
-[cpp_osx_svg]: https://github.com/torressa/cspy/workflows/MacOS%20Cpp/badge.svg
-[cpp_osx_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22MacOS+Cpp%22
-[python_osx_svg]: https://github.com/torressa/cspy/workflows/MacOS%20Python/badge.svg
-[python_osx_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22MacOS+Python%22
-[dotnet_osx_svg]: https://github.com/torressa/cspy/workflows/MacOS%20Dotnet/badge.svg
-[dotnet_osx_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22MacOS+Dotnet%22
+[unix_svg]: https://github.com/torressa/cspy/workflows/Cpp/badge.svg
+[unix_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22Cpp%22
+[python_unix_svg]: https://github.com/torressa/cspy/workflows/Python/badge.svg
+[python_unix_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22Python%22
+[dotnet_unix_svg]: https://github.com/torressa/cspy/workflows/Dotnet/badge.svg
+[dotnet_unix_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22Dotnet%22
 
 [cpp_win_svg]: https://github.com/torressa/cspy/workflows/Windows%20Cpp/badge.svg
 [cpp_win_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22Windows+Cpp%22
@@ -26,7 +18,6 @@
 [dotnet_win_svg]: https://github.com/torressa/cspy/workflows/Windows%20Dotnet/badge.svg
 [dotnet_win_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22Windows+Dotnet%22
 
-[![Documentation Status](https://readthedocs.org/projects/cspy/badge/?version=latest)](https://cspy.readthedocs.io/en/latest/?badge=latest)
 [![PyPI version](https://badge.fury.io/py/cspy.svg)](https://badge.fury.io/py/cspy)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/c28f50e92dae4bcc921f1bd142370608)](https://www.codacy.com/app/torressa/cspy?utm_source=github.com&utm_medium=referral&utm_content=torressa/cspy&utm_campaign=Badge_Grade)
 [![JOSS badge](https://joss.theoj.org/papers/25eda55801a528b982d03a6a61f7730d/status.svg)](https://joss.theoj.org/papers/25eda55801a528b982d03a6a61f7730d)
@@ -35,6 +26,8 @@
 # cspy
 
 A collection of algorithms for the (resource) Constrained Shortest Path (CSP) problem.
+
+Documentation [here](https://torressa.github.io/cspy/).
 
 The CSP problem was popularised by [Inrich and Desaulniers (2005)](https://www.researchgate.net/publication/227142556_Shortest_Path_Problems_with_Resource_Constraints). It was initially introduced as a subproblem for the bus driver scheduling problem, and has since then widely studied in a variety of different settings including: the vehicle routing problem with time windows (VRPTW), the technician routing and scheduling problem, the capacitated arc-routing problem, on-demand transportation systems, and, airport ground movement; among others.
 
@@ -56,16 +49,16 @@ Currently, the exact and metaheuristic algorithms implemented include:
 
 Please see the individual algorithms API Documentation for some toy examples and more details:
 
-- [Bidirectional and monodirectional algorithms](https://cspy.readthedocs.io/en/latest/api/cspy.BiDirectional.html)
-- [Heuristic Tabu Search](https://cspy.readthedocs.io/en/latest/api/cspy.Tabu.html)
-- [Greedy Elimination Procedure](https://cspy.readthedocs.io/en/latest/api/cspy.GreedyElim.html)
-- [GRASP](https://cspy.readthedocs.io/en/latest/api/cspy.GRASP.html)
-- [PSOLGENT](https://cspy.readthedocs.io/en/latest/api/cspy.PSOLGENT.html)
+- [Bidirectional and monodirectional algorithms](https://torressa.github.io/cspy/python_api/cspy.BiDirectional.html)
+- [Heuristic Tabu Search](https://torressa.github.io/cspy/python_api/cspy.Tabu.html)
+- [Greedy Elimination Procedure](https://torressa.github.io/cspy/python_api/cspy.GreedyElim.html)
+- [GRASP](https://torressa.github.io/cspy/python_api/cspy.GRASP.html)
+- [PSOLGENT](https://torressa.github.io/cspy/python_api/cspy.PSOLGENT.html)
 ## Getting Started
 
 ### Prerequisites
 
-Conceptual background and input formatting is discussed in the [docs](https://cspy.readthedocs.io/en/latest/how_to.html).
+Conceptual background and input formatting is discussed in the [docs](https://torressa.github.io/cspy/how_to.html).
 
 Module dependencies are:
 

@@ -1,10 +1,8 @@
-# TODO: only! execute this workflow automatically when a we push to master
-# on:
-#   push:
-#     branches: [ master ]
-#
+name: Docs
 
-on: [push]
+on:
+  push:
+    branches: [ master ]
 
 jobs:
 
@@ -28,8 +26,5 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GH_PAGES_TOKEN }}
       run: |
         cd ${GITHUB_REPOSITORY}
-        # TODO: remove when available in master
-        git fetch
-        git checkout rtd-to-gh-pages
         ./docs/build_docs.sh
       shell: bash
