@@ -20,14 +20,16 @@ jobs:
       run: |
         apt-get update
         apt-get install -y git
-        git clone --depth 1 "https://token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
-        ls
+        git clone "https://token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" ${GITHUB_REPOSITORY}
       shell: bash
 
     - name: Execute script to build our documentation and update pages
       env:
         GITHUB_TOKEN: ${{ secrets.GH_PAGES_TOKEN }}
       run: |
-        cd cspy
-        docs/build_docs.sh
+        cd ${GITHUB_REPOSITORY}
+        # TODO: remove when available in master
+        git fetch
+        git checkout rtd-to-gh-pages
+        ./docs/build_docs.sh
       shell: bash
