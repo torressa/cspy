@@ -394,11 +394,12 @@ void BiDirectional::extendSingleLabel(
     const AdjVertex&  adj_vertex) {
   if ((params_ptr_->elementary &&
        label->unreachable_nodes.find(adj_vertex.vertex.user_id) ==
-           label->unreachable_nodes.end()) ||
+           label->unreachable_nodes.cend()) ||
       !params_ptr_->elementary) {
     // extend current label along edge
     labelling::Label new_label =
         label->extend(adj_vertex, direction, max_res_curr_, min_res_curr_);
+
     // If label non-empty, (only when the extension is resource-feasible)
     if (new_label.vertex.lemon_id != -1) {
       updateEfficientLabels(direction, new_label);
