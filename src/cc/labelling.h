@@ -22,10 +22,12 @@ class Label {
   double                weight               = 0.0;
   bidirectional::Vertex vertex               = {-1, -1};
   std::vector<double>   resource_consumption = {};
-  std::vector<int>      partial_path         = {};
-  /// Set of unreachable nodes. This is only used in the elementary case.
-  std::set<int>          unreachable_nodes = {};
-  bidirectional::Params* params_ptr        = nullptr;
+  /// Set of size number of nodes+1. Contains 1 if the vertex is either visited
+  /// or unreachable or 0 otherwise. This is only used in the elementary case.
+  std::vector<int>                   unreachable_nodes      = {};
+  int                                unreachable_nodes_size = 0;
+  std::vector<bidirectional::Vertex> partial_path           = {};
+  bidirectional::Params*             params_ptr             = nullptr;
   // Phi value for joining algorithm from Righini and Salani (2006)
   double phi = std::nan("nan");
 
@@ -35,20 +37,30 @@ class Label {
 
   /// Constructor
   Label(
-      const double&                weight_in,
-      const bidirectional::Vertex& vertex_in,
-      const std::vector<double>&   resource_consumption_in,
-      const std::vector<int>&      partial_path_in,
-      bidirectional::Params*       params);
+      const double&                             weight_in,
+      const bidirectional::Vertex&              vertex_in,
+      const std::vector<double>&                resource_consumption_in,
+      const std::vector<bidirectional::Vertex>& partial_path_in,
+      const int&                                size_unreachable,
+      bidirectional::Params*                    params);
 
   /// @overload with phi
   Label(
-      const double&                weight_in,
-      const bidirectional::Vertex& vertex_in,
-      const std::vector<double>&   resource_consumption_in,
-      const std::vector<int>&      partial_path_in,
-      bidirectional::Params*       params,
-      const double&                phi_in);
+      const double&                             weight_in,
+      const bidirectional::Vertex&              vertex_in,
+      const std::vector<double>&                resource_consumption_in,
+      const std::vector<bidirectional::Vertex>& partial_path_in,
+      const int&                                size_unreachable,
+      bidirectional::Params*                    params,
+      const double&                             phi_in);
+
+  /// @overload no size_unreachable
+  Label(
+      const double&                             weight_in,
+      const bidirectional::Vertex&              vertex_in,
+      const std::vector<double>&                resource_consumption_in,
+      const std::vector<bidirectional::Vertex>& partial_path_in,
+      bidirectional::Params*                    params_ptr_in);
 
   /// default destructor
   ~Label(){};
@@ -131,7 +143,9 @@ class Label {
   bool checkThreshold(const double& threshold) const;
 
   /// Check whether the current partial path is Source - Sink
-  bool checkStPath(const int& source_id, const int& sink_id) const;
+  bool checkStPath(
+      const bidirectional::Vertex& source,
+      const bidirectional::Vertex& sink) const;
   /// set phi attribute for merged labels from Righini and Salani (2006)
   void setPhi(const double& phi_in) { phi = phi_in; }
 

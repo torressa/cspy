@@ -11,6 +11,15 @@
 
 namespace bidirectional {
 
+bool checkNegativeCostCycle(const DiGraph& graph) {
+  const LemonNode& source = graph.getLNodeFromId(graph.source.lemon_id);
+  lemon::BellmanFord<LemonGraph, LemonGraph::ArcMap<double>> BF(
+      *graph.lemon_graph_ptr, *graph.weight_map_ptr);
+  BF.run(source, graph.number_edges);
+  LemonPath path = BF.negativeCycle();
+  return (!path.empty());
+}
+
 // TODO Use explicit types when calling BF to avoid error on MACOS
 void lowerBoundWeight(
     std::vector<double>* lower_bound_weight,

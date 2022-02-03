@@ -5,12 +5,14 @@
 #include <vector>
 
 #include "lemon/maps.h"        // MapBase
+#include "lemon/path.h"        // Path
 #include "lemon/smart_graph.h" // SmartDigraph
 
 // Type defs for LEMON
-typedef lemon::SmartDigraph       LemonGraph;
-typedef lemon::SmartDigraph::Node LemonNode;
-typedef lemon::SmartDigraph::Arc  LemonArc;
+typedef lemon::SmartDigraph     LemonGraph;
+typedef LemonGraph::Node        LemonNode;
+typedef LemonGraph::Arc         LemonArc;
+typedef lemon::Path<LemonGraph> LemonPath;
 
 namespace bidirectional {
 
@@ -18,9 +20,17 @@ namespace bidirectional {
 /// different)
 struct Vertex {
  public:
-  int lemon_id;
-  int user_id;
+  int  lemon_id;
+  int  user_id;
+  bool operator==(const Vertex& other) const {
+    return lemon_id == other.lemon_id && user_id == other.user_id;
+  }
+  bool operator<(const Vertex& other) const { return user_id < other.user_id; }
+  bool operator!=(const Vertex& other) const { return !(*this == other); }
 };
+
+/// Convert a vector of Vertex into a vector of int by grabbing the user ids.
+std::vector<int> convertToInt(const std::vector<Vertex>& v_in);
 
 /**
  * Data structure to hold adjacent vertex attributes.

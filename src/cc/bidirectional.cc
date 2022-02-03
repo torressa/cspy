@@ -29,7 +29,7 @@ BiDirectional::BiDirectional(
       bwd_search_ptr_(std::make_unique<bidirectional::Search>(BWD)) {}
 
 std::vector<int> BiDirectional::getPath() const {
-  return best_label_->partial_path;
+  return convertToInt(best_label_->partial_path);
 }
 
 std::vector<double> BiDirectional::getConsumedResources() const {
@@ -84,6 +84,11 @@ void BiDirectional::runPreprocessing() {
     const int c = getCriticalRes(max_res, *graph_ptr_);
     setCriticalRes(c);
   }
+  // No need to use elementary if no negative cost cycle is found.
+  // TODO: refine.
+  if (!checkNegativeCostCycle(*graph_ptr_)) {
+    setElementary(false);
+  }
   if (params_ptr_->bounds_pruning) {
     if (params_ptr_->direction == BOTH || params_ptr_->direction == FWD) {
       lowerBoundWeight(
@@ -98,7 +103,7 @@ void BiDirectional::runPreprocessing() {
 
 void BiDirectional::init() {
   // Initialise labels
-  labelling::Label label(0.0, {-1, -1}, {}, {}, params_ptr_.get());
+  labelling::Label label(0.0, {-1, -1}, {}, {}, 0, params_ptr_.get());
   best_label_ = std::make_shared<labelling::Label>(label);
   // Initialise resource bounds
   initResourceBounds();
@@ -137,8 +142,9 @@ void BiDirectional::initResourceBounds() {
 void BiDirectional::initLabels(const Directions& direction) {
   Vertex              vertex;
   std::vector<double> res(min_res.size(), 0.0);
-  std::vector<int>    path;
-  Search*             search_ptr = getSearchPtr(direction);
+  std::vector<Vertex> path;
+  Search*             search_ptr       = getSearchPtr(direction);
+  const int           size_unreachable = graph_ptr_->number_vertices + 1;
 
   if (direction == FWD) {
     vertex = graph_ptr_->source;
@@ -148,14 +154,16 @@ void BiDirectional::initLabels(const Directions& direction) {
     vertex                         = graph_ptr_->sink;
   }
   // Current label init
-  path = {vertex.user_id};
-  labelling::Label lab(0.0, vertex, res, path, params_ptr_.get());
+  path = {vertex};
+  labelling::Label lab(
+      0.0, vertex, res, path, size_unreachable, params_ptr_.get());
   search_ptr->replaceCurrentLabel(lab);
   // Final label dummy init
   Vertex dum_vertex = {-1, -1};
   res               = {};
   path              = {};
-  labelling::Label lab2(0.0, dum_vertex, res, path, params_ptr_.get());
+  labelling::Label lab2(
+      0.0, dum_vertex, res, path, size_unreachable, params_ptr_.get());
 
   search_ptr->replaceIntermediateLabel(lab2);
   search_ptr->pushHeap();
@@ -284,7 +292,7 @@ bool BiDirectional::checkValidLabel(
     const Directions&       direction,
     const labelling::Label& label) {
   if (label.vertex.lemon_id != -1 &&
-      label.checkStPath(graph_ptr_->source.user_id, graph_ptr_->sink.user_id)) {
+      label.checkStPath(graph_ptr_->source, graph_ptr_->sink)) {
     if (!std::isnan(params_ptr_->threshold) &&
         label.checkThreshold(params_ptr_->threshold)) {
       terminated_early_w_st_path_           = true;
@@ -392,10 +400,11 @@ void BiDirectional::extendSingleLabel(
     labelling::Label* label,
     const Directions& direction,
     const AdjVertex&  adj_vertex) {
-  if ((params_ptr_->elementary &&
-       label->unreachable_nodes.find(adj_vertex.vertex.user_id) ==
-           label->unreachable_nodes.cend()) ||
-      !params_ptr_->elementary) {
+  if ( // Always extend when non-elementary
+      !params_ptr_->elementary ||
+      // When elementary, check if vertex already seen / unreachable
+      (params_ptr_->elementary &&
+       label->unreachable_nodes[adj_vertex.vertex.user_id] == 0)) {
     // extend current label along edge
     labelling::Label new_label =
         label->extend(adj_vertex, direction, max_res_curr_, min_res_curr_);
@@ -403,6 +412,7 @@ void BiDirectional::extendSingleLabel(
     // If label non-empty, (only when the extension is resource-feasible)
     if (new_label.vertex.lemon_id != -1) {
       updateEfficientLabels(direction, new_label);
+      // std::cout << new_label << "\n";
     }
   }
 }
@@ -500,13 +510,11 @@ void BiDirectional::saveCurrentBestLabel(const Directions& direction) {
   } else {
     // First source-sink path
     if ((direction == FWD &&
-         (current_label_ptr->partial_path.back() == graph_ptr_->sink.user_id &&
-          intermediate_label_ptr->vertex.user_id ==
-              graph_ptr_->source.user_id)) ||
-        (direction == BWD && (current_label_ptr->partial_path.back() ==
-                                  graph_ptr_->source.user_id &&
-                              intermediate_label_ptr->vertex.user_id ==
-                                  graph_ptr_->sink.user_id))) {
+         (current_label_ptr->partial_path.back() == graph_ptr_->sink &&
+          intermediate_label_ptr->vertex == graph_ptr_->source)) ||
+        (direction == BWD &&
+         (current_label_ptr->partial_path.back() == graph_ptr_->source &&
+          intermediate_label_ptr->vertex == graph_ptr_->sink))) {
       // Save complete source-sink path
       search_ptr->replaceIntermediateLabel(*current_label_ptr);
       // Update bounds

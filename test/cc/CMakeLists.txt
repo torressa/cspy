@@ -33,7 +33,8 @@ else()
     src/test_issue41.cc
     src/test_issue52.cc
     src/test_issue69.cc
-    src/test_issue90.cc)
+    src/test_issue90.cc
+    src/test_issue94.cc)
 endif()
 
 # note: macOS is APPLE and also UNIX !

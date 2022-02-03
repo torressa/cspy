@@ -4,6 +4,13 @@
 
 namespace bidirectional {
 
+std::vector<int> convertToInt(const std::vector<Vertex>& v_in) {
+  std::vector<int> v_out;
+  for (const Vertex& v : v_in)
+    v_out.push_back(v.user_id);
+  return v_out;
+}
+
 DiGraph::DiGraph(
     const int& num_nodes_in,
     const int& num_arcs_in,
