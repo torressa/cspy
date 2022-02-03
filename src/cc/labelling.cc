@@ -25,11 +25,12 @@ Label::Label(
       partial_path(partial_path_in),
       params_ptr(params_ptr_in) {
   if (params_ptr->elementary && size_unreachable > 0) {
-    unreachable_nodes.resize(unreachable_nodes_size);
+    // Vector of all 0s
+    unreachable_nodes.resize(unreachable_nodes_size, 0);
     // Last entry contains number of nodes visited
     unreachable_nodes[unreachable_nodes_size - 1] =
         static_cast<int>(partial_path.size());
-    // All other entries contain 1 if node visited
+    // Entries contain 1 if node visited
     for (const bidirectional::Vertex& v : partial_path)
       unreachable_nodes[v.lemon_id] = 1;
   }
@@ -132,6 +133,8 @@ Label Label::extend(
       // Push new node (direction doesn't matter here as edges have been
       // reversed for backward extensions)
       unreachable_nodes[new_node.lemon_id] = 1;
+      // Add an extra node to the total number of unreachable nodes
+      unreachable_nodes[unreachable_nodes_size - 1] += 1;
     }
   }
   return Label();

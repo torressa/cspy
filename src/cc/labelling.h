@@ -19,19 +19,33 @@ namespace labelling {
  */
 class Label {
  public:
-  double                weight               = 0.0;
-  bidirectional::Vertex vertex               = {-1, -1};
-  std::vector<double>   resource_consumption = {};
-  /// Set of size number of nodes+1. Contains 1 if the vertex is either visited
-  /// or unreachable or 0 otherwise. This is only used in the elementary case.
-  std::vector<int>                   unreachable_nodes      = {};
-  int                                unreachable_nodes_size = 0;
-  std::vector<bidirectional::Vertex> partial_path           = {};
-  bidirectional::Params*             params_ptr             = nullptr;
-  // Phi value for joining algorithm from Righini and Salani (2006)
+  /// Total weight / cost of the label
+  double weight = 0.0;
+  /// `Vertex` indicating the position of the label
+  bidirectional::Vertex vertex = {-1, -1};
+  /// Current resource usage
+  std::vector<double> resource_consumption = {};
+  /**
+   * Vector of size number of `number_vertices`+1.
+   * Between 0 and `number_vertices` - 1 (indexed by lemon_id) it contains
+   * either 1 if the vertex has been  visited / is unreachable,
+   * or 0 otherwise.
+   * At index `number_vertices` it contains the total number of visited
+   * vertices.
+   * This is only used  in the elementary case.
+   */
+  std::vector<int> unreachable_nodes = {};
+  /// Size of vector above
+  int unreachable_nodes_size = 0;
+  /// Vector of vertices of the path
+  std::vector<bidirectional::Vertex> partial_path = {};
+  /// Pointer to `bidirectional::Params` with problem/algorithm info.
+  bidirectional::Params* params_ptr = nullptr;
+  /// Phi value for joining algorithm from Righini and Salani (2006)
   double phi = std::nan("nan");
 
   /* Constructors */
+
   /// Dummy constructor
   Label(){};
 

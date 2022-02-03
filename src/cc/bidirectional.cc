@@ -404,7 +404,7 @@ void BiDirectional::extendSingleLabel(
       !params_ptr_->elementary ||
       // When elementary, check if vertex already seen / unreachable
       (params_ptr_->elementary &&
-       label->unreachable_nodes[adj_vertex.vertex.user_id] == 0)) {
+       label->unreachable_nodes[adj_vertex.vertex.lemon_id] == 0)) {
     // extend current label along edge
     labelling::Label new_label =
         label->extend(adj_vertex, direction, max_res_curr_, min_res_curr_);
