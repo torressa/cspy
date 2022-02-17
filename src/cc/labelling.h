@@ -1,5 +1,5 @@
-#ifndef BIDIRECTIONAL_LABELLING_H__
-#define BIDIRECTIONAL_LABELLING_H__
+#ifndef SRC_CC_LABELLING_H__
+#define SRC_CC_LABELLING_H__
 
 #include <cmath> // nan
 #include <set>
@@ -19,62 +19,36 @@ namespace labelling {
  */
 class Label {
  public:
-  /// Total weight / cost of the label
-  double weight = 0.0;
-  /// `Vertex` indicating the position of the label
-  bidirectional::Vertex vertex = {-1, -1};
-  /// Current resource usage
-  std::vector<double> resource_consumption = {};
-  /**
-   * Vector of size number of `number_vertices`+1.
-   * Between 0 and `number_vertices` - 1 (indexed by lemon_id) it contains
-   * either 1 if the vertex has been  visited / is unreachable,
-   * or 0 otherwise.
-   * At index `number_vertices` it contains the total number of visited
-   * vertices.
-   * This is only used  in the elementary case.
-   */
-  std::vector<int> unreachable_nodes = {};
-  /// Size of vector above
-  int unreachable_nodes_size = 0;
-  /// Vector of vertices of the path
-  std::vector<bidirectional::Vertex> partial_path = {};
-  /// Pointer to `bidirectional::Params` with problem/algorithm info.
-  bidirectional::Params* params_ptr = nullptr;
-  /// Phi value for joining algorithm from Righini and Salani (2006)
+  double                weight               = 0.0;
+  bidirectional::Vertex vertex               = {-1, -1};
+  std::vector<double>   resource_consumption = {};
+  std::vector<int>      partial_path         = {};
+  /// Set of unreachable nodes. This is only used in the elementary case.
+  std::set<int>          unreachable_nodes = {};
+  bidirectional::Params* params_ptr        = nullptr;
+  // Phi value for joining algorithm from Righini and Salani (2006)
   double phi = std::nan("nan");
 
   /* Constructors */
-
   /// Dummy constructor
   Label(){};
 
   /// Constructor
   Label(
-      const double&                             weight_in,
-      const bidirectional::Vertex&              vertex_in,
-      const std::vector<double>&                resource_consumption_in,
-      const std::vector<bidirectional::Vertex>& partial_path_in,
-      const int&                                size_unreachable,
-      bidirectional::Params*                    params);
+      const double&                weight_in,
+      const bidirectional::Vertex& vertex_in,
+      const std::vector<double>&   resource_consumption_in,
+      const std::vector<int>&      partial_path_in,
+      bidirectional::Params*       params);
 
   /// @overload with phi
   Label(
-      const double&                             weight_in,
-      const bidirectional::Vertex&              vertex_in,
-      const std::vector<double>&                resource_consumption_in,
-      const std::vector<bidirectional::Vertex>& partial_path_in,
-      const int&                                size_unreachable,
-      bidirectional::Params*                    params,
-      const double&                             phi_in);
-
-  /// @overload no size_unreachable
-  Label(
-      const double&                             weight_in,
-      const bidirectional::Vertex&              vertex_in,
-      const std::vector<double>&                resource_consumption_in,
-      const std::vector<bidirectional::Vertex>& partial_path_in,
-      bidirectional::Params*                    params_ptr_in);
+      const double&                weight_in,
+      const bidirectional::Vertex& vertex_in,
+      const std::vector<double>&   resource_consumption_in,
+      const std::vector<int>&      partial_path_in,
+      bidirectional::Params*       params,
+      const double&                phi_in);
 
   /// default destructor
   ~Label(){};
@@ -156,10 +130,13 @@ class Label {
   /// Check if weight is under the input threshold.
   bool checkThreshold(const double& threshold) const;
 
-  /// Check whether the current partial path is Source - Sink
-  bool checkStPath(
-      const bidirectional::Vertex& source,
-      const bidirectional::Vertex& sink) const;
+  /**
+   * Check whether the current partial path is Source - Sink
+   *
+   * @param[in] source_id, int with user_id of the source node.
+   * @param[in] sink_id, int with user_id of the sink node.
+   */
+  bool checkStPath(const int& source_id, const int& sink_id) const;
   /// set phi attribute for merged labels from Righini and Salani (2006)
   void setPhi(const double& phi_in) { phi = phi_in; }
 
@@ -186,13 +163,6 @@ class Label {
 Label getNextLabel(
     std::vector<Label>*              labels,
     const bidirectional::Directions& direction);
-
-/// Update efficient_labels using a candidate_label
-void updateEfficientLabels(
-    std::vector<Label>*              efficient_labels,
-    const Label&                     candidate_label,
-    const bidirectional::Directions& direction,
-    const bool&                      elementary);
 
 /**
  * Check whether the input label dominates any efficient label (previously
@@ -275,4 +245,4 @@ Label mergeLabels(
 
 } // namespace labelling
 
-#endif // BIDIRECTIONAL_LABELLING_H__
+#endif // SRC_CC_LABELLING_H__

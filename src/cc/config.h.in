@@ -1,0 +1,8 @@
+// clang-format off
+#ifndef SRC_CC_CONFIG_H
+#define SRC_CC_CONFIG_H
+
+// Set level for logger.
+#define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_@LOG_LEVEL@
+ 
+#endif // SRC_CC_CONFIG_H

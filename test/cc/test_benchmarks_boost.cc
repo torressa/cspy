@@ -1,14 +1,17 @@
-#include <boost/config.hpp>
-#include <boost/graph/adjacency_list.hpp>
-#include <boost/graph/r_c_shortest_paths.hpp>
 #include <fstream>
 #include <iostream> // cout
 #include <limits>   // numeric_limits
 #include <sstream>
 #include <vector>
 
+// gtest
 #include "gtest/gtest.h"
-#include "utils.h" // loadMaxMinRes, skipLines, writeToFile, getElapsedTime, getBestCost
+// Boost
+#include "boost/config.hpp"
+#include "boost/graph/adjacency_list.hpp"
+#include "boost/graph/r_c_shortest_paths.hpp"
+// cspy
+#include "test/cc/utils.h" // loadMaxMinRes, skipLines, writeToFile, getElapsedTime, getBestCost
 
 namespace boost {
 

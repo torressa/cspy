@@ -11,10 +11,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
  - Refactored Python and C++ unittests.
  - Added C# interface.
+ - Moved documentation from readthedocs to github pages.
 
 ### Added
  - [WIP] New functionality to select monotonic resources.
  - [WIP] Detection of monotonic resources.
+ - Logger using [`sdplog`](https://github.com/gabime/spdlog)
+
+### Fixed
+ - Issue: Bidirectional algorithm is not finding valid paths when using non-zero minimum resource values #89
+ - Issue: Bidirectional not finding valid path when using negative resource
+   consumption # 90
+ - Issue: Dominance check for elementary paths #94
 
 ## [v1.0.1]
 

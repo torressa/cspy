@@ -11,13 +11,19 @@
 
 namespace bidirectional {
 
-bool checkNegativeCostCycle(const DiGraph& graph) {
-  const LemonNode& source = graph.getLNodeFromId(graph.source.lemon_id);
+void detectNegativeCostCycle(DiGraph* graph_ptr) {
+  const LemonNode& source =
+      graph_ptr->getLNodeFromId(graph_ptr->source.lemon_id);
   lemon::BellmanFord<LemonGraph, LemonGraph::ArcMap<double>> BF(
-      *graph.lemon_graph_ptr, *graph.weight_map_ptr);
-  BF.run(source, graph.number_edges);
+      *graph_ptr->lemon_graph_ptr, *graph_ptr->weight_map_ptr);
+  BF.run(source, graph_ptr->number_edges);
   LemonPath path = BF.negativeCycle();
-  return (!path.empty());
+
+  // Update negative_cost_cycle_present member
+  if (path.empty())
+    graph_ptr->negative_cost_cycle_present = FALSE;
+  else
+    graph_ptr->negative_cost_cycle_present = TRUE;
 }
 
 // TODO Use explicit types when calling BF to avoid error on MACOS

@@ -1,5 +1,5 @@
-#ifndef BIDIRECTIONAL_DIGRAPH_H__
-#define BIDIRECTIONAL_DIGRAPH_H__
+#ifndef SRC_CC_DIGRAPH_H__
+#define SRC_CC_DIGRAPH_H__
 
 #include <memory>
 #include <vector>
@@ -20,17 +20,9 @@ namespace bidirectional {
 /// different)
 struct Vertex {
  public:
-  int  lemon_id;
-  int  user_id;
-  bool operator==(const Vertex& other) const {
-    return lemon_id == other.lemon_id && user_id == other.user_id;
-  }
-  bool operator<(const Vertex& other) const { return user_id < other.user_id; }
-  bool operator!=(const Vertex& other) const { return !(*this == other); }
+  int lemon_id;
+  int user_id;
 };
-
-/// Convert a vector of Vertex into a vector of int by grabbing the user ids.
-std::vector<int> convertToInt(const std::vector<Vertex>& v_in);
 
 /**
  * Data structure to hold adjacent vertex attributes.
@@ -69,6 +61,8 @@ class ResourceMap : public lemon::MapBase<LemonArc, double> {
       : resource_map(resource_map_in), r(r_in){};
 };
 
+enum NegativeCostCyclePresent { TRUE, FALSE, UNKNOWN };
+
 /**
  * Directed graph wrapper to create and query a lemon::SmartDigraph.
  * @see: https://lemon.cs.elte.hu/trac/lemon
@@ -89,7 +83,9 @@ class DiGraph {
   /// Pointer to lemon map containing arc resource consumptions
   std::unique_ptr<LemonGraph::ArcMap<std::vector<double>>> res_map_ptr;
   /// Vector with vertices
-  std::vector<Vertex> vertices;
+  std::vector<Vertex>      vertices;
+  NegativeCostCyclePresent negative_cost_cycle_present;
+  bool                     all_resources_positive;
 
   /**
    * Constructor.
@@ -197,7 +193,9 @@ class DiGraph {
    * @param[in] arc, lemon::SmartDigraph::Arc.
    * @returns double with arc weight
    */
-  double getWeight(const LemonArc& arc) const { return (*weight_map_ptr)[arc]; }
+  const double& getWeight(const LemonArc& arc) const {
+    return (*weight_map_ptr)[arc];
+  }
 
   /**
    * Extract lemon id for a given arc
@@ -229,7 +227,7 @@ class DiGraph {
    * @param[in] arc, lemon::SmartDigraph::Arc.
    * @returns vector of double with arc resource consumption
    */
-  std::vector<double> getRes(const LemonArc& arc) const {
+  const std::vector<double>& getRes(const LemonArc& arc) const {
     return (*res_map_ptr)[arc];
   }
 
@@ -246,4 +244,4 @@ class DiGraph {
 
 } // namespace bidirectional
 
-#endif // BIDIRECTIONAL_DIGRAPH_H__
+#endif // SRC_CC_DIGRAPH_H__

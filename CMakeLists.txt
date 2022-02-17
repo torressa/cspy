@@ -104,6 +104,12 @@ endif()
 option(BUILD_CXX "Build C++ library" ON)
 option(BUILD_PYTHON "Build Python Library" OFF)
 option(BUILD_DOTNET "Build Dotnet Library" OFF)
+set(LOG_LEVEL
+    "OFF"
+    CACHE
+      STRING
+      "Choose the logging level, options are: OFF (default), INFO, DEBUG, TRACE."
+      FORCE)
 
 message(STATUS "Build C++ library: ${BUILD_CXX}")
 message(STATUS "Build Python: ${BUILD_PYTHON}")
@@ -121,6 +127,13 @@ FetchContent_Declare(
   GIT_TAG "multiflow/dev")
 FetchContent_MakeAvailable(LEMON)
 set(BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS_OLD})
+
+# Add logger
+FetchContent_Declare(
+  spdlog
+  GIT_REPOSITORY "https://github.com/gabime/spdlog.git"
+  GIT_TAG "v1.x")
+FetchContent_MakeAvailable(spdlog)
 
 enable_testing()
 include(cpp)

@@ -1,5 +1,5 @@
-#ifndef BIDIRECTIONAL_PARAMS_H__
-#define BIDIRECTIONAL_PARAMS_H__
+#ifndef SRC_CC_PARAMS_H__
+#define SRC_CC_PARAMS_H__
 
 #include <cmath> // nan
 #include <vector>
@@ -22,7 +22,6 @@ enum Directions {
 
 /**
  * Input parameters.
- *
  */
 class Params {
  public:
@@ -85,4 +84,4 @@ class Params {
 
 } // namespace bidirectional
 
-#endif // BIDIRECTIONAL_PARAMS_H__
+#endif // SRC_CC_PARAMS_H__

@@ -7,8 +7,8 @@ set(NAME BiDirectional_test)
 if(BENCHMARK_TESTS)
   if(BENCHMARK_BOOST)
     find_package(Boost REQUIRED)
-    add_executable(${NAME} src/main.cc src/test_benchmarks_boost.cc
-                           src/test_benchmarks.cc src/utils.cc)
+    add_executable(${NAME} main.cc test_benchmarks_boost.cc test_benchmarks.cc
+                           utils.cc)
     target_include_directories(
       ${NAME}
       PUBLIC ${PROJECT_SOURCE_DIR}/src/cc/
@@ -17,24 +17,25 @@ if(BENCHMARK_TESTS)
     target_link_libraries(${NAME} ${Boost_LIBRARIES} gtest
                           ${PROJECT_NAME}::BiDirectionalCpp)
   else()
-    add_executable(${NAME} src/main.cc src/test_benchmarks.cc src/utils.cc)
+    add_executable(${NAME} main.cc test_benchmarks.cc utils.cc)
   endif()
 else()
   # Unit tests
   add_executable(
     ${NAME}
-    src/main.cc
-    src/utils.cc
-    src/test_labelling.cc
-    src/test_bidirectional.cc
-    src/test_issue17.cc
-    src/test_issue22.cc
-    src/test_issue38.cc
-    src/test_issue41.cc
-    src/test_issue52.cc
-    src/test_issue69.cc
-    src/test_issue90.cc
-    src/test_issue94.cc)
+    main.cc
+    utils.cc
+    test_labelling.cc
+    test_bidirectional.cc
+    test_issue17.cc
+    test_issue22.cc
+    test_issue38.cc
+    test_issue41.cc
+    test_issue52.cc
+    test_issue69.cc
+    test_issue89.cc
+    test_issue90.cc
+    test_issue94.cc)
 endif()
 
 # note: macOS is APPLE and also UNIX !

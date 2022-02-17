@@ -3,7 +3,7 @@
 
 #include "gtest/gtest.h"
 #include "src/cc/bidirectional.h"
-#include "utils.h" // loadMaxMinRes, skipLines, writeToFile, getElapsedTime, getBestCost
+#include "test/cc/utils.h" // loadMaxMinRes, skipLines, writeToFile, getElapsedTime, getBestCost
 
 namespace bidirectional {
 

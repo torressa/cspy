@@ -4,13 +4,6 @@
 
 namespace bidirectional {
 
-std::vector<int> convertToInt(const std::vector<Vertex>& v_in) {
-  std::vector<int> v_out;
-  for (const Vertex& v : v_in)
-    v_out.push_back(v.user_id);
-  return v_out;
-}
-
 DiGraph::DiGraph(
     const int& num_nodes_in,
     const int& num_arcs_in,
@@ -19,6 +12,7 @@ DiGraph::DiGraph(
     : number_vertices(num_nodes_in),
       number_edges(num_arcs_in),
       lemon_graph_ptr(std::make_unique<LemonGraph>()),
+      negative_cost_cycle_present(FALSE),
       weight_map_ptr(
           std::make_unique<LemonGraph::ArcMap<double>>(*lemon_graph_ptr)),
       res_map_ptr(std::make_unique<LemonGraph::ArcMap<std::vector<double>>>(
@@ -61,6 +55,12 @@ void DiGraph::addEdge(
   const LemonArc&  arc        = lemon_graph_ptr->addArc(tail_lnode, head_lnode);
   (*weight_map_ptr)[arc]      = weight;
   (*res_map_ptr)[arc]         = resource_consumption;
+  if (weight < 0)
+    negative_cost_cycle_present = UNKNOWN;
+  all_resources_positive = std::all_of(
+      resource_consumption.cbegin(), resource_consumption.cend(), [](bool v) {
+        return v >= 0;
+      });
 }
 
 AdjVertex DiGraph::getAdjVertex(const LemonArc& arc, const bool& forward)

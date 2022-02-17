@@ -1,14 +1,16 @@
-#ifndef BIDIRECTIONAL_PREPROCESSING_H__
-#define BIDIRECTIONAL_PREPROCESSING_H__
+#ifndef SRC_CC_PREPROCESSING_H__
+#define SRC_CC_PREPROCESSING_H__
 
 #include "digraph.h"
 
 namespace bidirectional {
 
 /**
- * Check if a negative cost cycle is found.
+ * Detect if a negative cost cycle is present.
+ *
+ * @param[out] graph, DiGraph
  */
-bool checkNegativeCostCycle(const DiGraph& graph);
+void detectNegativeCostCycle(DiGraph* graph);
 
 /**
  * Solve shortest path using the distance provided as input and set the
@@ -39,4 +41,4 @@ int getCriticalRes(const std::vector<double>& max_res, const DiGraph& graph);
 
 } // namespace bidirectional
 
-#endif // BIDIRECTIONAL_PREPROCESSING_H__
+#endif // SRC_CC_PREPROCESSING_H__

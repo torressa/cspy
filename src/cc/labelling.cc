@@ -12,64 +12,37 @@ namespace labelling {
 /* Constructors */
 
 Label::Label(
-    const double&                             weight_in,
-    const bidirectional::Vertex&              vertex_in,
-    const std::vector<double>&                resource_consumption_in,
-    const std::vector<bidirectional::Vertex>& partial_path_in,
-    const int&                                size_unreachable,
-    bidirectional::Params*                    params_ptr_in)
+    const double&                weight_in,
+    const bidirectional::Vertex& vertex_in,
+    const std::vector<double>&   resource_consumption_in,
+    const std::vector<int>&      partial_path_in,
+    bidirectional::Params*       params_ptr_in)
     : weight(weight_in),
       vertex(vertex_in),
       resource_consumption(resource_consumption_in),
-      unreachable_nodes_size(size_unreachable),
       partial_path(partial_path_in),
       params_ptr(params_ptr_in) {
-  if (params_ptr->elementary && size_unreachable > 0) {
-    // Vector of all 0s
-    unreachable_nodes.resize(unreachable_nodes_size, 0);
-    // Last entry contains number of nodes visited
-    unreachable_nodes[unreachable_nodes_size - 1] =
-        static_cast<int>(partial_path.size());
-    // Entries contain 1 if node visited
-    for (const bidirectional::Vertex& v : partial_path)
-      unreachable_nodes[v.lemon_id] = 1;
+  if (params_ptr->elementary) {
+    // Insert elements of partial_path
+    unreachable_nodes.insert(partial_path.cbegin(), partial_path.cend());
   }
 };
 
 Label::Label(
-    const double&                             weight_in,
-    const bidirectional::Vertex&              vertex_in,
-    const std::vector<double>&                resource_consumption_in,
-    const std::vector<bidirectional::Vertex>& partial_path_in,
-    const int&                                size_unreachable,
-    bidirectional::Params*                    params_ptr_in,
-    const double&                             phi_in)
+    const double&                weight_in,
+    const bidirectional::Vertex& vertex_in,
+    const std::vector<double>&   resource_consumption_in,
+    const std::vector<int>&      partial_path_in,
+    bidirectional::Params*       params_ptr_in,
+    const double&                phi_in)
     : Label(
           weight_in,
           vertex_in,
           resource_consumption_in,
           partial_path_in,
-          size_unreachable,
           params_ptr_in) {
   setPhi(phi_in);
 }
-
-Label::Label(
-    const double&                             weight_in,
-    const bidirectional::Vertex&              vertex_in,
-    const std::vector<double>&                resource_consumption_in,
-    const std::vector<bidirectional::Vertex>& partial_path_in,
-    bidirectional::Params*                    params_ptr_in)
-
-    : Label(
-          weight_in,
-          vertex_in,
-          resource_consumption_in,
-          partial_path_in,
-          0,
-          params_ptr_in)
-
-{}
 
 /* Public methods */
 
@@ -83,7 +56,7 @@ Label Label::extend(
   // extract vertex
   const bidirectional::Vertex& new_node = adjacent_vertex.vertex;
   // update partial_path
-  new_partial_path.push_back(new_node);
+  new_partial_path.push_back(new_node.user_id);
   // Propagate resources
   std::vector<double> new_resources;
   if (direction == bidirectional::FWD) {
@@ -96,7 +69,7 @@ Label Label::extend(
           vertex.user_id,
           new_node.user_id,
           adjacent_vertex.resource_consumption,
-          bidirectional::convertToInt(partial_path),
+          partial_path,
           weight);
     }
   } else {
@@ -112,7 +85,7 @@ Label Label::extend(
           new_node.user_id,
           vertex.user_id,
           adjacent_vertex.resource_consumption,
-          bidirectional::convertToInt(partial_path),
+          partial_path,
           weight);
     }
   }
@@ -122,7 +95,6 @@ Label Label::extend(
       new_node,
       new_resources,
       new_partial_path,
-      unreachable_nodes_size,
       params_ptr);
   // Check feasibility (soft=true) before returning label
   if (new_label.checkFeasibility(max_res, min_res, true)) {
@@ -132,9 +104,7 @@ Label Label::extend(
     if (params_ptr->elementary) {
       // Push new node (direction doesn't matter here as edges have been
       // reversed for backward extensions)
-      unreachable_nodes[new_node.lemon_id] = 1;
-      // Add an extra node to the total number of unreachable nodes
-      unreachable_nodes[unreachable_nodes_size - 1] += 1;
+      unreachable_nodes.insert(new_node.user_id);
     }
   }
   return Label();
@@ -178,11 +148,9 @@ bool Label::checkThreshold(const double& threshold) const {
   return false;
 }
 
-bool Label::checkStPath(
-    const bidirectional::Vertex& source,
-    const bidirectional::Vertex& sink) const {
-  if ((partial_path[0] == source && partial_path.back() == sink) ||
-      (partial_path.back() == source && partial_path[0] == sink))
+bool Label::checkStPath(const int& source_id, const int& sink_id) const {
+  if ((partial_path[0] == source_id && partial_path.back() == sink_id) ||
+      (partial_path.back() == source_id && partial_path[0] == sink_id))
     return true;
   return false;
 }
@@ -192,8 +160,6 @@ bool Label::checkDominance(
     const bidirectional::Directions& direction) const {
   const int& resource_size = resource_consumption.size();
   const int& c_res         = params_ptr->critical_res;
-
-  // std::cout << "checking this " << *this << " vs " << other << "\n";
 
   if (weight == other.weight) {
     // Check if all resources are equal
@@ -208,14 +174,12 @@ bool Label::checkDominance(
   }
   // Compare weight
   if (weight > other.weight) {
-    // std::cout << "dominated weight \n";
     return false;
   }
   if (direction == bidirectional::FWD) {
     // Forward
     for (int i = 0; i < resource_size; i++) {
       if (resource_consumption[i] > other.resource_consumption[i]) {
-        // std::cout << "not Dominated cause resources\n";
         return false;
       }
     }
@@ -236,14 +200,18 @@ bool Label::checkDominance(
     }
   }
   // Check for the elementary case
-  if (params_ptr->elementary && unreachable_nodes_size > 0 &&
-      other.unreachable_nodes_size > 0) {
-    for (int n = 0; n < unreachable_nodes_size; ++n) {
-      if (unreachable_nodes[n] > other.unreachable_nodes[n]) {
-        return false;
-      }
+  if (params_ptr->elementary && unreachable_nodes.size() > 0 &&
+      other.unreachable_nodes.size() > 0) {
+    // check other.unreachable_nodes \subset unreachable_nodes (strict)
+    if (!std::includes(
+            other.unreachable_nodes.begin(),
+            other.unreachable_nodes.end(),
+            unreachable_nodes.begin(),
+            unreachable_nodes.end())) {
+      return false;
     }
   }
+  //  this dominates other
   return true;
 }
 
@@ -278,19 +246,10 @@ bool operator==(const Label& label1, const Label& label2) {
     return false;
   if (label1.weight != label2.weight)
     return false;
-  // Check partial path
-  const int s1 = static_cast<int>(label1.partial_path.size());
-  const int s2 = static_cast<int>(label2.partial_path.size());
-  if (s1 != s2)
+  if (label1.partial_path != label2.partial_path)
     return false;
-  const int s = std::min(s1, s2);
-  for (int i = 0; i < s; ++i) {
-    if (label1.partial_path[i] != label2.partial_path[i])
-      return false;
-  }
-  // Check every resource for inequality
-  for (int i = 0; i < static_cast<int>(label1.resource_consumption.size());
-       i++) {
+  /// Check every resource for inequality
+  for (int i = 0; i < label1.resource_consumption.size(); i++) {
     if (label1.resource_consumption[i] != label2.resource_consumption[i]) {
       return false;
     }
@@ -318,9 +277,6 @@ std::ostream& operator<<(std::ostream& os, const Label& label) {
     os << r << ",";
   os << "], partial_path=[";
   for (const auto& n : label.partial_path)
-    os << n.user_id << ",";
-  os << "], unreachable_nodes=[";
-  for (const auto& n : label.unreachable_nodes)
     os << n << ",";
   os << "])\n";
   return os;
@@ -336,6 +292,9 @@ bool runDominanceEff(
     const bidirectional::Directions& direction,
     const bool&                      elementary) {
   bool dominated = false;
+  // Position to insert label.
+  int position_idx = static_cast<int>(efficient_labels_ptr->size());
+  std::vector<Label>::iterator position;
   for (auto it = efficient_labels_ptr->begin();
        it != efficient_labels_ptr->end();) {
     bool         deleted = false;
@@ -351,8 +310,20 @@ bool runDominanceEff(
         break;
       }
     }
+
+    const int& idx = it - efficient_labels_ptr->begin();
+    if (label.weight < label2.weight && idx < position_idx) {
+      position     = it;
+      position_idx = idx;
+    }
     if (!deleted)
       ++it;
+  }
+  if (!dominated) {
+    if (position_idx < static_cast<int>(efficient_labels_ptr->size()))
+      efficient_labels_ptr->insert(position, label);
+    else
+      efficient_labels_ptr->push_back(label);
   }
   return dominated;
 }
@@ -377,7 +348,7 @@ Label processBwdLabel(
     const std::vector<double>& cumulative_resource,
     const bool&                invert_min_res) {
   // Invert path
-  std::vector<bidirectional::Vertex> new_path = label.partial_path;
+  std::vector<int> new_path = label.partial_path;
   std::reverse(new_path.begin(), new_path.end());
   // Init resources
   std::vector<double> new_resources(label.resource_consumption);
@@ -395,12 +366,7 @@ Label processBwdLabel(
         std::plus<double>());
   }
   return Label(
-      label.weight,
-      label.vertex,
-      new_resources,
-      new_path,
-      label.unreachable_nodes_size,
-      label.params_ptr);
+      label.weight, label.vertex, new_resources, new_path, label.params_ptr);
 }
 
 double getPhiValue(
@@ -442,7 +408,7 @@ bool mergePreCheck(
   if (fwd_label.vertex.lemon_id == -1 || bwd_label.vertex.lemon_id == -1)
     return false;
   if (fwd_label.params_ptr->elementary) {
-    std::vector<bidirectional::Vertex> path_copy = fwd_label.partial_path;
+    std::vector<int> path_copy = fwd_label.partial_path;
     path_copy.insert(
         path_copy.end(),
         bwd_label.partial_path.begin(),
@@ -509,21 +475,14 @@ Label mergeLabels(
   const double& weight =
       fwd_label.weight + adj_vertex.weight + bwd_label_ptr->weight;
   // Process final path
-  std::vector<bidirectional::Vertex> final_path = fwd_label.partial_path;
+  std::vector<int> final_path = fwd_label.partial_path;
   final_path.insert(
       final_path.end(),
-      bwd_label_ptr->partial_path.cbegin(),
-      bwd_label_ptr->partial_path.cend());
+      bwd_label_ptr->partial_path.begin(),
+      bwd_label_ptr->partial_path.end());
   // Get phi value
   const double& phi = getPhiValue(fwd_label, bwd_label, max_res);
-  return Label(
-      weight,
-      sink,
-      final_res,
-      final_path,
-      fwd_label.unreachable_nodes_size,
-      params_ptr,
-      phi);
+  return Label(weight, sink, final_res, final_path, params_ptr, phi);
 }
 
 } // namespace labelling

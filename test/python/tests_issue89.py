@@ -64,29 +64,12 @@ class TestsIssue89(TestingBase):
                             self.min_res,
                             elementary=True,
                             direction="forward")
-
-        alg.run()
-        self.check_result(alg, self.result_path, self.total_cost,
-                          self.consumed_resources)
-
-    def test_forward(self):
-        alg = BiDirectional(self.H,
-                            self.max_res,
-                            self.min_res,
-                            direction="forward")
-
         alg.run()
         self.check_result(alg, self.result_path, self.total_cost,
                           self.consumed_resources)
 
     def test_both_elementary(self):
         alg = BiDirectional(self.H, self.max_res, self.min_res, elementary=True)
-        alg.run()
-        self.check_result(alg, self.result_path, self.total_cost,
-                          self.consumed_resources)
-
-    def test_both(self):
-        alg = BiDirectional(self.H, self.max_res, self.min_res)
         alg.run()
         self.check_result(alg, self.result_path, self.total_cost,
                           self.consumed_resources)
@@ -101,26 +84,11 @@ class TestsIssue89(TestingBase):
         self.check_result(alg, self.result_path, self.total_cost,
                           self.consumed_resources)
 
-    def test_H2_forward(self):
-        alg = BiDirectional(self.H2,
-                            self.max_res,
-                            self.min_res,
-                            direction="forward")
-        alg.run()
-        self.check_result(alg, self.result_path, self.total_cost,
-                          self.consumed_resources)
-
     def test_H2_both_elementary(self):
         alg = BiDirectional(self.H2,
                             self.max_res,
                             self.min_res,
                             elementary=True)
-        alg.run()
-        self.check_result(alg, self.result_path, self.total_cost,
-                          self.consumed_resources)
-
-    def test_H2_both(self):
-        alg = BiDirectional(self.H2, self.max_res, self.min_res)
         alg.run()
         self.check_result(alg, self.result_path, self.total_cost,
                           self.consumed_resources)
