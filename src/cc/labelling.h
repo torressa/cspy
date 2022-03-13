@@ -137,6 +137,10 @@ class Label {
    * @param[in] sink_id, int with user_id of the sink node.
    */
   bool checkStPath(const int& source_id, const int& sink_id) const;
+
+  /// Returns true is the partial path extension is OK.
+  bool checkPathExtension(const int& user_id) const;
+
   /// set phi attribute for merged labels from Righini and Salani (2006)
   void setPhi(const double& phi_in) { phi = phi_in; }
 

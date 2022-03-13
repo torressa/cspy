@@ -155,6 +155,10 @@ bool Label::checkStPath(const int& source_id, const int& sink_id) const {
   return false;
 }
 
+bool Label::checkPathExtension(const int& user_id) const {
+  return (partial_path.end()[-2] != user_id && partial_path.back() != user_id);
+}
+
 bool Label::checkDominance(
     const Label&                     other,
     const bidirectional::Directions& direction) const {
@@ -292,9 +296,6 @@ bool runDominanceEff(
     const bidirectional::Directions& direction,
     const bool&                      elementary) {
   bool dominated = false;
-  // Position to insert label.
-  int position_idx = static_cast<int>(efficient_labels_ptr->size());
-  std::vector<Label>::iterator position;
   for (auto it = efficient_labels_ptr->begin();
        it != efficient_labels_ptr->end();) {
     bool         deleted = false;
@@ -311,19 +312,8 @@ bool runDominanceEff(
       }
     }
 
-    const int& idx = it - efficient_labels_ptr->begin();
-    if (label.weight < label2.weight && idx < position_idx) {
-      position     = it;
-      position_idx = idx;
-    }
     if (!deleted)
       ++it;
-  }
-  if (!dominated) {
-    if (position_idx < static_cast<int>(efficient_labels_ptr->size()))
-      efficient_labels_ptr->insert(position, label);
-    else
-      efficient_labels_ptr->push_back(label);
   }
   return dominated;
 }
@@ -407,18 +397,28 @@ bool mergePreCheck(
   bool result = true;
   if (fwd_label.vertex.lemon_id == -1 || bwd_label.vertex.lemon_id == -1)
     return false;
+
+  // Merge paths
+  std::vector<int> path     = fwd_label.partial_path;
+  std::vector<int> path_bwd = bwd_label.partial_path;
+
+  std::reverse(path_bwd.begin(), path_bwd.end());
+  path.insert(path.end(), path_bwd.begin(), path_bwd.end());
+
   if (fwd_label.params_ptr->elementary) {
-    std::vector<int> path_copy = fwd_label.partial_path;
-    path_copy.insert(
-        path_copy.end(),
-        bwd_label.partial_path.begin(),
-        bwd_label.partial_path.end());
-    std::sort(path_copy.begin(), path_copy.end());
+    std::sort(path.begin(), path.end());
     const bool& contains_duplicates =
-        std::adjacent_find(path_copy.begin(), path_copy.end()) !=
-        path_copy.end();
+        std::adjacent_find(path.begin(), path.end()) != path.end();
     result = !contains_duplicates;
   }
+
+  // Check for 2-cycles.
+  const int size = static_cast<int>(path.size());
+  for (int i = 1; i < size - 1; ++i) {
+    if (path[i - 1] == path[i + 1] || path[i - 1] == path[i])
+      return false;
+  }
+
   return result;
 }
 
@@ -474,7 +474,8 @@ Label mergeLabels(
   // process final weight
   const double& weight =
       fwd_label.weight + adj_vertex.weight + bwd_label_ptr->weight;
-  // Process final path
+
+  // Merge paths
   std::vector<int> final_path = fwd_label.partial_path;
   final_path.insert(
       final_path.end(),

@@ -58,9 +58,9 @@ void DiGraph::addEdge(
   if (weight < 0)
     negative_cost_cycle_present = UNKNOWN;
   all_resources_positive = std::all_of(
-      resource_consumption.cbegin(), resource_consumption.cend(), [](bool v) {
-        return v >= 0;
-      });
+      resource_consumption.cbegin(),
+      resource_consumption.cend(),
+      [](const double& v) { return (v >= 0); });
 }
 
 AdjVertex DiGraph::getAdjVertex(const LemonArc& arc, const bool& forward)

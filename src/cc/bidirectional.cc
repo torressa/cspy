@@ -420,17 +420,22 @@ void BiDirectional::extendSingleLabel(
     const AdjVertex&  adj_vertex) {
   if ( // Always extend when non-elementary
       !params_ptr_->elementary ||
-      // When elementary, check if vertex already seen / unreachable
+      // When elementary, check if vertex already seen / unreachable and if the
+      // next node is suitable (2-cycles are not allowed!)
       (params_ptr_->elementary &&
        label->unreachable_nodes.find(adj_vertex.vertex.user_id) ==
            label->unreachable_nodes.end())) {
-    // extend current label along edge
-    labelling::Label new_label =
-        label->extend(adj_vertex, direction, max_res_curr_, min_res_curr_);
+    if (label->partial_path.size() <= 1 ||
+        (label->partial_path.size() > 1 &&
+         label->checkPathExtension(adj_vertex.vertex.user_id))) {
+      // extend current label along edge
+      labelling::Label new_label =
+          label->extend(adj_vertex, direction, max_res_curr_, min_res_curr_);
 
-    // If label non-empty, (only when the extension is resource-feasible)
-    if (new_label.vertex.lemon_id != -1) {
-      updateEfficientLabels(direction, new_label);
+      // If label non-empty, (only when the extension is resource-feasible)
+      if (new_label.vertex.lemon_id != -1) {
+        updateEfficientLabels(direction, new_label);
+      }
     }
   }
 }
@@ -461,7 +466,7 @@ void BiDirectional::updateEfficientLabels(
             params_ptr_->elementary);
         if (!dominated && !checkPrimalBound(direction, candidate_label)) {
           // add candidate_label to efficient_labels and unprocessed heap
-          // search_ptr->pushEfficientLabel(lemon_id, candidate_label);
+          search_ptr->pushEfficientLabel(lemon_id, candidate_label);
           search_ptr->pushUnprocessedLabel(candidate_label);
         }
       } else {
@@ -708,13 +713,13 @@ void BiDirectional::joinLabels() {
                   }
                   // Add merged label to list
                   merged_labels_.push_back(merged_label);
-                } else
-                  break;
+                } // else
+                  // break;
               }
             }
           }
-        } else
-          break;
+        } // else
+          // break;
       }
     }
   }

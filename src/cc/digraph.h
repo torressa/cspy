@@ -151,7 +151,7 @@ class DiGraph {
   }
 
   /**
-   * Extract lemon id for a given node
+   * Get the adjacent vertex.
    *
    * @param[in] arc, lemon::SmartDigraph::Arc.
    * @param[in] forward, bool. Whether arc is checked forward or not (backward).

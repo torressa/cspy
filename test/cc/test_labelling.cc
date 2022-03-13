@@ -182,6 +182,7 @@ TEST_F(TestLabelling, testRunDominanceForward) {
   // Insert labels
   labels->push_back(label2);
   labels->push_back(label1);
+  labels->push_back(label3);
 
   runDominanceEff(labels.get(), label3, bidirectional::FWD, false);
   ASSERT_EQ(labels->size(), 1);
@@ -199,6 +200,7 @@ TEST_F(TestLabelling, testRunDominanceBackward) {
 
   labels->push_back(label1);
   labels->push_back(label2);
+  labels->push_back(label3);
 
   runDominanceEff(labels.get(), label3, bidirectional::BWD, false);
   ASSERT_EQ(labels->size(), 1);
