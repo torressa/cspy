@@ -105,13 +105,13 @@ option(BUILD_CXX "Build C++ library" ON)
 option(BUILD_PYTHON "Build Python Library" OFF)
 option(BUILD_DOTNET "Build Dotnet Library" OFF)
 set(LOG_LEVEL
-    "OFF"
+    "DEBUG"
     CACHE
       STRING
       "Choose the logging level, options are: OFF (default), INFO, DEBUG, TRACE."
-      FORCE)
+)
 
-message(STATUS "Build C++ library: ${BUILD_CXX}")
+message(STATUS "Build C++ library: ${BUILD_CXX}, LOG_LEVEL= ${LOG_LEVEL}")
 message(STATUS "Build Python: ${BUILD_PYTHON}")
 message(STATUS "Build Dotnet: ${BUILD_DOTNET}")
 

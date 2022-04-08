@@ -243,6 +243,21 @@ bool Label::fullDominance(
   return result;
 }
 
+std::string Label::getString() const {
+  std::string s = "";
+  if (partial_path.size() > 0) {
+    s += "Label(node=" + std::to_string(vertex.user_id);
+    s += ", weight= " + std::to_string(weight) + ", res[";
+    for (const auto& r : resource_consumption)
+      s += std::to_string(r) + ",";
+    s += "], partial_path=[";
+    for (const auto& n : partial_path)
+      s += std::to_string(n) + ",";
+    s += "])";
+  }
+  return s;
+}
+
 /* Operator Overloads */
 
 bool operator==(const Label& label1, const Label& label2) {
@@ -274,16 +289,7 @@ bool operator>(const Label& label1, const Label& label2) {
 }
 
 std::ostream& operator<<(std::ostream& os, const Label& label) {
-  const int& c_res = label.params_ptr->critical_res;
-  os << "Label(node=" << label.vertex.user_id << ", weight= " << label.weight
-     << ", res[";
-  for (const auto& r : label.resource_consumption)
-    os << r << ",";
-  os << "], partial_path=[";
-  for (const auto& n : label.partial_path)
-    os << n << ",";
-  os << "])\n";
-  return os;
+  os << label.getString();
 }
 
 /**
@@ -304,6 +310,9 @@ bool runDominanceEff(
       // check if label dominates label2
       if (label.checkDominance(label2, direction)) {
         // Delete label2
+        SPDLOG_DEBUG(
+            "[runDominanceEff]: Label {} is dominated by candidate.",
+            label2.getString());
         it      = efficient_labels_ptr->erase(it);
         deleted = true;
       } else if (label2.checkDominance(label, direction)) {

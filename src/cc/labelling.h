@@ -5,8 +5,12 @@
 #include <set>
 #include <vector>
 
+#include "src/cc/config.h"  // log-level
 #include "src/cc/digraph.h" // AdjVertex
 #include "src/cc/params.h"  // Directions, Params
+                            //
+// logging
+#include "spdlog/spdlog.h" // after config.h as
 
 namespace labelling {
 
@@ -144,6 +148,7 @@ class Label {
   /// set phi attribute for merged labels from Righini and Salani (2006)
   void setPhi(const double& phi_in) { phi = phi_in; }
 
+  std::string getString() const;
   // operator overloads
   Label&               operator=(const Label& other) = default;
   friend bool          operator<(const Label& label1, const Label& label2);
