@@ -1,13 +1,12 @@
 # Wrapper for BiDirectionalCpp
 from typing import List, Optional, Tuple, Union
 
-from networkx import (DiGraph, convert_node_labels_to_integers,
-                      get_node_attributes)
+from networkx import DiGraph, convert_node_labels_to_integers, get_node_attributes
 from cspy.preprocessing import preprocess_graph
 from cspy.checking import check
 
 # Import from the SWIG output file
-from .pyBiDirectionalCpp import (BiDirectionalCpp, REFCallback, DoubleVector)
+from .pyBiDirectionalCpp import BiDirectionalCpp, REFCallback, DoubleVector
 
 
 class BiDirectional:
@@ -91,27 +90,29 @@ class BiDirectional:
     """
 
     def __init__(
-            self,
-            G: DiGraph,
-            max_res: List[float],
-            min_res: List[float],
-            preprocess: Optional[bool] = False,
-            direction: Optional[str] = "both",
-            method: Optional[str] = "unprocessed",
-            time_limit: Optional[Union[float, int]] = None,
-            threshold: Optional[float] = None,
-            elementary: Optional[bool] = False,
-            bounds_pruning: Optional[bool] = False,
-            find_critical_res: Optional[bool] = False,
-            critical_res: Optional[int] = None,
-            # seed: Union[int] = None,
-            REF_callback: Optional[REFCallback] = None):
+        self,
+        G: DiGraph,
+        max_res: List[float],
+        min_res: List[float],
+        preprocess: Optional[bool] = False,
+        direction: Optional[str] = "both",
+        method: Optional[str] = "unprocessed",
+        time_limit: Optional[Union[float, int]] = None,
+        threshold: Optional[float] = None,
+        elementary: Optional[bool] = False,
+        bounds_pruning: Optional[bool] = False,
+        find_critical_res: Optional[bool] = False,
+        critical_res: Optional[int] = None,
+        # seed: Union[int] = None,
+        REF_callback: Optional[REFCallback] = None,
+    ):
         # Check inputs
         check(G, max_res, min_res, direction, REF_callback, __name__)
         # check_seed(seed, __name__)
         # Preprocess and save graph
-        self.G: DiGraph = preprocess_graph(G, max_res, min_res, preprocess,
-                                           REF_callback)
+        self.G: DiGraph = preprocess_graph(
+            G, max_res, min_res, preprocess, REF_callback
+        )
         # Dictionary with graph label -> original label
         self._original_node_labels = None
         # Vertex id with source/sink
@@ -123,11 +124,14 @@ class BiDirectional:
 
         # Pass graph
         self._init_graph()
-        self.bidirectional_cpp = BiDirectionalCpp(len(self.G.nodes()),
-                                                  len(self.G.edges()),
-                                                  self._source_id,
-                                                  self._sink_id, max_res_vector,
-                                                  min_res_vector)
+        self.bidirectional_cpp = BiDirectionalCpp(
+            len(self.G.nodes()),
+            len(self.G.edges()),
+            self._source_id,
+            self._sink_id,
+            max_res_vector,
+            min_res_vector,
+        )
         self._load_graph()
         # pass solving attributes
         if direction != "both":
@@ -136,7 +140,7 @@ class BiDirectional:
             self.bidirectional_cpp.setMethod(method)
         if time_limit is not None and isinstance(time_limit, (int, float)):
             self.bidirectional_cpp.setTimeLimit(time_limit)
-        if threshold is not None and isinstance(time_limit, (int, float)):
+        if threshold is not None and isinstance(threshold, (int, float)):
             self.bidirectional_cpp.setThreshold(threshold)
         if isinstance(elementary, bool) and elementary:
             self.bidirectional_cpp.setElementary(True)
@@ -155,17 +159,16 @@ class BiDirectional:
         #     self.bidirectional_cpp.setSeed(seed)
 
     def run(self):
-        'Run the algorithm in series'
+        "Run the algorithm in series"
         self.bidirectional_cpp.run()
 
     def run_parallel(self):
-        'Run the algorithm in parallel'
+        "Run the algorithm in parallel"
         raise NotImplementedError("Coming soon")
 
     @property
     def path(self):
-        """Get list with nodes in calculated path.
-        """
+        """Get list with nodes in calculated path."""
         path = self.bidirectional_cpp.getPath()
         # format as list on return as SWIG returns "tuple"
         if len(path) <= 0:
@@ -174,18 +177,16 @@ class BiDirectional:
 
     @property
     def total_cost(self):
-        """Get accumulated cost along the path.
-        """
+        """Get accumulated cost along the path."""
         path = self.bidirectional_cpp.getPath()
         return self.bidirectional_cpp.getTotalCost() if len(path) > 0 else None
 
     @property
     def consumed_resources(self):
-        """Get accumulated resources consumed along the path.
-        """
+        """Get accumulated resources consumed along the path."""
         path = self.bidirectional_cpp.getPath()
         res = self.bidirectional_cpp.getConsumedResources()
-        if (len(path) > 0 and len(res) > 0):
+        if len(path) > 0 and len(res) > 0:
             return list(res)
         else:
             return None
@@ -201,9 +202,9 @@ class BiDirectional:
         # Convert node label to integers and saves original labels in
         # new node attribute "original_label"
         self.G = convert_node_labels_to_integers(
-            self.G, label_attribute="original_label")
-        self._original_node_labels = get_node_attributes(
-            self.G, "original_label")
+            self.G, label_attribute="original_label"
+        )
+        self._original_node_labels = get_node_attributes(self.G, "original_label")
         # Save source and sink node ids (integers)
         self._source_id = self._get_original_node_label("Source")
         self._sink_id = self._get_original_node_label("Sink")
@@ -214,8 +215,9 @@ class BiDirectional:
         # Load each edge independently
         for edge in self.G.edges(data=True):
             res_cost = _list_to_double_vector(edge[2]["res_cost"])
-            self.bidirectional_cpp.addEdge(edge[0], edge[1], edge[2]["weight"],
-                                           res_cost)
+            self.bidirectional_cpp.addEdge(
+                edge[0], edge[1], edge[2]["weight"], res_cost
+            )
 
     def _get_original_node_label(self, node_label):
         matching_labels = [
