@@ -14,7 +14,7 @@ class TestLabelling : public ::testing::Test {
   bidirectional::Vertex                  node       = {1, 1}; // B
   bidirectional::Vertex                  other_node = {2, 2}; // C
   std::vector<double>                    res        = {6.0, 5.0};
-  std::vector<int>                       path       = {0};
+  std::vector<int>                       path       = {1};
   std::vector<double>                    max_res    = {20.0, 20.0};
   std::vector<double>                    min_res    = {0.0, 0.0};
   std::unique_ptr<bidirectional::Params> params_ptr =
@@ -46,11 +46,11 @@ TEST_F(TestLabelling, testDominanceElementary) {
 
   // L2 dominates (due to resources)
   ASSERT_FALSE(label.checkDominance(label2, bidirectional::FWD));
-  ASSERT_TRUE(label2.checkDominance(label, bidirectional::FWD));
+  ASSERT_FALSE(label2.checkDominance(label, bidirectional::FWD));
 
   // Make U2 \subset U1
   label2.unreachable_nodes = std::set<int>({1, 2});
-  // L2 still dominates L1 now as U2 \subset U1
+  // L2 now dominates L1 now as U2 \subset U1
   ASSERT_FALSE(label.checkDominance(label2, bidirectional::FWD));
   ASSERT_TRUE(label2.checkDominance(label, bidirectional::FWD));
 
@@ -68,6 +68,21 @@ TEST_F(TestLabelling, testDominanceElementary) {
   ASSERT_TRUE(label2.checkDominance(label, bidirectional::FWD));
 }
 
+TEST_F(TestLabelling, testDominanceElementaryIssue94) {
+  params_ptr->elementary = true;
+  // L1
+  std::vector<int> path1{0, 2, 3};
+  Label            label(6.0, node, {2.0}, path1, params_ptr.get());
+  label.unreachable_nodes = std::set<int>({0, 2, 3});
+  // L2
+  std::vector<int> path2{0, 1, 3};
+  Label            label2(11.0, node, {2.0}, path2, params_ptr.get());
+  label2.unreachable_nodes = std::set<int>({0, 1, 3});
+
+  ASSERT_FALSE(label2.checkDominance(label, bidirectional::FWD));
+  ASSERT_FALSE(label.checkDominance(label2, bidirectional::FWD));
+}
+
 TEST_F(TestLabelling, testThreshold) {
   const Label  label(weight, node, res, path, params_ptr.get());
   const double threshold1 = 11.0;
@@ -78,8 +93,9 @@ TEST_F(TestLabelling, testThreshold) {
 }
 
 TEST_F(TestLabelling, testStPath) {
-  const Label      label(weight, node, res, path, params_ptr.get());
-  std::vector<int> path2 = {0, 10};
+  const Label label(weight, node, res, path, params_ptr.get());
+
+  std::vector<int> path2{0, 10};
   const Label      label2(weight, node, res, path2, params_ptr.get());
 
   ASSERT_FALSE(label.checkStPath(0, 10));
@@ -163,16 +179,14 @@ TEST_F(TestLabelling, testRunDominanceForward) {
 
   auto labels = std::make_unique<std::vector<Label>>();
 
-  std::make_heap(labels->begin(), labels->end(), std::greater<>{});
-
   // Insert labels
-  labels->push_back(label1);
   labels->push_back(label2);
-  std::push_heap(labels->begin(), labels->end(), std::greater<>{});
+  labels->push_back(label1);
+  labels->push_back(label3);
 
-  ASSERT_EQ(labels->size(), 2);
   runDominanceEff(labels.get(), label3, bidirectional::FWD, false);
-  ASSERT_EQ(labels->size(), 0);
+  ASSERT_EQ(labels->size(), 1);
+  ASSERT_EQ((*labels)[0], label3);
 }
 
 TEST_F(TestLabelling, testRunDominanceBackward) {
@@ -184,14 +198,13 @@ TEST_F(TestLabelling, testRunDominanceBackward) {
 
   auto labels = std::make_unique<std::vector<Label>>();
 
-  std::make_heap(labels->begin(), labels->end());
   labels->push_back(label1);
   labels->push_back(label2);
-  std::push_heap(labels->begin(), labels->end());
+  labels->push_back(label3);
 
-  ASSERT_EQ(labels->size(), 2);
   runDominanceEff(labels.get(), label3, bidirectional::BWD, false);
-  ASSERT_EQ(labels->size(), 0);
+  ASSERT_EQ(labels->size(), 1);
+  ASSERT_EQ((*labels)[0], label3);
 }
 
 } // namespace labelling

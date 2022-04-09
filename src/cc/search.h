@@ -1,5 +1,5 @@
-#ifndef BIDIRECTIONAL_SEARCH_H__
-#define BIDIRECTIONAL_SEARCH_H__
+#ifndef SRC_CC_SEARCH_H__
+#define SRC_CC_SEARCH_H__
 
 #include <memory> // unique_ptr
 #include <set>
@@ -105,4 +105,4 @@ class Search {
 
 } // namespace bidirectional
 
-#endif // BIDIRECTIONAL_SEARCH_H__
+#endif // SRC_CC_SEARCH_H__

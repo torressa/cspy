@@ -1,9 +1,9 @@
-#include "bidirectional.h"
+#include "src/cc/bidirectional.h"
 
 #include <algorithm> // sort, all_of, find
 #include <limits>    // numeric_limits
 
-#include "preprocessing.h" // lowerBoundWeight, getCriticalRes
+#include "src/cc/preprocessing.h" // lowerBoundWeight, getCriticalRes
 
 namespace bidirectional {
 
@@ -26,7 +26,17 @@ BiDirectional::BiDirectional(
           source_id,
           sink_id)),
       fwd_search_ptr_(std::make_unique<bidirectional::Search>(FWD)),
-      bwd_search_ptr_(std::make_unique<bidirectional::Search>(BWD)) {}
+      bwd_search_ptr_(std::make_unique<bidirectional::Search>(BWD)) {
+#if SPDLOG_ACTIVE_LEVEL == SPDLOG_LEVEL_DEBUG
+  // Needed as not printed otherwise
+  spdlog::set_level(spdlog::level::debug);
+#endif
+  spdlog::default_logger()->set_pattern("%v");
+  SPDLOG_INFO(
+      "************************************************************************"
+      "********");
+  // spdlog::set_pattern("%+"); // back to default format
+}
 
 std::vector<int> BiDirectional::getPath() const {
   return best_label_->partial_path;
@@ -51,16 +61,18 @@ void BiDirectional::checkCriticalRes() const {
       min_r    = r;
     }
   }
-  if (min_r != params_ptr_->critical_res) {
-    std::cout << "Critical resource " << params_ptr_->critical_res
-              << " does not match final tighest res " << min_r << "\n";
-  }
+  if (min_r != params_ptr_->critical_res)
+    SPDLOG_INFO(
+        "Critical resource {} does not match final tighest {}",
+        params_ptr_->critical_res,
+        min_r);
 }
 
 void BiDirectional::run() {
   start_time_ = std::chrono::system_clock::now();
   init();
 
+  SPDLOG_INFO("\t Time (s) \t | \t Solution");
   while (fwd_search_ptr_->stop == false || bwd_search_ptr_->stop == false) {
     const Directions& direction = getDirection();
     if (direction != NODIR) {
@@ -82,9 +94,28 @@ void BiDirectional::run() {
 void BiDirectional::runPreprocessing() {
   if (params_ptr_->direction == BOTH && params_ptr_->find_critical_res) {
     const int c = getCriticalRes(max_res, *graph_ptr_);
+    SPDLOG_INFO("Set critical resource to index {}", c);
     setCriticalRes(c);
   }
+  // No need to use elementary if no negative cost cycle is found, all
+  // reasources have positive values, a callback is not registered and minimum
+  // resources are not present.
+  detectNegativeCostCycle(graph_ptr_.get());
+  if (graph_ptr_->negative_cost_cycle_present == FALSE &&
+      graph_ptr_->all_resources_positive &&
+      params_ptr_->ref_callback == nullptr &&
+      std::all_of(
+          min_res.cbegin(), min_res.cend(), [](bool v) { return v == 0; })) {
+    if (params_ptr_->elementary) {
+      SPDLOG_INFO(
+          "No negative cost cycle found and elementary set to true. Forcing to "
+          "false");
+      setElementary(false);
+    }
+  }
+
   if (params_ptr_->bounds_pruning) {
+    SPDLOG_INFO("Setting lower bounds.");
     if (params_ptr_->direction == BOTH || params_ptr_->direction == FWD) {
       lowerBoundWeight(
           fwd_search_ptr_->lower_bound_weight.get(), *graph_ptr_, true);
@@ -98,7 +129,7 @@ void BiDirectional::runPreprocessing() {
 
 void BiDirectional::init() {
   // Initialise labels
-  labelling::Label label(0.0, {-1, -1}, {}, {}, params_ptr_.get());
+  labelling::Label label;
   best_label_ = std::make_shared<labelling::Label>(label);
   // Initialise resource bounds
   initResourceBounds();
@@ -138,7 +169,8 @@ void BiDirectional::initLabels(const Directions& direction) {
   Vertex              vertex;
   std::vector<double> res(min_res.size(), 0.0);
   std::vector<int>    path;
-  Search*             search_ptr = getSearchPtr(direction);
+  Search*             search_ptr       = getSearchPtr(direction);
+  const int           size_unreachable = graph_ptr_->number_vertices + 1;
 
   if (direction == FWD) {
     vertex = graph_ptr_->source;
@@ -246,6 +278,9 @@ void BiDirectional::move(const Directions& direction) {
 }
 
 bool BiDirectional::terminate(const Directions& direction) {
+  // TODO: check if label exists in opposite direction, check if they can be
+  // merged and check if resulting label qualifies here
+  // if direction_in == BOTH && efficient_labels[opposite_dir].
   Search* search_ptr = getSearchPtr(direction);
   return terminate(direction, *search_ptr->intermediate_label);
 }
@@ -254,9 +289,7 @@ bool BiDirectional::terminate(
     const Directions&       direction,
     const labelling::Label& label) {
   // Check time elapsed (if relevant)
-  std::chrono::duration<double> duration =
-      (std::chrono::system_clock::now() - start_time_);
-  double timediff_sec = duration.count();
+  const double& timediff_sec = getElapsedTime();
   if (!std::isnan(params_ptr_->time_limit) &&
       timediff_sec >= params_ptr_->time_limit) {
     return true;
@@ -274,6 +307,7 @@ void BiDirectional::updateCurrentLabel(const Directions& direction) {
     search_ptr->replaceCurrentLabel(new_label);
     // Update unprocessed label counter
     search_ptr->unprocessed_count = search_ptr->unprocessed_labels->size();
+    SPDLOG_DEBUG("{} left in {}", search_ptr->unprocessed_count, direction);
   } else {
     search_ptr->stop = true;
   }
@@ -365,6 +399,7 @@ void BiDirectional::extendCurrentLabel(const Directions& direction) {
   // Extend and check current resource feasibility for each edge
   Search*                            search_ptr    = getSearchPtr(direction);
   std::shared_ptr<labelling::Label>& current_label = search_ptr->current_label;
+  SPDLOG_DEBUG("Extending: {}", current_label->getString());
   if (direction == FWD) {
     // For each outgoing arc from the current label
     for (LemonGraph::OutArcIt a(
@@ -373,6 +408,10 @@ void BiDirectional::extendCurrentLabel(const Directions& direction) {
          a != lemon::INVALID;
          ++a) {
       const AdjVertex& adj_v = graph_ptr_->getAdjVertex(a, true);
+      SPDLOG_DEBUG(
+          "\t Along: {}->{}",
+          current_label->vertex.user_id,
+          adj_v.vertex.user_id);
       extendSingleLabel(current_label.get(), direction, adj_v);
     }
   } else {
@@ -383,6 +422,10 @@ void BiDirectional::extendCurrentLabel(const Directions& direction) {
          a != lemon::INVALID;
          ++a) {
       const AdjVertex& adj_v = graph_ptr_->getAdjVertex(a, false);
+      SPDLOG_DEBUG(
+          "\t Along: {}->{}",
+          current_label->vertex.user_id,
+          adj_v.vertex.user_id);
       extendSingleLabel(current_label.get(), direction, adj_v);
     }
   }
@@ -392,17 +435,27 @@ void BiDirectional::extendSingleLabel(
     labelling::Label* label,
     const Directions& direction,
     const AdjVertex&  adj_vertex) {
-  if ((params_ptr_->elementary &&
+  if ( // Always extend when non-elementary
+      !params_ptr_->elementary ||
+      // When elementary, check if vertex already seen / unreachable and if the
+      // next node is suitable (2-cycles are not allowed!)
+      (params_ptr_->elementary &&
        label->unreachable_nodes.find(adj_vertex.vertex.user_id) ==
-           label->unreachable_nodes.cend()) ||
-      !params_ptr_->elementary) {
-    // extend current label along edge
-    labelling::Label new_label =
-        label->extend(adj_vertex, direction, max_res_curr_, min_res_curr_);
+           label->unreachable_nodes.end())) {
+    if (label->partial_path.size() <= 1 ||
+        (label->partial_path.size() > 1 &&
+         label->checkPathExtension(adj_vertex.vertex.user_id))) {
+      // extend current label along edge
+      labelling::Label new_label =
+          label->extend(adj_vertex, direction, max_res_curr_, min_res_curr_);
 
-    // If label non-empty, (only when the extension is resource-feasible)
-    if (new_label.vertex.lemon_id != -1) {
-      updateEfficientLabels(direction, new_label);
+      // If label non-empty, (only when the extension is resource-feasible)
+      if (new_label.vertex.lemon_id != -1) {
+        SPDLOG_DEBUG("\t Found new label: {}", new_label.getString());
+        updateEfficientLabels(direction, new_label);
+      } else {
+        SPDLOG_DEBUG("\t Extension infeasible");
+      }
     }
   }
 }
@@ -417,36 +470,37 @@ void BiDirectional::updateEfficientLabels(
   std::vector<labelling::Label>& efficient_labels_vertex =
       search_ptr->efficient_labels[lemon_id];
 
-  if (candidate_label.vertex.lemon_id != -1) {
-    if (std::find(
-            efficient_labels_vertex.begin(),
-            efficient_labels_vertex.end(),
-            candidate_label) == efficient_labels_vertex.end()) {
-      ++search_ptr->generated_count;
-      // If there already exists labels for the given vertex
-      if (efficient_labels_vertex.size() > 1) {
-        // check if new_label is dominated by any other comparable label
-        const bool dominated = runDominanceEff(
-            &efficient_labels_vertex,
-            candidate_label,
-            direction,
-            params_ptr_->elementary);
-        if (!dominated && !checkPrimalBound(direction, candidate_label)) {
-          // add candidate_label to efficient_labels and unprocessed heap
-          search_ptr->pushEfficientLabel(lemon_id, candidate_label);
-          search_ptr->pushUnprocessedLabel(candidate_label);
-        }
-      }
-      // First label produced for the vertex
-      else {
-        // update both efficient and unprocessed labels
+  if (std::find(
+          efficient_labels_vertex.begin(),
+          efficient_labels_vertex.end(),
+          candidate_label) == efficient_labels_vertex.end()) {
+    ++search_ptr->generated_count;
+    // If there already exists labels for the given vertex
+    if (efficient_labels_vertex.size() > 1) {
+      // check if new_label is dominated by any other comparable label
+      const bool dominated = runDominanceEff(
+          &efficient_labels_vertex,
+          candidate_label,
+          direction,
+          params_ptr_->elementary);
+      if (!dominated && !checkPrimalBound(direction, candidate_label)) {
+        // add candidate_label to efficient_labels and unprocessed heap
         search_ptr->pushEfficientLabel(lemon_id, candidate_label);
         search_ptr->pushUnprocessedLabel(candidate_label);
+        SPDLOG_DEBUG("\t Added to the queue.");
+      } else {
+        SPDLOG_DEBUG("\t Label dominated.");
       }
-      updateBestLabels(direction, candidate_label);
-      // Update vertices visited
-      search_ptr->addVisitedVertex(lemon_id);
+    } else {
+      // First label produced for the vertex
+      // update both efficient and unprocessed labels
+      search_ptr->pushEfficientLabel(lemon_id, candidate_label);
+      search_ptr->pushUnprocessedLabel(candidate_label);
+      SPDLOG_DEBUG("\t Added to the queue (no other label at this vertex).");
     }
+    updateBestLabels(direction, candidate_label);
+    // Update vertices visited
+    search_ptr->addVisitedVertex(lemon_id);
   }
 }
 
@@ -459,12 +513,17 @@ void BiDirectional::updateBestLabels(
   std::vector<std::shared_ptr<labelling::Label>>& best_labels =
       search_ptr->best_labels;
 
+  bool stop = false;
   if (direction == FWD && lemon_id == graph_ptr_->sink.lemon_id &&
       !candidate_label.checkFeasibility(max_res, min_res)) {
-    return;
+    stop = true;
   } else if (
       direction == BWD && lemon_id == graph_ptr_->source.lemon_id &&
       !candidate_label.checkFeasibility(max_res, min_res)) {
+    stop = true;
+  }
+  if (stop) {
+    SPDLOG_DEBUG("\t Label not globally feasible and not s-t path.");
     return;
   }
   // Update best_label only when new label has lower weight or first label
@@ -472,6 +531,9 @@ void BiDirectional::updateBestLabels(
        candidate_label.weight < best_labels[lemon_id]->weight) ||
       !best_labels[lemon_id]) {
     search_ptr->replaceBestLabel(lemon_id, candidate_label);
+    SPDLOG_DEBUG(
+        "\t Vertex improvement with {}.",
+        search_ptr->best_labels[lemon_id]->getString());
   }
 }
 
@@ -492,11 +554,13 @@ void BiDirectional::saveCurrentBestLabel(const Directions& direction) {
   if (!current_label_ptr->checkFeasibility(max_res, min_res)) {
     return;
   }
+  bool improvement_found = false;
   if (intermediate_label_ptr->vertex.lemon_id ==
           current_label_ptr->vertex.lemon_id &&
       current_label_ptr->fullDominance(*intermediate_label_ptr, direction)) {
     // Save complete source-sink path
     search_ptr->replaceIntermediateLabel(*current_label_ptr);
+    improvement_found = true;
   } else {
     // First source-sink path
     if ((direction == FWD &&
@@ -509,12 +573,21 @@ void BiDirectional::saveCurrentBestLabel(const Directions& direction) {
                                   graph_ptr_->sink.user_id))) {
       // Save complete source-sink path
       search_ptr->replaceIntermediateLabel(*current_label_ptr);
+      improvement_found = true;
       // Update bounds
       if (std::isnan(primal_st_bound_) ||
           intermediate_label_ptr->weight < primal_st_bound_) {
         primal_st_bound_ = intermediate_label_ptr->weight;
       }
     }
+  }
+
+  if (improvement_found) {
+    SPDLOG_INFO(
+        "\t {} \t | \t {}", getElapsedTime(), current_label_ptr->weight);
+    SPDLOG_DEBUG(
+        "******* Global improvement {}.",
+        search_ptr->intermediate_label->getString());
   }
 }
 
@@ -552,6 +625,11 @@ void BiDirectional::postProcessing() {
               *bwd_search_ptr_->intermediate_label, max_res, min_res, true));
     }
   }
+  // 80 stars at the end
+  spdlog::default_logger()->set_pattern("%v");
+  SPDLOG_INFO(
+      "************************************************************************"
+      "********");
 }
 
 double BiDirectional::getUB() {
@@ -595,6 +673,7 @@ void BiDirectional::getMinimumWeights(double* fwd_min, double* bwd_min) {
 
 void BiDirectional::joinLabels() {
   // ref id with critical_res
+  SPDLOG_INFO("Merging");
   const int&    c_res   = params_ptr_->critical_res;
   double        UB      = getUB();
   const double& HF      = std::min(max_res_curr_[c_res], min_res_curr_[c_res]);
@@ -657,6 +736,10 @@ void BiDirectional::joinLabels() {
                       // Save
                       best_label_ =
                           std::make_shared<labelling::Label>(merged_label);
+                      SPDLOG_INFO(
+                          "\t {} \t | \t {}",
+                          getElapsedTime(),
+                          best_label_->weight);
                       // Tighten UB
                       if (best_label_->weight < UB) {
                         UB = best_label_->weight;
@@ -669,11 +752,13 @@ void BiDirectional::joinLabels() {
                   }
                   // Add merged label to list
                   merged_labels_.push_back(merged_label);
-                }
+                } // else
+                  // break;
               }
             }
           }
-        }
+        } // else
+          // break;
       }
     }
   }

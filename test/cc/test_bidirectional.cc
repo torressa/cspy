@@ -4,8 +4,9 @@
 #include <vector>
 
 #include "gtest/gtest.h"
+// cspy
 #include "src/cc/bidirectional.h"
-#include "test/cc/src/utils.h"
+#include "test/cc/utils.h"
 
 namespace bidirectional {
 

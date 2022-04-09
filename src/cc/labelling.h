@@ -1,12 +1,16 @@
-#ifndef BIDIRECTIONAL_LABELLING_H__
-#define BIDIRECTIONAL_LABELLING_H__
+#ifndef SRC_CC_LABELLING_H__
+#define SRC_CC_LABELLING_H__
 
 #include <cmath> // nan
 #include <set>
 #include <vector>
 
+#include "src/cc/config.h"  // log-level
 #include "src/cc/digraph.h" // AdjVertex
 #include "src/cc/params.h"  // Directions, Params
+                            //
+// logging
+#include "spdlog/spdlog.h" // after config.h as
 
 namespace labelling {
 
@@ -130,11 +134,21 @@ class Label {
   /// Check if weight is under the input threshold.
   bool checkThreshold(const double& threshold) const;
 
-  /// Check whether the current partial path is Source - Sink
+  /**
+   * Check whether the current partial path is Source - Sink
+   *
+   * @param[in] source_id, int with user_id of the source node.
+   * @param[in] sink_id, int with user_id of the sink node.
+   */
   bool checkStPath(const int& source_id, const int& sink_id) const;
+
+  /// Returns true is the partial path extension is OK.
+  bool checkPathExtension(const int& user_id) const;
+
   /// set phi attribute for merged labels from Righini and Salani (2006)
   void setPhi(const double& phi_in) { phi = phi_in; }
 
+  std::string getString() const;
   // operator overloads
   Label&               operator=(const Label& other) = default;
   friend bool          operator<(const Label& label1, const Label& label2);
@@ -158,13 +172,6 @@ class Label {
 Label getNextLabel(
     std::vector<Label>*              labels,
     const bidirectional::Directions& direction);
-
-/// Update efficient_labels using a candidate_label
-void updateEfficientLabels(
-    std::vector<Label>*              efficient_labels,
-    const Label&                     candidate_label,
-    const bidirectional::Directions& direction,
-    const bool&                      elementary);
 
 /**
  * Check whether the input label dominates any efficient label (previously
@@ -247,4 +254,4 @@ Label mergeLabels(
 
 } // namespace labelling
 
-#endif // BIDIRECTIONAL_LABELLING_H__
+#endif // SRC_CC_LABELLING_H__

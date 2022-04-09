@@ -5,7 +5,7 @@
 
 #include "gtest/gtest.h"
 #include "src/cc/bidirectional.h"
-#include "test/cc/src/utils.h"
+#include "test/cc/utils.h"
 
 namespace bidirectional {
 

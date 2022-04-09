@@ -1,6 +1,7 @@
-#include "utils.h"
-
 #include "gtest/gtest.h"
+
+// cspy
+#include "test/cc/utils.h"
 
 void skipLines(std::ifstream& file, std::string& line, const int& num_lines) {
   for (int i = 0; i < num_lines; ++i) {
@@ -107,6 +108,16 @@ void checkResult(
     const std::vector<int>&             path,
     const std::vector<double>&          consumed_resources,
     const double&                       cost) {
+  std::string s;
+  s += "weight = " + std::to_string(alg.getTotalCost());
+  s += ", partial_path=[";
+  for (const auto& n : alg.getPath())
+    s += std::to_string(n) + ",";
+  s += "], res=[";
+  for (const auto& r : alg.getConsumedResources())
+    s += std::to_string(r) + ",";
+  s += "\n";
+  std::cout << s;
   ASSERT_EQ(alg.getPath(), path);
   ASSERT_EQ(alg.getConsumedResources(), consumed_resources);
   ASSERT_EQ(alg.getTotalCost(), cost);
