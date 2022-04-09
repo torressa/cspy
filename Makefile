@@ -1,7 +1,6 @@
 # Run unit tests
 all:
-	cmake -S . -Bbuild -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON \
-		-DLOG_LEVEL="DEBUG"
+	cmake -S . -Bbuild -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON
 	cmake --build build --config Release --target all -v
 	cd build && ctest --verbose | tee -a out.txt
 

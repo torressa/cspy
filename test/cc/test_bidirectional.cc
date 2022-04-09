@@ -38,6 +38,7 @@ class TestBiDirectional : public ::testing::Test {
 TEST_F(TestBiDirectional, testBoth) {
   bidirectional->run();
   checkResult(*bidirectional, final_path, final_res, final_cost);
+  bidirectional->checkCriticalRes();
 }
 
 TEST_F(TestBiDirectional, testBothTimeLimit) {

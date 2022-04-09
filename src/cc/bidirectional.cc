@@ -62,7 +62,7 @@ void BiDirectional::checkCriticalRes() const {
     }
   }
   if (min_r != params_ptr_->critical_res)
-    SPDLOG_INFO(
+    SPDLOG_WARN(
         "Critical resource {} does not match final tighest {}",
         params_ptr_->critical_res,
         min_r);

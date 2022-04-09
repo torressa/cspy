@@ -105,7 +105,7 @@ option(BUILD_CXX "Build C++ library" ON)
 option(BUILD_PYTHON "Build Python Library" OFF)
 option(BUILD_DOTNET "Build Dotnet Library" OFF)
 set(LOG_LEVEL
-    "DEBUG"
+    "WARN"
     CACHE
       STRING
       "Choose the logging level, options are: OFF (default), INFO, DEBUG, TRACE."

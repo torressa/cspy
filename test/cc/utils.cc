@@ -116,7 +116,7 @@ void checkResult(
   s += "], res=[";
   for (const auto& r : alg.getConsumedResources())
     s += std::to_string(r) + ",";
-  s += "\n";
+  s += "]\n";
   std::cout << s;
   ASSERT_EQ(alg.getPath(), path);
   ASSERT_EQ(alg.getConsumedResources(), consumed_resources);

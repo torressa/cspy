@@ -16,6 +16,8 @@ jobs:
       run: cmake -S. -Bbuild -G "Visual Studio 17 2022" -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON -DBUILD_PYTHON=OFF
     - name: Build
       run: cmake --build build --config Release --target ALL_BUILD -- /verbosity:normal /maxcpucount
+    - name: Test (cd into build)
+      run: cd build && ctest --verbose
     - name: Test
       run: cmake --build build --config Release --target RUN_TESTS -- /verbosity:normal /maxcpucount
     - name: Install
