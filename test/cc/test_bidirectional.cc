@@ -38,6 +38,8 @@ class TestBiDirectional : public ::testing::Test {
 TEST_F(TestBiDirectional, testBoth) {
   bidirectional->run();
   checkResult(*bidirectional, final_path, final_res, final_cost);
+  // check if message is printed out
+  bidirectional->setCriticalRes(1);
   bidirectional->checkCriticalRes();
 }
 

@@ -9,9 +9,57 @@ on:
       - master
 
 
-#  TODO add windows as per:
-# https://github.com/Niraj-Kamdar/manylinux-wheel-builder#advanced-usage
 jobs:
+  # from:
+  # https://github.com/bitcoindevkit/bdk-python/blob/master/.github/workflows/build.yml
+  # MIT
+  build-manylinux2014-x86_64-wheel:
+    name: 'Build Manylinux 2014 x86_64 wheel'
+    runs-on: ubuntu-latest
+    container:
+      image: quay.io/pypa/manylinux2014_x86_64
+      env:
+        TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
+        TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+        PLAT: manylinux2014_x86_64
+        PYBIN: '/opt/python/${{ matrix.python }}/bin'
+    strategy:
+      matrix:
+        python: # Update this list whenever the docker image is updated (check /opt/python/)
+          - cp36-cp36m
+          - cp37-cp37m
+          - cp38-cp38
+          - cp39-cp39
+          - cp310-cp310
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+      - name: Configure
+        run: |
+          cmake -S . -Bbuild -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON \
+            -DBUILD_PYTHON=${BUILD_PYTHON} -DBUILD_SHARED_LIBS=${BUILD_PYTHON} \
+            -DBENCHMARK_TESTS=${BENCHMARK_TESTS} -DBENCHMARK_BOOST=${BENCHMARK_BOOST} \
+            -DPython3_ROOT_DIR="/usr/" -DPython3_FIND_STRATEGY="LOCATION"
+      - name: Build
+        run: cmake --build build --config Release --target all -v
+      - name: install requirements
+        run: ${PYBIN}/pip install -r python/requirements.dev.txt
+      - name: build wheel
+        run: ${PYBIN}/pip wheel build/python/ --no-deps -w build/python/wheelhouse
+      - name: repair wheel
+        run: auditwheel repair build/python/wheelhouse/* --plat "$PLAT" -w /build/python/wheelhouse-repaired
+      - name: test
+        run: |
+	        "${PYBIN}/pip" install cspy --no-index -f build/python/wheelhouse-repaired/
+          "${PYBIN}/python3" -m unittest discover -s test/python/
+      - name: upload wheel
+        run: |
+          ${PYBIN}/pip install twine
+          twine upload build/python/wheelhouse-repaired/*
+        continue-on-error: true
+
   macos-build:
     runs-on: ${{ matrix.os }}
     strategy:
@@ -21,18 +69,21 @@ jobs:
     env:
       TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
       TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+      ARCHFLAGS: "-arch x86_64 -arch arm64"
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
+      - run: rustup target add aarch64-apple-darwin
       - name: Configure
         run: |
           echo $pythonLocation
           echo $pythonVersion
           cmake -S . -Bbuild -DBUILD_TESTING=ON -DBUILD_PYTHON=ON -DBUILD_SHARED_LIBS=ON -DPython3_ROOT_DIR=${pythonLocation} -DPython_ROOT_DIR=${pythonLocation} -DPython3_FIND_STRATEGY=LOCATION
       - name: Build
+        env:
         run: cmake --build build --config Release --target all -v
       - name: Fix wheel and run python tests
         run: |
@@ -54,7 +105,7 @@ jobs:
       TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
     strategy:
       matrix:
-        python-version: [3.6, 3.7, 3.8, 3.9]
+        python-version: [3.6, 3.7, 3.8, 3.9, "3.10"]
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python ${{ matrix.python-version }}

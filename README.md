@@ -4,8 +4,8 @@
 | Windows  | [![Status][cpp_win_svg]][cpp_win_link] | [![Status][python_win_svg]][python_win_link] |[![Status][dotnet_win_svg]][dotnet_win_link] |
 
 
-[unix_svg]: https://github.com/torressa/cspy/workflows/Cpp/badge.svg
-[unix_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22Cpp%22
+[cpp_unix_svg]: https://github.com/torressa/cspy/workflows/Cpp/badge.svg
+[cpp_unix_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22Cpp%22
 [python_unix_svg]: https://github.com/torressa/cspy/workflows/Python/badge.svg
 [python_unix_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22Python%22
 [dotnet_unix_svg]: https://github.com/torressa/cspy/workflows/Dotnet/badge.svg
@@ -175,7 +175,6 @@ double cost = alg.getTotalCost();
 ### Examples
 
 - [`vrpy`](https://github.com/Kuifje02/vrpy) : External vehicle routing framework which uses `cspy` to solve different variants of the vehicle routing problem using column generation. Particulatly, see  [`subproblem_cspy.py`](https://github.com/Kuifje02/vrpy/blob/master/vrpy/subproblem_cspy.py).
-- [`cgar`](examples/cgar) : [needs revising] Complex example use of `cspy` in a column generation example applied to the aircraft recovery problem.
 - [`jpath`](examples/jpath) : Simple example showing the necessary graph adptations and the use of custom resource extension functions.
 
 
@@ -211,10 +210,9 @@ Requirements:
 
 - CMake (>=v3.14)
 - Standard C++ toolchain
-- [LEMON](https://lemon.cs.elte.hu/trac/lemon) installed (see [`tools/docker/scripts/install_lemon`](tools/docker/scripts/install_lemon))
 - Python (>=3.6)
 
-Then use the [`Makefile`] e.g. `make` in the root dir runs the unit tests
+Then use the wrapper [`Makefile`](Makefile) e.g. `make` in the root dir runs the unit tests
 
 ## License
 
@@ -257,7 +255,8 @@ If you'd like to cite this package, please use the following bib format:
   number = {49},
   pages = {1655},
   author = {{Torres Sanchez}, David},
-  title = {cspy: A Python package with a collection of algorithms for the (Resource) Constrained Shortest Path problem},
+  title = {cspy: A Python package with a collection of algorithms for the
+    (Resource) Constrained Shortest Path problem},
   journal = {Journal of Open Source Software}
 }
 ```

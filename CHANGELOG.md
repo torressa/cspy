@@ -15,8 +15,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
  - Non-elementary checks for 2-cycles (`i->j->i` are not allowed)
 
 ### Added
- - [WIP] New functionality to select monotonic resources.
- - [WIP] Detection of monotonic resources.
  - Logger using [`sdplog`](https://github.com/gabime/spdlog).
 
 ### Fixed
