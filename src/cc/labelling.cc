@@ -421,6 +421,10 @@ bool mergePreCheck(
     result = !contains_duplicates;
   }
 
+  if (!result) {
+    return false;
+  }
+
   // Check for 2-cycles.
   const int size = static_cast<int>(path.size());
   for (int i = 1; i < size - 1; ++i) {

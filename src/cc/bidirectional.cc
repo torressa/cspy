@@ -110,7 +110,7 @@ void BiDirectional::runPreprocessing() {
       SPDLOG_INFO(
           "No negative cost cycle found and elementary set to true. Forcing to "
           "false");
-      setElementary(false);
+      // setElementary(false);
     }
   }
 
@@ -281,6 +281,14 @@ bool BiDirectional::terminate(const Directions& direction) {
   // TODO: check if label exists in opposite direction, check if they can be
   // merged and check if resulting label qualifies here
   // if direction_in == BOTH && efficient_labels[opposite_dir].
+  if (params_ptr_->direction == BOTH && direction == FWD &&
+      !std::isnan(params_ptr_->threshold)) {
+    SPDLOG_DEBUG("Checking early termination");
+    bool terminate_both = checkTerminateBoth();
+    if (terminate_both)
+      return true;
+  }
+  // Check in direction
   Search* search_ptr = getSearchPtr(direction);
   return terminate(direction, *search_ptr->intermediate_label);
 }
@@ -295,6 +303,65 @@ bool BiDirectional::terminate(
     return true;
   }
   return checkValidLabel(direction, label);
+}
+
+bool BiDirectional::checkTerminateBoth() {
+  int n = fwd_search_ptr_->current_label->vertex.lemon_id;
+  std::vector<labelling::Label> merged_labels_;
+  // for each label at the current node
+  for (auto fwd_iter = fwd_search_ptr_->efficient_labels[n].cbegin();
+       fwd_iter != fwd_search_ptr_->efficient_labels[n].cend();
+       ++fwd_iter) {
+    const labelling::Label& fwd_label = *fwd_iter;
+    // for each successor of n
+    for (LemonGraph::OutArcIt a(
+             *graph_ptr_->lemon_graph_ptr, graph_ptr_->getLNodeFromId(n));
+         a != lemon::INVALID;
+         ++a) {
+      const int&    m           = graph_ptr_->getId(graph_ptr_->head(a));
+      const double& edge_weight = graph_ptr_->getWeight(a);
+      if (checkVertexVisited(BWD, m) && m != graph_ptr_->source.lemon_id) {
+        // for each backward label at m
+        for (auto bwd_iter = bwd_search_ptr_->efficient_labels[m].cbegin();
+             bwd_iter != bwd_search_ptr_->efficient_labels[m].cend();
+             ++bwd_iter) {
+          const labelling::Label& bwd_label = *bwd_iter;
+          if (labelling::mergePreCheck(fwd_label, bwd_label, max_res)) {
+            const labelling::Label& merged_label = labelling::mergeLabels(
+                fwd_label,
+                bwd_label,
+                graph_ptr_->getAdjVertex(a, true),
+                graph_ptr_->sink,
+                max_res,
+                min_res);
+            SPDLOG_DEBUG("mgd = {}", merged_label.getString());
+            if (merged_label.vertex.lemon_id != -1 &&
+                merged_label.checkFeasibility(max_res, min_res) &&
+                labelling::halfwayCheck(merged_label, merged_labels_)) {
+              if (best_label_->vertex.lemon_id == -1 ||
+                  (merged_label.fullDominance(*best_label_, FWD) ||
+                   merged_label.weight < best_label_->weight)) {
+                // Save
+                best_label_ = std::make_shared<labelling::Label>(merged_label);
+                SPDLOG_INFO(
+                    "\t {} \t | \t {}", getElapsedTime(), best_label_->weight);
+                // Stop if time out or threshold found
+                if (terminate(FWD, *best_label_)) {
+                  terminated_early_w_st_path_           = true;
+                  terminated_early_w_st_path_direction_ = NODIR;
+                  SPDLOG_INFO("stopping early!");
+                  return true;
+                }
+              }
+            }
+            // add merged label to list
+            merged_labels_.push_back(merged_label);
+          }
+        }
+      }
+    }
+  }
+  return false;
 }
 
 void BiDirectional::updateCurrentLabel(const Directions& direction) {
@@ -619,7 +686,7 @@ void BiDirectional::postProcessing() {
     // final label contains the label that triggered the early termination
     if (terminated_early_w_st_path_direction_ == FWD) {
       best_label_ = fwd_search_ptr_->intermediate_label;
-    } else {
+    } else if (terminated_early_w_st_path_direction_ == BWD) {
       best_label_ =
           std::make_shared<labelling::Label>(labelling::processBwdLabel(
               *bwd_search_ptr_->intermediate_label, max_res, min_res, true));
@@ -750,7 +817,7 @@ void BiDirectional::joinLabels() {
                       }
                     }
                   }
-                  // Add merged label to list
+                  // add merged label to list
                   merged_labels_.push_back(merged_label);
                 } // else
                   // break;

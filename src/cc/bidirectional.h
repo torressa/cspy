@@ -140,7 +140,9 @@ class BiDirectional {
   /// iteration number
   int iteration_ = 0;
   // whether the search terminated early with a valid source-sink path
-  bool       terminated_early_w_st_path_ = false;
+  bool terminated_early_w_st_path_ = false;
+  // Direction where the path is located (FWD, BWD or NODIR if merged label
+  // already saved).
   Directions terminated_early_w_st_path_direction_;
 
   /// Vectors with current maximum and minimum resources (first entry contains
@@ -192,6 +194,7 @@ class BiDirectional {
   bool terminate(const Directions& direction, const labelling::Label& label);
   /// @overload to just use current intermediate_label in direction
   bool terminate(const Directions& direction);
+  bool checkTerminateBoth();
 
   /* checks */
 
