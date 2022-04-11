@@ -127,7 +127,7 @@ jobs:
         run: cmake --build build --config Release --target ALL_BUILD -- /verbosity:normal /maxcpucount
       - name: Run python tests
         run: |
-	  cd build
+          cd build
           ctest -C Release --verbose
       - name: upload wheel
         run: |
