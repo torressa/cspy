@@ -52,7 +52,7 @@ jobs:
         run: auditwheel repair build/python/wheelhouse/* --plat "$PLAT" -w /build/python/wheelhouse-repaired
       - name: test
         run: |
-	  "${PYBIN}/pip" install cspy --no-index -f build/python/wheelhouse-repaired/
+          "${PYBIN}/pip" install cspy --no-index -f build/python/wheelhouse-repaired/
           "${PYBIN}/python3" -m unittest discover -s test/python/
       - name: upload wheel
         run: |
