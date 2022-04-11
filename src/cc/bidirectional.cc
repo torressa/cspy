@@ -278,9 +278,6 @@ void BiDirectional::move(const Directions& direction) {
 }
 
 bool BiDirectional::terminate(const Directions& direction) {
-  // TODO: check if label exists in opposite direction, check if they can be
-  // merged and check if resulting label qualifies here
-  // if direction_in == BOTH && efficient_labels[opposite_dir].
   Search* search_ptr = getSearchPtr(direction);
   return terminate(direction, *search_ptr->intermediate_label);
 }

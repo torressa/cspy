@@ -42,7 +42,7 @@ endif()
 
 project(
   cspy
-  VERSION 1.0.1
+  VERSION 1.0.2
   LANGUAGES CXX)
 message(STATUS "project: ${PROJECT_NAME}")
 message(STATUS "version: ${PROJECT_VERSION}")
@@ -105,10 +105,10 @@ option(BUILD_CXX "Build C++ library" ON)
 option(BUILD_PYTHON "Build Python Library" OFF)
 option(BUILD_DOTNET "Build Dotnet Library" OFF)
 set(LOG_LEVEL
-    "WARN"
+    "INFO"
     CACHE
       STRING
-      "Choose the logging level, options are: OFF (default), INFO, DEBUG, TRACE."
+      "Choose the logging level, options are: OFF (default), WARN, INFO, DEBUG, TRACE."
 )
 
 message(STATUS "Build C++ library: ${BUILD_CXX}, LOG_LEVEL= ${LOG_LEVEL}")
