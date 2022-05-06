@@ -35,7 +35,7 @@ jobs:
         python-version: [3.6, 3.7, 3.8, 3.9, "3.10"]
         os: [macos-11, macos-10.15]
     env:
-      ARCHFLAGS: "-arch x86_64 -arch arm64"
+      SYSTEM_VERSION_COMPAT: 0
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python ${{ matrix.python-version }}

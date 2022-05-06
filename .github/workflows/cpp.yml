@@ -9,6 +9,8 @@ jobs:
       fail-fast: false
       matrix:
         os: [macos-11, macos-10.15, ubuntu-latest]
+    env:
+      SYSTEM_VERSION_COMPAT: 0
     steps:
     - uses: actions/checkout@v2
     - name: Configure
