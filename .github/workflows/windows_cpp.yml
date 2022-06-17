@@ -17,7 +17,7 @@ jobs:
     - name: Build
       run: cmake --build build --config Release --target ALL_BUILD -- /verbosity:normal /maxcpucount
     - name: Test (cd into build)
-      run: cd build && ctest --verbose
+      run: cd build && ctest --verbose -C Release
     - name: Test
       run: cmake --build build --config Release --target RUN_TESTS -- /verbosity:normal /maxcpucount
     - name: Install
