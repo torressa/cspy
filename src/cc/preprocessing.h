@@ -1,16 +1,21 @@
-#ifndef BIDIRECTIONAL_PREPROCESSING_H__
-#define BIDIRECTIONAL_PREPROCESSING_H__
-
-#define INF 10000.0
+#ifndef SRC_CC_PREPROCESSING_H__
+#define SRC_CC_PREPROCESSING_H__
 
 #include "digraph.h"
 
 namespace bidirectional {
 
 /**
+ * Detect if a negative cost cycle is present.
+ *
+ * @param[out] graph, DiGraph
+ */
+void detectNegativeCostCycle(DiGraph* graph);
+
+/**
  * Solve shortest path using the distance provided as input and set the
- * lower_bound_weight for each node.  Uses LEMON's Bellman-Ford (just in case of
- * negative weights)
+ * lower_bound_weight for each node.  Uses LEMON's Bellman-Ford (just in case
+ * of negative weights)
  * @see: https://lemon.cs.elte.hu/pub/doc/latest/a00038.html
  *
  * @param[out] lower_bound_weight, vector of double that contains the lower
@@ -25,8 +30,8 @@ void lowerBoundWeight(
     const bool&          forward);
 
 /**
- * [EXPERIMENTAL] Get possible critical resource by solving longest paths on the
- * graph with each resource as distance for each edge.
+ * [EXPERIMENTAL] Get possible critical resource by solving longest paths on
+ * the graph with each resource as distance for each edge.
  *
  * @param[in] vector of double with maximum resources (upper bounds).
  * @param[in] bidirectional::DiGraph, with graph.
@@ -36,4 +41,4 @@ int getCriticalRes(const std::vector<double>& max_res, const DiGraph& graph);
 
 } // namespace bidirectional
 
-#endif // BIDIRECTIONAL_PREPROCESSING_H__
+#endif // SRC_CC_PREPROCESSING_H__

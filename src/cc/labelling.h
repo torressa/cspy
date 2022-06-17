@@ -1,11 +1,16 @@
-#ifndef BIDIRECTIONAL_LABELLING_H__
-#define BIDIRECTIONAL_LABELLING_H__
+#ifndef SRC_CC_LABELLING_H__
+#define SRC_CC_LABELLING_H__
 
 #include <cmath> // nan
+#include <set>
 #include <vector>
 
-#include "digraph.h" // AdjVertex
-#include "params.h"  // Directions, Params
+#include "src/cc/config.h"  // log-level
+#include "src/cc/digraph.h" // AdjVertex
+#include "src/cc/params.h"  // Directions, Params
+                            //
+// logging
+#include "spdlog/spdlog.h" // after config.h as
 
 namespace labelling {
 
@@ -18,12 +23,13 @@ namespace labelling {
  */
 class Label {
  public:
-  double                 weight               = 0.0;
-  bidirectional::Vertex  vertex               = {-1, -1};
-  std::vector<double>    resource_consumption = {};
-  std::vector<int>       partial_path         = {};
-  std::vector<int>       unreachable_nodes    = {};
-  bidirectional::Params* params_ptr           = nullptr;
+  double                weight               = 0.0;
+  bidirectional::Vertex vertex               = {-1, -1};
+  std::vector<double>   resource_consumption = {};
+  std::vector<int>      partial_path         = {};
+  /// Set of unreachable nodes. This is only used in the elementary case.
+  std::set<int>          unreachable_nodes = {};
+  bidirectional::Params* params_ptr        = nullptr;
   // Phi value for joining algorithm from Righini and Salani (2006)
   double phi = std::nan("nan");
 
@@ -32,15 +38,6 @@ class Label {
   Label(){};
 
   /// Constructor
-  // Label(
-  //     const double&                weight_in,
-  //     const bidirectional::Vertex& vertex_in,
-  //     const std::vector<double>&   resource_consumption_in,
-  //     const std::vector<int>&      partial_path_in,
-  //     const bool&                  elementary,
-  //     const int&                   critical_res);
-
-  /// @overload
   Label(
       const double&                weight_in,
       const bidirectional::Vertex& vertex_in,
@@ -115,27 +112,43 @@ class Label {
       const bidirectional::Directions& direction) const;
 
   /**
-   * Check resource feasibility of current label i.e.
-   * min_res[i] <= resource_consumption[i] <= max_res[i]
-   * for i in 0..resource_consumption.size()
+   * Check resource feasibility of current label i.e. `min_res[i] <=
+   * resource_consumption[i] <= max_res[i]` for `i` in
+   * `0,...,resource_consumption.size()`.
+   * If "soft" check, then the lower bound is only checked if either: resource
+   * index `i` is the index of the critical resource or `min_res[i]<= 0`(See
+   * issue #90). If not "soft", then all lower bounds are checked as expected.
    *
    * @param[in] max_res, vector of double with upper bound(s) for resource
-   * consumption
+   * consumption. Checks values are <= bound
    * @param[in] min_res, vector of double with lower bound(s) for resource
-   * consumption
+   * consumption. Checks values are >= bound
+   * @param[in] soft, bool with whether the minimum resources should be checked
+   * "softly". Default is false.
    */
   bool checkFeasibility(
       const std::vector<double>& max_res,
-      const std::vector<double>& min_res) const;
+      const std::vector<double>& min_res,
+      const bool&                soft = false) const;
 
   /// Check if weight is under the input threshold.
   bool checkThreshold(const double& threshold) const;
 
-  /// Check whether the current partial path is Source - Sink
+  /**
+   * Check whether the current partial path is Source - Sink
+   *
+   * @param[in] source_id, int with user_id of the source node.
+   * @param[in] sink_id, int with user_id of the sink node.
+   */
   bool checkStPath(const int& source_id, const int& sink_id) const;
+
+  /// Returns true is the partial path extension is OK.
+  bool checkPathExtension(const int& user_id) const;
+
   /// set phi attribute for merged labels from Righini and Salani (2006)
   void setPhi(const double& phi_in) { phi = phi_in; }
 
+  std::string getString() const;
   // operator overloads
   Label&               operator=(const Label& other) = default;
   friend bool          operator<(const Label& label1, const Label& label2);
@@ -159,13 +172,6 @@ class Label {
 Label getNextLabel(
     std::vector<Label>*              labels,
     const bidirectional::Directions& direction);
-
-/// Update efficient_labels using a candidate_label
-void updateEfficientLabels(
-    std::vector<Label>*              efficient_labels,
-    const Label&                     candidate_label,
-    const bidirectional::Directions& direction,
-    const bool&                      elementary);
 
 /**
  * Check whether the input label dominates any efficient label (previously
@@ -210,9 +216,9 @@ Label processBwdLabel(
  * To be used before attempting to merge.
  */
 bool mergePreCheck(
-    const labelling::Label&   fwd_label,
-    const labelling::Label&   bwd_label,
-    const std::vector<double> max_res);
+    const labelling::Label&    fwd_label,
+    const labelling::Label&    bwd_label,
+    const std::vector<double>& max_res);
 
 /**
  * Returns the phi value.
@@ -248,4 +254,4 @@ Label mergeLabels(
 
 } // namespace labelling
 
-#endif // BIDIRECTIONAL_LABELLING_H__
+#endif // SRC_CC_LABELLING_H__

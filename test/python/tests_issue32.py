@@ -1,9 +1,9 @@
-import unittest
-
 from numpy import array
 from networkx import DiGraph
 
-from cspy import BiDirectional, Tabu, GreedyElim, REFCallback
+from cspy import BiDirectional, GreedyElim, REFCallback
+
+from utils import TestingBase
 
 
 class MyCallback(REFCallback):
@@ -19,7 +19,7 @@ class MyCallback(REFCallback):
         res_new = list(cumul_res)
         # Monotone resource
         res_new[0] += 1.0
-        tail_original, head_original = self._get_original_node_label(tail, head)
+        _, head_original = self._get_original_node_label(tail, head)
         # Increasing resource
         if head_original != "Sink":
             res_new[1] += float(int(head_original)**2)
@@ -30,7 +30,7 @@ class MyCallback(REFCallback):
     def REF_bwd(self, cumul_res, tail, head, edge_res, partial_path,
                 cumul_cost):
         res_new = list(cumul_res)
-        tail_original, head_original = self._get_original_node_label(tail, head)
+        _, head_original = self._get_original_node_label(tail, head)
         # Monotone resource
         res_new[0] -= 1
         # Increasing resource
@@ -45,8 +45,7 @@ class MyCallback(REFCallback):
         # local copies
         fwd_res = list(fwd_resources)
         bwd_res = list(bwd_resources)
-        edge_res = list(edge_resources)
-        tail_original, head_original = self._get_original_node_label(tail, head)
+        _, head_original = self._get_original_node_label(tail, head)
         # Compute merged resources
         merged_res = [0] * len(fwd_res)
         merged_res[0] = fwd_res[0] + bwd_res[0]
@@ -64,7 +63,7 @@ class MyCallback(REFCallback):
         return _tail, _head
 
 
-class TestsIssue32(unittest.TestCase):
+class TestsIssue32(TestingBase):
     """
     Tests for issue #32
     https://github.com/torressa/cspy/issues/32
@@ -103,9 +102,8 @@ class TestsIssue32(unittest.TestCase):
         # Overwrite graph as original labelling won't match
         self.my_callback.G = alg.G
         alg.run()
-        self.assertEqual(alg.path, self.result_path)
-        self.assertEqual(alg.total_cost, self.total_cost)
-        self.assertEqual(alg.consumed_resources, self.consumed_resources)
+        self.check_result(alg, self.result_path, self.total_cost,
+                          self.consumed_resources)
 
     def test_forward(self):
         """
@@ -118,9 +116,8 @@ class TestsIssue32(unittest.TestCase):
                             REF_callback=self.my_callback)
         self.my_callback.G = alg.G
         alg.run()
-        self.assertEqual(alg.path, self.result_path)
-        self.assertEqual(alg.total_cost, self.total_cost)
-        self.assertEqual(alg.consumed_resources, self.consumed_resources)
+        self.check_result(alg, self.result_path, self.total_cost,
+                          self.consumed_resources)
 
     # def test_tabu(self):
     #     alg = Tabu(self.G,

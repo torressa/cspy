@@ -1,22 +1,25 @@
-#ifndef BIDIRECTIONAL_DIGRAPH_H__
-#define BIDIRECTIONAL_DIGRAPH_H__
+#ifndef SRC_CC_DIGRAPH_H__
+#define SRC_CC_DIGRAPH_H__
 
 #include <memory>
 #include <vector>
 
 #include "lemon/maps.h"        // MapBase
+#include "lemon/path.h"        // Path
 #include "lemon/smart_graph.h" // SmartDigraph
 
 // Type defs for LEMON
-typedef lemon::SmartDigraph       LemonGraph;
-typedef lemon::SmartDigraph::Node LemonNode;
-typedef lemon::SmartDigraph::Arc  LemonArc;
+typedef lemon::SmartDigraph     LemonGraph;
+typedef LemonGraph::Node        LemonNode;
+typedef LemonGraph::Arc         LemonArc;
+typedef lemon::Path<LemonGraph> LemonPath;
 
 namespace bidirectional {
 
 /// Vertex to hold lemon id in the graph and the corresponding user id (may be
 /// different)
 struct Vertex {
+ public:
   int lemon_id;
   int user_id;
 };
@@ -26,6 +29,7 @@ struct Vertex {
  * (this way it can be used both forward and backward directions)
  */
 struct AdjVertex {
+ public:
   /// Tail/head vertex
   Vertex vertex;
   /// Double with weight/cost for the arc
@@ -57,6 +61,8 @@ class ResourceMap : public lemon::MapBase<LemonArc, double> {
       : resource_map(resource_map_in), r(r_in){};
 };
 
+enum NegativeCostCyclePresent { TRUE, FALSE, UNKNOWN };
+
 /**
  * Directed graph wrapper to create and query a lemon::SmartDigraph.
  * @see: https://lemon.cs.elte.hu/trac/lemon
@@ -77,7 +83,9 @@ class DiGraph {
   /// Pointer to lemon map containing arc resource consumptions
   std::unique_ptr<LemonGraph::ArcMap<std::vector<double>>> res_map_ptr;
   /// Vector with vertices
-  std::vector<Vertex> vertices;
+  std::vector<Vertex>      vertices;
+  NegativeCostCyclePresent negative_cost_cycle_present;
+  bool                     all_resources_positive;
 
   /**
    * Constructor.
@@ -143,7 +151,7 @@ class DiGraph {
   }
 
   /**
-   * Extract lemon id for a given node
+   * Get the adjacent vertex.
    *
    * @param[in] arc, lemon::SmartDigraph::Arc.
    * @param[in] forward, bool. Whether arc is checked forward or not (backward).
@@ -185,7 +193,9 @@ class DiGraph {
    * @param[in] arc, lemon::SmartDigraph::Arc.
    * @returns double with arc weight
    */
-  double getWeight(const LemonArc& arc) const { return (*weight_map_ptr)[arc]; }
+  const double& getWeight(const LemonArc& arc) const {
+    return (*weight_map_ptr)[arc];
+  }
 
   /**
    * Extract lemon id for a given arc
@@ -209,9 +219,7 @@ class DiGraph {
 
  private:
   /// int. User id corresponding to the source_node in the graph.
-  int source_id_;
-  /// int. User id corresponding to the sink node in the graph.
-  int sink_id_;
+  int source_id_, sink_id_;
 
   /**
    * Extract arc resource consumption from arc map
@@ -219,7 +227,7 @@ class DiGraph {
    * @param[in] arc, lemon::SmartDigraph::Arc.
    * @returns vector of double with arc resource consumption
    */
-  std::vector<double> getRes(const LemonArc& arc) const {
+  const std::vector<double>& getRes(const LemonArc& arc) const {
     return (*res_map_ptr)[arc];
   }
 
@@ -236,4 +244,4 @@ class DiGraph {
 
 } // namespace bidirectional
 
-#endif // BIDIRECTIONAL_DIGRAPH_H__
+#endif // SRC_CC_DIGRAPH_H__

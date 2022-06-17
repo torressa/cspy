@@ -1,6 +1,6 @@
 #include "labelling.h"
 
-#include <algorithm> // sort, includes, copy_if, find, push/make_heap, adj_vertex
+#include <algorithm> // sort, includes, copy_if, push/make_heap
 #include <iostream>  // ostream
 
 namespace labelling {
@@ -23,24 +23,10 @@ Label::Label(
       partial_path(partial_path_in),
       params_ptr(params_ptr_in) {
   if (params_ptr->elementary) {
-    unreachable_nodes = partial_path;
-    std::sort(unreachable_nodes.begin(), unreachable_nodes.end());
+    // Insert elements of partial_path
+    unreachable_nodes.insert(partial_path.cbegin(), partial_path.cend());
   }
 };
-
-// Label::Label(
-//     const double&                weight_in,
-//     const bidirectional::Vertex& vertex_in,
-//     const std::vector<double>&   resource_consumption_in,
-//     const std::vector<int>&      partial_path_in,
-//     const bidirectional::Params& params)
-//     : Label(
-//           weight_in,
-//           vertex_in,
-//           resource_consumption_in,
-//           partial_path_in,
-//           params.elementary,
-//           params.critical_res) {}
 
 Label::Label(
     const double&                weight_in,
@@ -103,23 +89,22 @@ Label Label::extend(
           weight);
     }
   }
-  // Check feasibility before creating
+  // Create new label
   Label new_label(
       weight + adjacent_vertex.weight,
       new_node,
       new_resources,
       new_partial_path,
       params_ptr);
-  if (new_label.checkFeasibility(max_res, min_res)) {
+  // Check feasibility (soft=true) before returning label
+  if (new_label.checkFeasibility(max_res, min_res, true)) {
     return new_label;
   } else {
     // Update current labels unreachable_nodes
     if (params_ptr->elementary) {
       // Push new node (direction doesn't matter here as edges have been
       // reversed for backward extensions)
-      unreachable_nodes.push_back(new_node.user_id);
-      // Keep them sorted for comparison
-      std::sort(unreachable_nodes.begin(), unreachable_nodes.end());
+      unreachable_nodes.insert(new_node.user_id);
     }
   }
   return Label();
@@ -127,16 +112,33 @@ Label Label::extend(
 
 bool Label::checkFeasibility(
     const std::vector<double>& max_res,
-    const std::vector<double>& min_res) const {
+    const std::vector<double>& min_res,
+    const bool&                soft) const {
   const int& resource_size = resource_consumption.size();
+  const int& c_res         = params_ptr->critical_res;
   for (int i = 0; i < resource_size; i++) {
-    if (resource_consumption[i] <= max_res[i] &&
-        resource_consumption[i] >= min_res[i]) {
-      ;
+    // Always check maximum resources
+    if (resource_consumption[i] <= max_res[i]) {
+      // Check against minimum resources only if:
+      // 1. `i` is the index of the critical resource (as the value will carry
+      // the halfway point and should always be checked).
+      // 2. The check is not soft.
+      // 3. The check is soft and value is <= 0 (in case we have negative
+      // minimum resources).
+      if (i == c_res || !soft || (soft && min_res[i] <= 0))
+        if (resource_consumption[i] >= min_res[i]) {
+          ;
+        } else {
+          // The label is infeasible because of violating a minimum resource
+          // bound
+          return false;
+        }
     } else {
+      // The label is infeasible because of violating a maximum resource bound
       return false;
     }
   }
+  // The label is feasible
   return true;
 }
 
@@ -153,6 +155,10 @@ bool Label::checkStPath(const int& source_id, const int& sink_id) const {
   return false;
 }
 
+bool Label::checkPathExtension(const int& user_id) const {
+  return (partial_path.end()[-2] != user_id && partial_path.back() != user_id);
+}
+
 bool Label::checkDominance(
     const Label&                     other,
     const bidirectional::Directions& direction) const {
@@ -161,12 +167,11 @@ bool Label::checkDominance(
 
   if (weight == other.weight) {
     // Check if all resources are equal
-    bool all_res_equal = true;
-    for (int i = 0; i < resource_size; i++) {
-      if (resource_consumption[i] != other.resource_consumption[i]) {
-        all_res_equal = false;
-      }
-    }
+    bool all_res_equal = std::equal(
+        resource_consumption.cbegin(),
+        resource_consumption.cend(),
+        other.resource_consumption.cbegin(),
+        other.resource_consumption.cend());
     if (all_res_equal) {
       return false;
     }
@@ -175,8 +180,16 @@ bool Label::checkDominance(
   if (weight > other.weight) {
     return false;
   }
-  if (direction == bidirectional::BWD) {
-    // Compare monotone resources
+  if (direction == bidirectional::FWD) {
+    // Forward
+    for (int i = 0; i < resource_size; i++) {
+      if (resource_consumption[i] > other.resource_consumption[i]) {
+        return false;
+      }
+    }
+  } else {
+    // Backward
+    // Compare critical resource
     if (resource_consumption[c_res] < other.resource_consumption[c_res]) {
       return false;
     }
@@ -189,30 +202,20 @@ bool Label::checkDominance(
         }
       }
     }
-  } else { // Forward
-    for (int i = 0; i < resource_size; i++) {
-      if (resource_consumption[i] > other.resource_consumption[i]) {
-        return false;
-      }
-    }
   }
   // Check for the elementary case
   if (params_ptr->elementary && unreachable_nodes.size() > 0 &&
       other.unreachable_nodes.size() > 0) {
-    if (std::includes(
-            unreachable_nodes.begin(),
-            unreachable_nodes.end(),
+    // check other.unreachable_nodes \subset unreachable_nodes (strict)
+    if (!std::includes(
             other.unreachable_nodes.begin(),
-            other.unreachable_nodes.end())) {
-      // If the unreachable_nodes are the same, this leads to one equivalent
-      // label to be removed
-      if (unreachable_nodes == other.unreachable_nodes) {
-        return true;
-      }
+            other.unreachable_nodes.end(),
+            unreachable_nodes.begin(),
+            unreachable_nodes.end())) {
       return false;
     }
   }
-  // this dominates other
+  //  this dominates other
   return true;
 }
 
@@ -238,6 +241,21 @@ bool Label::fullDominance(
       result = true;
   }
   return result;
+}
+
+std::string Label::getString() const {
+  std::string s = "";
+  if (partial_path.size() > 0) {
+    s += "Label(node=" + std::to_string(vertex.user_id);
+    s += ", weight= " + std::to_string(weight) + ", res[";
+    for (const auto& r : resource_consumption)
+      s += std::to_string(r) + ",";
+    s += "], partial_path=[";
+    for (const auto& n : partial_path)
+      s += std::to_string(n) + ",";
+    s += "])";
+  }
+  return s;
 }
 
 /* Operator Overloads */
@@ -271,14 +289,7 @@ bool operator>(const Label& label1, const Label& label2) {
 }
 
 std::ostream& operator<<(std::ostream& os, const Label& label) {
-  const int& c_res = label.params_ptr->critical_res;
-  os << "Label(node=" << label.vertex.user_id << ", weight= " << label.weight
-     << ", res[" << c_res << "]=" << label.resource_consumption[c_res]
-     << ", partial_path=[";
-  for (auto n : label.partial_path)
-    os << n << ",";
-  os << "])\n";
-  return os;
+  os << label.getString();
 }
 
 /**
@@ -299,6 +310,9 @@ bool runDominanceEff(
       // check if label dominates label2
       if (label.checkDominance(label2, direction)) {
         // Delete label2
+        SPDLOG_DEBUG(
+            "[runDominanceEff]: Label {} is dominated by candidate.",
+            label2.getString());
         it      = efficient_labels_ptr->erase(it);
         deleted = true;
       } else if (label2.checkDominance(label, direction)) {
@@ -306,6 +320,7 @@ bool runDominanceEff(
         break;
       }
     }
+
     if (!deleted)
       ++it;
   }
@@ -385,24 +400,34 @@ bool halfwayCheck(const Label& label, const std::vector<Label>& labels) {
 }
 
 bool mergePreCheck(
-    const labelling::Label&   fwd_label,
-    const labelling::Label&   bwd_label,
-    const std::vector<double> max_res) {
+    const labelling::Label&    fwd_label,
+    const labelling::Label&    bwd_label,
+    const std::vector<double>& max_res) {
   bool result = true;
   if (fwd_label.vertex.lemon_id == -1 || bwd_label.vertex.lemon_id == -1)
     return false;
+
+  // Merge paths
+  std::vector<int> path     = fwd_label.partial_path;
+  std::vector<int> path_bwd = bwd_label.partial_path;
+
+  std::reverse(path_bwd.begin(), path_bwd.end());
+  path.insert(path.end(), path_bwd.begin(), path_bwd.end());
+
   if (fwd_label.params_ptr->elementary) {
-    std::vector<int> path_copy = fwd_label.partial_path;
-    path_copy.insert(
-        path_copy.end(),
-        bwd_label.partial_path.begin(),
-        bwd_label.partial_path.end());
-    std::sort(path_copy.begin(), path_copy.end());
+    std::sort(path.begin(), path.end());
     const bool& contains_duplicates =
-        std::adjacent_find(path_copy.begin(), path_copy.end()) !=
-        path_copy.end();
+        std::adjacent_find(path.begin(), path.end()) != path.end();
     result = !contains_duplicates;
   }
+
+  // Check for 2-cycles.
+  const int size = static_cast<int>(path.size());
+  for (int i = 1; i < size - 1; ++i) {
+    if (path[i - 1] == path[i + 1] || path[i - 1] == path[i])
+      return false;
+  }
+
   return result;
 }
 
@@ -458,7 +483,8 @@ Label mergeLabels(
   // process final weight
   const double& weight =
       fwd_label.weight + adj_vertex.weight + bwd_label_ptr->weight;
-  // Process final path
+
+  // Merge paths
   std::vector<int> final_path = fwd_label.partial_path;
   final_path.insert(
       final_path.end(),

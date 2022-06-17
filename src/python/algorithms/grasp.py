@@ -1,10 +1,9 @@
 from time import time
-from math import factorial
+from itertools import repeat
 from logging import getLogger
 from collections import deque
-from itertools import permutations, repeat
+from typing import List, Optional
 from random import sample, randint
-from typing import List, Optional, Callable
 
 from networkx import DiGraph
 from numpy.random import choice
@@ -200,9 +199,8 @@ class GRASP(PathBase):
             if rng:
                 tmp = np.empty(len(poss_edges), dtype='object')
                 tmp[:] = poss_edges
-                selection = rng.choice(tmp,
-                        replace=False,
-                        size=sample_size).tolist()
+                selection = rng.choice(tmp, replace=False,
+                                       size=sample_size).tolist()
             else:
                 selection = sample(deque(poss_edges), sample_size)
             # will use last value tried with given key

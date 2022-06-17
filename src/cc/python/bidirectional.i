@@ -17,6 +17,16 @@ using namespace bidirectional;
 /* turn on director wrapping REFCallback */
 %feature("director") bidirectional::REFCallback;
 
+%feature("director:except") {
+  if ($error != NULL) {
+    throw Swig::DirectorMethodException();
+  }
+}
+%exception {
+  try { $action }
+  catch (Swig::DirectorException &e) { SWIG_fail; }
+}
+
 
 %rename($ignore, %$isclass) "";
 %rename("%s") bidirectional;

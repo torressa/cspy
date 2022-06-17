@@ -42,7 +42,7 @@ endif()
 
 project(
   cspy
-  VERSION 1.0.1
+  VERSION 1.0.2
   LANGUAGES CXX)
 message(STATUS "project: ${PROJECT_NAME}")
 message(STATUS "version: ${PROJECT_VERSION}")
@@ -103,26 +103,37 @@ endif()
 # By default only the ortools C++ library is built.
 option(BUILD_CXX "Build C++ library" ON)
 option(BUILD_PYTHON "Build Python Library" OFF)
+option(BUILD_DOTNET "Build Dotnet Library" OFF)
+set(LOG_LEVEL
+    "WARN"
+    CACHE
+      STRING
+      "Choose the logging level, options are: OFF (default), WARN, INFO, DEBUG, TRACE."
+)
 
-message(STATUS "Build C++ library: ${BUILD_CXX}")
+message(STATUS "Build C++ library: ${BUILD_CXX}, LOG_LEVEL= ${LOG_LEVEL}")
 message(STATUS "Build Python: ${BUILD_PYTHON}")
-
-# TODO Other languages option(BUILD_JAVA "Build Java Library" OFF)
-# option(BUILD_DOTNET "Build .NET Library" OFF) message(STATUS "Build Java:
-# ${BUILD_JAVA}") message(STATUS "Build .Net: ${BUILD_DOTNET}")
+message(STATUS "Build Dotnet: ${BUILD_DOTNET}")
 
 include(FetchContent)
 set(FETCHCONTENT_QUIET OFF)
+set(LEMON_BUILD_TESTING OFF)
+# Remove shared libs for LEMON
+set(BUILD_SHARED_LIBS_OLD ${BUILD_SHARED_LIBS})
+set(BUILD_SHARED_LIBS OFF)
+FetchContent_Declare(
+  LEMON
+  GIT_REPOSITORY "https://github.com/MultiFlow/LEMON.git"
+  GIT_TAG "multiflow/dev")
+FetchContent_MakeAvailable(LEMON)
+set(BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS_OLD})
 
-# TODO: download and install lemon with FetchContent
-
-# FetchContent_Declare(lemon URL
-# http://lemon.cs.elte.hu/pub/sources/lemon-1.3.1.tar.gz)
-# option(LEMON_ENABLE_GLPK NO) option(LEMON_ENABLE_COIN NO)
-# option(LEMON_ENABLE_ILOG NO) option(LEMON_ENABLE_SOPLEX NO)
-# FetchContent_MakeAvailable(lemon)
-
-find_package(LEMON REQUIRED)
+# Add logger
+FetchContent_Declare(
+  spdlog
+  GIT_REPOSITORY "https://github.com/gabime/spdlog.git"
+  GIT_TAG "v1.x")
+FetchContent_MakeAvailable(spdlog)
 
 enable_testing()
 include(cpp)
@@ -137,8 +148,10 @@ if(WIN32
 endif()
 
 include(python)
+include(dotnet)
 
-if(NOT BUILD_PYTHON)
+# Fetch googletest and add C++ tests only if required
+if(NOT (BUILD_PYTHON OR BUILD_DOTNET) AND BUILD_TESTING)
   set(FETCHCONTENT_QUIET OFF)
   # Prevent overriding the parent project's compiler/linker settings on Windows
   set(gtest_force_shared_crt
@@ -146,10 +159,8 @@ if(NOT BUILD_PYTHON)
       CACHE BOOL "" FORCE)
   FetchContent_Declare(
     googletest
-    GIT_REPOSITORY https://github.com/google/googletest.git
-    GIT_TAG master)
+    GIT_REPOSITORY "https://github.com/google/googletest.git"
+    GIT_TAG "main")
   FetchContent_MakeAvailable(googletest)
   add_subdirectory(test/cc/)
 endif()
-
-# Other languages include(java) include(dotnet)

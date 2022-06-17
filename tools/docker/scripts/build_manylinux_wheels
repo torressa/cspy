@@ -23,7 +23,7 @@ rm -rf /opt/python/cp310*
 rm -rf /opt/python/pp37*
 
 cd build/python/
-# mkdir wheelhouse
+mkdir -p wheelhouse
 
 # Build each wheel
 for PYBIN in /opt/python/*/bin; do

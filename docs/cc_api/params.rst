@@ -5,7 +5,7 @@ Params
    :project: cspy
    :path: xml
 
-.. doxygenclass:: bidirectional::Params
+.. doxygclass:: bidirectional::Params
    :project: cspy
    :members:
    :path: xml

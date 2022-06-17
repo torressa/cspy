@@ -1,26 +1,23 @@
-| OS     | C++ | Python |
-|:-------|-----|--------|
-| Linux  | [![Status][cpp_linux_svg]][cpp_linux_link] | [![Status][python_linux_svg]][python_linux_link] |
-| macOS  | [![Status][cpp_osx_svg]][cpp_osx_link] | [![Status][python_osx_svg]][python_osx_link] |
-| Windows  | [![Status][cpp_win_svg]][cpp_win_link] | [![Status][python_win_svg]][python_win_link] |
+| OS     | C++ | Python | Dotnet |
+|:-------|-----|--------|--------|
+| Unix (linux + macos) | [![Status][cpp_unix_svg]][cpp_unix_link] | [![Status][python_unix_svg]][python_unix_link]| [![Status][dotnet_unix_svg]][dotnet_unix_link] |
+| Windows  | [![Status][cpp_win_svg]][cpp_win_link] | [![Status][python_win_svg]][python_win_link] |[![Status][dotnet_win_svg]][dotnet_win_link] |
 
 
-[cpp_linux_svg]: https://github.com/torressa/cspy/workflows/Ubuntu%20Cpp/badge.svg
-[cpp_linux_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22Ubuntu+Cpp%22
-[python_linux_svg]: https://github.com/torressa/cspy/workflows/Ubuntu%20Python/badge.svg
-[python_linux_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22Ubuntu+Python%22
-
-[cpp_osx_svg]: https://github.com/torressa/cspy/workflows/MacOS%20Cpp/badge.svg
-[cpp_osx_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22MacOS+Cpp%22
-[python_osx_svg]: https://github.com/torressa/cspy/workflows/MacOS%20Python/badge.svg
-[python_osx_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22MacOS+Python%22
+[cpp_unix_svg]: https://github.com/torressa/cspy/workflows/Cpp/badge.svg
+[cpp_unix_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22Cpp%22
+[python_unix_svg]: https://github.com/torressa/cspy/workflows/Python/badge.svg
+[python_unix_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22Python%22
+[dotnet_unix_svg]: https://github.com/torressa/cspy/workflows/Dotnet/badge.svg
+[dotnet_unix_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22Dotnet%22
 
 [cpp_win_svg]: https://github.com/torressa/cspy/workflows/Windows%20Cpp/badge.svg
 [cpp_win_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22Windows+Cpp%22
 [python_win_svg]: https://github.com/torressa/cspy/workflows/Windows%20Python/badge.svg
 [python_win_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22Windows+Python%22
+[dotnet_win_svg]: https://github.com/torressa/cspy/workflows/Windows%20Dotnet/badge.svg
+[dotnet_win_link]: https://github.com/torressa/cspy/actions?query=workflow%3A%22Windows+Dotnet%22
 
-[![Documentation Status](https://readthedocs.org/projects/cspy/badge/?version=latest)](https://cspy.readthedocs.io/en/latest/?badge=latest)
 [![PyPI version](https://badge.fury.io/py/cspy.svg)](https://badge.fury.io/py/cspy)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/c28f50e92dae4bcc921f1bd142370608)](https://www.codacy.com/app/torressa/cspy?utm_source=github.com&utm_medium=referral&utm_content=torressa/cspy&utm_campaign=Badge_Grade)
 [![JOSS badge](https://joss.theoj.org/papers/25eda55801a528b982d03a6a61f7730d/status.svg)](https://joss.theoj.org/papers/25eda55801a528b982d03a6a61f7730d)
@@ -29,6 +26,8 @@
 # cspy
 
 A collection of algorithms for the (resource) Constrained Shortest Path (CSP) problem.
+
+Documentation [here](https://torressa.github.io/cspy/).
 
 The CSP problem was popularised by [Inrich and Desaulniers (2005)](https://www.researchgate.net/publication/227142556_Shortest_Path_Problems_with_Resource_Constraints). It was initially introduced as a subproblem for the bus driver scheduling problem, and has since then widely studied in a variety of different settings including: the vehicle routing problem with time windows (VRPTW), the technician routing and scheduling problem, the capacitated arc-routing problem, on-demand transportation systems, and, airport ground movement; among others.
 
@@ -49,11 +48,17 @@ Currently, the exact and metaheuristic algorithms implemented include:
 Please see the [docs](https://cspy.readthedocs.io/en/latest/index.html) for individual algorithms Python or C++ API documentation, as well as some toy examples and further details.
 
 
+- [Bidirectional and monodirectional algorithms](https://torressa.github.io/cspy/python_api/cspy.BiDirectional.html)
+- [Heuristic Tabu Search](https://torressa.github.io/cspy/python_api/cspy.Tabu.html)
+- [Greedy Elimination Procedure](https://torressa.github.io/cspy/python_api/cspy.GreedyElim.html)
+- [GRASP](https://torressa.github.io/cspy/python_api/cspy.GRASP.html)
+- [PSOLGENT](https://torressa.github.io/cspy/python_api/cspy.PSOLGENT.html)
+
 ## Getting Started
 
 ### Prerequisites
 
-Conceptual background and input formatting is discussed in the [docs](https://cspy.readthedocs.io/en/latest/how_to.html).
+Conceptual background and input formatting is discussed in the [docs](https://torressa.github.io/cspy/how_to.html).
 
 Module dependencies are:
 
@@ -143,7 +148,31 @@ void wrap() {
 } // namespace bidirectional
 ```
 
-For more details see the [C++ API](https://cspy.readthedocs.io/en/latest/cc_api/BiDirectional.html)
+#### C#
+
+```csharp
+DoubleVector max_res = new DoubleVector(new List<double>() {4.0, 20.0});
+DoubleVector min_res = new DoubleVector(new List<double>() {0.0, 0.0});
+int number_vertices = 5;
+int number_edges = 5;
+BiDirectionalCpp alg = new BiDirectionalCpp(number_vertices, number_edges, 0, 4, max_res, min_res);
+
+// Populate graph
+alg.addNodes(new IntVector(new List<int>() {0, 1, 2, 3, 4}));
+alg.addEdge(0, 1, -1.0, new DoubleVector(new List<double>() {1, 2}));
+alg.addEdge(1, 2, -1.0, new DoubleVector(new List<double>() {1, 0.3}));
+alg.addEdge(2, 3, -10.0, new DoubleVector(new List<double>() {1, 3}));
+alg.addEdge(2, 4, 10.0, new DoubleVector(new List<double>() {1, 2}));
+alg.addEdge(3, 4, -1.0, new DoubleVector(new List<double>() {1, 10}));
+alg.setDirection("forward");
+
+// Run and query attributes
+alg.run();
+
+IntVector path = alg.getPath();
+DoubleVector res = alg.getConsumedResources();
+double cost = alg.getTotalCost();
+```
 
 ### Examples
 
@@ -183,10 +212,9 @@ Requirements:
 
 - [CMake](https://cmake.org/download/) (>=v3.14)
 - Standard C++ toolchain
-- [LEMON](https://lemon.cs.elte.hu/trac/lemon) installed (see [`tools/docker/scripts/install_lemon`](tools/docker/scripts/install_lemon))
 - Python (>=3.6)
 
-Then use the [`Makefile`] e.g. `make` in the root dir runs the unit tests
+Then use the wrapper [`Makefile`](Makefile) e.g. `make` in the root dir runs the unit tests
 
 ## License
 
@@ -213,7 +241,7 @@ After that feel free to send a pull request.
 
 If you have a question or need help, feel free to raise an issue explaining it.
 
-Alternatively, email me at `d.torressanchez@lancaster.ac.uk`.
+Alternatively, email me at `torressa at tutanota.com`.
 
 ## Citing
 
@@ -229,7 +257,8 @@ If you'd like to cite this package, please use the following bib format:
   number = {49},
   pages = {1655},
   author = {{Torres Sanchez}, David},
-  title = {cspy: A Python package with a collection of algorithms for the (Resource) Constrained Shortest Path problem},
+  title = {cspy: A Python package with a collection of algorithms for the
+    (Resource) Constrained Shortest Path problem},
   journal = {Journal of Open Source Software}
 }
 ```

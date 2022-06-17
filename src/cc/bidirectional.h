@@ -1,13 +1,18 @@
-#ifndef BIDIRECTIONAL_BIDIRECTIONAL_H__
-#define BIDIRECTIONAL_BIDIRECTIONAL_H__
+#ifndef SRC_CC_BIDIRECTIONAL_H__
+#define SRC_CC_BIDIRECTIONAL_H__
 
 #include <chrono> // timing (e.g. time_point)
 #include <vector>
 
-#include "digraph.h"
-#include "params.h"
-#include "ref_callback.h"
-#include "search.h"
+// cspy
+#include "src/cc/config.h" // log-level
+#include "src/cc/digraph.h"
+#include "src/cc/params.h"
+#include "src/cc/ref_callback.h"
+#include "src/cc/search.h"
+
+// logging
+#include "spdlog/spdlog.h" // after config.h as
 
 namespace bidirectional {
 
@@ -289,6 +294,14 @@ class BiDirectional {
    */
   void getMinimumWeights(double* fwd_min, double* bwd_min);
 
+  /// return time since start time in seconds.
+
+  double getElapsedTime() {
+    std::chrono::duration<double> duration =
+        (std::chrono::system_clock::now() - start_time_);
+    return static_cast<double>(duration.count());
+  }
+
   /**
    * The procedure "Join" or Algorithm 3 from Righini and Salani (2006).
    *
@@ -299,4 +312,4 @@ class BiDirectional {
 
 } // namespace bidirectional
 
-#endif // BIDIRECTIONAL_BIDIRECTIONAL_H__
+#endif // SRC_CC_BIDIRECTIONAL_H__

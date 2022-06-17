@@ -1,0 +1,56 @@
+name: Python
+
+on: [push, pull_request]
+
+jobs:
+  ubuntu:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [3.6, 3.7, 3.8, 3.9, "3.10"]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Configure
+        run: |
+          echo $pythonLocation
+          echo $pythonVersion
+          cmake -S . -Bbuild -DBUILD_TESTING=ON -DBUILD_PYTHON=ON -DBUILD_SHARED_LIBS=ON -DPython3_ROOT_DIR=${pythonLocation} -DPython_ROOT_DIR=${pythonLocation} -DPython3_FIND_STRATEGY=LOCATION
+      - name: Build
+        run: cmake --build build --config Release --target all -v
+      - name: Run python tests
+        run: |
+          cd build
+          ctest --verbose -R python_unittest
+
+  macos:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [3.6, 3.7, 3.8, 3.9, "3.10"]
+        os: [macos-11, macos-10.15]
+    env:
+      SYSTEM_VERSION_COMPAT: 0
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: rustup target add aarch64-apple-darwin
+      - name: Configure
+        run: |
+          echo $pythonLocation
+          echo $pythonVersion
+          cmake -S . -Bbuild -DBUILD_TESTING=ON -DBUILD_PYTHON=ON -DBUILD_SHARED_LIBS=ON -DPython3_ROOT_DIR=${pythonLocation} -DPython_ROOT_DIR=${pythonLocation} -DPython3_FIND_STRATEGY=LOCATION
+      - name: Build
+        run: cmake --build build --config Release --target all -v
+      - name: Run python tests
+        run: |
+          cd build
+          ctest --verbose -R python_unittest

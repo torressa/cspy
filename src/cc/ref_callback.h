@@ -1,5 +1,5 @@
-#ifndef BIDIRECTIONAL_REF_CALLBACK_H__
-#define BIDIRECTIONAL_REF_CALLBACK_H__
+#ifndef SRC_CC_REF_CALLBACK_H__
+#define SRC_CC_REF_CALLBACK_H__
 
 #include <string>
 #include <vector>
@@ -58,4 +58,4 @@ std::vector<double> additiveBackwardREF(
 
 } // namespace bidirectional
 
-#endif // BIDIRECTIONAL_REF_CALLBACK_H__
+#endif // SRC_CC_REF_CALLBACK_H__
