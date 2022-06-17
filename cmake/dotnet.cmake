@@ -46,7 +46,7 @@ endif()
 list(APPEND CMAKE_SWIG_FLAGS ${FLAGS} "-I${PROJECT_SOURCE_DIR}")
 
 # Needed by dotnet/CMakeLists.txt
-set(DOTNET_PACKAGE cspy.Dotnet)
+set(DOTNET_PACKAGE cspy)
 set(DOTNET_PACKAGES_DIR "${PROJECT_BINARY_DIR}/dotnet/packages")
 if(APPLE)
   set(RUNTIME_IDENTIFIER osx-x64)
