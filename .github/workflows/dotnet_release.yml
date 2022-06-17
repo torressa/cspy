@@ -45,7 +45,7 @@ jobs:
     - name: Check cmake
       run: cmake --version
     - name: Configure
-      run: cmake -S. -Bbuild -G "Visual Studio 16 2019" -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON -DBUILD_DOTNET=ON
+      run: cmake -S. -Bbuild -G "Visual Studio 17 2022" -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON -DBUILD_DOTNET=ON
     - name: Build
       run: cmake --build build --config Release --target ALL_BUILD -- /verbosity:normal /maxcpucount
     - name: Test
@@ -56,3 +56,4 @@ jobs:
       run: |
         cd build/dotnet/packages
         dotnet nuget push "*.nupkg" --skip-duplicate --api-key ${NUGET_API_KEY} --source https://api.nuget.org/v3/index.json
+      continue-on-error: true
