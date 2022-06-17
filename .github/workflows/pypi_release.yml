@@ -83,7 +83,6 @@ jobs:
           echo $pythonVersion
           cmake -S . -Bbuild -DBUILD_TESTING=ON -DBUILD_PYTHON=ON -DBUILD_SHARED_LIBS=ON -DPython3_ROOT_DIR=${pythonLocation} -DPython_ROOT_DIR=${pythonLocation} -DPython3_FIND_STRATEGY=LOCATION
       - name: Build
-        env:
         run: cmake --build build --config Release --target all -v
       - name: Fix wheel and run python tests
         run: |
