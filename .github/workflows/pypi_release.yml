@@ -24,6 +24,7 @@ jobs:
         PLAT: manylinux2014_x86_64
         PYBIN: '/opt/python/${{ matrix.python }}/bin'
     strategy:
+      fail-fast: false
       matrix:
         python: # Update this list whenever the docker image is updated (check /opt/python/)
           - cp36-cp36m
@@ -33,15 +34,11 @@ jobs:
           - cp310-cp310
     steps:
       - uses: actions/checkout@v2
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
       - name: Configure
         run: |
-          cmake -S . -Bbuild -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON \
-            -DBUILD_PYTHON=${BUILD_PYTHON} -DBUILD_SHARED_LIBS=${BUILD_PYTHON} \
-            -DBENCHMARK_TESTS=${BENCHMARK_TESTS} -DBENCHMARK_BOOST=${BENCHMARK_BOOST} \
-            -DPython3_ROOT_DIR="/usr/" -DPython3_FIND_STRATEGY="LOCATION"
+          echo $pythonLocation
+          echo $pythonVersion
+          cmake -S . -Bbuild -DBUILD_TESTING=ON -DBUILD_PYTHON=ON -DBUILD_SHARED_LIBS=ON -DPython3_ROOT_DIR=${pythonLocation} -DPython_ROOT_DIR=${pythonLocation} -DPython3_FIND_STRATEGY=LOCATION
       - name: Build
         run: cmake --build build --config Release --target all -v
       - name: install requirements
@@ -63,6 +60,7 @@ jobs:
   macos-build:
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         os: [macos-10.15, macos-11] # 10.14 and 11 don't work
         python-version: [3.6, 3.7, 3.8, 3.9, "3.10"]
@@ -76,7 +74,6 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
-      - run: rustup target add aarch64-apple-darwin
       - name: Configure
         run: |
           echo $pythonLocation
