@@ -107,10 +107,10 @@ void BiDirectional::runPreprocessing() {
       std::all_of(
           min_res.cbegin(), min_res.cend(), [](bool v) { return v == 0; })) {
     if (params_ptr_->elementary) {
-      SPDLOG_INFO(
-          "No negative cost cycle found and elementary set to true. Forcing to "
-          "false");
-      setElementary(false);
+      SPDLOG_WARN(
+          "No negative cost cycle has been found and elementary set to true.\n"
+          "Consider setting elementary to false.");
+      // setElementary(false);
     }
   }
 
