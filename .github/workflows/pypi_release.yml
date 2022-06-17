@@ -58,7 +58,7 @@ jobs:
       - name: build wheel
         run: ${PYBIN}/pip wheel build/python/ --no-deps -w build/python/wheelhouse
       - name: repair wheel
-        run: auditwheel repair build/python/wheelhouse/* --plat "$PLAT" -w /build/python/wheelhouse-repaired
+        run: auditwheel repair build/python/wheelhouse/* --plat "$PLAT" -w build/python/wheelhouse-repaired
       - name: test
         run: |
           "${PYBIN}/pip" install cspy --no-index -f build/python/wheelhouse-repaired/
