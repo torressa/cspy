@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [unreleased]
 
+## [v1.0.2]
+
 ### Changed
 
  - Refactored Python and C++ unittests.
@@ -289,7 +291,8 @@ path using `networkx.shortest_simple_paths`.
 - Docstring modifications to include maths.
 - Updated README.
 
-[unreleased]: https://github.com/torressa/cspy/compare/v1.0.1...HEAD
+[unreleased]: https://github.com/torressa/cspy/compare/v1.0.2...HEAD
+[v1.0.2]: https://github.com/torressa/cspy/compare/v1.0.1...v1.0.2
 [v1.0.1]: https://github.com/torressa/cspy/compare/v1.0.0...v1.0.1
 [v1.0.0]: https://github.com/torressa/cspy/compare/v1.0.0-alpha...v1.0.0
 [v1.0.0-alpha]: https://github.com/torressa/cspy/compare/v0.1.2...v1.0.0-alpha
