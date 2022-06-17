@@ -39,8 +39,13 @@ jobs:
       - name: Install SWIG
         run: |
           git clone https://github.com/swig/swig.git --branch v4.0.2
-          && cd swig && ./autogen.sh && ./configure
-          && make && make install && cd .. && rm -rf swig/
+          cd swig
+          ./autogen.sh
+          ./configure
+          make
+          make install
+          cd ..
+          rm -rf swig/
       - name: Configure
         run: |
           cmake -S . -Bbuild -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON \
