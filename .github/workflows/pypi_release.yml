@@ -34,6 +34,13 @@ jobs:
           - cp310-cp310
     steps:
       - uses: actions/checkout@v2
+      - name: Install python3-devel
+        run: yum install -y python3-devel wget
+      - name: Install SWIG
+        run: |
+          git clone https://github.com/swig/swig.git --branch v4.0.2
+          && cd swig && ./autogen.sh && ./configure
+          && make && make install && cd .. && rm -rf swig/
       - name: Configure
         run: |
           cmake -S . -Bbuild -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON \

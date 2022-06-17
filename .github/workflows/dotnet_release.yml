@@ -27,7 +27,7 @@ jobs:
       run: cmake --build build --config Release --target install -v -- DESTDIR=install
     - name: Publish to NuGet
       run: |
-        dotnet nuget push build/dotnet/packages/ --skip-duplicate -k ${NUGET_API_KEY} -s https://api.nuget.org/v3/index.json
+        dotnet nuget push build/dotnet/packages/ -k ${NUGET_API_KEY} --skip-duplicate  -s https://api.nuget.org/v3/index.json
       continue-on-error: true
 
   windows-build:
@@ -53,5 +53,5 @@ jobs:
       run: cmake --build build --config Release --target INSTALL -- /verbosity:normal /maxcpucount
     - name: Publish to NuGet
       run: |
-        dotnet nuget push build/dotnet/packages/ --skip-duplicate -k ${NUGET_API_KEY} -s https://api.nuget.org/v3/index.json
+        dotnet nuget push build/dotnet/packages/ -k ${NUGET_API_KEY} --skip-duplicate  -s https://api.nuget.org/v3/index.json
       continue-on-error: true
