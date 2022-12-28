@@ -109,6 +109,10 @@ class BiDirectional {
     params_ptr_->setElementary(elementary_in);
   }
   /// @see bidirectional::Params
+  void setTwoCycleElimination(const bool& two_cycle_elimination_in) {
+    params_ptr_->setTwoCycleElimination(two_cycle_elimination_in);
+  }
+  /// @see bidirectional::Params
   void setBoundsPruning(const bool& bounds_pruning_in) {
     params_ptr_->setBoundsPruning(bounds_pruning_in);
   }
