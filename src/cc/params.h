@@ -36,7 +36,7 @@ class Params {
   double threshold = std::nan("na");
   /// bool with whether output path is required to be elementary
   bool elementary = false;
-  /// bool with wheter 2-cycles should be eliminated for non-elementary RCSPP
+  /// bool with whether 2-cycles should be eliminated for non-elementary RCSPP
   bool two_cycle_elimination = false;
   /// bool with whether lower bounds based on shortest paths are used to prune
   /// labels. Experimental!

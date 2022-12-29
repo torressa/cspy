@@ -1,6 +1,6 @@
 set_property(SOURCE bidirectional.i PROPERTY CPLUSPLUS ON)
 set_property(SOURCE bidirectional.i PROPERTY COMPILE_OPTIONS -dllimport
-                                             cspy-dotnet-native)
+                                             cspy-dn-native)
 
 swig_add_library(
   BiDirectionalDotnet

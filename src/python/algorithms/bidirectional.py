@@ -84,6 +84,9 @@ class BiDirectional:
         Custom resource extension callback. See `REFs`_ for more details.
         Default : None
 
+    two_cycle_elimination: bool, optional
+        whether 2-cycles should be eliminated for non-elementary RCSPP
+
     .. _REFs : https://cspy.readthedocs.io/en/latest/ref.html
     .. _Tilk 2017: https://www.sciencedirect.com/science/article/pii/S0377221717302035
     .. _Righini and Salani (2006): https://www.sciencedirect.com/science/article/pii/S1572528606000417
@@ -105,6 +108,7 @@ class BiDirectional:
         critical_res: Optional[int] = None,
         # seed: Union[int] = None,
         REF_callback: Optional[REFCallback] = None,
+        two_cycle_elimination: Optional[bool] = False,
     ):
         # Check inputs
         check(G, max_res, min_res, direction, REF_callback, __name__)
@@ -157,6 +161,8 @@ class BiDirectional:
             self.bidirectional_cpp.setREFCallback(REF_callback)
         # if isinstance(seed, int) and seed is not None:
         #     self.bidirectional_cpp.setSeed(seed)
+        if isinstance(two_cycle_elimination, bool) and two_cycle_elimination:
+            self.bidirectional_cpp.setTwoCycleElimination(True)
 
     def run(self):
         "Run the algorithm in series"

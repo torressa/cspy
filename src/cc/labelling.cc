@@ -160,7 +160,8 @@ bool Label::checkPathExtension(const int& user_id) const {
     return false;
   };
 
-  if (params_ptr->two_cycle_elimination && getPredecessorId() == user_id) {
+  if (params_ptr->two_cycle_elimination && partial_path.size() > 1 &&
+      getPredecessorId() == user_id) {
     return false;
   }
 
@@ -460,10 +461,10 @@ bool mergePreCheck(
   // Check for 2-cycles.
   // Check at end of partial path should be sufficient since individual paths
   // are 2-cycle free
-  if (fwd_label.params_ptr->two_cycle_elimination) {
+  if (fwd_label.params_ptr->two_cycle_elimination &&
+      fwd_label.partial_path.size() > 1 && bwd_label.partial_path.size() > 1) {
     if (fwd_label.getPredecessorId() == bwd_label.partial_path.back())
       return false;
-
     if (bwd_label.getPredecessorId() == fwd_label.partial_path.back())
       return false;
   }

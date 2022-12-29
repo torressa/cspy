@@ -27,11 +27,11 @@ jobs:
       fail-fast: false
       matrix:
         python: # Update this list whenever the docker image is updated (check /opt/python/)
-          - cp36-cp36m
           - cp37-cp37m
           - cp38-cp38
           - cp39-cp39
           - cp310-cp310
+          - cp311-cp311
     steps:
       - uses: actions/checkout@v2
       - name: Install python3-devel
@@ -74,8 +74,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-10.15, macos-11] # 10.14 and 11 don't work
-        python-version: [3.6, 3.7, 3.8, 3.9, "3.10"]
+        os: [macos-10.15, macos-11]
+        python-version: [3.7, 3.8, 3.9, "3.10", "3.11"]
     env:
       TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
       TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
@@ -107,14 +107,14 @@ jobs:
         continue-on-error: true
 
   windows-build:
-    runs-on: windows-latest
+    runs-on: windows-2019
     env:
       TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
       TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
     strategy:
       fail-fast: false
       matrix:
-        python-version: [3.6, 3.7, 3.8, 3.9, "3.10"]
+        python-version: [3.7, 3.8, 3.9, "3.10", "3.11"]
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python ${{ matrix.python-version }}

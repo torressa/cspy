@@ -207,6 +207,19 @@ TEST_F(TestLabelling, testRunDominanceBackward) {
   ASSERT_EQ((*labels)[0], label3);
 }
 
+TEST_F(TestLabelling, testTwoCycleExtension) {
+  std::vector<int> path1{0, 6, 7, 8};
+  std::vector<int> path2{0, 1, 3, 4, 8};
+
+  Label label1(-270.0, node, {2.0}, path1, params_ptr.get());
+  Label label2(-260.0, node, {2.0}, path2, params_ptr.get());
+
+  ASSERT_TRUE(label1.checkDominance(label2, bidirectional::FWD));
+
+  params_ptr->two_cycle_elimination = true;
+  ASSERT_FALSE(label1.checkDominance(label2, bidirectional::FWD));
+}
+
 } // namespace labelling
 
 // namespace labelling
