@@ -145,8 +145,41 @@ class Label {
   /// Returns true is the partial path extension is OK.
   bool checkPathExtension(const int& user_id) const;
 
+  /**
+   * Simple check if both lables have the same feasible extension with regard to
+   * 2-cycle elimination.
+   * this and other have same feasible extension if predecessor is the same.
+   * @param[in] other, Label with other label to compare
+   * @return true if this and other have same feasible extension
+   */
+  bool checkSameFeasibleExtensionTwoCycleSimple(const Label& other) const;
+
+  /**
+   * Simple check if both lables have the same feasible extension under
+   * elementary conditions.
+   * this and other have the same feasible extension if unreachable_nodes of
+   * this is subset of unreachable_nodes of other
+   * @param[in] other, Label with other label to compare
+   * @return true if this and other have same feasible extension
+   */
+  bool checkSameFeasibleExtensionElementary(const Label& other) const;
+
+  /**
+   * Check if both lables have the same feasible extension, i.e.,
+   * if they both can extend to the same nodes.
+   * Important for correct dominance check.
+   * Labels with different feasible extension cannot dominate each other.
+   * @param[in] other, Label with other label to compare
+   * @return true if this and other have same feasible extension
+   */
+  bool checkSameFeasibleExtension(const Label& other) const;
+
   /// set phi attribute for merged labels from Righini and Salani (2006)
   void setPhi(const double& phi_in) { phi = phi_in; }
+
+  /// gets the id of the predecessor node
+  /// TODO can be replaced as member of label
+  int getPredecessorId() const { return partial_path.end()[-2]; };
 
   std::string getString() const;
   // operator overloads
@@ -156,7 +189,7 @@ class Label {
   friend std::ostream& operator<<(std::ostream& os, const Label& label);
   friend bool          operator==(const Label& label1, const Label& label2);
   friend bool          operator!=(const Label& label1, const Label& label2) {
-    return !(label1 == label2);
+             return !(label1 == label2);
   }
 };
 

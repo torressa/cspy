@@ -29,29 +29,31 @@ def prune_graph(G, max_res, min_res):
 
         def __get_weight(i, j, attr_dict):
             # returns number to use as weight for the algorithm
-            return attr_dict['res_cost'][r]
+            return attr_dict["res_cost"][r]
 
         # Get paths from source to all other nodes
-        length_s, path_s = single_source_bellman_ford(G,
-                                                      'Source',
-                                                      weight=__get_weight)
-        length_t, path_t = single_source_bellman_ford(G.reverse(copy=True),
-                                                      'Sink',
-                                                      weight=__get_weight)
+        length_s, path_s = single_source_bellman_ford(G, "Source", weight=__get_weight)
+        length_t, path_t = single_source_bellman_ford(
+            G.reverse(copy=True), "Sink", weight=__get_weight
+        )
 
         try:
             # Collect nodes in paths that violate the resource bounds
             # see note above
-            nodes_source.update({
-                path_s[key][-1]: (val, r)
-                for key, val in length_s.items()
-                if (key != 'Source') and (val > max_res[r])
-            })
-            nodes_sink.update({
-                path_t[key][-1]: (val, r)
-                for key, val in length_t.items()
-                if (key != 'Sink') and (val > max_res[r])
-            })
+            nodes_source.update(
+                {
+                    path_s[key][-1]: (val, r)
+                    for key, val in length_s.items()
+                    if (key != "Source") and (val > max_res[r])
+                }
+            )
+            nodes_sink.update(
+                {
+                    path_t[key][-1]: (val, r)
+                    for key, val in length_t.items()
+                    if (key != "Sink") and (val > max_res[r])
+                }
+            )
         except IndexError:  # No nodes violate resource limits
             pass
 
@@ -59,12 +61,11 @@ def prune_graph(G, max_res, min_res):
     nodes_sink = {}
     n_nodes = len(G.nodes())
     # Map function for each resource
-    list(map(_check_resource, range(0, G.graph['n_res'])))
+    list(map(_check_resource, range(0, G.graph["n_res"])))
     if nodes_source or nodes_sink:  # if there are nodes to remove
         # Remove node if either direction is bad; it can't be on shortest path
         nodes_to_remove = [
-                node for node in G.nodes() if (node in nodes_source) or
-                (node in nodes_sink)
+            node for node in G.nodes() if (node in nodes_source) or (node in nodes_sink)
         ]
         # Filter out source or sink
         if "Source" in nodes_to_remove or "Sink" in nodes_to_remove:
@@ -77,7 +78,8 @@ def prune_graph(G, max_res, min_res):
             elif "Source" in nodes_source:
                 unreachable_res = nodes_source["Source"][1]
             raise Exception(
-                "Sink not reachable for resource {}".format(unreachable_res))
+                "Sink not reachable for resource {}".format(unreachable_res)
+            )
         G.remove_nodes_from(nodes_to_remove)
         log.info("Removed {}/{} nodes".format(len(nodes_to_remove), n_nodes))
     return G

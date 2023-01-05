@@ -7,7 +7,7 @@
       <MinClientVersion>4.1.0</MinClientVersion>
       <NeutralLanguage>en-UK</NeutralLanguage>
       <Authors>David Torres Sanchez</Authors>
-      <Company>Lancaster Univeristy</Company>
+      <Company>Lancaster University</Company>
       <Copyright>Copyright (c) 2021. David Torres Sanchez</Copyright>
        <!-- Pack Option -->
        <PackageTags>native;sample</PackageTags>

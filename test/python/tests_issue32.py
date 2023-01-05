@@ -7,41 +7,37 @@ from utils import TestingBase
 
 
 class MyCallback(REFCallback):
-
     def __init__(self, max_res):
         REFCallback.__init__(self)
         # Graph to be set once it has been preprocessed
         self.G: DiGraph = None
         self._max_res = max_res
 
-    def REF_fwd(self, cumul_res, tail, head, edge_res, partial_path,
-                cumul_cost):
+    def REF_fwd(self, cumul_res, tail, head, edge_res, partial_path, cumul_cost):
         res_new = list(cumul_res)
         # Monotone resource
         res_new[0] += 1.0
         _, head_original = self._get_original_node_label(tail, head)
         # Increasing resource
         if head_original != "Sink":
-            res_new[1] += float(int(head_original)**2)
+            res_new[1] += float(int(head_original) ** 2)
         # Resource reset
         res_new[2] += edge_res[1]
         return res_new
 
-    def REF_bwd(self, cumul_res, tail, head, edge_res, partial_path,
-                cumul_cost):
+    def REF_bwd(self, cumul_res, tail, head, edge_res, partial_path, cumul_cost):
         res_new = list(cumul_res)
         _, head_original = self._get_original_node_label(tail, head)
         # Monotone resource
         res_new[0] -= 1
         # Increasing resource
         if head_original != "Sink":
-            res_new[1] += float(int(head_original)**2)
+            res_new[1] += float(int(head_original) ** 2)
         # Resource reset
         res_new[2] += edge_res[1]
         return res_new
 
-    def REF_join(self, fwd_resources, bwd_resources, tail, head,
-                 edge_resources):
+    def REF_join(self, fwd_resources, bwd_resources, tail, head, edge_resources):
         # local copies
         fwd_res = list(fwd_resources)
         bwd_res = list(bwd_resources)
@@ -50,8 +46,7 @@ class MyCallback(REFCallback):
         merged_res = [0] * len(fwd_res)
         merged_res[0] = fwd_res[0] + bwd_res[0]
         if head_original != "Sink":
-            merged_res[1] = fwd_res[1] + bwd_res[1] + float(
-                int(head_original)**2)
+            merged_res[1] = fwd_res[1] + bwd_res[1] + float(int(head_original) ** 2)
         else:
             merged_res[1] = fwd_res[1] + bwd_res[1]
         merged_res[2] = fwd_res[2] + bwd_res[2]
@@ -77,47 +72,53 @@ class TestsIssue32(TestingBase):
         # Create simple digraph with appropriate attributes
         # No resource costs required for custom REFs
         self.G = DiGraph(directed=True, n_res=3)
-        self.G.add_edge('Source', 1, res_cost=array([0, 0, 0]), weight=-1)
+        self.G.add_edge("Source", 1, res_cost=array([0, 0, 0]), weight=-1)
         self.G.add_edge(1, 2, res_cost=array([0, 0, 0]), weight=-1)
         self.G.add_edge(2, 3, res_cost=array([0, 0, 0]), weight=-10)
         self.G.add_edge(2, 4, res_cost=array([0, 1, 0]), weight=-10)
         self.G.add_edge(3, 4, res_cost=array([0, 1, 0]), weight=-10)
-        self.G.add_edge(4, 'Sink', res_cost=array([0, 0, 0]), weight=-1)
+        self.G.add_edge(4, "Sink", res_cost=array([0, 0, 0]), weight=-1)
         # Expected results
-        self.result_path = ['Source', 1, 2, 3, 4, 'Sink']
+        self.result_path = ["Source", 1, 2, 3, 4, "Sink"]
         self.total_cost = -23
         self.consumed_resources = [5, 30, 1]
 
-        self.result_path_heur = ['Source', 1, 2, 4, 'Sink']
+        self.result_path_heur = ["Source", 1, 2, 4, "Sink"]
         self.total_cost_heur = -13
         self.consumed_resources_heur = [4, 21, 1]
 
     def test_bidirectional(self):
         """Test BiDirectional with custom callback."""
-        alg = BiDirectional(self.G,
-                            self.max_res,
-                            self.min_res,
-                            method="unprocessed",
-                            REF_callback=self.my_callback)
+        alg = BiDirectional(
+            self.G,
+            self.max_res,
+            self.min_res,
+            method="unprocessed",
+            REF_callback=self.my_callback,
+        )
         # Overwrite graph as original labelling won't match
         self.my_callback.G = alg.G
         alg.run()
-        self.check_result(alg, self.result_path, self.total_cost,
-                          self.consumed_resources)
+        self.check_result(
+            alg, self.result_path, self.total_cost, self.consumed_resources
+        )
 
     def test_forward(self):
         """
         Test BiDirectional in the forward direction with custom callback.
         """
-        alg = BiDirectional(self.G,
-                            self.max_res,
-                            self.min_res,
-                            direction="forward",
-                            REF_callback=self.my_callback)
+        alg = BiDirectional(
+            self.G,
+            self.max_res,
+            self.min_res,
+            direction="forward",
+            REF_callback=self.my_callback,
+        )
         self.my_callback.G = alg.G
         alg.run()
-        self.check_result(alg, self.result_path, self.total_cost,
-                          self.consumed_resources)
+        self.check_result(
+            alg, self.result_path, self.total_cost, self.consumed_resources
+        )
 
     # def test_tabu(self):
     #     alg = Tabu(self.G,

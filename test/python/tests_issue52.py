@@ -23,7 +23,7 @@ class TestsIssue52(TestingBase):
         self.G.add_edge("C", "A", res_cost=array([1, 1]), weight=-10)
         self.G.add_edge("A", "Sink", res_cost=array([1, 1]), weight=0)
         # Expected results
-        self.result_path = ['Source', 'A', 'B', 'C', 'A', 'Sink']
+        self.result_path = ["Source", "A", "B", "C", "A", "Sink"]
         self.total_cost = -30
         self.consumed_resources = [5, 5]
 
@@ -34,23 +34,20 @@ class TestsIssue52(TestingBase):
         """
         alg = BiDirectional(self.G, self.max_res, self.min_res)
         alg.run()
-        self.check_result(alg, self.result_path, self.total_cost,
-                          self.consumed_resources)
+        self.check_result(
+            alg, self.result_path, self.total_cost, self.consumed_resources
+        )
 
     def test_bidirectional_forward(self):
-        alg = BiDirectional(self.G,
-                            self.max_res,
-                            self.min_res,
-                            direction='forward')
+        alg = BiDirectional(self.G, self.max_res, self.min_res, direction="forward")
         alg.run()
-        self.check_result(alg, self.result_path, self.total_cost,
-                          self.consumed_resources)
+        self.check_result(
+            alg, self.result_path, self.total_cost, self.consumed_resources
+        )
 
     def test_bidirectional_backward(self):
-        alg = BiDirectional(self.G,
-                            self.max_res,
-                            self.min_res,
-                            direction='backward')
+        alg = BiDirectional(self.G, self.max_res, self.min_res, direction="backward")
         alg.run()
-        self.check_result(alg, self.result_path, self.total_cost,
-                          self.consumed_resources)
+        self.check_result(
+            alg, self.result_path, self.total_cost, self.consumed_resources
+        )

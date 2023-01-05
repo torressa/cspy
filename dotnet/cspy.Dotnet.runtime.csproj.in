@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Library</OutputType>
-    <TargetFrameworks>netstandard2.1;netstandard2.0</TargetFrameworks>
+    @DOTNET_TFM@
     <RuntimeIdentifier>@RUNTIME_IDENTIFIER@</RuntimeIdentifier>
     <AssemblyName>cspy-dotnet-native</AssemblyName>
     <Version>@PROJECT_VERSION@</Version>
@@ -11,7 +11,7 @@
     <IncludeBuildOutput>false</IncludeBuildOutput>
 
     <!-- Pack Option -->
-    <Title>@DOTNET@ @RUNTIME_IDENTIFIER@ v@PROJECT_VERSION@</Title>
+    <Title>@DOTNET_PACKAGE@ @RUNTIME_IDENTIFIER@ v@PROJECT_VERSION@</Title>
     <PackageId>@DOTNET_NATIVE_PROJECT@</PackageId>
 
     <!-- Signing -->
@@ -22,12 +22,10 @@
 
   <ItemGroup>
     <!-- Native library must be in native directory... -->
-    <Content Include="$<TARGET_FILE:BiDirectionalCpp>">
-      <PackagePath>runtimes/@RUNTIME_IDENTIFIER@/native/%(Filename)%(Extension)</PackagePath>
-      <Pack>true</Pack>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="$<TARGET_FILE:cspy-dotnet-native>">
+    <Content Include="
+          $<TARGET_FILE:cspy-dotnet-native>
+          $<$<STREQUAL:$<TARGET_PROPERTY:BiDirectionalCpp,TYPE>,SHARED_LIBRARY>:;$<TARGET_SONAME_FILE:BiDirectionalCpp>>
+        ">
       <PackagePath>runtimes/@RUNTIME_IDENTIFIER@/native/%(Filename)%(Extension)</PackagePath>
       <Pack>true</Pack>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

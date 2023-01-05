@@ -156,7 +156,52 @@ bool Label::checkStPath(const int& source_id, const int& sink_id) const {
 }
 
 bool Label::checkPathExtension(const int& user_id) const {
-  return (partial_path.end()[-2] != user_id && partial_path.back() != user_id);
+  if (partial_path.back() == user_id) {
+    return false;
+  };
+
+  if (params_ptr->two_cycle_elimination && partial_path.size() > 1 &&
+      getPredecessorId() == user_id) {
+    return false;
+  }
+
+  return true;
+}
+
+bool Label::checkSameFeasibleExtensionTwoCycleSimple(const Label& other) const {
+  return other.partial_path.size() > 1 && partial_path.size() > 1 &&
+         other.getPredecessorId() == getPredecessorId();
+}
+
+bool Label::checkSameFeasibleExtensionElementary(const Label& other) const {
+  if (unreachable_nodes.size() == 0)
+    return false;
+
+  if (other.unreachable_nodes.size() == 0)
+    return false;
+
+  if (!std::includes(
+          other.unreachable_nodes.begin(),
+          other.unreachable_nodes.end(),
+          unreachable_nodes.begin(),
+          unreachable_nodes.end())) {
+    return false;
+  }
+
+  return true;
+}
+
+bool Label::checkSameFeasibleExtension(const Label& other) const {
+  if (params_ptr->elementary) {
+    return checkSameFeasibleExtensionElementary(other);
+  }
+
+  if (params_ptr->two_cycle_elimination) {
+    return checkSameFeasibleExtensionTwoCycleSimple(other);
+  }
+
+  // always same extension if RCSPP without cycle-elimination
+  return true;
 }
 
 bool Label::checkDominance(
@@ -203,19 +248,12 @@ bool Label::checkDominance(
       }
     }
   }
-  // Check for the elementary case
-  if (params_ptr->elementary && unreachable_nodes.size() > 0 &&
-      other.unreachable_nodes.size() > 0) {
-    // check other.unreachable_nodes \subset unreachable_nodes (strict)
-    if (!std::includes(
-            other.unreachable_nodes.begin(),
-            other.unreachable_nodes.end(),
-            unreachable_nodes.begin(),
-            unreachable_nodes.end())) {
-      return false;
-    }
+
+  if (!checkSameFeasibleExtension(other)) {
+    return false;
   }
-  //  this dominates other
+
+  // this dominates other
   return true;
 }
 
@@ -403,32 +441,35 @@ bool mergePreCheck(
     const labelling::Label&    fwd_label,
     const labelling::Label&    bwd_label,
     const std::vector<double>& max_res) {
-  bool result = true;
   if (fwd_label.vertex.lemon_id == -1 || bwd_label.vertex.lemon_id == -1)
     return false;
 
   // Merge paths
-  std::vector<int> path     = fwd_label.partial_path;
-  std::vector<int> path_bwd = bwd_label.partial_path;
-
-  std::reverse(path_bwd.begin(), path_bwd.end());
-  path.insert(path.end(), path_bwd.begin(), path_bwd.end());
+  std::vector<int> path = fwd_label.partial_path;
+  path.insert(
+      path.end(),
+      bwd_label.partial_path.rbegin(),
+      bwd_label.partial_path.rend());
 
   if (fwd_label.params_ptr->elementary) {
     std::sort(path.begin(), path.end());
     const bool& contains_duplicates =
         std::adjacent_find(path.begin(), path.end()) != path.end();
-    result = !contains_duplicates;
+    return !contains_duplicates;
   }
 
   // Check for 2-cycles.
-  const int size = static_cast<int>(path.size());
-  for (int i = 1; i < size - 1; ++i) {
-    if (path[i - 1] == path[i + 1] || path[i - 1] == path[i])
+  // Check at end of partial path should be sufficient since individual paths
+  // are 2-cycle free
+  if (fwd_label.params_ptr->two_cycle_elimination &&
+      fwd_label.partial_path.size() > 1 && bwd_label.partial_path.size() > 1) {
+    if (fwd_label.getPredecessorId() == bwd_label.partial_path.back())
+      return false;
+    if (bwd_label.getPredecessorId() == fwd_label.partial_path.back())
       return false;
   }
 
-  return result;
+  return true;
 }
 
 Label mergeLabels(

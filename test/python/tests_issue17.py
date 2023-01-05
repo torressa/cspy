@@ -30,7 +30,7 @@ class TestsIssue17(TestingBase):
         # Maximum and minimum resource arrays
         self.max_res, self.min_res = [len(self.G.nodes()), 6], [0, 0]
         # Expected results
-        self.result_path = ['Source', 2, 5, 'Sink']
+        self.result_path = ["Source", 2, 5, "Sink"]
         self.total_cost = 1
         self.consumed_resources = [3, 3]
 
@@ -40,36 +40,30 @@ class TestsIssue17(TestingBase):
         self.assertEqual(alg.path, self.result_path)
         self.assertEqual(alg.total_cost, self.total_cost)
         self.assertTrue(alg.consumed_resources == self.consumed_resources)
-        self.assertTrue(
-            all(e in self.G.edges() for e in zip(alg.path, alg.path[1:])))
+        self.assertTrue(all(e in self.G.edges() for e in zip(alg.path, alg.path[1:])))
 
     def test_bidirectional_forward(self):
-        alg = BiDirectional(self.G,
-                            self.max_res,
-                            self.min_res,
-                            direction='forward',
-                            elementary=True)
+        alg = BiDirectional(
+            self.G, self.max_res, self.min_res, direction="forward", elementary=True
+        )
         alg.run()
-        self.check_result(alg, self.result_path, self.total_cost,
-                          self.consumed_resources)
-        self.assertTrue(
-            all(e in self.G.edges() for e in zip(alg.path, alg.path[1:])))
+        self.check_result(
+            alg, self.result_path, self.total_cost, self.consumed_resources
+        )
+        self.assertTrue(all(e in self.G.edges() for e in zip(alg.path, alg.path[1:])))
 
     def test_bidirectional_backward(self):
-        alg = BiDirectional(self.G,
-                            self.max_res,
-                            self.min_res,
-                            direction='backward',
-                            elementary=True)
+        alg = BiDirectional(
+            self.G, self.max_res, self.min_res, direction="backward", elementary=True
+        )
         alg.run()
-        self.check_result(alg, self.result_path, self.total_cost,
-                          self.consumed_resources)
-        self.assertTrue(
-            all(e in self.G.edges() for e in zip(alg.path, alg.path[1:])))
+        self.check_result(
+            alg, self.result_path, self.total_cost, self.consumed_resources
+        )
+        self.assertTrue(all(e in self.G.edges() for e in zip(alg.path, alg.path[1:])))
 
     def test_tabu(self):
         alg = Tabu(self.G, self.max_res, self.min_res)
         alg.run()
-        self.check_result(alg, ['Source', 2, 5, 4, 'Sink'], 1, [4, 4])
-        self.assertTrue(
-            all(e in self.G.edges() for e in zip(alg.path, alg.path[1:])))
+        self.check_result(alg, ["Source", 2, 5, 4, "Sink"], 1, [4, 4])
+        self.assertTrue(all(e in self.G.edges() for e in zip(alg.path, alg.path[1:])))

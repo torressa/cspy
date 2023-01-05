@@ -26,7 +26,7 @@ class TestsIssue20(TestingBase):
         # Maximum and minimum resource arrays
         self.max_res, self.min_res = [len(self.G.edges()), 2], [0, 0]
         # Expected results
-        self.result_path = ['Source', 2, 1, 'Sink']
+        self.result_path = ["Source", 2, 1, "Sink"]
         self.total_cost = -10
         self.consumed_resources = [3, 2]
 
@@ -37,10 +37,10 @@ class TestsIssue20(TestingBase):
         """
         alg = BiDirectional(self.G, self.max_res, self.min_res, elementary=True)
         alg.run()
-        self.check_result(alg, self.result_path, self.total_cost,
-                          self.consumed_resources)
-        self.assertTrue(
-            all(e in self.G.edges() for e in zip(alg.path, alg.path[1:])))
+        self.check_result(
+            alg, self.result_path, self.total_cost, self.consumed_resources
+        )
+        self.assertTrue(all(e in self.G.edges() for e in zip(alg.path, alg.path[1:])))
 
     def test_tabu(self):
         """
@@ -48,7 +48,7 @@ class TestsIssue20(TestingBase):
         """
         alg = Tabu(self.G, self.max_res, self.min_res)
         alg.run()
-        self.check_result(alg, self.result_path, self.total_cost,
-                          self.consumed_resources)
-        self.assertTrue(
-            all(e in self.G.edges() for e in zip(alg.path, alg.path[1:])))
+        self.check_result(
+            alg, self.result_path, self.total_cost, self.consumed_resources
+        )
+        self.assertTrue(all(e in self.G.edges() for e in zip(alg.path, alg.path[1:])))
