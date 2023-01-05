@@ -72,19 +72,22 @@ class GreedyElim(PathBase):
         if no resource feasible path is found
     """
 
-    def __init__(self,
-                 G: DiGraph,
-                 max_res: List,
-                 min_res: List,
-                 preprocess: Optional[bool] = False,
-                 algorithm: Optional[str] = "simple",
-                 max_depth: Optional[int] = 1000,
-                 time_limit: Optional[int] = None,
-                 threshold: Optional[float] = None,
-                 REF_callback=None):
+    def __init__(
+        self,
+        G: DiGraph,
+        max_res: List,
+        min_res: List,
+        preprocess: Optional[bool] = False,
+        algorithm: Optional[str] = "simple",
+        max_depth: Optional[int] = 1000,
+        time_limit: Optional[int] = None,
+        threshold: Optional[float] = None,
+        REF_callback=None,
+    ):
         # Pass arguments to parent class
-        super().__init__(G, max_res, min_res, preprocess, threshold,
-                         REF_callback, algorithm)
+        super().__init__(
+            G, max_res, min_res, preprocess, threshold, REF_callback, algorithm
+        )
         # Algorithm specific parameters
         self.max_depth = max_depth
         self.time_limit = time_limit
@@ -100,8 +103,7 @@ class GreedyElim(PathBase):
         Calculate shortest path with resource constraints.
         """
         start = time()
-        while not self.stop and not check_time_limit_breached(
-                start, self.time_limit):
+        while not self.stop and not check_time_limit_breached(start, self.time_limit):
             self._algorithm()
 
         if not self.best_path:
@@ -127,8 +129,7 @@ class GreedyElim(PathBase):
             # Add previously removed edge
             self.add_edge_back(self.last_edge_removed)
             # Remove a predecessor edge instead
-            self.remove_edge(self._get_predecessor_edges(
-                self.last_edge_removed))
+            self.remove_edge(self._get_predecessor_edges(self.last_edge_removed))
 
     def _get_predecessor_edges(self, edge):
         if not self.predecessor_edges:
@@ -137,15 +138,18 @@ class GreedyElim(PathBase):
                 self.stop = True
                 return edge
             self.predecessor_edges = [
-                e for e in self.G.edges(self.G.nbunch_iter(
-                    [node] + list(self.G.predecessors(node))),
-                                        data=True) if e[1] == node and e != edge
+                e
+                for e in self.G.edges(
+                    self.G.nbunch_iter([node] + list(self.G.predecessors(node))),
+                    data=True,
+                )
+                if e[1] == node and e != edge
             ]
-            self.predecessor_edges.sort(key=lambda x: x[2]['weight'])
+            self.predecessor_edges.sort(key=lambda x: x[2]["weight"])
         next_edge = self.predecessor_edges[-1]
         self.predecessor_edges.pop(-1)
         return next_edge
 
     @staticmethod
     def _edge_extract(edge):
-        return array(edge[2]['res_cost'])
+        return array(edge[2]["res_cost"])

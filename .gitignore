@@ -8,3 +8,4 @@ xml
 *.o
 *.so
 *.sw*
+*.DS_Store

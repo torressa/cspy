@@ -5,7 +5,7 @@ from types import BuiltinFunctionType
 from itertools import filterfalse, tee, chain
 
 from numpy import zeros, array
-from networkx import (shortest_simple_paths, astar_path, negative_edge_cycle)
+from networkx import shortest_simple_paths, astar_path, negative_edge_cycle
 
 from cspy.checking import check
 from cspy.preprocessing import preprocess_graph
@@ -22,20 +22,11 @@ class PathBase:
     e.g. shortest path, feasibility checks, compatible joining
     """
 
-    def __init__(self,
-                 G,
-                 max_res,
-                 min_res,
-                 preprocess,
-                 threshold,
-                 REF_callback,
-                 algorithm=None):
+    def __init__(
+        self, G, max_res, min_res, preprocess, threshold, REF_callback, algorithm=None
+    ):
         # Check inputs
-        check(G,
-              max_res,
-              min_res,
-              REF_callback=REF_callback,
-              algorithm=__name__)
+        check(G, max_res, min_res, REF_callback=REF_callback, algorithm=__name__)
         # Preprocess graph
         self.G = preprocess_graph(G, max_res, min_res, preprocess, REF_callback)
 
@@ -101,17 +92,17 @@ class PathBase:
         cost is returned.
         """
         # Create two copies of the simple path generator
-        paths, paths_backup = tee(shortest_simple_paths(self.G, source, 'Sink'),
-                                  2)
+        paths, paths_backup = tee(shortest_simple_paths(self.G, source, "Sink"), 2)
         paths_reduced = True
 
         # Select paths with under threshold if they exist
         try:
             cost_min = self.threshold if self.threshold is not None else 0
             paths_backup = filterfalse(
-                lambda p: sum(self.G[i][j]["weight"]
-                              for i, j in zip(p, p[1:])) >= cost_min,
-                paths_backup)
+                lambda p: sum(self.G[i][j]["weight"] for i, j in zip(p, p[1:]))
+                >= cost_min,
+                paths_backup,
+            )
             first = paths_backup.__next__()
             # add first element back
             paths = chain([first], paths_backup)
@@ -145,23 +136,25 @@ class PathBase:
         """
         shortest_path_edges = deque(iter(zip(self.st_path, self.st_path[1:])))
         shortest_path_edges_w_data = deque()
-        shortest_path_edges_w_data.extend([
-            (e[0], e[1], self.G[e[0]][e[1]]) for e in shortest_path_edges
-        ])
+        shortest_path_edges_w_data.extend(
+            [(e[0], e[1], self.G[e[0]][e[1]]) for e in shortest_path_edges]
+        )
         # init total resources and cost
-        total_res = zeros(self.G.graph['n_res'])
+        total_res = zeros(self.G.graph["n_res"])
         cost = 0
         # Check path for resource feasibility by adding one edge at a time
         for edge in shortest_path_edges_w_data:
-            cost += edge[2]['weight']
+            cost += edge[2]["weight"]
             if isinstance(self.REF, BuiltinFunctionType):
                 total_res += self._edge_extract(edge)
             else:
-                total_res = self.REF(total_res, edge[0], edge[1],
-                                     edge[2]["res_cost"], None, None)
+                total_res = self.REF(
+                    total_res, edge[0], edge[1], edge[2]["res_cost"], None, None
+                )
                 total_res = array(total_res)
-            if not ((all(total_res <= self.max_res) and
-                     all(total_res >= self.min_res))):
+            if not (
+                (all(total_res <= self.max_res) and all(total_res >= self.min_res))
+            ):
                 break
         else:
             # Fesible path found. Save attributes.
@@ -182,22 +175,25 @@ class PathBase:
     def add_edge_back(self, edge):
         LOG.debug("Added edge back {}".format(edge[:2]))
         if "data" in edge[2]:
-            self.G.add_edge(*edge[:2],
-                            res_cost=edge[2]['res_cost'],
-                            weight=edge[2]['weight'],
-                            data=edge[2]['data'])
+            self.G.add_edge(
+                *edge[:2],
+                res_cost=edge[2]["res_cost"],
+                weight=edge[2]["weight"],
+                data=edge[2]["data"]
+            )
         else:
-            self.G.add_edge(*edge[:2],
-                            res_cost=edge[2]['res_cost'],
-                            weight=edge[2]['weight'])
+            self.G.add_edge(
+                *edge[:2], res_cost=edge[2]["res_cost"], weight=edge[2]["weight"]
+            )
 
     def save(self, total_res, cost):
-        if not self.threshold or (self.threshold is not None and
-                                  cost <= self.threshold):
+        if not self.threshold or (
+            self.threshold is not None and cost <= self.threshold
+        ):
             self.best_path = self.st_path
             self.best_path_total_res = total_res
             self.best_path_cost = cost
 
     @staticmethod
     def _edge_extract(edge):
-        return array(edge[2]['res_cost'])
+        return array(edge[2]["res_cost"])

@@ -20,12 +20,13 @@ class TestsIssue38(TestingBase):
         self.G = DiGraph(directed=True, n_res=2)
         self.G.add_edge("Source", "A", res_cost=array([1, 2]), weight=0)
         self.G.add_edge("A", "Sink", res_cost=array([1, 10]), weight=0)
-        self.result_path = ['Source', "A", 'Sink']
+        self.result_path = ["Source", "A", "Sink"]
         self.total_cost = 0
         self.consumed_resources = [2, 12]
 
     def test_bidirectional(self):
         alg = BiDirectional(self.G, self.max_res, self.min_res)
         alg.run()
-        self.check_result(alg, self.result_path, self.total_cost,
-                          self.consumed_resources)
+        self.check_result(
+            alg, self.result_path, self.total_cost, self.consumed_resources
+        )

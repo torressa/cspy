@@ -71,25 +71,28 @@ class Tabu(PathBase):
 
     """
 
-    def __init__(self,
-                 G: DiGraph,
-                 max_res: List[float],
-                 min_res: List[float],
-                 preprocess: Optional[bool] = False,
-                 algorithm: Optional[str] = "simple",
-                 max_depth: Optional[int] = 1000,
-                 time_limit: Optional[int] = None,
-                 threshold: Optional[float] = None,
-                 REF_callback: Callable = None):
+    def __init__(
+        self,
+        G: DiGraph,
+        max_res: List[float],
+        min_res: List[float],
+        preprocess: Optional[bool] = False,
+        algorithm: Optional[str] = "simple",
+        max_depth: Optional[int] = 1000,
+        time_limit: Optional[int] = None,
+        threshold: Optional[float] = None,
+        REF_callback: Callable = None,
+    ):
         # Pass arguments to PathBase object
-        super().__init__(G, max_res, min_res, preprocess, threshold,
-                         REF_callback, algorithm)
+        super().__init__(
+            G, max_res, min_res, preprocess, threshold, REF_callback, algorithm
+        )
         # Algorithm specific parameters
         self.time_limit = time_limit
         self.max_depth = max_depth
         self.iteration = 0
         self.stop = False
-        self.neighbour = 'Source'
+        self.neighbour = "Source"
         self.neighbourhood = []
         self.tabu_edge = None
         self.edges_to_check = dict(self.G.edges())
@@ -99,8 +102,7 @@ class Tabu(PathBase):
         Calculate shortest path with resource constraints.
         """
         start = time()
-        while not self.stop and not check_time_limit_breached(
-                start, self.time_limit):
+        while not self.stop and not check_time_limit_breached(start, self.time_limit):
             self._algorithm()
             self.iteration += 1
 
@@ -134,9 +136,12 @@ class Tabu(PathBase):
         elif neighbour in self.st_path:
             # Paths can be joined at neighbour
             self.st_path = [
-                node for node in self.st_path
-                if (node != neighbour and
-                    self.st_path.index(node) < self.st_path.index(neighbour))
+                node
+                for node in self.st_path
+                if (
+                    node != neighbour
+                    and self.st_path.index(node) < self.st_path.index(neighbour)
+                )
             ] + path
         else:
             self._merge_paths(neighbour, path)
@@ -146,7 +151,8 @@ class Tabu(PathBase):
         for node in reversed(branch_path):
             if (node, neighbour) in self.G.edges():
                 self.st_path = [
-                    n for n in branch_path
+                    n
+                    for n in branch_path
                     if (branch_path.index(n) <= branch_path.index(node))
                 ] + path
                 break
@@ -189,11 +195,13 @@ class Tabu(PathBase):
                 return edge
             else:
                 nodes_iter = self.G.predecessors(node)
-                self.neighbourhood = deque(e for e in self.G.edges(
-                    self.G.nbunch_iter(nodes_iter), data=True)
-                                           if e[1] == node and e != edge)
+                self.neighbourhood = deque(
+                    e
+                    for e in self.G.edges(self.G.nbunch_iter(nodes_iter), data=True)
+                    if e[1] == node and e != edge
+                )
         # Get the edge in the neighbourhood with greatest weight
-        next_edge = max(self.neighbourhood, key=lambda x: x[2]['weight'])
+        next_edge = max(self.neighbourhood, key=lambda x: x[2]["weight"])
         # delete edge from neighbourhood
         del self.neighbourhood[self.neighbourhood.index(next_edge)]
         return next_edge

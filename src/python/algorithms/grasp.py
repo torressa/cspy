@@ -72,20 +72,21 @@ class GRASP(PathBase):
 
     """
 
-    def __init__(self,
-                 G: DiGraph,
-                 max_res: List[float],
-                 min_res: List[float],
-                 preprocess: Optional[bool] = False,
-                 max_iter: Optional[int] = 100,
-                 max_localiter: Optional[int] = 10,
-                 time_limit: Optional[int] = None,
-                 threshold: Optional[float] = None,
-                 alpha: Optional[float] = 0.2,
-                 REF_callback=None):
+    def __init__(
+        self,
+        G: DiGraph,
+        max_res: List[float],
+        min_res: List[float],
+        preprocess: Optional[bool] = False,
+        max_iter: Optional[int] = 100,
+        max_localiter: Optional[int] = 10,
+        time_limit: Optional[int] = None,
+        threshold: Optional[float] = None,
+        alpha: Optional[float] = 0.2,
+        REF_callback=None,
+    ):
         # Pass arguments to parent class
-        super().__init__(G, max_res, min_res, preprocess, threshold,
-                         REF_callback)
+        super().__init__(G, max_res, min_res, preprocess, threshold, REF_callback)
         # Algorithm specific attributes
         self.max_iter = max_iter
         self.max_localiter = max_localiter
@@ -96,15 +97,18 @@ class GRASP(PathBase):
         self.stop = False
         self.best_path = None
         self.best_solution = None
-        self.nodes = self.G.nodes()
+        self.nodes = sorted(list(self.G.nodes()))
 
     def run(self):
         """
         Calculate shortest path with resource constraints.
         """
         start = time()
-        while (self.it < self.max_iter and not self.stop and
-               not check_time_limit_breached(start, self.time_limit)):
+        while (
+            self.it < self.max_iter
+            and not self.stop
+            and not check_time_limit_breached(start, self.time_limit)
+        ):
             self._algorithm()
             self.it += 1
         if not self.best_solution.path:
@@ -120,14 +124,12 @@ class GRASP(PathBase):
         # Construction phase
         while len(solution.path) < len(self.nodes):
             candidates = [i for i in self.nodes if i not in solution.path]
-            weights = deque(
-                map(self._heuristic, repeat(solution.path[-1]), candidates))
+            weights = deque(map(self._heuristic, repeat(solution.path[-1]), candidates))
             # Build Restricted Candidiate List (RCL)
             restriced_candidates = [
                 candidates[i]
                 for i, c in enumerate(weights)
-                if c <= (min(weights) + self.alpha *
-                         (max(weights) - min(weights)))
+                if c <= (min(weights) + self.alpha * (max(weights) - min(weights)))
             ]
             # Select random node from RCL to add to the current solution
             solution.path.append(choice(restriced_candidates))
@@ -137,13 +139,15 @@ class GRASP(PathBase):
     def _local_search(self, solution):
         for _ in range(self.max_localiter):  # Local search phase
             # Init candidate solution using random valid path generator
-            candidate = Solution(
-                self._find_alternative_paths(self.G, solution.path), 0)
+            candidate = Solution(self._find_alternative_paths(self.G, solution.path), 0)
             # evaluate candidate solution
             candidate.cost = self._cost_solution(candidate)
             # Update solution with candidate if lower cost and resource feasible
-            if (candidate.path and candidate.cost < solution.cost and
-                    self._check_path(candidate)):
+            if (
+                candidate.path
+                and candidate.cost < solution.cost
+                and self._check_path(candidate)
+            ):
                 solution = candidate
         return solution
 
@@ -157,15 +161,15 @@ class GRASP(PathBase):
             if (i, j) not in self.G.edges():
                 return 1e10
             else:
-                return self.G.get_edge_data(i, j)['weight']
+                return self.G.get_edge_data(i, j)["weight"]
         else:
             return 1e10
 
     def _cost_solution(self, solution=None):
         if solution:
             return sum(
-                self._heuristic(i, j)
-                for i, j in zip(solution.path, solution.path[1:]))
+                self._heuristic(i, j) for i, j in zip(solution.path, solution.path[1:])
+            )
         else:
             return 1e11
 
@@ -176,8 +180,12 @@ class GRASP(PathBase):
         """
         if solution:
             path, cost = solution.path, solution.cost
-            if (len(path) > 2 and cost < 1e10 and path[0] == 'Source' and
-                    path[-1] == 'Sink'):
+            if (
+                len(path) > 2
+                and cost < 1e10
+                and path[0] == "Source"
+                and path[-1] == "Sink"
+            ):
                 self.st_path = path
                 return self.check_feasibility(return_edge=False)
             else:
@@ -197,15 +205,14 @@ class GRASP(PathBase):
         if poss_edges:
             sample_size = randint(1, len(poss_edges))
             if rng:
-                tmp = np.empty(len(poss_edges), dtype='object')
+                tmp = np.empty(len(poss_edges), dtype="object")
                 tmp[:] = poss_edges
-                selection = rng.choice(tmp, replace=False,
-                                       size=sample_size).tolist()
+                selection = rng.choice(tmp, replace=False, size=sample_size).tolist()
             else:
                 selection = sample(deque(poss_edges), sample_size)
             # will use last value tried with given key
             path_edges = dict([edge for edge in selection if edge in G.edges()])
-            elem = 'Source'  # start point in the new list
+            elem = "Source"  # start point in the new list
             new_list = []
             for _ in path_edges:
                 try:

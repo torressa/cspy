@@ -9,8 +9,14 @@ from cspy.preprocessing import preprocess_graph
 name = "cspy"
 
 __all__ = [
-    'BiDirectional', 'REFCallback', 'Tabu', 'GreedyElim', 'PSOLGENT', 'GRASP',
-    'check', 'preprocess_graph'
+    "BiDirectional",
+    "REFCallback",
+    "Tabu",
+    "GreedyElim",
+    "PSOLGENT",
+    "GRASP",
+    "check",
+    "preprocess_graph",
 ]
 
-__version__ = '0.1.0'
+__version__ = "0.1.0"
