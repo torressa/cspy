@@ -1,4 +1,3 @@
-# CMake from https://github.com/Mizux/dotnet-native LICENSE: Apache License 2.0
 if(NOT BUILD_DOTNET)
   return()
 endif()
@@ -6,6 +5,17 @@ endif()
 set(CMAKE_SWIG_FLAGS)
 find_package(SWIG REQUIRED)
 include(UseSWIG)
+
+# .Net Core 3.1 LTS is not available for osx arm64
+if(APPLE AND CMAKE_SYSTEM_PROCESSOR MATCHES "^(aarch64|arm64)")
+  set(USE_DOTNET_CORE_31 OFF)
+else()
+  option(USE_DOTNET_CORE_31 "Use .Net Core 3.1 LTS support" ON)
+endif()
+message(STATUS ".Net: Use .Net Core 3.1 LTS support: ${USE_DOTNET_CORE_31}")
+
+option(USE_DOTNET_6 "Use .Net 6.0 LTS support" ON)
+message(STATUS ".Net: Use .Net 6.0 LTS support: ${USE_DOTNET_6}")
 
 # if(${SWIG_VERSION} VERSION_GREATER_EQUAL 4) list(APPEND CMAKE_SWIG_FLAGS
 # "-doxygen") endif()
@@ -44,19 +54,42 @@ elseif(UNIX)
 endif()
 
 list(APPEND CMAKE_SWIG_FLAGS ${FLAGS} "-I${PROJECT_SOURCE_DIR}")
+target_link_libraries(cspy-dotnet-native PRIVATE BiDirectionalDotnet)
 
 # Needed by dotnet/CMakeLists.txt
-set(DOTNET_PACKAGE cspy.DN)
+set(DOTNET_PACKAGE cspy.Dotnet)
 set(DOTNET_PACKAGES_DIR "${PROJECT_BINARY_DIR}/dotnet/packages")
+
+# Runtime IDentifier see:
+# https://docs.microsoft.com/en-us/dotnet/core/rid-catalog
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(aarch64|arm64)")
+  set(DOTNET_PLATFORM arm64)
+else()
+  set(DOTNET_PLATFORM x64)
+endif()
+
+# see: https://docs.microsoft.com/en-us/dotnet/standard/frameworks
+if(USE_DOTNET_CORE_31 AND USE_DOTNET_6)
+  set(DOTNET_TFM "<TargetFrameworks>netcoreapp3.1;net6.0</TargetFrameworks>")
+elseif(USE_DOTNET_6)
+  set(DOTNET_TFM "<TargetFramework>net6.0</TargetFramework>")
+elseif(USE_DOTNET_CORE_31)
+  set(DOTNET_TFM "<TargetFramework>netcoreapp3.1</TargetFramework>")
+else()
+  message(FATAL_ERROR "No .Net SDK selected !")
+endif()
+
 if(APPLE)
-  set(RUNTIME_IDENTIFIER osx-x64)
+  set(RUNTIME_IDENTIFIER osx-${DOTNET_PLATFORM})
 elseif(UNIX)
-  set(RUNTIME_IDENTIFIER linux-x64)
+  set(RUNTIME_IDENTIFIER linux-${DOTNET_PLATFORM})
 elseif(WIN32)
-  set(RUNTIME_IDENTIFIER win-x64)
+  set(RUNTIME_IDENTIFIER win-${DOTNET_PLATFORM})
 else()
   message(FATAL_ERROR "Unsupported system !")
 endif()
+message(STATUS ".Net RID: ${RUNTIME_IDENTIFIER}")
+
 set(DOTNET_NATIVE_PROJECT ${DOTNET_PACKAGE}.runtime.${RUNTIME_IDENTIFIER})
 set(DOTNET_PROJECT ${DOTNET_PACKAGE})
 
@@ -75,7 +108,7 @@ message(STATUS ".Net runtime project: ${DOTNET_NATIVE_PROJECT}")
 set(DOTNET_NATIVE_PATH ${PROJECT_BINARY_DIR}/dotnet/${DOTNET_NATIVE_PROJECT})
 message(STATUS ".Net runtime project build path: ${DOTNET_NATIVE_PATH}")
 
-# *.csproj.in contains: CMake variable(s) (@PROJECT_NAME@) that configure_file()
+# *.csproj.in contains: CMake variable(s) (@pROJECT_NAME@) that configure_file()
 # can manage and generator expression ($<TARGET_FILE:...>) that file(GENERATE)
 # can manage.
 configure_file(${PROJECT_SOURCE_DIR}/dotnet/${DOTNET_PACKAGE}.runtime.csproj.in
@@ -128,12 +161,12 @@ add_custom_target(
   DEPENDS ${DOTNET_PATH}/${DOTNET_PROJECT}.csproj
   COMMAND ${DOTNET_EXECUTABLE} build -c Release
           ${DOTNET_PROJECT}/${DOTNET_PROJECT}.csproj
-  COMMAND ${DOTNET_EXECUTABLE} pack -c Release
+  COMMAND ${DOTNET_EXECUTABLE} pack --no-build -c Release
           ${DOTNET_PROJECT}/${DOTNET_PROJECT}.csproj
   BYPRODUCTS dotnet/${DOTNET_PROJECT}/bin dotnet/${DOTNET_PROJECT}/obj
              dotnet/packages
   WORKING_DIRECTORY dotnet)
-add_dependencies(dotnet_package dotnet_native_package)
+add_dependencies(dotnet_package dotnet_native_package cspy-dotnet-native)
 
 # ##############################################################################
 # .Net Test  ##
@@ -165,7 +198,8 @@ function(add_dotnet_test FILE_NAME)
   if(BUILD_TESTING)
     add_test(
       NAME dotnet_${TEST_NAME}
-      COMMAND ${DOTNET_EXECUTABLE} test --no-build -c Release
+      COMMAND ${DOTNET_EXECUTABLE} test --no-build --framework net6.0 -c Release
+              ${TEST_NAME}.csproj
       WORKING_DIRECTORY ${DOTNET_TEST_PATH})
   endif()
 
