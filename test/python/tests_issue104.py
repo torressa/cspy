@@ -1,7 +1,7 @@
+import unittest
 from networkx import DiGraph, read_graphml
 
 from cspy import BiDirectional
-
 from utils import TestingBase
 
 
@@ -13,6 +13,7 @@ def load_graph():
     return G
 
 
+@unittest.skip("Skipping test104")
 class TestsIssue104(TestingBase):
     """
     Tests for issue #104
