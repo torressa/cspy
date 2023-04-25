@@ -1,0 +1,406 @@
+\hypertarget{classlabelling_1_1Label}{}\section{labelling\+:\+:Label Class Reference}
+\label{classlabelling_1_1Label}\index{labelling\+::\+Label@{labelling\+::\+Label}}
+
+
+{\ttfamily \#include $<$labelling.\+h$>$}
+
+
+
+Collaboration diagram for labelling\+:\+:Label\+:
+% FIG 0
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classlabelling_1_1Label_a3728b76c8b32589e04ecaac821f11733}{Label} ()
+\begin{DoxyCompactList}\small\item\em Dummy constructor. \end{DoxyCompactList}\item 
+\hyperlink{classlabelling_1_1Label_a6861a92f1825ed3bb9ea46515cdf1d16}{Label} (const double \&weight\+\_\+in, const \hyperlink{structbidirectional_1_1Vertex}{bidirectional\+::\+Vertex} \&vertex\+\_\+in, const std\+::vector$<$ double $>$ \&resource\+\_\+consumption\+\_\+in, const std\+::vector$<$ int $>$ \&partial\+\_\+path\+\_\+in, \hyperlink{classbidirectional_1_1Params}{bidirectional\+::\+Params} $\ast$params)
+\begin{DoxyCompactList}\small\item\em Constructor. \end{DoxyCompactList}\item 
+\hyperlink{classlabelling_1_1Label_a255f1384159b9748980f824eb1ddb5f8}{Label} (const double \&weight\+\_\+in, const \hyperlink{structbidirectional_1_1Vertex}{bidirectional\+::\+Vertex} \&vertex\+\_\+in, const std\+::vector$<$ double $>$ \&resource\+\_\+consumption\+\_\+in, const std\+::vector$<$ int $>$ \&partial\+\_\+path\+\_\+in, \hyperlink{classbidirectional_1_1Params}{bidirectional\+::\+Params} $\ast$params, const double \&phi\+\_\+in)
+\item 
+\hyperlink{classlabelling_1_1Label_a72d8b0e24b8dbacc1ecb40b3c32265e2}{$\sim$\+Label} ()
+\begin{DoxyCompactList}\small\item\em default destructor \end{DoxyCompactList}\item 
+\hyperlink{classlabelling_1_1Label}{Label} \hyperlink{classlabelling_1_1Label_a23f7e5da2fb22dca07977aad9bfa9ad3}{extend} (const \hyperlink{structbidirectional_1_1AdjVertex}{bidirectional\+::\+Adj\+Vertex} \&adjacent\+\_\+vertex, const \hyperlink{namespacebidirectional_a4cbe6f0bfbd3629c2cd44c98014aed70}{bidirectional\+::\+Directions} \&direction, const std\+::vector$<$ double $>$ \&max\+\_\+res=\{\}, const std\+::vector$<$ double $>$ \&min\+\_\+res=\{\})
+\item 
+bool \hyperlink{classlabelling_1_1Label_ad5afbf2f5d2c6f208283021186783883}{check\+Dominance} (const \hyperlink{classlabelling_1_1Label}{Label} \&other, const \hyperlink{namespacebidirectional_a4cbe6f0bfbd3629c2cd44c98014aed70}{bidirectional\+::\+Directions} \&direction) const
+\item 
+bool \hyperlink{classlabelling_1_1Label_a3f59b4a2818a4b0096080cd5f830b73d}{full\+Dominance} (const \hyperlink{classlabelling_1_1Label}{Label} \&other, const \hyperlink{namespacebidirectional_a4cbe6f0bfbd3629c2cd44c98014aed70}{bidirectional\+::\+Directions} \&direction) const
+\item 
+bool \hyperlink{classlabelling_1_1Label_adc3068c1147414d77f0f7696b4687e69}{check\+Feasibility} (const std\+::vector$<$ double $>$ \&max\+\_\+res, const std\+::vector$<$ double $>$ \&min\+\_\+res, const bool \&soft=false) const
+\item 
+bool \hyperlink{classlabelling_1_1Label_a72d0d91c2d99edbcdc36aa157586cf00}{check\+Threshold} (const double \&threshold) const
+\begin{DoxyCompactList}\small\item\em Check if weight is under the input threshold. \end{DoxyCompactList}\item 
+bool \hyperlink{classlabelling_1_1Label_a0e4957ff69cf08cfdc743df10d50d3c7}{check\+St\+Path} (const int \&source\+\_\+id, const int \&sink\+\_\+id) const
+\item 
+bool \hyperlink{classlabelling_1_1Label_a496b8a76fd2fe06265b1acc1a508b4ca}{check\+Path\+Extension} (const int \&user\+\_\+id) const
+\begin{DoxyCompactList}\small\item\em Returns true is the partial path extension is OK. \end{DoxyCompactList}\item 
+bool \hyperlink{classlabelling_1_1Label_a5c8dc87a89577d00ccf86251867ec76a}{check\+Same\+Feasible\+Extension\+Two\+Cycle\+Simple} (const \hyperlink{classlabelling_1_1Label}{Label} \&other) const
+\item 
+bool \hyperlink{classlabelling_1_1Label_a333b6fc9dba864b3df2cdf530a055aa7}{check\+Same\+Feasible\+Extension\+Elementary} (const \hyperlink{classlabelling_1_1Label}{Label} \&other) const
+\item 
+bool \hyperlink{classlabelling_1_1Label_a02179d540444a13aa7cc3355d0a461b8}{check\+Same\+Feasible\+Extension} (const \hyperlink{classlabelling_1_1Label}{Label} \&other) const
+\item 
+void \hyperlink{classlabelling_1_1Label_afffea46e29dc7074edd10470c5dfeb87}{set\+Phi} (const double \&phi\+\_\+in)
+\begin{DoxyCompactList}\small\item\em set phi attribute for merged labels from Righini and Salani (2006) \end{DoxyCompactList}\item 
+int \hyperlink{classlabelling_1_1Label_a676337cc2e66ddaba088c736b9220651}{get\+Predecessor\+Id} () const
+\item 
+std\+::string \hyperlink{classlabelling_1_1Label_adc93c3a59a853bc559bb63e8df1ae67e}{get\+String} () const
+\item 
+\hyperlink{classlabelling_1_1Label}{Label} \& \hyperlink{classlabelling_1_1Label_a96fec70e1378988bb3d01f3aee8ab676}{operator=} (const \hyperlink{classlabelling_1_1Label}{Label} \&other)=default
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+double \hyperlink{classlabelling_1_1Label_a478f34a67528586877720483c5f0d38b}{weight} = 0.\+0
+\item 
+\hyperlink{structbidirectional_1_1Vertex}{bidirectional\+::\+Vertex} \hyperlink{classlabelling_1_1Label_a7c8972ee9d1c00fd348025c321467f75}{vertex} = \{-\/1, -\/1\}
+\item 
+std\+::vector$<$ double $>$ \hyperlink{classlabelling_1_1Label_a2c185387fad46a29bce3dd99b111a1c4}{resource\+\_\+consumption} = \{\}
+\item 
+std\+::vector$<$ int $>$ \hyperlink{classlabelling_1_1Label_a7511d29a3aa0272b1a0e1ea5fb75ff14}{partial\+\_\+path} = \{\}
+\item 
+std\+::set$<$ int $>$ \hyperlink{classlabelling_1_1Label_ae684804e463fe690b4fe6ee32812e123}{unreachable\+\_\+nodes} = \{\}
+\begin{DoxyCompactList}\small\item\em Set of unreachable nodes. This is only used in the elementary case. \end{DoxyCompactList}\item 
+\hyperlink{classbidirectional_1_1Params}{bidirectional\+::\+Params} $\ast$ \hyperlink{classlabelling_1_1Label_a182759fd08c2536f9e6a2614c790b127}{params\+\_\+ptr} = nullptr
+\item 
+double \hyperlink{classlabelling_1_1Label_a632cd90937f05a8ea69ad60d4c103c66}{phi} = std\+::nan(\char`\"{}nan\char`\"{})
+\end{DoxyCompactItemize}
+\subsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+bool \hyperlink{classlabelling_1_1Label_aac0781be66b1d133b633cef3f60f8183}{operator$<$} (const \hyperlink{classlabelling_1_1Label}{Label} \&label1, const \hyperlink{classlabelling_1_1Label}{Label} \&label2)
+\item 
+bool \hyperlink{classlabelling_1_1Label_a7bd46e6920cac7ede4b725f2d33fb12b}{operator$>$} (const \hyperlink{classlabelling_1_1Label}{Label} \&label1, const \hyperlink{classlabelling_1_1Label}{Label} \&label2)
+\item 
+std\+::ostream \& \hyperlink{classlabelling_1_1Label_ae52256a096ed1acaf1afaba6458b42ca}{operator$<$$<$} (std\+::ostream \&os, const \hyperlink{classlabelling_1_1Label}{Label} \&label)
+\item 
+bool \hyperlink{classlabelling_1_1Label_abc60b45b5a5310043283c0e6c694cc92}{operator==} (const \hyperlink{classlabelling_1_1Label}{Label} \&label1, const \hyperlink{classlabelling_1_1Label}{Label} \&label2)
+\item 
+bool \hyperlink{classlabelling_1_1Label_a48813c4c8ca8174edcdf9cf34358b442}{operator!=} (const \hyperlink{classlabelling_1_1Label}{Label} \&label1, const \hyperlink{classlabelling_1_1Label}{Label} \&label2)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Single node label. With resource, cost and other attributes.
+
+Main functionality includes\+:
+\begin{DoxyItemize}
+\item Checking resource feasibility
+\item Checking dominance 
+\end{DoxyItemize}
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classlabelling_1_1Label_a3728b76c8b32589e04ecaac821f11733}\label{classlabelling_1_1Label_a3728b76c8b32589e04ecaac821f11733}} 
+\index{labelling\+::\+Label@{labelling\+::\+Label}!Label@{Label}}
+\index{Label@{Label}!labelling\+::\+Label@{labelling\+::\+Label}}
+\subsubsection{\texorpdfstring{Label()}{Label()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily labelling\+::\+Label\+::\+Label (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Dummy constructor. 
+
+\mbox{\Hypertarget{classlabelling_1_1Label_a6861a92f1825ed3bb9ea46515cdf1d16}\label{classlabelling_1_1Label_a6861a92f1825ed3bb9ea46515cdf1d16}} 
+\index{labelling\+::\+Label@{labelling\+::\+Label}!Label@{Label}}
+\index{Label@{Label}!labelling\+::\+Label@{labelling\+::\+Label}}
+\subsubsection{\texorpdfstring{Label()}{Label()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily labelling\+::\+Label\+::\+Label (\begin{DoxyParamCaption}\item[{const double \&}]{weight\+\_\+in,  }\item[{const \hyperlink{structbidirectional_1_1Vertex}{bidirectional\+::\+Vertex} \&}]{vertex\+\_\+in,  }\item[{const std\+::vector$<$ double $>$ \&}]{resource\+\_\+consumption\+\_\+in,  }\item[{const std\+::vector$<$ int $>$ \&}]{partial\+\_\+path\+\_\+in,  }\item[{\hyperlink{classbidirectional_1_1Params}{bidirectional\+::\+Params} $\ast$}]{params\+\_\+ptr\+\_\+in }\end{DoxyParamCaption})}
+
+
+
+Constructor. 
+
+\hyperlink{classlabelling_1_1Label}{Label} \mbox{\Hypertarget{classlabelling_1_1Label_a255f1384159b9748980f824eb1ddb5f8}\label{classlabelling_1_1Label_a255f1384159b9748980f824eb1ddb5f8}} 
+\index{labelling\+::\+Label@{labelling\+::\+Label}!Label@{Label}}
+\index{Label@{Label}!labelling\+::\+Label@{labelling\+::\+Label}}
+\subsubsection{\texorpdfstring{Label()}{Label()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily labelling\+::\+Label\+::\+Label (\begin{DoxyParamCaption}\item[{const double \&}]{weight\+\_\+in,  }\item[{const \hyperlink{structbidirectional_1_1Vertex}{bidirectional\+::\+Vertex} \&}]{vertex\+\_\+in,  }\item[{const std\+::vector$<$ double $>$ \&}]{resource\+\_\+consumption\+\_\+in,  }\item[{const std\+::vector$<$ int $>$ \&}]{partial\+\_\+path\+\_\+in,  }\item[{\hyperlink{classbidirectional_1_1Params}{bidirectional\+::\+Params} $\ast$}]{params,  }\item[{const double \&}]{phi\+\_\+in }\end{DoxyParamCaption})}
+
+This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. \mbox{\Hypertarget{classlabelling_1_1Label_a72d8b0e24b8dbacc1ecb40b3c32265e2}\label{classlabelling_1_1Label_a72d8b0e24b8dbacc1ecb40b3c32265e2}} 
+\index{labelling\+::\+Label@{labelling\+::\+Label}!````~Label@{$\sim$\+Label}}
+\index{````~Label@{$\sim$\+Label}!labelling\+::\+Label@{labelling\+::\+Label}}
+\subsubsection{\texorpdfstring{$\sim$\+Label()}{~Label()}}
+{\footnotesize\ttfamily labelling\+::\+Label\+::$\sim$\+Label (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+default destructor 
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classlabelling_1_1Label_ad5afbf2f5d2c6f208283021186783883}\label{classlabelling_1_1Label_ad5afbf2f5d2c6f208283021186783883}} 
+\index{labelling\+::\+Label@{labelling\+::\+Label}!check\+Dominance@{check\+Dominance}}
+\index{check\+Dominance@{check\+Dominance}!labelling\+::\+Label@{labelling\+::\+Label}}
+\subsubsection{\texorpdfstring{check\+Dominance()}{checkDominance()}}
+{\footnotesize\ttfamily bool labelling\+::\+Label\+::check\+Dominance (\begin{DoxyParamCaption}\item[{const \hyperlink{classlabelling_1_1Label}{Label} \&}]{other,  }\item[{const \hyperlink{namespacebidirectional_a4cbe6f0bfbd3629c2cd44c98014aed70}{bidirectional\+::\+Directions} \&}]{direction }\end{DoxyParamCaption}) const}
+
+Check if this dominates other. Assumes the labels are comparable i.\+e. same nodes
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em other} & \hyperlink{classlabelling_1_1Label}{Label} \\
+\hline
+\mbox{\tt in}  & {\em direction} & Directions \\
+\hline
+\mbox{\tt in}  & {\em elementary} & bool, optional \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+bool 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classlabelling_1_1Label_adc3068c1147414d77f0f7696b4687e69}\label{classlabelling_1_1Label_adc3068c1147414d77f0f7696b4687e69}} 
+\index{labelling\+::\+Label@{labelling\+::\+Label}!check\+Feasibility@{check\+Feasibility}}
+\index{check\+Feasibility@{check\+Feasibility}!labelling\+::\+Label@{labelling\+::\+Label}}
+\subsubsection{\texorpdfstring{check\+Feasibility()}{checkFeasibility()}}
+{\footnotesize\ttfamily bool labelling\+::\+Label\+::check\+Feasibility (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ double $>$ \&}]{max\+\_\+res,  }\item[{const std\+::vector$<$ double $>$ \&}]{min\+\_\+res,  }\item[{const bool \&}]{soft = {\ttfamily false} }\end{DoxyParamCaption}) const}
+
+Check resource feasibility of current label i.\+e. {\ttfamily min\+\_\+res\mbox{[}i\mbox{]} $<$= resource\+\_\+consumption\mbox{[}i\mbox{]} $<$= max\+\_\+res\mbox{[}i\mbox{]}} for {\ttfamily i} in {\ttfamily 0,...,resource\+\_\+consumption.\+size()}. If \char`\"{}soft\char`\"{} check, then the lower bound is only checked if either\+: resource index {\ttfamily i} is the index of the critical resource or {\ttfamily min\+\_\+res\mbox{[}i\mbox{]}$<$= 0}(See issue \#90). If not \char`\"{}soft\char`\"{}, then all lower bounds are checked as expected.
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em max\+\_\+res,vector} & of double with upper bound(s) for resource consumption. Checks values are $<$= bound \\
+\hline
+\mbox{\tt in}  & {\em min\+\_\+res,vector} & of double with lower bound(s) for resource consumption. Checks values are $>$= bound \\
+\hline
+\mbox{\tt in}  & {\em soft,bool} & with whether the minimum resources should be checked \char`\"{}softly\char`\"{}. Default is false. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classlabelling_1_1Label_a496b8a76fd2fe06265b1acc1a508b4ca}\label{classlabelling_1_1Label_a496b8a76fd2fe06265b1acc1a508b4ca}} 
+\index{labelling\+::\+Label@{labelling\+::\+Label}!check\+Path\+Extension@{check\+Path\+Extension}}
+\index{check\+Path\+Extension@{check\+Path\+Extension}!labelling\+::\+Label@{labelling\+::\+Label}}
+\subsubsection{\texorpdfstring{check\+Path\+Extension()}{checkPathExtension()}}
+{\footnotesize\ttfamily bool labelling\+::\+Label\+::check\+Path\+Extension (\begin{DoxyParamCaption}\item[{const int \&}]{user\+\_\+id }\end{DoxyParamCaption}) const}
+
+
+
+Returns true is the partial path extension is OK. 
+
+\mbox{\Hypertarget{classlabelling_1_1Label_a02179d540444a13aa7cc3355d0a461b8}\label{classlabelling_1_1Label_a02179d540444a13aa7cc3355d0a461b8}} 
+\index{labelling\+::\+Label@{labelling\+::\+Label}!check\+Same\+Feasible\+Extension@{check\+Same\+Feasible\+Extension}}
+\index{check\+Same\+Feasible\+Extension@{check\+Same\+Feasible\+Extension}!labelling\+::\+Label@{labelling\+::\+Label}}
+\subsubsection{\texorpdfstring{check\+Same\+Feasible\+Extension()}{checkSameFeasibleExtension()}}
+{\footnotesize\ttfamily bool labelling\+::\+Label\+::check\+Same\+Feasible\+Extension (\begin{DoxyParamCaption}\item[{const \hyperlink{classlabelling_1_1Label}{Label} \&}]{other }\end{DoxyParamCaption}) const}
+
+Check if both lables have the same feasible extension, i.\+e., if they both can extend to the same nodes. Important for correct dominance check. Labels with different feasible extension cannot dominate each other. 
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em other,\hyperlink{classlabelling_1_1Label}{Label}} & with other label to compare \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if this and other have same feasible extension 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classlabelling_1_1Label_a333b6fc9dba864b3df2cdf530a055aa7}\label{classlabelling_1_1Label_a333b6fc9dba864b3df2cdf530a055aa7}} 
+\index{labelling\+::\+Label@{labelling\+::\+Label}!check\+Same\+Feasible\+Extension\+Elementary@{check\+Same\+Feasible\+Extension\+Elementary}}
+\index{check\+Same\+Feasible\+Extension\+Elementary@{check\+Same\+Feasible\+Extension\+Elementary}!labelling\+::\+Label@{labelling\+::\+Label}}
+\subsubsection{\texorpdfstring{check\+Same\+Feasible\+Extension\+Elementary()}{checkSameFeasibleExtensionElementary()}}
+{\footnotesize\ttfamily bool labelling\+::\+Label\+::check\+Same\+Feasible\+Extension\+Elementary (\begin{DoxyParamCaption}\item[{const \hyperlink{classlabelling_1_1Label}{Label} \&}]{other }\end{DoxyParamCaption}) const}
+
+Simple check if both lables have the same feasible extension under elementary conditions. this and other have the same feasible extension if unreachable\+\_\+nodes of this is subset of unreachable\+\_\+nodes of other 
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em other,\hyperlink{classlabelling_1_1Label}{Label}} & with other label to compare \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if this and other have same feasible extension 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classlabelling_1_1Label_a5c8dc87a89577d00ccf86251867ec76a}\label{classlabelling_1_1Label_a5c8dc87a89577d00ccf86251867ec76a}} 
+\index{labelling\+::\+Label@{labelling\+::\+Label}!check\+Same\+Feasible\+Extension\+Two\+Cycle\+Simple@{check\+Same\+Feasible\+Extension\+Two\+Cycle\+Simple}}
+\index{check\+Same\+Feasible\+Extension\+Two\+Cycle\+Simple@{check\+Same\+Feasible\+Extension\+Two\+Cycle\+Simple}!labelling\+::\+Label@{labelling\+::\+Label}}
+\subsubsection{\texorpdfstring{check\+Same\+Feasible\+Extension\+Two\+Cycle\+Simple()}{checkSameFeasibleExtensionTwoCycleSimple()}}
+{\footnotesize\ttfamily bool labelling\+::\+Label\+::check\+Same\+Feasible\+Extension\+Two\+Cycle\+Simple (\begin{DoxyParamCaption}\item[{const \hyperlink{classlabelling_1_1Label}{Label} \&}]{other }\end{DoxyParamCaption}) const}
+
+Simple check if both lables have the same feasible extension with regard to 2-\/cycle elimination. this and other have same feasible extension if predecessor is the same. 
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em other,\hyperlink{classlabelling_1_1Label}{Label}} & with other label to compare \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if this and other have same feasible extension 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classlabelling_1_1Label_a0e4957ff69cf08cfdc743df10d50d3c7}\label{classlabelling_1_1Label_a0e4957ff69cf08cfdc743df10d50d3c7}} 
+\index{labelling\+::\+Label@{labelling\+::\+Label}!check\+St\+Path@{check\+St\+Path}}
+\index{check\+St\+Path@{check\+St\+Path}!labelling\+::\+Label@{labelling\+::\+Label}}
+\subsubsection{\texorpdfstring{check\+St\+Path()}{checkStPath()}}
+{\footnotesize\ttfamily bool labelling\+::\+Label\+::check\+St\+Path (\begin{DoxyParamCaption}\item[{const int \&}]{source\+\_\+id,  }\item[{const int \&}]{sink\+\_\+id }\end{DoxyParamCaption}) const}
+
+Check whether the current partial path is Source -\/ Sink
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em source\+\_\+id,int} & with user\+\_\+id of the source node. \\
+\hline
+\mbox{\tt in}  & {\em sink\+\_\+id,int} & with user\+\_\+id of the sink node. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classlabelling_1_1Label_a72d0d91c2d99edbcdc36aa157586cf00}\label{classlabelling_1_1Label_a72d0d91c2d99edbcdc36aa157586cf00}} 
+\index{labelling\+::\+Label@{labelling\+::\+Label}!check\+Threshold@{check\+Threshold}}
+\index{check\+Threshold@{check\+Threshold}!labelling\+::\+Label@{labelling\+::\+Label}}
+\subsubsection{\texorpdfstring{check\+Threshold()}{checkThreshold()}}
+{\footnotesize\ttfamily bool labelling\+::\+Label\+::check\+Threshold (\begin{DoxyParamCaption}\item[{const double \&}]{threshold }\end{DoxyParamCaption}) const}
+
+
+
+Check if weight is under the input threshold. 
+
+\mbox{\Hypertarget{classlabelling_1_1Label_a23f7e5da2fb22dca07977aad9bfa9ad3}\label{classlabelling_1_1Label_a23f7e5da2fb22dca07977aad9bfa9ad3}} 
+\index{labelling\+::\+Label@{labelling\+::\+Label}!extend@{extend}}
+\index{extend@{extend}!labelling\+::\+Label@{labelling\+::\+Label}}
+\subsubsection{\texorpdfstring{extend()}{extend()}}
+{\footnotesize\ttfamily \hyperlink{classlabelling_1_1Label}{Label} labelling\+::\+Label\+::extend (\begin{DoxyParamCaption}\item[{const \hyperlink{structbidirectional_1_1AdjVertex}{bidirectional\+::\+Adj\+Vertex} \&}]{adjacent\+\_\+vertex,  }\item[{const \hyperlink{namespacebidirectional_a4cbe6f0bfbd3629c2cd44c98014aed70}{bidirectional\+::\+Directions} \&}]{direction,  }\item[{const std\+::vector$<$ double $>$ \&}]{max\+\_\+res = {\ttfamily \{\}},  }\item[{const std\+::vector$<$ double $>$ \&}]{min\+\_\+res = {\ttfamily \{\}} }\end{DoxyParamCaption})}
+
+Generate new label extensions from the current label and return only if resource feasible. The input label is a pointer as it may be modified in the case that the edge / adjacent\+\_\+vertex is found to be resource infeasible, in which case, the head/tail node becomes unreachable and the attribute is updated.
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt out}  & {\em label,\hyperlink{classlabelling_1_1Label}{labelling\+::\+Label},current} & label to extend (and maybe update {\ttfamily unreachable\+\_\+nodes}) \\
+\hline
+\mbox{\tt in}  & {\em adjacent\+\_\+vertex,Adj\+Vertex,edge} & \\
+\hline
+\mbox{\tt in}  & {\em direction} & Directions \\
+\hline
+\mbox{\tt in}  & {\em elementary} & bool \\
+\hline
+\mbox{\tt in}  & {\em max\+\_\+res,vector} & of double with upper bound(s) for resource consumption \\
+\hline
+\mbox{\tt in}  & {\em min\+\_\+res,vector} & of double with lower bound(s) for resource consumption\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\hyperlink{classlabelling_1_1Label}{Label} object with extended label. Note this may be empty if the extension is resource infeasible 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classlabelling_1_1Label_a3f59b4a2818a4b0096080cd5f830b73d}\label{classlabelling_1_1Label_a3f59b4a2818a4b0096080cd5f830b73d}} 
+\index{labelling\+::\+Label@{labelling\+::\+Label}!full\+Dominance@{full\+Dominance}}
+\index{full\+Dominance@{full\+Dominance}!labelling\+::\+Label@{labelling\+::\+Label}}
+\subsubsection{\texorpdfstring{full\+Dominance()}{fullDominance()}}
+{\footnotesize\ttfamily bool labelling\+::\+Label\+::full\+Dominance (\begin{DoxyParamCaption}\item[{const \hyperlink{classlabelling_1_1Label}{Label} \&}]{other,  }\item[{const \hyperlink{namespacebidirectional_a4cbe6f0bfbd3629c2cd44c98014aed70}{bidirectional\+::\+Directions} \&}]{direction }\end{DoxyParamCaption}) const}
+
+Checks whether {\ttfamily this} dominates {\ttfamily other} for the input direction. In the case when neither dominates , i.\+e. they are non-\/dominated, the direction is flipped labels are compared again.
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em other} & \hyperlink{classlabelling_1_1Label}{Label} \\
+\hline
+\mbox{\tt in}  & {\em direction} & Directions \\
+\hline
+\mbox{\tt in}  & {\em elementary} & bool \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+bool 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classlabelling_1_1Label_a676337cc2e66ddaba088c736b9220651}\label{classlabelling_1_1Label_a676337cc2e66ddaba088c736b9220651}} 
+\index{labelling\+::\+Label@{labelling\+::\+Label}!get\+Predecessor\+Id@{get\+Predecessor\+Id}}
+\index{get\+Predecessor\+Id@{get\+Predecessor\+Id}!labelling\+::\+Label@{labelling\+::\+Label}}
+\subsubsection{\texorpdfstring{get\+Predecessor\+Id()}{getPredecessorId()}}
+{\footnotesize\ttfamily int labelling\+::\+Label\+::get\+Predecessor\+Id (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+gets the id of the predecessor node T\+O\+DO can be replaced as member of label \mbox{\Hypertarget{classlabelling_1_1Label_adc93c3a59a853bc559bb63e8df1ae67e}\label{classlabelling_1_1Label_adc93c3a59a853bc559bb63e8df1ae67e}} 
+\index{labelling\+::\+Label@{labelling\+::\+Label}!get\+String@{get\+String}}
+\index{get\+String@{get\+String}!labelling\+::\+Label@{labelling\+::\+Label}}
+\subsubsection{\texorpdfstring{get\+String()}{getString()}}
+{\footnotesize\ttfamily std\+::string labelling\+::\+Label\+::get\+String (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{classlabelling_1_1Label_a96fec70e1378988bb3d01f3aee8ab676}\label{classlabelling_1_1Label_a96fec70e1378988bb3d01f3aee8ab676}} 
+\index{labelling\+::\+Label@{labelling\+::\+Label}!operator=@{operator=}}
+\index{operator=@{operator=}!labelling\+::\+Label@{labelling\+::\+Label}}
+\subsubsection{\texorpdfstring{operator=()}{operator=()}}
+{\footnotesize\ttfamily \hyperlink{classlabelling_1_1Label}{Label}\& labelling\+::\+Label\+::operator= (\begin{DoxyParamCaption}\item[{const \hyperlink{classlabelling_1_1Label}{Label} \&}]{other }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
+
+\mbox{\Hypertarget{classlabelling_1_1Label_afffea46e29dc7074edd10470c5dfeb87}\label{classlabelling_1_1Label_afffea46e29dc7074edd10470c5dfeb87}} 
+\index{labelling\+::\+Label@{labelling\+::\+Label}!set\+Phi@{set\+Phi}}
+\index{set\+Phi@{set\+Phi}!labelling\+::\+Label@{labelling\+::\+Label}}
+\subsubsection{\texorpdfstring{set\+Phi()}{setPhi()}}
+{\footnotesize\ttfamily void labelling\+::\+Label\+::set\+Phi (\begin{DoxyParamCaption}\item[{const double \&}]{phi\+\_\+in }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+set phi attribute for merged labels from Righini and Salani (2006) 
+
+
+
+\subsection{Friends And Related Function Documentation}
+\mbox{\Hypertarget{classlabelling_1_1Label_a48813c4c8ca8174edcdf9cf34358b442}\label{classlabelling_1_1Label_a48813c4c8ca8174edcdf9cf34358b442}} 
+\index{labelling\+::\+Label@{labelling\+::\+Label}!operator"!=@{operator"!=}}
+\index{operator"!=@{operator"!=}!labelling\+::\+Label@{labelling\+::\+Label}}
+\subsubsection{\texorpdfstring{operator"!=}{operator!=}}
+{\footnotesize\ttfamily bool operator!= (\begin{DoxyParamCaption}\item[{const \hyperlink{classlabelling_1_1Label}{Label} \&}]{label1,  }\item[{const \hyperlink{classlabelling_1_1Label}{Label} \&}]{label2 }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
+
+\mbox{\Hypertarget{classlabelling_1_1Label_aac0781be66b1d133b633cef3f60f8183}\label{classlabelling_1_1Label_aac0781be66b1d133b633cef3f60f8183}} 
+\index{labelling\+::\+Label@{labelling\+::\+Label}!operator$<$@{operator$<$}}
+\index{operator$<$@{operator$<$}!labelling\+::\+Label@{labelling\+::\+Label}}
+\subsubsection{\texorpdfstring{operator$<$}{operator<}}
+{\footnotesize\ttfamily bool operator$<$ (\begin{DoxyParamCaption}\item[{const \hyperlink{classlabelling_1_1Label}{Label} \&}]{label1,  }\item[{const \hyperlink{classlabelling_1_1Label}{Label} \&}]{label2 }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
+
+\mbox{\Hypertarget{classlabelling_1_1Label_ae52256a096ed1acaf1afaba6458b42ca}\label{classlabelling_1_1Label_ae52256a096ed1acaf1afaba6458b42ca}} 
+\index{labelling\+::\+Label@{labelling\+::\+Label}!operator$<$$<$@{operator$<$$<$}}
+\index{operator$<$$<$@{operator$<$$<$}!labelling\+::\+Label@{labelling\+::\+Label}}
+\subsubsection{\texorpdfstring{operator$<$$<$}{operator<<}}
+{\footnotesize\ttfamily std\+::ostream\& operator$<$$<$ (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{os,  }\item[{const \hyperlink{classlabelling_1_1Label}{Label} \&}]{label }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
+
+\mbox{\Hypertarget{classlabelling_1_1Label_abc60b45b5a5310043283c0e6c694cc92}\label{classlabelling_1_1Label_abc60b45b5a5310043283c0e6c694cc92}} 
+\index{labelling\+::\+Label@{labelling\+::\+Label}!operator==@{operator==}}
+\index{operator==@{operator==}!labelling\+::\+Label@{labelling\+::\+Label}}
+\subsubsection{\texorpdfstring{operator==}{operator==}}
+{\footnotesize\ttfamily bool operator== (\begin{DoxyParamCaption}\item[{const \hyperlink{classlabelling_1_1Label}{Label} \&}]{label1,  }\item[{const \hyperlink{classlabelling_1_1Label}{Label} \&}]{label2 }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
+
+Check every resource for inequality \mbox{\Hypertarget{classlabelling_1_1Label_a7bd46e6920cac7ede4b725f2d33fb12b}\label{classlabelling_1_1Label_a7bd46e6920cac7ede4b725f2d33fb12b}} 
+\index{labelling\+::\+Label@{labelling\+::\+Label}!operator$>$@{operator$>$}}
+\index{operator$>$@{operator$>$}!labelling\+::\+Label@{labelling\+::\+Label}}
+\subsubsection{\texorpdfstring{operator$>$}{operator>}}
+{\footnotesize\ttfamily bool operator$>$ (\begin{DoxyParamCaption}\item[{const \hyperlink{classlabelling_1_1Label}{Label} \&}]{label1,  }\item[{const \hyperlink{classlabelling_1_1Label}{Label} \&}]{label2 }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
+
+
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{classlabelling_1_1Label_a182759fd08c2536f9e6a2614c790b127}\label{classlabelling_1_1Label_a182759fd08c2536f9e6a2614c790b127}} 
+\index{labelling\+::\+Label@{labelling\+::\+Label}!params\+\_\+ptr@{params\+\_\+ptr}}
+\index{params\+\_\+ptr@{params\+\_\+ptr}!labelling\+::\+Label@{labelling\+::\+Label}}
+\subsubsection{\texorpdfstring{params\+\_\+ptr}{params\_ptr}}
+{\footnotesize\ttfamily \hyperlink{classbidirectional_1_1Params}{bidirectional\+::\+Params}$\ast$ labelling\+::\+Label\+::params\+\_\+ptr = nullptr}
+
+\mbox{\Hypertarget{classlabelling_1_1Label_a7511d29a3aa0272b1a0e1ea5fb75ff14}\label{classlabelling_1_1Label_a7511d29a3aa0272b1a0e1ea5fb75ff14}} 
+\index{labelling\+::\+Label@{labelling\+::\+Label}!partial\+\_\+path@{partial\+\_\+path}}
+\index{partial\+\_\+path@{partial\+\_\+path}!labelling\+::\+Label@{labelling\+::\+Label}}
+\subsubsection{\texorpdfstring{partial\+\_\+path}{partial\_path}}
+{\footnotesize\ttfamily std\+::vector$<$int$>$ labelling\+::\+Label\+::partial\+\_\+path = \{\}}
+
+\mbox{\Hypertarget{classlabelling_1_1Label_a632cd90937f05a8ea69ad60d4c103c66}\label{classlabelling_1_1Label_a632cd90937f05a8ea69ad60d4c103c66}} 
+\index{labelling\+::\+Label@{labelling\+::\+Label}!phi@{phi}}
+\index{phi@{phi}!labelling\+::\+Label@{labelling\+::\+Label}}
+\subsubsection{\texorpdfstring{phi}{phi}}
+{\footnotesize\ttfamily double labelling\+::\+Label\+::phi = std\+::nan(\char`\"{}nan\char`\"{})}
+
+\mbox{\Hypertarget{classlabelling_1_1Label_a2c185387fad46a29bce3dd99b111a1c4}\label{classlabelling_1_1Label_a2c185387fad46a29bce3dd99b111a1c4}} 
+\index{labelling\+::\+Label@{labelling\+::\+Label}!resource\+\_\+consumption@{resource\+\_\+consumption}}
+\index{resource\+\_\+consumption@{resource\+\_\+consumption}!labelling\+::\+Label@{labelling\+::\+Label}}
+\subsubsection{\texorpdfstring{resource\+\_\+consumption}{resource\_consumption}}
+{\footnotesize\ttfamily std\+::vector$<$double$>$ labelling\+::\+Label\+::resource\+\_\+consumption = \{\}}
+
+\mbox{\Hypertarget{classlabelling_1_1Label_ae684804e463fe690b4fe6ee32812e123}\label{classlabelling_1_1Label_ae684804e463fe690b4fe6ee32812e123}} 
+\index{labelling\+::\+Label@{labelling\+::\+Label}!unreachable\+\_\+nodes@{unreachable\+\_\+nodes}}
+\index{unreachable\+\_\+nodes@{unreachable\+\_\+nodes}!labelling\+::\+Label@{labelling\+::\+Label}}
+\subsubsection{\texorpdfstring{unreachable\+\_\+nodes}{unreachable\_nodes}}
+{\footnotesize\ttfamily std\+::set$<$int$>$ labelling\+::\+Label\+::unreachable\+\_\+nodes = \{\}}
+
+
+
+Set of unreachable nodes. This is only used in the elementary case. 
+
+\mbox{\Hypertarget{classlabelling_1_1Label_a7c8972ee9d1c00fd348025c321467f75}\label{classlabelling_1_1Label_a7c8972ee9d1c00fd348025c321467f75}} 
+\index{labelling\+::\+Label@{labelling\+::\+Label}!vertex@{vertex}}
+\index{vertex@{vertex}!labelling\+::\+Label@{labelling\+::\+Label}}
+\subsubsection{\texorpdfstring{vertex}{vertex}}
+{\footnotesize\ttfamily \hyperlink{structbidirectional_1_1Vertex}{bidirectional\+::\+Vertex} labelling\+::\+Label\+::vertex = \{-\/1, -\/1\}}
+
+\mbox{\Hypertarget{classlabelling_1_1Label_a478f34a67528586877720483c5f0d38b}\label{classlabelling_1_1Label_a478f34a67528586877720483c5f0d38b}} 
+\index{labelling\+::\+Label@{labelling\+::\+Label}!weight@{weight}}
+\index{weight@{weight}!labelling\+::\+Label@{labelling\+::\+Label}}
+\subsubsection{\texorpdfstring{weight}{weight}}
+{\footnotesize\ttfamily double labelling\+::\+Label\+::weight = 0.\+0}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/\+\_\+\+\_\+w/cspy/cspy/torressa/cspy/src/cc/\hyperlink{labelling_8h}{labelling.\+h}\item 
+/\+\_\+\+\_\+w/cspy/cspy/torressa/cspy/src/cc/\hyperlink{labelling_8cc}{labelling.\+cc}\end{DoxyCompactItemize}

@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="dir_b35e6539d4252f2f7831d547d43ad4a7" kind="dir">
+    <compoundname>/__w/cspy/cspy/torressa/cspy/src/cc</compoundname>
+    <innerfile refid="bidirectional_8cc">bidirectional.cc</innerfile>
+    <innerfile refid="bidirectional_8h">bidirectional.h</innerfile>
+    <innerfile refid="digraph_8cc">digraph.cc</innerfile>
+    <innerfile refid="digraph_8h">digraph.h</innerfile>
+    <innerfile refid="labelling_8cc">labelling.cc</innerfile>
+    <innerfile refid="labelling_8h">labelling.h</innerfile>
+    <innerfile refid="params_8h">params.h</innerfile>
+    <innerfile refid="preprocessing_8cc">preprocessing.cc</innerfile>
+    <innerfile refid="preprocessing_8h">preprocessing.h</innerfile>
+    <innerfile refid="ref__callback_8cc">ref_callback.cc</innerfile>
+    <innerfile refid="ref__callback_8h">ref_callback.h</innerfile>
+    <innerfile refid="search_8cc">search.cc</innerfile>
+    <innerfile refid="search_8h">search.h</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/__w/cspy/cspy/torressa/cspy/src/cc/"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="dir_68267d1309a1af8e8297ef4c3efbcdba" kind="dir">
+    <compoundname>/__w/cspy/cspy/torressa/cspy/src</compoundname>
+    <innerdir refid="dir_b35e6539d4252f2f7831d547d43ad4a7">/__w/cspy/cspy/torressa/cspy/src/cc</innerdir>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/__w/cspy/cspy/torressa/cspy/src/"/>
+  </compounddef>
+</doxygen>

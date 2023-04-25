@@ -1,0 +1,240 @@
+\hypertarget{classbidirectional_1_1Params}{}\section{bidirectional\+:\+:Params Class Reference}
+\label{classbidirectional_1_1Params}\index{bidirectional\+::\+Params@{bidirectional\+::\+Params}}
+
+
+{\ttfamily \#include $<$params.\+h$>$}
+
+
+
+Collaboration diagram for bidirectional\+:\+:Params\+:
+% FIG 0
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classbidirectional_1_1Params_a4873db87f0c812884543365b3a075de2}{Params} ()
+\item 
+\hyperlink{classbidirectional_1_1Params_a2f4b540e09b10800d412da8af5ddfb2a}{$\sim$\+Params} ()
+\item 
+void \hyperlink{classbidirectional_1_1Params_a8cd76d63403256defcfff896d33a4fc6}{set\+Direction} (const std\+::string \&direction\+\_\+in)
+\item 
+void \hyperlink{classbidirectional_1_1Params_ac469873b9d5dbc166ee387b9ddc968f5}{set\+Method} (const std\+::string \&method\+\_\+in)
+\item 
+void \hyperlink{classbidirectional_1_1Params_a6d2cd9d82200130aa3bca9f207e85422}{set\+Time\+Limit} (const double \&time\+\_\+limit\+\_\+in)
+\item 
+void \hyperlink{classbidirectional_1_1Params_a6c8b580515f2730f7b8362c8c86efc4d}{set\+Threshold} (const double \&threshold\+\_\+in)
+\item 
+void \hyperlink{classbidirectional_1_1Params_aeb8196a318f012a4fb1756c4f267f030}{set\+Elementary} (const bool \&elementary\+\_\+in)
+\item 
+void \hyperlink{classbidirectional_1_1Params_acc5edce835f155bb15c3edcb991d1fb0}{set\+Two\+Cycle\+Elimination} (const bool \&two\+\_\+cycle\+\_\+elimination\+\_\+in)
+\item 
+void \hyperlink{classbidirectional_1_1Params_adc2cc88c79856b8f6aed271b99c60bd2}{set\+Bounds\+Pruning} (const bool \&bounds\+\_\+pruning\+\_\+in)
+\item 
+void \hyperlink{classbidirectional_1_1Params_a3c344fd31c2bd86c4308e65169546a1b}{set\+Find\+Critical\+Res} (const bool \&find\+\_\+critical\+\_\+res\+\_\+in)
+\item 
+void \hyperlink{classbidirectional_1_1Params_a4cb80c6a553af542ee696b63f031d547}{set\+Critical\+Res} (const int \&critical\+\_\+res\+\_\+in)
+\item 
+void \hyperlink{classbidirectional_1_1Params_a1f73fd12554f071113a5487a78e53d49}{set\+R\+E\+F\+Callback} (\hyperlink{classbidirectional_1_1REFCallback}{bidirectional\+::\+R\+E\+F\+Callback} $\ast$cb)
+\begin{DoxyCompactList}\small\item\em Set callback for custom resource extensions. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{namespacebidirectional_a4cbe6f0bfbd3629c2cd44c98014aed70}{Directions} \hyperlink{classbidirectional_1_1Params_a1d461034d1a1e04fa7f00cb63cd230d8}{direction} = \hyperlink{namespacebidirectional_a4cbe6f0bfbd3629c2cd44c98014aed70ab50b3fbd895a667b43b3e9eb3bd54f85}{bidirectional\+::\+B\+O\+TH}
+\begin{DoxyCompactList}\small\item\em Direction for search. \end{DoxyCompactList}\item 
+std\+::string \hyperlink{classbidirectional_1_1Params_a2faf36e89993c9fd0979e3e42b2332ea}{method} = \char`\"{}unprocessed\char`\"{}
+\item 
+double \hyperlink{classbidirectional_1_1Params_a2c0fd34b19d753cfce75690a5d68e1e1}{time\+\_\+limit} = std\+::nan(\char`\"{}na\char`\"{})
+\begin{DoxyCompactList}\small\item\em double with time limit in seconds \end{DoxyCompactList}\item 
+double \hyperlink{classbidirectional_1_1Params_ac7099f442d46b684fcbe55ba9c6657e4}{threshold} = std\+::nan(\char`\"{}na\char`\"{})
+\begin{DoxyCompactList}\small\item\em double with threshold to stop search with total cost $<$= threshold \end{DoxyCompactList}\item 
+bool \hyperlink{classbidirectional_1_1Params_aa19060565463ffc251019a1dea026e6d}{elementary} = false
+\begin{DoxyCompactList}\small\item\em bool with whether output path is required to be elementary \end{DoxyCompactList}\item 
+bool \hyperlink{classbidirectional_1_1Params_ade4211d18d72a33dccb323ea1861fe70}{two\+\_\+cycle\+\_\+elimination} = false
+\begin{DoxyCompactList}\small\item\em bool with whether 2-\/cycles should be eliminated for non-\/elementary R\+C\+S\+PP \end{DoxyCompactList}\item 
+bool \hyperlink{classbidirectional_1_1Params_a1a452cc4956571752b946165a899f850}{bounds\+\_\+pruning} = false
+\item 
+bool \hyperlink{classbidirectional_1_1Params_aafe66809d74beb22c445a72ca7955f85}{find\+\_\+critical\+\_\+res} = false
+\item 
+int \hyperlink{classbidirectional_1_1Params_a7d318c4af901a82c3f566d59c6de1b62}{critical\+\_\+res} = 0
+\item 
+\hyperlink{classbidirectional_1_1REFCallback}{bidirectional\+::\+R\+E\+F\+Callback} $\ast$ \hyperlink{classbidirectional_1_1Params_afa96dcebb31c930ea4bd339fc72779a5}{ref\+\_\+callback} = nullptr
+\begin{DoxyCompactList}\small\item\em Callback to custom R\+EF. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Input parameters. 
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classbidirectional_1_1Params_a4873db87f0c812884543365b3a075de2}\label{classbidirectional_1_1Params_a4873db87f0c812884543365b3a075de2}} 
+\index{bidirectional\+::\+Params@{bidirectional\+::\+Params}!Params@{Params}}
+\index{Params@{Params}!bidirectional\+::\+Params@{bidirectional\+::\+Params}}
+\subsubsection{\texorpdfstring{Params()}{Params()}}
+{\footnotesize\ttfamily bidirectional\+::\+Params\+::\+Params (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classbidirectional_1_1Params_a2f4b540e09b10800d412da8af5ddfb2a}\label{classbidirectional_1_1Params_a2f4b540e09b10800d412da8af5ddfb2a}} 
+\index{bidirectional\+::\+Params@{bidirectional\+::\+Params}!````~Params@{$\sim$\+Params}}
+\index{````~Params@{$\sim$\+Params}!bidirectional\+::\+Params@{bidirectional\+::\+Params}}
+\subsubsection{\texorpdfstring{$\sim$\+Params()}{~Params()}}
+{\footnotesize\ttfamily bidirectional\+::\+Params\+::$\sim$\+Params (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classbidirectional_1_1Params_adc2cc88c79856b8f6aed271b99c60bd2}\label{classbidirectional_1_1Params_adc2cc88c79856b8f6aed271b99c60bd2}} 
+\index{bidirectional\+::\+Params@{bidirectional\+::\+Params}!set\+Bounds\+Pruning@{set\+Bounds\+Pruning}}
+\index{set\+Bounds\+Pruning@{set\+Bounds\+Pruning}!bidirectional\+::\+Params@{bidirectional\+::\+Params}}
+\subsubsection{\texorpdfstring{set\+Bounds\+Pruning()}{setBoundsPruning()}}
+{\footnotesize\ttfamily void bidirectional\+::\+Params\+::set\+Bounds\+Pruning (\begin{DoxyParamCaption}\item[{const bool \&}]{bounds\+\_\+pruning\+\_\+in }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classbidirectional_1_1Params_a4cb80c6a553af542ee696b63f031d547}\label{classbidirectional_1_1Params_a4cb80c6a553af542ee696b63f031d547}} 
+\index{bidirectional\+::\+Params@{bidirectional\+::\+Params}!set\+Critical\+Res@{set\+Critical\+Res}}
+\index{set\+Critical\+Res@{set\+Critical\+Res}!bidirectional\+::\+Params@{bidirectional\+::\+Params}}
+\subsubsection{\texorpdfstring{set\+Critical\+Res()}{setCriticalRes()}}
+{\footnotesize\ttfamily void bidirectional\+::\+Params\+::set\+Critical\+Res (\begin{DoxyParamCaption}\item[{const int \&}]{critical\+\_\+res\+\_\+in }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classbidirectional_1_1Params_a8cd76d63403256defcfff896d33a4fc6}\label{classbidirectional_1_1Params_a8cd76d63403256defcfff896d33a4fc6}} 
+\index{bidirectional\+::\+Params@{bidirectional\+::\+Params}!set\+Direction@{set\+Direction}}
+\index{set\+Direction@{set\+Direction}!bidirectional\+::\+Params@{bidirectional\+::\+Params}}
+\subsubsection{\texorpdfstring{set\+Direction()}{setDirection()}}
+{\footnotesize\ttfamily void bidirectional\+::\+Params\+::set\+Direction (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{direction\+\_\+in }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classbidirectional_1_1Params_aeb8196a318f012a4fb1756c4f267f030}\label{classbidirectional_1_1Params_aeb8196a318f012a4fb1756c4f267f030}} 
+\index{bidirectional\+::\+Params@{bidirectional\+::\+Params}!set\+Elementary@{set\+Elementary}}
+\index{set\+Elementary@{set\+Elementary}!bidirectional\+::\+Params@{bidirectional\+::\+Params}}
+\subsubsection{\texorpdfstring{set\+Elementary()}{setElementary()}}
+{\footnotesize\ttfamily void bidirectional\+::\+Params\+::set\+Elementary (\begin{DoxyParamCaption}\item[{const bool \&}]{elementary\+\_\+in }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classbidirectional_1_1Params_a3c344fd31c2bd86c4308e65169546a1b}\label{classbidirectional_1_1Params_a3c344fd31c2bd86c4308e65169546a1b}} 
+\index{bidirectional\+::\+Params@{bidirectional\+::\+Params}!set\+Find\+Critical\+Res@{set\+Find\+Critical\+Res}}
+\index{set\+Find\+Critical\+Res@{set\+Find\+Critical\+Res}!bidirectional\+::\+Params@{bidirectional\+::\+Params}}
+\subsubsection{\texorpdfstring{set\+Find\+Critical\+Res()}{setFindCriticalRes()}}
+{\footnotesize\ttfamily void bidirectional\+::\+Params\+::set\+Find\+Critical\+Res (\begin{DoxyParamCaption}\item[{const bool \&}]{find\+\_\+critical\+\_\+res\+\_\+in }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classbidirectional_1_1Params_ac469873b9d5dbc166ee387b9ddc968f5}\label{classbidirectional_1_1Params_ac469873b9d5dbc166ee387b9ddc968f5}} 
+\index{bidirectional\+::\+Params@{bidirectional\+::\+Params}!set\+Method@{set\+Method}}
+\index{set\+Method@{set\+Method}!bidirectional\+::\+Params@{bidirectional\+::\+Params}}
+\subsubsection{\texorpdfstring{set\+Method()}{setMethod()}}
+{\footnotesize\ttfamily void bidirectional\+::\+Params\+::set\+Method (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{method\+\_\+in }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classbidirectional_1_1Params_a1f73fd12554f071113a5487a78e53d49}\label{classbidirectional_1_1Params_a1f73fd12554f071113a5487a78e53d49}} 
+\index{bidirectional\+::\+Params@{bidirectional\+::\+Params}!set\+R\+E\+F\+Callback@{set\+R\+E\+F\+Callback}}
+\index{set\+R\+E\+F\+Callback@{set\+R\+E\+F\+Callback}!bidirectional\+::\+Params@{bidirectional\+::\+Params}}
+\subsubsection{\texorpdfstring{set\+R\+E\+F\+Callback()}{setREFCallback()}}
+{\footnotesize\ttfamily void bidirectional\+::\+Params\+::set\+R\+E\+F\+Callback (\begin{DoxyParamCaption}\item[{\hyperlink{classbidirectional_1_1REFCallback}{bidirectional\+::\+R\+E\+F\+Callback} $\ast$}]{cb }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Set callback for custom resource extensions. 
+
+\mbox{\Hypertarget{classbidirectional_1_1Params_a6c8b580515f2730f7b8362c8c86efc4d}\label{classbidirectional_1_1Params_a6c8b580515f2730f7b8362c8c86efc4d}} 
+\index{bidirectional\+::\+Params@{bidirectional\+::\+Params}!set\+Threshold@{set\+Threshold}}
+\index{set\+Threshold@{set\+Threshold}!bidirectional\+::\+Params@{bidirectional\+::\+Params}}
+\subsubsection{\texorpdfstring{set\+Threshold()}{setThreshold()}}
+{\footnotesize\ttfamily void bidirectional\+::\+Params\+::set\+Threshold (\begin{DoxyParamCaption}\item[{const double \&}]{threshold\+\_\+in }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classbidirectional_1_1Params_a6d2cd9d82200130aa3bca9f207e85422}\label{classbidirectional_1_1Params_a6d2cd9d82200130aa3bca9f207e85422}} 
+\index{bidirectional\+::\+Params@{bidirectional\+::\+Params}!set\+Time\+Limit@{set\+Time\+Limit}}
+\index{set\+Time\+Limit@{set\+Time\+Limit}!bidirectional\+::\+Params@{bidirectional\+::\+Params}}
+\subsubsection{\texorpdfstring{set\+Time\+Limit()}{setTimeLimit()}}
+{\footnotesize\ttfamily void bidirectional\+::\+Params\+::set\+Time\+Limit (\begin{DoxyParamCaption}\item[{const double \&}]{time\+\_\+limit\+\_\+in }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classbidirectional_1_1Params_acc5edce835f155bb15c3edcb991d1fb0}\label{classbidirectional_1_1Params_acc5edce835f155bb15c3edcb991d1fb0}} 
+\index{bidirectional\+::\+Params@{bidirectional\+::\+Params}!set\+Two\+Cycle\+Elimination@{set\+Two\+Cycle\+Elimination}}
+\index{set\+Two\+Cycle\+Elimination@{set\+Two\+Cycle\+Elimination}!bidirectional\+::\+Params@{bidirectional\+::\+Params}}
+\subsubsection{\texorpdfstring{set\+Two\+Cycle\+Elimination()}{setTwoCycleElimination()}}
+{\footnotesize\ttfamily void bidirectional\+::\+Params\+::set\+Two\+Cycle\+Elimination (\begin{DoxyParamCaption}\item[{const bool \&}]{two\+\_\+cycle\+\_\+elimination\+\_\+in }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{classbidirectional_1_1Params_a1a452cc4956571752b946165a899f850}\label{classbidirectional_1_1Params_a1a452cc4956571752b946165a899f850}} 
+\index{bidirectional\+::\+Params@{bidirectional\+::\+Params}!bounds\+\_\+pruning@{bounds\+\_\+pruning}}
+\index{bounds\+\_\+pruning@{bounds\+\_\+pruning}!bidirectional\+::\+Params@{bidirectional\+::\+Params}}
+\subsubsection{\texorpdfstring{bounds\+\_\+pruning}{bounds\_pruning}}
+{\footnotesize\ttfamily bool bidirectional\+::\+Params\+::bounds\+\_\+pruning = false}
+
+bool with whether lower bounds based on shortest paths are used to prune labels. Experimental! \mbox{\Hypertarget{classbidirectional_1_1Params_a7d318c4af901a82c3f566d59c6de1b62}\label{classbidirectional_1_1Params_a7d318c4af901a82c3f566d59c6de1b62}} 
+\index{bidirectional\+::\+Params@{bidirectional\+::\+Params}!critical\+\_\+res@{critical\+\_\+res}}
+\index{critical\+\_\+res@{critical\+\_\+res}!bidirectional\+::\+Params@{bidirectional\+::\+Params}}
+\subsubsection{\texorpdfstring{critical\+\_\+res}{critical\_res}}
+{\footnotesize\ttfamily int bidirectional\+::\+Params\+::critical\+\_\+res = 0}
+
+Resource id for the critical resource used in dominance checks and choosing the halfway point. Default is 0. \mbox{\Hypertarget{classbidirectional_1_1Params_a1d461034d1a1e04fa7f00cb63cd230d8}\label{classbidirectional_1_1Params_a1d461034d1a1e04fa7f00cb63cd230d8}} 
+\index{bidirectional\+::\+Params@{bidirectional\+::\+Params}!direction@{direction}}
+\index{direction@{direction}!bidirectional\+::\+Params@{bidirectional\+::\+Params}}
+\subsubsection{\texorpdfstring{direction}{direction}}
+{\footnotesize\ttfamily \hyperlink{namespacebidirectional_a4cbe6f0bfbd3629c2cd44c98014aed70}{Directions} bidirectional\+::\+Params\+::direction = \hyperlink{namespacebidirectional_a4cbe6f0bfbd3629c2cd44c98014aed70ab50b3fbd895a667b43b3e9eb3bd54f85}{bidirectional\+::\+B\+O\+TH}}
+
+
+
+Direction for search. 
+
+\mbox{\Hypertarget{classbidirectional_1_1Params_aa19060565463ffc251019a1dea026e6d}\label{classbidirectional_1_1Params_aa19060565463ffc251019a1dea026e6d}} 
+\index{bidirectional\+::\+Params@{bidirectional\+::\+Params}!elementary@{elementary}}
+\index{elementary@{elementary}!bidirectional\+::\+Params@{bidirectional\+::\+Params}}
+\subsubsection{\texorpdfstring{elementary}{elementary}}
+{\footnotesize\ttfamily bool bidirectional\+::\+Params\+::elementary = false}
+
+
+
+bool with whether output path is required to be elementary 
+
+\mbox{\Hypertarget{classbidirectional_1_1Params_aafe66809d74beb22c445a72ca7955f85}\label{classbidirectional_1_1Params_aafe66809d74beb22c445a72ca7955f85}} 
+\index{bidirectional\+::\+Params@{bidirectional\+::\+Params}!find\+\_\+critical\+\_\+res@{find\+\_\+critical\+\_\+res}}
+\index{find\+\_\+critical\+\_\+res@{find\+\_\+critical\+\_\+res}!bidirectional\+::\+Params@{bidirectional\+::\+Params}}
+\subsubsection{\texorpdfstring{find\+\_\+critical\+\_\+res}{find\_critical\_res}}
+{\footnotesize\ttfamily bool bidirectional\+::\+Params\+::find\+\_\+critical\+\_\+res = false}
+
+bool with whether critical resource is found at the preprocessing stage. \begin{DoxySeeAlso}{See also}
+\hyperlink{namespacebidirectional_a7b92b2282139801a9e2668a743ad07a1}{get\+Critical\+Res}. overrides \hyperlink{classbidirectional_1_1Params_a7d318c4af901a82c3f566d59c6de1b62}{critical\+\_\+res} value. Default false. 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{classbidirectional_1_1Params_a2faf36e89993c9fd0979e3e42b2332ea}\label{classbidirectional_1_1Params_a2faf36e89993c9fd0979e3e42b2332ea}} 
+\index{bidirectional\+::\+Params@{bidirectional\+::\+Params}!method@{method}}
+\index{method@{method}!bidirectional\+::\+Params@{bidirectional\+::\+Params}}
+\subsubsection{\texorpdfstring{method}{method}}
+{\footnotesize\ttfamily std\+::string bidirectional\+::\+Params\+::method = \char`\"{}unprocessed\char`\"{}}
+
+string with method to determine the next direction of search. Options are\+: unprocessed, processed and generated. \mbox{\Hypertarget{classbidirectional_1_1Params_afa96dcebb31c930ea4bd339fc72779a5}\label{classbidirectional_1_1Params_afa96dcebb31c930ea4bd339fc72779a5}} 
+\index{bidirectional\+::\+Params@{bidirectional\+::\+Params}!ref\+\_\+callback@{ref\+\_\+callback}}
+\index{ref\+\_\+callback@{ref\+\_\+callback}!bidirectional\+::\+Params@{bidirectional\+::\+Params}}
+\subsubsection{\texorpdfstring{ref\+\_\+callback}{ref\_callback}}
+{\footnotesize\ttfamily \hyperlink{classbidirectional_1_1REFCallback}{bidirectional\+::\+R\+E\+F\+Callback}$\ast$ bidirectional\+::\+Params\+::ref\+\_\+callback = nullptr}
+
+
+
+Callback to custom R\+EF. 
+
+\mbox{\Hypertarget{classbidirectional_1_1Params_ac7099f442d46b684fcbe55ba9c6657e4}\label{classbidirectional_1_1Params_ac7099f442d46b684fcbe55ba9c6657e4}} 
+\index{bidirectional\+::\+Params@{bidirectional\+::\+Params}!threshold@{threshold}}
+\index{threshold@{threshold}!bidirectional\+::\+Params@{bidirectional\+::\+Params}}
+\subsubsection{\texorpdfstring{threshold}{threshold}}
+{\footnotesize\ttfamily double bidirectional\+::\+Params\+::threshold = std\+::nan(\char`\"{}na\char`\"{})}
+
+
+
+double with threshold to stop search with total cost $<$= threshold 
+
+\mbox{\Hypertarget{classbidirectional_1_1Params_a2c0fd34b19d753cfce75690a5d68e1e1}\label{classbidirectional_1_1Params_a2c0fd34b19d753cfce75690a5d68e1e1}} 
+\index{bidirectional\+::\+Params@{bidirectional\+::\+Params}!time\+\_\+limit@{time\+\_\+limit}}
+\index{time\+\_\+limit@{time\+\_\+limit}!bidirectional\+::\+Params@{bidirectional\+::\+Params}}
+\subsubsection{\texorpdfstring{time\+\_\+limit}{time\_limit}}
+{\footnotesize\ttfamily double bidirectional\+::\+Params\+::time\+\_\+limit = std\+::nan(\char`\"{}na\char`\"{})}
+
+
+
+double with time limit in seconds 
+
+\mbox{\Hypertarget{classbidirectional_1_1Params_ade4211d18d72a33dccb323ea1861fe70}\label{classbidirectional_1_1Params_ade4211d18d72a33dccb323ea1861fe70}} 
+\index{bidirectional\+::\+Params@{bidirectional\+::\+Params}!two\+\_\+cycle\+\_\+elimination@{two\+\_\+cycle\+\_\+elimination}}
+\index{two\+\_\+cycle\+\_\+elimination@{two\+\_\+cycle\+\_\+elimination}!bidirectional\+::\+Params@{bidirectional\+::\+Params}}
+\subsubsection{\texorpdfstring{two\+\_\+cycle\+\_\+elimination}{two\_cycle\_elimination}}
+{\footnotesize\ttfamily bool bidirectional\+::\+Params\+::two\+\_\+cycle\+\_\+elimination = false}
+
+
+
+bool with whether 2-\/cycles should be eliminated for non-\/elementary R\+C\+S\+PP 
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+/\+\_\+\+\_\+w/cspy/cspy/torressa/cspy/src/cc/\hyperlink{params_8h}{params.\+h}\end{DoxyCompactItemize}

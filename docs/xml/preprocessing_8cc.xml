@@ -1,0 +1,205 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="preprocessing_8cc" kind="file" language="C++">
+    <compoundname>preprocessing.cc</compoundname>
+    <includes refid="preprocessing_8h" local="yes">preprocessing.h</includes>
+    <includes local="no">iostream</includes>
+    <includes local="no">queue</includes>
+    <includes local="no">set</includes>
+    <includes refid="digraph_8h" local="yes">digraph.h</includes>
+    <includes local="yes">lemon/adaptors.h</includes>
+    <includes local="yes">lemon/bellman_ford.h</includes>
+    <includes local="yes">lemon/maps.h</includes>
+    <incdepgraph>
+      <node id="123">
+        <label>lemon/maps.h</label>
+      </node>
+      <node id="127">
+        <label>queue</label>
+      </node>
+      <node id="125">
+        <label>lemon/smart_graph.h</label>
+      </node>
+      <node id="118">
+        <label>/__w/cspy/cspy/torressa/cspy/src/cc/preprocessing.cc</label>
+        <link refid="preprocessing_8cc"/>
+        <childnode refid="119" relation="include">
+        </childnode>
+        <childnode refid="126" relation="include">
+        </childnode>
+        <childnode refid="127" relation="include">
+        </childnode>
+        <childnode refid="128" relation="include">
+        </childnode>
+        <childnode refid="120" relation="include">
+        </childnode>
+        <childnode refid="129" relation="include">
+        </childnode>
+        <childnode refid="130" relation="include">
+        </childnode>
+        <childnode refid="123" relation="include">
+        </childnode>
+      </node>
+      <node id="124">
+        <label>lemon/path.h</label>
+      </node>
+      <node id="122">
+        <label>vector</label>
+      </node>
+      <node id="126">
+        <label>iostream</label>
+      </node>
+      <node id="128">
+        <label>set</label>
+      </node>
+      <node id="129">
+        <label>lemon/adaptors.h</label>
+      </node>
+      <node id="120">
+        <label>digraph.h</label>
+        <link refid="digraph_8h"/>
+        <childnode refid="121" relation="include">
+        </childnode>
+        <childnode refid="122" relation="include">
+        </childnode>
+        <childnode refid="123" relation="include">
+        </childnode>
+        <childnode refid="124" relation="include">
+        </childnode>
+        <childnode refid="125" relation="include">
+        </childnode>
+      </node>
+      <node id="121">
+        <label>memory</label>
+      </node>
+      <node id="119">
+        <label>preprocessing.h</label>
+        <link refid="preprocessing_8h"/>
+        <childnode refid="120" relation="include">
+        </childnode>
+      </node>
+      <node id="130">
+        <label>lemon/bellman_ford.h</label>
+      </node>
+    </incdepgraph>
+    <innernamespace refid="namespacebidirectional">bidirectional</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#include<sp/>&quot;<ref refid="preprocessing_8h" kindref="compound">preprocessing.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;iostream&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;queue&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;set&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="digraph_8h" kindref="compound">digraph.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;lemon/adaptors.h&quot;</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>reverseDigraph</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;lemon/bellman_ford.h&quot;</highlight><highlight class="normal"><sp/></highlight><highlight class="comment">//<sp/>BellmanFord</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;lemon/maps.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespacebidirectional" kindref="compound">bidirectional</ref><sp/>{</highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="namespacebidirectional_1a13e4a7c0617b0c9092e57cba21c75438" kindref="member">detectNegativeCostCycle</ref>(DiGraph*<sp/>graph_ptr)<sp/>{</highlight></codeline>
+<codeline lineno="15"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="digraph_8h_1a952c6b935f7521c3435dbd13b255246b" kindref="member">LemonNode</ref>&amp;<sp/>source<sp/>=</highlight></codeline>
+<codeline lineno="16"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>graph_ptr-&gt;getLNodeFromId(graph_ptr-&gt;source.lemon_id);</highlight></codeline>
+<codeline lineno="17"><highlight class="normal"><sp/><sp/>lemon::BellmanFord&lt;LemonGraph,<sp/>LemonGraph::ArcMap&lt;double&gt;&gt;<sp/>BF(</highlight></codeline>
+<codeline lineno="18"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>*graph_ptr-&gt;lemon_graph_ptr,<sp/>*graph_ptr-&gt;weight_map_ptr);</highlight></codeline>
+<codeline lineno="19"><highlight class="normal"><sp/><sp/>BF.run(source,<sp/>graph_ptr-&gt;number_edges);</highlight></codeline>
+<codeline lineno="20"><highlight class="normal"><sp/><sp/><ref refid="digraph_8h_1a261c69ea112177ad64fd27d10b23f4b7" kindref="member">LemonPath</ref><sp/>path<sp/>=<sp/>BF.negativeCycle();</highlight></codeline>
+<codeline lineno="21"><highlight class="normal"></highlight></codeline>
+<codeline lineno="22"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>Update<sp/>negative_cost_cycle_present<sp/>member</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="23"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(path.empty())</highlight></codeline>
+<codeline lineno="24"><highlight class="normal"><sp/><sp/><sp/><sp/>graph_ptr-&gt;negative_cost_cycle_present<sp/>=<sp/><ref refid="namespacebidirectional_1a507ec433f8ac22a92fcc3b8aad252f29a7fcb4521ab8f836164a0670be9848d18" kindref="member">FALSE</ref>;</highlight></codeline>
+<codeline lineno="25"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="26"><highlight class="normal"><sp/><sp/><sp/><sp/>graph_ptr-&gt;negative_cost_cycle_present<sp/>=<sp/><ref refid="namespacebidirectional_1a507ec433f8ac22a92fcc3b8aad252f29a50727807c27ff7820eef09fbe631eba9" kindref="member">TRUE</ref>;</highlight></codeline>
+<codeline lineno="27"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"></highlight></codeline>
+<codeline lineno="29"><highlight class="normal"></highlight><highlight class="comment">//<sp/>TODO<sp/>Use<sp/>explicit<sp/>types<sp/>when<sp/>calling<sp/>BF<sp/>to<sp/>avoid<sp/>error<sp/>on<sp/>MACOS</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="30"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="namespacebidirectional_1a35feb503e8ae674a3756aebc9a3b1d0f" kindref="member">lowerBoundWeight</ref>(</highlight></codeline>
+<codeline lineno="31"><highlight class="normal"><sp/><sp/><sp/><sp/>std::vector&lt;double&gt;*<sp/>lower_bound_weight,</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>DiGraph&amp;<sp/><sp/><sp/><sp/><sp/><sp/><sp/>graph,</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal">&amp;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>forward)<sp/>{</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>Create<sp/>map<sp/>to<sp/>store<sp/>distances</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="35"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(forward)<sp/>{</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Instantiate<sp/>algorithm<sp/>with<sp/>normal<sp/>graph</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="37"><highlight class="normal"><sp/><sp/><sp/><sp/>LemonGraph::NodeMap&lt;double&gt;<sp/>distance_map(*graph.lemon_graph_ptr);</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="digraph_8h_1a952c6b935f7521c3435dbd13b255246b" kindref="member">LemonNode</ref>&amp;<sp/>source<sp/>=<sp/>graph.getLNodeFromId(graph.source.lemon_id);</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/>lemon::BellmanFord&lt;LemonGraph,<sp/>LemonGraph::ArcMap&lt;double&gt;&gt;<sp/>BF(</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>*graph.lemon_graph_ptr,<sp/>*graph.weight_map_ptr);</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"><sp/><sp/><sp/><sp/>BF.distMap(distance_map);</highlight></codeline>
+<codeline lineno="42"><highlight class="normal"><sp/><sp/><sp/><sp/>BF.run(source,<sp/>graph.number_edges);</highlight></codeline>
+<codeline lineno="43"><highlight class="normal"></highlight></codeline>
+<codeline lineno="44"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>TODO:<sp/>Fix<sp/>wizard<sp/>version<sp/>on<sp/>MACOS</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>bellmanFord(*graph.lemon_graph_ptr,<sp/>*graph.weight_map_ptr)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/><sp/><sp/><sp/><sp/>.distMap(distance_map)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/><sp/><sp/><sp/><sp/>.run(source,<sp/>sink);</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="48"><highlight class="normal"></highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Extract<sp/>shortest<sp/>path<sp/>distance<sp/>to<sp/>each<sp/>node,<sp/>if<sp/>available,<sp/>ow<sp/>lemon::inf</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(LemonGraph::NodeIt<sp/>v(*graph.lemon_graph_ptr);<sp/>v<sp/>!=<sp/>lemon::INVALID;</highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>++v)<sp/>{</highlight></codeline>
+<codeline lineno="52"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">&amp;<sp/></highlight><highlight class="keywordtype">id</highlight><highlight class="normal"><sp/>=<sp/>graph.getId(v);</highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>std::cout<sp/>&lt;&lt;<sp/>&quot;dist[&quot;<sp/>&lt;&lt;<sp/>id<sp/>&lt;&lt;<sp/>&quot;]<sp/>=<sp/>&quot;<sp/>&lt;&lt;<sp/>distance_map[v]<sp/>&lt;&lt;<sp/>&quot;\n&quot;;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>(*lower_bound_weight)[id]<sp/>=<sp/>distance_map[v];</highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/>lemon::ReverseDigraph&lt;const<sp/>LemonGraph&gt;<sp/>RG(*graph.lemon_graph_ptr);</highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/>lemon::ReverseDigraph&lt;const<sp/>LemonGraph&gt;::NodeMap&lt;</highlight><highlight class="keywordtype">double</highlight><highlight class="normal">&gt;<sp/>distance_map_rev(</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>*graph.lemon_graph_ptr);</highlight></codeline>
+<codeline lineno="60"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="digraph_8h_1a952c6b935f7521c3435dbd13b255246b" kindref="member">LemonNode</ref>&amp;<sp/>sink<sp/>=<sp/>graph.getLNodeFromId(graph.sink.lemon_id);</highlight></codeline>
+<codeline lineno="61"><highlight class="normal"></highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/><sp/><sp/>lemon::BellmanFord&lt;</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>lemon::ReverseDigraph&lt;const<sp/>LemonGraph&gt;,</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>LemonGraph::ArcMap&lt;double&gt;&gt;</highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>BF(RG,<sp/>*graph.weight_map_ptr);</highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/><sp/><sp/><sp/>BF.distMap(distance_map_rev);</highlight></codeline>
+<codeline lineno="67"><highlight class="normal"><sp/><sp/><sp/><sp/>BF.run(sink,<sp/>graph.number_edges);</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"></highlight></codeline>
+<codeline lineno="69"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>TODO:<sp/>Fix<sp/>wizard<sp/>version<sp/>on<sp/>MACOS</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="70"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Instantiate<sp/>algorithm<sp/>with<sp/>reversed<sp/>digraph</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="71"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>bellmanFord(reverseDigraph(*graph.lemon_graph_ptr),</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="72"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>*graph.weight_map_ptr)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/><sp/><sp/><sp/><sp/>.distMap(distance_map)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="74"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/><sp/><sp/><sp/><sp/>.run(sink,<sp/>source);</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="75"><highlight class="normal"></highlight></codeline>
+<codeline lineno="76"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Extract<sp/>distance<sp/>using<sp/>reverse<sp/>map</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="77"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(LemonGraph::NodeIt<sp/>v(*graph.lemon_graph_ptr);<sp/>v<sp/>!=<sp/>lemon::INVALID;</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>++v)<sp/>{</highlight></codeline>
+<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">&amp;<sp/></highlight><highlight class="keywordtype">id</highlight><highlight class="normal"><sp/>=<sp/>graph.getId(v);</highlight></codeline>
+<codeline lineno="80"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>std::cout<sp/>&lt;&lt;<sp/>&quot;dist[&quot;<sp/>&lt;&lt;<sp/>id<sp/>&lt;&lt;<sp/>&quot;]<sp/>=<sp/>&quot;<sp/>&lt;&lt;<sp/>distance_map_rev[v]<sp/>&lt;&lt;<sp/>&quot;\n&quot;;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="81"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>(*lower_bound_weight)[id]<sp/>=<sp/>distance_map_rev[v];</highlight></codeline>
+<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="83"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="84"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="85"><highlight class="normal"></highlight></codeline>
+<codeline lineno="86"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="namespacebidirectional_1a7b92b2282139801a9e2668a743ad07a1" kindref="member">getCriticalRes</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;double&gt;&amp;<sp/>max_res,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>DiGraph&amp;<sp/>graph)<sp/>{</highlight></codeline>
+<codeline lineno="87"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>Create<sp/>map<sp/>to<sp/>store<sp/>distances</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="88"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>critical_res<sp/><sp/><sp/><sp/><sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="89"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>max_diff<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>0.0;</highlight></codeline>
+<codeline lineno="90"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">&amp;<sp/>number_resources<sp/>=<sp/>max_res.size();</highlight></codeline>
+<codeline lineno="91"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(number_resources<sp/>==<sp/>0)</highlight></codeline>
+<codeline lineno="92"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>critical_res;</highlight></codeline>
+<codeline lineno="93"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>r<sp/>=<sp/>0;<sp/>r<sp/>&lt;<sp/>number_resources;<sp/>++r)<sp/>{</highlight></codeline>
+<codeline lineno="94"><highlight class="normal"><sp/><sp/><sp/><sp/>LemonGraph::NodeMap&lt;double&gt;<sp/>distance_map(*graph.lemon_graph_ptr);</highlight></codeline>
+<codeline lineno="95"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="digraph_8h_1a952c6b935f7521c3435dbd13b255246b" kindref="member">LemonNode</ref>&amp;<sp/>source<sp/>=<sp/>graph.getLNodeFromId(graph.source.lemon_id);</highlight></codeline>
+<codeline lineno="96"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="digraph_8h_1a952c6b935f7521c3435dbd13b255246b" kindref="member">LemonNode</ref>&amp;<sp/>sink<sp/><sp/><sp/>=<sp/>graph.getLNodeFromId(graph.sink.lemon_id);</highlight></codeline>
+<codeline lineno="97"><highlight class="normal"><sp/><sp/><sp/><sp/>ResourceMap<sp/><sp/><sp/><sp/><sp/><sp/>m<sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>graph.getResourceMap(r);</highlight></codeline>
+<codeline lineno="98"><highlight class="normal"><sp/><sp/><sp/><sp/>lemon::BellmanFord&lt;LemonGraph,<sp/>ResourceMap&gt;<sp/>BF(*graph.lemon_graph_ptr,<sp/>m);</highlight></codeline>
+<codeline lineno="99"><highlight class="normal"><sp/><sp/><sp/><sp/>BF.distMap(distance_map);</highlight></codeline>
+<codeline lineno="100"><highlight class="normal"><sp/><sp/><sp/><sp/>BF.run(source,<sp/>graph.number_edges);</highlight></codeline>
+<codeline lineno="101"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>dist<sp/>=<sp/>BF.dist(sink);</highlight></codeline>
+<codeline lineno="102"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>diff<sp/>=<sp/>std::abs(dist)<sp/>-<sp/>max_res[r];</highlight></codeline>
+<codeline lineno="103"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(diff<sp/>&gt;<sp/>max_diff)<sp/>{</highlight></codeline>
+<codeline lineno="104"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>max_diff<sp/><sp/><sp/><sp/><sp/>=<sp/>diff;</highlight></codeline>
+<codeline lineno="105"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>critical_res<sp/>=<sp/>r;</highlight></codeline>
+<codeline lineno="106"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="107"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="108"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>critical_res;</highlight></codeline>
+<codeline lineno="109"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="110"><highlight class="normal"></highlight></codeline>
+<codeline lineno="111"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>bidirectional</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="/__w/cspy/cspy/torressa/cspy/src/cc/preprocessing.cc"/>
+  </compounddef>
+</doxygen>

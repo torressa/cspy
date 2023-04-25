@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Search &mdash; cspy 1.0.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="REFCallback" href="REFCallback.html" />
+    <link rel="prev" title="BiDirectional" href="BiDirectional.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            cspy
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how_to.html">Using <cite>cspy</cite></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ref.html">Resource Extension Functions (REFs)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../python_api/cspy.BiDirectional.html">cspy.BiDirectional</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python_api/cspy.Tabu.html">cspy.Tabu</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python_api/cspy.GreedyElim.html">cspy.GreedyElim</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python_api/cspy.GRASP.html">cspy.GRASP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python_api/cspy.PSOLGENT.html">cspy.PSOLGENT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python_api/cspy.preprocess_graph.html">cspy.preprocess_graph</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python_api/cspy.check.html">cspy.check</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">C++ API</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="BiDirectional.html">BiDirectional</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="REFCallback.html">REFCallback</a></li>
+<li class="toctree-l1"><a class="reference internal" href="params.html">Params</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DiGraph.html">DiGraph</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Vertex.html">Vertex</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Label.html">Labelling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="preprocessing.html">Preprocessing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">cspy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Search</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/cc_api/Search.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="search">
+<h1>Search<a class="headerlink" href="#search" title="Permalink to this heading"></a></h1>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N13bidirectional6SearchE">
+<span id="_CPPv3N13bidirectional6SearchE"></span><span id="_CPPv2N13bidirectional6SearchE"></span><span id="bidirectional::Search"></span><span class="target" id="classbidirectional_1_1Search"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Search</span></span></span><a class="headerlink" href="#_CPPv4N13bidirectional6SearchE" title="Permalink to this definition"></a><br /></dt>
+<dd><div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N13bidirectional6Search8makeHeapEv">
+<span id="_CPPv3N13bidirectional6Search8makeHeapEv"></span><span id="_CPPv2N13bidirectional6Search8makeHeapEv"></span><span id="bidirectional::Search::makeHeap"></span><span class="target" id="classbidirectional_1_1Search_1af38a13e27dcd3b69e78dc7943ee90f46"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">makeHeap</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N13bidirectional6Search8makeHeapEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Initialises heap using the appropriate comparison i.e. increasing in the monotone resource forward lists, decreasing otherwise </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N13bidirectional6Search8pushHeapEv">
+<span id="_CPPv3N13bidirectional6Search8pushHeapEv"></span><span id="_CPPv2N13bidirectional6Search8pushHeapEv"></span><span id="bidirectional::Search::pushHeap"></span><span class="target" id="classbidirectional_1_1Search_1a2c1a7067a4ce02805e8ab5f9beac8c7c"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">pushHeap</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N13bidirectional6Search8pushHeapEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Push new elements in heap using the appropriate comparison i.e. increasing in the monotone resource forward lists, decreasing otherwise </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N13bidirectional6Search16replaceBestLabelERKiRKN9labelling5LabelE">
+<span id="_CPPv3N13bidirectional6Search16replaceBestLabelERKiRKN9labelling5LabelE"></span><span id="_CPPv2N13bidirectional6Search16replaceBestLabelERKiRKN9labelling5LabelE"></span><span id="bidirectional::Search::replaceBestLabel__iCR.labelling::LabelCR"></span><span class="target" id="classbidirectional_1_1Search_1a25ab49cfbc9f074630e059429fc7f0cc"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">replaceBestLabel</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">lemon_id</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">labelling</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="Label.html#_CPPv4N9labelling5LabelE" title="labelling::Label"><span class="n"><span class="pre">Label</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">label</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N13bidirectional6Search16replaceBestLabelERKiRKN9labelling5LabelE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Replace best label. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N13bidirectional6Search19replaceCurrentLabelERKN9labelling5LabelE">
+<span id="_CPPv3N13bidirectional6Search19replaceCurrentLabelERKN9labelling5LabelE"></span><span id="_CPPv2N13bidirectional6Search19replaceCurrentLabelERKN9labelling5LabelE"></span><span id="bidirectional::Search::replaceCurrentLabel__labelling::LabelCR"></span><span class="target" id="classbidirectional_1_1Search_1a2b2e85f750fd35df23f470ce2222dcfb"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">replaceCurrentLabel</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">labelling</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="Label.html#_CPPv4N9labelling5LabelE" title="labelling::Label"><span class="n"><span class="pre">Label</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">label</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N13bidirectional6Search19replaceCurrentLabelERKN9labelling5LabelE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Replace best label. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N13bidirectional6Search24replaceIntermediateLabelERKN9labelling5LabelE">
+<span id="_CPPv3N13bidirectional6Search24replaceIntermediateLabelERKN9labelling5LabelE"></span><span id="_CPPv2N13bidirectional6Search24replaceIntermediateLabelERKN9labelling5LabelE"></span><span id="bidirectional::Search::replaceIntermediateLabel__labelling::LabelCR"></span><span class="target" id="classbidirectional_1_1Search_1a66b5168d25b5fe7f673f6d335ae716d1"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">replaceIntermediateLabel</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">labelling</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="Label.html#_CPPv4N9labelling5LabelE" title="labelling::Label"><span class="n"><span class="pre">Label</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">label</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N13bidirectional6Search24replaceIntermediateLabelERKN9labelling5LabelE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Replace intermediate label. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N13bidirectional6Search16addVisitedVertexERKi">
+<span id="_CPPv3N13bidirectional6Search16addVisitedVertexERKi"></span><span id="_CPPv2N13bidirectional6Search16addVisitedVertexERKi"></span><span id="bidirectional::Search::addVisitedVertex__iCR"></span><span class="target" id="classbidirectional_1_1Search_1a91b68db5c76c29195db8b2e4566fc601"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">addVisitedVertex</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">lemon_id</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N13bidirectional6Search16addVisitedVertexERKi" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Update vertices visited. </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N13bidirectional6Search9directionE">
+<span id="_CPPv3N13bidirectional6Search9directionE"></span><span id="_CPPv2N13bidirectional6Search9directionE"></span><span id="bidirectional::Search::direction__Directions"></span><span class="target" id="classbidirectional_1_1Search_1ad5a262892bdeae2978453c9967ab7372"></span><a class="reference internal" href="params.html#_CPPv4N13bidirectional10DirectionsE" title="bidirectional::Directions"><span class="n"><span class="pre">Directions</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">direction</span></span></span><a class="headerlink" href="#_CPPv4N13bidirectional6Search9directionE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Direction of <a class="reference internal" href="#classbidirectional_1_1Search"><span class="std std-ref">Search</span></a>. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N13bidirectional6Search4stopE">
+<span id="_CPPv3N13bidirectional6Search4stopE"></span><span id="_CPPv2N13bidirectional6Search4stopE"></span><span id="bidirectional::Search::stop__b"></span><span class="target" id="classbidirectional_1_1Search_1a0d03b4c804f947b14f7ec603d7005055"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stop</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">false</span></span><a class="headerlink" href="#_CPPv4N13bidirectional6Search4stopE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Stopping criteria for each direction. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N13bidirectional6Search14bound_exceededE">
+<span id="_CPPv3N13bidirectional6Search14bound_exceededE"></span><span id="_CPPv2N13bidirectional6Search14bound_exceededE"></span><span id="bidirectional::Search::bound_exceeded__b"></span><span class="target" id="classbidirectional_1_1Search_1a51f9dea11b07ce6e196df86ce0912d7d"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">bound_exceeded</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">false</span></span><a class="headerlink" href="#_CPPv4N13bidirectional6Search14bound_exceededE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Stopping criteria for each direction. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N13bidirectional6Search17unprocessed_countE">
+<span id="_CPPv3N13bidirectional6Search17unprocessed_countE"></span><span id="_CPPv2N13bidirectional6Search17unprocessed_countE"></span><span id="bidirectional::Search::unprocessed_count__i"></span><span class="target" id="classbidirectional_1_1Search_1a5143275aff96ad18651c6050832a854a"></span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">unprocessed_count</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4N13bidirectional6Search17unprocessed_countE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Number of unprocessed labels generated. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N13bidirectional6Search15processed_countE">
+<span id="_CPPv3N13bidirectional6Search15processed_countE"></span><span id="_CPPv2N13bidirectional6Search15processed_countE"></span><span id="bidirectional::Search::processed_count__i"></span><span class="target" id="classbidirectional_1_1Search_1a951da4144a4cf70e3288d0c5898769b9"></span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">processed_count</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4N13bidirectional6Search15processed_countE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Number of labels processed. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N13bidirectional6Search15generated_countE">
+<span id="_CPPv3N13bidirectional6Search15generated_countE"></span><span id="_CPPv2N13bidirectional6Search15generated_countE"></span><span id="bidirectional::Search::generated_count__i"></span><span class="target" id="classbidirectional_1_1Search_1a3a9007631e48d796e85ae2cfc3a247ab"></span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">generated_count</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0</span></span><a class="headerlink" href="#_CPPv4N13bidirectional6Search15generated_countE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Number of labels generated (includes the possibly infeasible extensions) </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N13bidirectional6Search18lower_bound_weightE">
+<span id="_CPPv3N13bidirectional6Search18lower_bound_weightE"></span><span id="_CPPv2N13bidirectional6Search18lower_bound_weightE"></span><span id="bidirectional::Search::lower_bound_weight__std::unique_ptr:std::vector:double::"></span><span class="target" id="classbidirectional_1_1Search_1ac06fcd122e7d2bb99e493c9a82cbecd1"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">unique_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">lower_bound_weight</span></span></span><a class="headerlink" href="#_CPPv4N13bidirectional6Search18lower_bound_weightE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Lower bounds from any node to sink. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N13bidirectional6Search16visited_verticesE">
+<span id="_CPPv3N13bidirectional6Search16visited_verticesE"></span><span id="_CPPv2N13bidirectional6Search16visited_verticesE"></span><span id="bidirectional::Search::visited_vertices__std::set:i:"></span><span class="target" id="classbidirectional_1_1Search_1a7548a1928ca152017f6f4fe7a5c55089"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">set</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">int</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">visited_vertices</span></span></span><a class="headerlink" href="#_CPPv4N13bidirectional6Search16visited_verticesE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>vector with indices of vertices visited </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N13bidirectional6Search18intermediate_labelE">
+<span id="_CPPv3N13bidirectional6Search18intermediate_labelE"></span><span id="_CPPv2N13bidirectional6Search18intermediate_labelE"></span><span id="bidirectional::Search::intermediate_label__std::shared_ptr:labelling::Label:"></span><span class="target" id="classbidirectional_1_1Search_1aa7996593da90536ffce5cb681dc26a9b"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">labelling</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="Label.html#_CPPv4N9labelling5LabelE" title="labelling::Label"><span class="n"><span class="pre">Label</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">intermediate_label</span></span></span><a class="headerlink" href="#_CPPv4N13bidirectional6Search18intermediate_labelE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Intermediate current best label with possibly complete source-sink path (shared pointer as we want to be able to substitute it without resetting) </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N13bidirectional6Search16efficient_labelsE">
+<span id="_CPPv3N13bidirectional6Search16efficient_labelsE"></span><span id="_CPPv2N13bidirectional6Search16efficient_labelsE"></span><span id="bidirectional::Search::efficient_labels__std::vector:std::vector:labelling::Label::"></span><span class="target" id="classbidirectional_1_1Search_1aa9159c191cdef5d5555614b9efcb8dc5"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">labelling</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="Label.html#_CPPv4N9labelling5LabelE" title="labelling::Label"><span class="n"><span class="pre">Label</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">efficient_labels</span></span></span><a class="headerlink" href="#_CPPv4N13bidirectional6Search16efficient_labelsE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>vector with pareto optimal labels (per node) in each direction </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N13bidirectional6Search11best_labelsE">
+<span id="_CPPv3N13bidirectional6Search11best_labelsE"></span><span id="_CPPv2N13bidirectional6Search11best_labelsE"></span><span id="bidirectional::Search::best_labels__std::vector:std::shared_ptr:labelling::Label::"></span><span class="target" id="classbidirectional_1_1Search_1a4b87b9c1f546b3138cb1bba0cc309a80"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">labelling</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="Label.html#_CPPv4N9labelling5LabelE" title="labelling::Label"><span class="n"><span class="pre">Label</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">best_labels</span></span></span><a class="headerlink" href="#_CPPv4N13bidirectional6Search11best_labelsE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>vector with pointer to label with least weight (per node) in each direction </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N13bidirectional6Search18unprocessed_labelsE">
+<span id="_CPPv3N13bidirectional6Search18unprocessed_labelsE"></span><span id="_CPPv2N13bidirectional6Search18unprocessed_labelsE"></span><span id="bidirectional::Search::unprocessed_labels__std::unique_ptr:std::vector:labelling::Label::"></span><span class="target" id="classbidirectional_1_1Search_1aeb057642c57dde16fec701f625781651"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">unique_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">labelling</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="Label.html#_CPPv4N9labelling5LabelE" title="labelling::Label"><span class="n"><span class="pre">Label</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">unprocessed_labels</span></span></span><a class="headerlink" href="#_CPPv4N13bidirectional6Search18unprocessed_labelsE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>heap vector to keep unprocessed labels ordered. the order depends on the on the direction of the search. i.e. forward -&gt; increasing in the monotone resource, backward -&gt; decreasing in the monotone resource. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="BiDirectional.html" class="btn btn-neutral float-left" title="BiDirectional" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="REFCallback.html" class="btn btn-neutral float-right" title="REFCallback" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, David Torres Sanchez.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

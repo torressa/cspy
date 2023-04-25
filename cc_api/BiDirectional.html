@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BiDirectional &mdash; cspy 1.0.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Search" href="Search.html" />
+    <link rel="prev" title="cspy.check" href="../python_api/cspy.check.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            cspy
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how_to.html">Using <cite>cspy</cite></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ref.html">Resource Extension Functions (REFs)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../python_api/cspy.BiDirectional.html">cspy.BiDirectional</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python_api/cspy.Tabu.html">cspy.Tabu</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python_api/cspy.GreedyElim.html">cspy.GreedyElim</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python_api/cspy.GRASP.html">cspy.GRASP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python_api/cspy.PSOLGENT.html">cspy.PSOLGENT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python_api/cspy.preprocess_graph.html">cspy.preprocess_graph</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python_api/cspy.check.html">cspy.check</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">C++ API</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">BiDirectional</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Search.html">Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="REFCallback.html">REFCallback</a></li>
+<li class="toctree-l1"><a class="reference internal" href="params.html">Params</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DiGraph.html">DiGraph</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Vertex.html">Vertex</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Label.html">Labelling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="preprocessing.html">Preprocessing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">cspy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">BiDirectional</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/cc_api/BiDirectional.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="bidirectional">
+<h1>BiDirectional<a class="headerlink" href="#bidirectional" title="Permalink to this heading"></a></h1>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N13bidirectional13BiDirectionalE">
+<span id="_CPPv3N13bidirectional13BiDirectionalE"></span><span id="_CPPv2N13bidirectional13BiDirectionalE"></span><span id="bidirectional::BiDirectional"></span><span class="target" id="classbidirectional_1_1BiDirectional"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BiDirectional</span></span></span><a class="headerlink" href="#_CPPv4N13bidirectional13BiDirectionalE" title="Permalink to this definition"></a><br /></dt>
+<dd><p><a class="reference internal" href="#classbidirectional_1_1BiDirectional"><span class="std std-ref">BiDirectional</span></a> algorithm. see docs</p>
+<p><ol class="loweralpha simple">
+<li><p>ctor (memory allocation for the graph)</p></li>
+<li><p>add edges to graph using <code class="docutils literal notranslate"><span class="pre">addEdge</span></code>.</p></li>
+<li><p>[optional] set solving parameters if desired (e.g. time_limit, …) 3.1. [optional] set callback using <code class="docutils literal notranslate"><span class="pre">setREFCallback</span></code> 3.2. [optional] set seed using <code class="docutils literal notranslate"><span class="pre">setSeed</span></code></p></li>
+<li><p>call <code class="docutils literal notranslate"><span class="pre">run</span></code></p></li>
+</ol>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N13bidirectional13BiDirectional13BiDirectionalERKiRKiRKiRKiRKNSt6vectorIdEERKNSt6vectorIdEE">
+<span id="_CPPv3N13bidirectional13BiDirectional13BiDirectionalERKiRKiRKiRKiRKNSt6vectorIdEERKNSt6vectorIdEE"></span><span id="_CPPv2N13bidirectional13BiDirectional13BiDirectionalERKiRKiRKiRKiRKNSt6vectorIdEERKNSt6vectorIdEE"></span><span id="bidirectional::BiDirectional::BiDirectional__iCR.iCR.iCR.iCR.std::vector:double:CR.std::vector:double:CR"></span><span class="target" id="classbidirectional_1_1BiDirectional_1aa8fc8de56198cce766bf887248136fc2"></span><span class="sig-name descname"><span class="n"><span class="pre">BiDirectional</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">number_vertices</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">number_edges</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">source_id</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">sink_id</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">max_res_in</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">min_res_in</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N13bidirectional13BiDirectional13BiDirectionalERKiRKiRKiRKiRKNSt6vectorIdEERKNSt6vectorIdEE" title="Permalink to this definition"></a><br /></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>number_vertices, int</strong> – <strong>[in]</strong> number of vertices in the graph (to be added using addEdge) </p></li>
+<li><p><strong>number_edges, int</strong> – <strong>[in]</strong> number of edges in the graph </p></li>
+<li><p><strong>source_id, int</strong> – <strong>[in]</strong> vertex id for the source </p></li>
+<li><p><strong>sink_id, int</strong> – <strong>[in]</strong> vertex id for the sink </p></li>
+<li><p><strong>max_res, vector</strong> – <strong>[in]</strong> of double with upper bound for resource consumption </p></li>
+<li><p><strong>min_res, vector</strong> – <strong>[in]</strong> of double with lower bound for resource consumption </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N13bidirectional13BiDirectionalD0Ev">
+<span id="_CPPv3N13bidirectional13BiDirectionalD0Ev"></span><span id="_CPPv2N13bidirectional13BiDirectionalD0Ev"></span><span id="bidirectional::BiDirectional::~BiDirectional"></span><span class="target" id="classbidirectional_1_1BiDirectional_1ae8a303f1eab194fb7df356c1900c9c7f"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">~BiDirectional</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N13bidirectional13BiDirectionalD0Ev" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Default destructor. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N13bidirectional13BiDirectional8addNodesERKNSt6vectorIiEE">
+<span id="_CPPv3N13bidirectional13BiDirectional8addNodesERKNSt6vectorIiEE"></span><span id="_CPPv2N13bidirectional13BiDirectional8addNodesERKNSt6vectorIiEE"></span><span id="bidirectional::BiDirectional::addNodes__std::vector:i:CR"></span><span class="target" id="classbidirectional_1_1BiDirectional_1a37633f0f701bfb6a5f3a212212316f29"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">addNodes</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">int</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">nodes</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N13bidirectional13BiDirectional8addNodesERKNSt6vectorIiEE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Wrapper to add nodes to the graph. </p>
+<p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="DiGraph.html#classbidirectional_1_1DiGraph_1a483c50e9b5b483472ae7ee2910f3bcda"><span class="std std-ref">DiGraph::addNodes</span></a></p>
+</div>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N13bidirectional13BiDirectional7addEdgeERKiRKiRKdRKNSt6vectorIdEE">
+<span id="_CPPv3N13bidirectional13BiDirectional7addEdgeERKiRKiRKdRKNSt6vectorIdEE"></span><span id="_CPPv2N13bidirectional13BiDirectional7addEdgeERKiRKiRKdRKNSt6vectorIdEE"></span><span id="bidirectional::BiDirectional::addEdge__iCR.iCR.doubleCR.std::vector:double:CR"></span><span class="target" id="classbidirectional_1_1BiDirectional_1a5e4873f624300e7c3620e00758c98a35"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">addEdge</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">tail</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">head</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">weight</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">resource_consumption</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N13bidirectional13BiDirectional7addEdgeERKiRKiRKdRKNSt6vectorIdEE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Add an edge to the graph. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N13bidirectional13BiDirectional3runEv">
+<span id="_CPPv3N13bidirectional13BiDirectional3runEv"></span><span id="_CPPv2N13bidirectional13BiDirectional3runEv"></span><span id="bidirectional::BiDirectional::run"></span><span class="target" id="classbidirectional_1_1BiDirectional_1ac29ad49abb6001ad50f4dac4a5775b3c"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">run</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N13bidirectional13BiDirectional3runEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>run the algorithm (assumes all the appropriate options are set) </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK13bidirectional13BiDirectional7getPathEv">
+<span id="_CPPv3NK13bidirectional13BiDirectional7getPathEv"></span><span id="_CPPv2NK13bidirectional13BiDirectional7getPathEv"></span><span id="bidirectional::BiDirectional::getPathC"></span><span class="target" id="classbidirectional_1_1BiDirectional_1a25af01f68ffce330a85922d02aa2ce88"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">int</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">getPath</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK13bidirectional13BiDirectional7getPathEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Return the final path. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK13bidirectional13BiDirectional20getConsumedResourcesEv">
+<span id="_CPPv3NK13bidirectional13BiDirectional20getConsumedResourcesEv"></span><span id="_CPPv2NK13bidirectional13BiDirectional20getConsumedResourcesEv"></span><span id="bidirectional::BiDirectional::getConsumedResourcesC"></span><span class="target" id="classbidirectional_1_1BiDirectional_1a426412403ca7693f52b12a198d3f57c5"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">getConsumedResources</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK13bidirectional13BiDirectional20getConsumedResourcesEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Return the consumed resources. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK13bidirectional13BiDirectional12getTotalCostEv">
+<span id="_CPPv3NK13bidirectional13BiDirectional12getTotalCostEv"></span><span id="_CPPv2NK13bidirectional13BiDirectional12getTotalCostEv"></span><span id="bidirectional::BiDirectional::getTotalCostC"></span><span class="target" id="classbidirectional_1_1BiDirectional_1a7f18313a5858ce248b7819f7c214a43f"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">getTotalCost</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK13bidirectional13BiDirectional12getTotalCostEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Return the total cost. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK13bidirectional13BiDirectional16checkCriticalResEv">
+<span id="_CPPv3NK13bidirectional13BiDirectional16checkCriticalResEv"></span><span id="_CPPv2NK13bidirectional13BiDirectional16checkCriticalResEv"></span><span id="bidirectional::BiDirectional::checkCriticalResC"></span><span class="target" id="classbidirectional_1_1BiDirectional_1ad57667c8edeafda55eba523d02ff33e6"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">checkCriticalRes</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK13bidirectional13BiDirectional16checkCriticalResEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>After running the algorithm, one can check if critical resource is tight (difference between final resource and maximum) and prints a message if it doesn’t match to the one chosen in Params. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N13bidirectional13BiDirectional12setDirectionERKNSt6stringE">
+<span id="_CPPv3N13bidirectional13BiDirectional12setDirectionERKNSt6stringE"></span><span id="_CPPv2N13bidirectional13BiDirectional12setDirectionERKNSt6stringE"></span><span id="bidirectional::BiDirectional::setDirection__ssCR"></span><span class="target" id="classbidirectional_1_1BiDirectional_1ac0961c36b450c9886562b0c63156da12"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">setDirection</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">direction_in</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N13bidirectional13BiDirectional12setDirectionERKNSt6stringE" title="Permalink to this definition"></a><br /></dt>
+<dd><p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>bidirectional::Params</p>
+</div>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N13bidirectional13BiDirectional9setMethodERKNSt6stringE">
+<span id="_CPPv3N13bidirectional13BiDirectional9setMethodERKNSt6stringE"></span><span id="_CPPv2N13bidirectional13BiDirectional9setMethodERKNSt6stringE"></span><span id="bidirectional::BiDirectional::setMethod__ssCR"></span><span class="target" id="classbidirectional_1_1BiDirectional_1a11320df93ad8e5747aa1f3e14cbe44bd"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">setMethod</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">method_in</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N13bidirectional13BiDirectional9setMethodERKNSt6stringE" title="Permalink to this definition"></a><br /></dt>
+<dd><p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>bidirectional::Params</p>
+</div>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N13bidirectional13BiDirectional12setTimeLimitERKd">
+<span id="_CPPv3N13bidirectional13BiDirectional12setTimeLimitERKd"></span><span id="_CPPv2N13bidirectional13BiDirectional12setTimeLimitERKd"></span><span id="bidirectional::BiDirectional::setTimeLimit__doubleCR"></span><span class="target" id="classbidirectional_1_1BiDirectional_1af21bde5b9190abb4f0ea10ef3f8b30b4"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">setTimeLimit</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">time_limit_in</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N13bidirectional13BiDirectional12setTimeLimitERKd" title="Permalink to this definition"></a><br /></dt>
+<dd><p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>bidirectional::Params</p>
+</div>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N13bidirectional13BiDirectional12setThresholdERKd">
+<span id="_CPPv3N13bidirectional13BiDirectional12setThresholdERKd"></span><span id="_CPPv2N13bidirectional13BiDirectional12setThresholdERKd"></span><span id="bidirectional::BiDirectional::setThreshold__doubleCR"></span><span class="target" id="classbidirectional_1_1BiDirectional_1a007a9d61310ec94a2470c75dd62b537a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">setThreshold</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">threshold_in</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N13bidirectional13BiDirectional12setThresholdERKd" title="Permalink to this definition"></a><br /></dt>
+<dd><p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>bidirectional::Params</p>
+</div>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N13bidirectional13BiDirectional13setElementaryERKb">
+<span id="_CPPv3N13bidirectional13BiDirectional13setElementaryERKb"></span><span id="_CPPv2N13bidirectional13BiDirectional13setElementaryERKb"></span><span id="bidirectional::BiDirectional::setElementary__bCR"></span><span class="target" id="classbidirectional_1_1BiDirectional_1aafbbf3fb26308432be606799903f430e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">setElementary</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">elementary_in</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N13bidirectional13BiDirectional13setElementaryERKb" title="Permalink to this definition"></a><br /></dt>
+<dd><p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>bidirectional::Params</p>
+</div>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N13bidirectional13BiDirectional22setTwoCycleEliminationERKb">
+<span id="_CPPv3N13bidirectional13BiDirectional22setTwoCycleEliminationERKb"></span><span id="_CPPv2N13bidirectional13BiDirectional22setTwoCycleEliminationERKb"></span><span id="bidirectional::BiDirectional::setTwoCycleElimination__bCR"></span><span class="target" id="classbidirectional_1_1BiDirectional_1adc4255b9f2ad9c9271805a64f93ea7c9"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">setTwoCycleElimination</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">two_cycle_elimination_in</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N13bidirectional13BiDirectional22setTwoCycleEliminationERKb" title="Permalink to this definition"></a><br /></dt>
+<dd><p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>bidirectional::Params</p>
+</div>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N13bidirectional13BiDirectional16setBoundsPruningERKb">
+<span id="_CPPv3N13bidirectional13BiDirectional16setBoundsPruningERKb"></span><span id="_CPPv2N13bidirectional13BiDirectional16setBoundsPruningERKb"></span><span id="bidirectional::BiDirectional::setBoundsPruning__bCR"></span><span class="target" id="classbidirectional_1_1BiDirectional_1ac3cb989cdc2f4c1cedde6b30a9e7c1d8"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">setBoundsPruning</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">bounds_pruning_in</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N13bidirectional13BiDirectional16setBoundsPruningERKb" title="Permalink to this definition"></a><br /></dt>
+<dd><p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>bidirectional::Params</p>
+</div>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N13bidirectional13BiDirectional18setFindCriticalResERKb">
+<span id="_CPPv3N13bidirectional13BiDirectional18setFindCriticalResERKb"></span><span id="_CPPv2N13bidirectional13BiDirectional18setFindCriticalResERKb"></span><span id="bidirectional::BiDirectional::setFindCriticalRes__bCR"></span><span class="target" id="classbidirectional_1_1BiDirectional_1ad309aa627316fbccdf1d6e747d064c05"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">setFindCriticalRes</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">find_critical_res_in</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N13bidirectional13BiDirectional18setFindCriticalResERKb" title="Permalink to this definition"></a><br /></dt>
+<dd><p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>bidirectional::Params and <a class="reference internal" href="preprocessing.html#namespacebidirectional_1a7b92b2282139801a9e2668a743ad07a1"><span class="std std-ref">getCriticalRes</span></a></p>
+</div>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N13bidirectional13BiDirectional14setCriticalResERKi">
+<span id="_CPPv3N13bidirectional13BiDirectional14setCriticalResERKi"></span><span id="_CPPv2N13bidirectional13BiDirectional14setCriticalResERKi"></span><span id="bidirectional::BiDirectional::setCriticalRes__iCR"></span><span class="target" id="classbidirectional_1_1BiDirectional_1ad0a3ef7e4a5fcabfa34f9401532258b5"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">setCriticalRes</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">critical_res_in</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N13bidirectional13BiDirectional14setCriticalResERKi" title="Permalink to this definition"></a><br /></dt>
+<dd><p><div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>bidirectional::Params</p>
+</div>
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N13bidirectional13BiDirectional14setREFCallbackEPN13bidirectional11REFCallbackE">
+<span id="_CPPv3N13bidirectional13BiDirectional14setREFCallbackEPN13bidirectional11REFCallbackE"></span><span id="_CPPv2N13bidirectional13BiDirectional14setREFCallbackEPN13bidirectional11REFCallbackE"></span><span id="bidirectional::BiDirectional::setREFCallback__bidirectional::REFCallbackP"></span><span class="target" id="classbidirectional_1_1BiDirectional_1a901d84e260c2d18c3a3f2d14a5492278"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">setREFCallback</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">bidirectional</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="REFCallback.html#_CPPv4N13bidirectional11REFCallbackE" title="bidirectional::REFCallback"><span class="n"><span class="pre">REFCallback</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">cb</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N13bidirectional13BiDirectional14setREFCallbackEPN13bidirectional11REFCallbackE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Pass python callback for label extensions. Note: swig needs namespace specifier </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N13bidirectional13BiDirectional7max_resE">
+<span id="_CPPv3N13bidirectional13BiDirectional7max_resE"></span><span id="_CPPv2N13bidirectional13BiDirectional7max_resE"></span><span id="bidirectional::BiDirectional::max_res__std::vector:double:"></span><span class="target" id="classbidirectional_1_1BiDirectional_1af181d7ebb76e773b7aa5da0da40cc74d"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">max_res</span></span></span><a class="headerlink" href="#_CPPv4N13bidirectional13BiDirectional7max_resE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>vector with upper and lower bounds for resources </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../python_api/cspy.check.html" class="btn btn-neutral float-left" title="cspy.check" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Search.html" class="btn btn-neutral float-right" title="Search" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, David Torres Sanchez.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

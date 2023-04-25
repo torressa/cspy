@@ -1,0 +1,275 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="labelling_8h" kind="file" language="C++">
+    <compoundname>labelling.h</compoundname>
+    <includes local="no">cmath</includes>
+    <includes local="no">set</includes>
+    <includes local="no">vector</includes>
+    <includes local="yes">src/cc/config.h</includes>
+    <includes refid="digraph_8h" local="yes">src/cc/digraph.h</includes>
+    <includes refid="params_8h" local="yes">src/cc/params.h</includes>
+    <includes local="yes">spdlog/spdlog.h</includes>
+    <includedby refid="labelling_8cc" local="yes">/__w/cspy/cspy/torressa/cspy/src/cc/labelling.cc</includedby>
+    <includedby refid="search_8h" local="yes">/__w/cspy/cspy/torressa/cspy/src/cc/search.h</includedby>
+    <incdepgraph>
+      <node id="93">
+        <label>lemon/maps.h</label>
+      </node>
+      <node id="95">
+        <label>lemon/smart_graph.h</label>
+      </node>
+      <node id="87">
+        <label>cmath</label>
+      </node>
+      <node id="98">
+        <label>string</label>
+      </node>
+      <node id="99">
+        <label>spdlog/spdlog.h</label>
+      </node>
+      <node id="94">
+        <label>lemon/path.h</label>
+      </node>
+      <node id="89">
+        <label>vector</label>
+      </node>
+      <node id="90">
+        <label>src/cc/config.h</label>
+      </node>
+      <node id="96">
+        <label>src/cc/params.h</label>
+        <link refid="params_8h"/>
+        <childnode refid="87" relation="include">
+        </childnode>
+        <childnode refid="89" relation="include">
+        </childnode>
+        <childnode refid="97" relation="include">
+        </childnode>
+      </node>
+      <node id="88">
+        <label>set</label>
+      </node>
+      <node id="91">
+        <label>src/cc/digraph.h</label>
+        <link refid="digraph_8h"/>
+        <childnode refid="92" relation="include">
+        </childnode>
+        <childnode refid="89" relation="include">
+        </childnode>
+        <childnode refid="93" relation="include">
+        </childnode>
+        <childnode refid="94" relation="include">
+        </childnode>
+        <childnode refid="95" relation="include">
+        </childnode>
+      </node>
+      <node id="86">
+        <label>/__w/cspy/cspy/torressa/cspy/src/cc/labelling.h</label>
+        <link refid="labelling_8h"/>
+        <childnode refid="87" relation="include">
+        </childnode>
+        <childnode refid="88" relation="include">
+        </childnode>
+        <childnode refid="89" relation="include">
+        </childnode>
+        <childnode refid="90" relation="include">
+        </childnode>
+        <childnode refid="91" relation="include">
+        </childnode>
+        <childnode refid="96" relation="include">
+        </childnode>
+        <childnode refid="99" relation="include">
+        </childnode>
+      </node>
+      <node id="97">
+        <label>ref_callback.h</label>
+        <link refid="ref__callback_8h"/>
+        <childnode refid="98" relation="include">
+        </childnode>
+        <childnode refid="89" relation="include">
+        </childnode>
+      </node>
+      <node id="92">
+        <label>memory</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="101">
+        <label>/__w/cspy/cspy/torressa/cspy/src/cc/labelling.cc</label>
+        <link refid="labelling_8cc"/>
+      </node>
+      <node id="104">
+        <label>/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.cc</label>
+        <link refid="bidirectional_8cc"/>
+      </node>
+      <node id="103">
+        <label>/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h</label>
+        <link refid="bidirectional_8h"/>
+        <childnode refid="104" relation="include">
+        </childnode>
+      </node>
+      <node id="102">
+        <label>/__w/cspy/cspy/torressa/cspy/src/cc/search.h</label>
+        <link refid="search_8h"/>
+        <childnode refid="103" relation="include">
+        </childnode>
+        <childnode refid="105" relation="include">
+        </childnode>
+      </node>
+      <node id="100">
+        <label>/__w/cspy/cspy/torressa/cspy/src/cc/labelling.h</label>
+        <link refid="labelling_8h"/>
+        <childnode refid="101" relation="include">
+        </childnode>
+        <childnode refid="102" relation="include">
+        </childnode>
+      </node>
+      <node id="105">
+        <label>/__w/cspy/cspy/torressa/cspy/src/cc/search.cc</label>
+        <link refid="search_8cc"/>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="classlabelling_1_1Label" prot="public">labelling::Label</innerclass>
+    <innernamespace refid="namespacelabelling">labelling</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#ifndef<sp/>SRC_CC_LABELLING_H__</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SRC_CC_LABELLING_H__</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;cmath&gt;</highlight><highlight class="normal"><sp/></highlight><highlight class="comment">//<sp/>nan</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;set&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;vector&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;src/cc/config.h&quot;</highlight><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>log-level</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="digraph_8h" kindref="compound">src/cc/digraph.h</ref>&quot;</highlight><highlight class="normal"><sp/></highlight><highlight class="comment">//<sp/>AdjVertex</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="params_8h" kindref="compound">src/cc/params.h</ref>&quot;</highlight><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>Directions,<sp/>Params</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight><highlight class="comment">//<sp/>logging</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;spdlog/spdlog.h&quot;</highlight><highlight class="normal"><sp/></highlight><highlight class="comment">//<sp/>after<sp/>config.h<sp/>as</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespacelabelling" kindref="compound">labelling</ref><sp/>{</highlight></codeline>
+<codeline lineno="16"><highlight class="normal"></highlight></codeline>
+<codeline lineno="24" refid="classlabelling_1_1Label" refkind="compound"><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref><sp/>{</highlight></codeline>
+<codeline lineno="25"><highlight class="normal"><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="26" refid="classlabelling_1_1Label_1a478f34a67528586877720483c5f0d38b" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classlabelling_1_1Label_1a478f34a67528586877720483c5f0d38b" kindref="member">weight</ref><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>0.0;</highlight></codeline>
+<codeline lineno="27" refid="classlabelling_1_1Label_1a7c8972ee9d1c00fd348025c321467f75" refkind="member"><highlight class="normal"><sp/><sp/><ref refid="structbidirectional_1_1Vertex" kindref="compound">bidirectional::Vertex</ref><sp/><ref refid="classlabelling_1_1Label_1a7c8972ee9d1c00fd348025c321467f75" kindref="member">vertex</ref><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>{-1,<sp/>-1};</highlight></codeline>
+<codeline lineno="28" refid="classlabelling_1_1Label_1a2c185387fad46a29bce3dd99b111a1c4" refkind="member"><highlight class="normal"><sp/><sp/>std::vector&lt;double&gt;<sp/><sp/><sp/><ref refid="classlabelling_1_1Label_1a2c185387fad46a29bce3dd99b111a1c4" kindref="member">resource_consumption</ref><sp/>=<sp/>{};</highlight></codeline>
+<codeline lineno="29" refid="classlabelling_1_1Label_1a7511d29a3aa0272b1a0e1ea5fb75ff14" refkind="member"><highlight class="normal"><sp/><sp/>std::vector&lt;int&gt;<sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classlabelling_1_1Label_1a7511d29a3aa0272b1a0e1ea5fb75ff14" kindref="member">partial_path</ref><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>{};</highlight></codeline>
+<codeline lineno="31" refid="classlabelling_1_1Label_1ae684804e463fe690b4fe6ee32812e123" refkind="member"><highlight class="normal"><sp/><sp/>std::set&lt;int&gt;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classlabelling_1_1Label_1ae684804e463fe690b4fe6ee32812e123" kindref="member">unreachable_nodes</ref><sp/>=<sp/>{};</highlight></codeline>
+<codeline lineno="32" refid="classlabelling_1_1Label_1a182759fd08c2536f9e6a2614c790b127" refkind="member"><highlight class="normal"><sp/><sp/><ref refid="classbidirectional_1_1Params" kindref="compound">bidirectional::Params</ref>*<sp/><ref refid="classlabelling_1_1Label_1a182759fd08c2536f9e6a2614c790b127" kindref="member">params_ptr</ref><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/></highlight><highlight class="keyword">nullptr</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>Phi<sp/>value<sp/>for<sp/>joining<sp/>algorithm<sp/>from<sp/>Righini<sp/>and<sp/>Salani<sp/>(2006)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="34" refid="classlabelling_1_1Label_1a632cd90937f05a8ea69ad60d4c103c66" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label_1a632cd90937f05a8ea69ad60d4c103c66" kindref="member">phi</ref><sp/>=<sp/>std::nan(</highlight><highlight class="stringliteral">&quot;nan&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"></highlight></codeline>
+<codeline lineno="36"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">/*<sp/>Constructors<sp/>*/</highlight></codeline>
+<codeline lineno="38" refid="classlabelling_1_1Label_1a3728b76c8b32589e04ecaac821f11733" refkind="member"><highlight class="normal"><sp/><sp/><ref refid="classlabelling_1_1Label_1a3728b76c8b32589e04ecaac821f11733" kindref="member">Label</ref>(){};</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"></highlight></codeline>
+<codeline lineno="41"><highlight class="normal"><sp/><sp/><ref refid="classlabelling_1_1Label_1a3728b76c8b32589e04ecaac821f11733" kindref="member">Label</ref>(</highlight></codeline>
+<codeline lineno="42"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">&amp;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>weight_in,</highlight></codeline>
+<codeline lineno="43"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structbidirectional_1_1Vertex" kindref="compound">bidirectional::Vertex</ref>&amp;<sp/>vertex_in,</highlight></codeline>
+<codeline lineno="44"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;double&gt;&amp;<sp/><sp/><sp/>resource_consumption_in,</highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;int&gt;&amp;<sp/><sp/><sp/><sp/><sp/><sp/>partial_path_in,</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classbidirectional_1_1Params" kindref="compound">bidirectional::Params</ref>*<sp/><sp/><sp/><sp/><sp/><sp/><sp/>params);</highlight></codeline>
+<codeline lineno="47"><highlight class="normal"></highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><ref refid="classlabelling_1_1Label_1a3728b76c8b32589e04ecaac821f11733" kindref="member">Label</ref>(</highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">&amp;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>weight_in,</highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structbidirectional_1_1Vertex" kindref="compound">bidirectional::Vertex</ref>&amp;<sp/>vertex_in,</highlight></codeline>
+<codeline lineno="52"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;double&gt;&amp;<sp/><sp/><sp/>resource_consumption_in,</highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;int&gt;&amp;<sp/><sp/><sp/><sp/><sp/><sp/>partial_path_in,</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classbidirectional_1_1Params" kindref="compound">bidirectional::Params</ref>*<sp/><sp/><sp/><sp/><sp/><sp/><sp/>params,</highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">&amp;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>phi_in);</highlight></codeline>
+<codeline lineno="56"><highlight class="normal"></highlight></codeline>
+<codeline lineno="58" refid="classlabelling_1_1Label_1a72d8b0e24b8dbacc1ecb40b3c32265e2" refkind="member"><highlight class="normal"><sp/><sp/><ref refid="classlabelling_1_1Label_1a72d8b0e24b8dbacc1ecb40b3c32265e2" kindref="member">~Label</ref>(){};</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"></highlight></codeline>
+<codeline lineno="81"><highlight class="normal"><sp/><sp/><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref><sp/><ref refid="classlabelling_1_1Label_1a23f7e5da2fb22dca07977aad9bfa9ad3" kindref="member">extend</ref>(</highlight></codeline>
+<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structbidirectional_1_1AdjVertex" kindref="compound">bidirectional::AdjVertex</ref>&amp;<sp/><sp/>adjacent_vertex,</highlight></codeline>
+<codeline lineno="83"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="namespacebidirectional_1a4cbe6f0bfbd3629c2cd44c98014aed70" kindref="member">bidirectional::Directions</ref>&amp;<sp/>direction,</highlight></codeline>
+<codeline lineno="84"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;double&gt;&amp;<sp/><sp/><sp/><sp/><sp/><sp/><sp/>max_res<sp/>=<sp/>{},</highlight></codeline>
+<codeline lineno="85"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;double&gt;&amp;<sp/><sp/><sp/><sp/><sp/><sp/><sp/>min_res<sp/>=<sp/>{});</highlight></codeline>
+<codeline lineno="86"><highlight class="normal"></highlight></codeline>
+<codeline lineno="96"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label_1ad5afbf2f5d2c6f208283021186783883" kindref="member">checkDominance</ref>(</highlight></codeline>
+<codeline lineno="97"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref>&amp;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>other,</highlight></codeline>
+<codeline lineno="98"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="namespacebidirectional_1a4cbe6f0bfbd3629c2cd44c98014aed70" kindref="member">bidirectional::Directions</ref>&amp;<sp/>direction)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="99"><highlight class="normal"></highlight></codeline>
+<codeline lineno="110"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label_1a3f59b4a2818a4b0096080cd5f830b73d" kindref="member">fullDominance</ref>(</highlight></codeline>
+<codeline lineno="111"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref>&amp;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>other,</highlight></codeline>
+<codeline lineno="112"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="namespacebidirectional_1a4cbe6f0bfbd3629c2cd44c98014aed70" kindref="member">bidirectional::Directions</ref>&amp;<sp/>direction)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="113"><highlight class="normal"></highlight></codeline>
+<codeline lineno="129"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label_1adc3068c1147414d77f0f7696b4687e69" kindref="member">checkFeasibility</ref>(</highlight></codeline>
+<codeline lineno="130"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;double&gt;&amp;<sp/>max_res,</highlight></codeline>
+<codeline lineno="131"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;double&gt;&amp;<sp/>min_res,</highlight></codeline>
+<codeline lineno="132"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal">&amp;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>soft<sp/>=<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="133"><highlight class="normal"></highlight></codeline>
+<codeline lineno="135"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label_1a72d0d91c2d99edbcdc36aa157586cf00" kindref="member">checkThreshold</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">&amp;<sp/>threshold)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="136"><highlight class="normal"></highlight></codeline>
+<codeline lineno="143"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label_1a0e4957ff69cf08cfdc743df10d50d3c7" kindref="member">checkStPath</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">&amp;<sp/>source_id,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">&amp;<sp/>sink_id)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="144"><highlight class="normal"></highlight></codeline>
+<codeline lineno="146"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label_1a496b8a76fd2fe06265b1acc1a508b4ca" kindref="member">checkPathExtension</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">&amp;<sp/>user_id)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="147"><highlight class="normal"></highlight></codeline>
+<codeline lineno="155"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label_1a5c8dc87a89577d00ccf86251867ec76a" kindref="member">checkSameFeasibleExtensionTwoCycleSimple</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref>&amp;<sp/>other)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="156"><highlight class="normal"></highlight></codeline>
+<codeline lineno="165"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label_1a333b6fc9dba864b3df2cdf530a055aa7" kindref="member">checkSameFeasibleExtensionElementary</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref>&amp;<sp/>other)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="166"><highlight class="normal"></highlight></codeline>
+<codeline lineno="175"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label_1a02179d540444a13aa7cc3355d0a461b8" kindref="member">checkSameFeasibleExtension</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref>&amp;<sp/>other)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="176"><highlight class="normal"></highlight></codeline>
+<codeline lineno="178" refid="classlabelling_1_1Label_1afffea46e29dc7074edd10470c5dfeb87" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label_1afffea46e29dc7074edd10470c5dfeb87" kindref="member">setPhi</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">&amp;<sp/>phi_in)<sp/>{<sp/>phi<sp/>=<sp/>phi_in;<sp/>}</highlight></codeline>
+<codeline lineno="179"><highlight class="normal"></highlight></codeline>
+<codeline lineno="182" refid="classlabelling_1_1Label_1a676337cc2e66ddaba088c736b9220651" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label_1a676337cc2e66ddaba088c736b9220651" kindref="member">getPredecessorId</ref>()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>partial_path.end()[-2];<sp/>};</highlight></codeline>
+<codeline lineno="183"><highlight class="normal"></highlight></codeline>
+<codeline lineno="184"><highlight class="normal"><sp/><sp/>std::string<sp/><ref refid="classlabelling_1_1Label_1adc93c3a59a853bc559bb63e8df1ae67e" kindref="member">getString</ref>()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="185"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>operator<sp/>overloads</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="186"><highlight class="normal"><sp/><sp/><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref>&amp;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classlabelling_1_1Label_1a96fec70e1378988bb3d01f3aee8ab676" kindref="member">operator=</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref>&amp;<sp/>other)<sp/>=<sp/></highlight><highlight class="keywordflow">default</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="187"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">friend</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classlabelling_1_1Label_1aac0781be66b1d133b633cef3f60f8183" kindref="member">operator&lt;</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref>&amp;<sp/>label1,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref>&amp;<sp/>label2);</highlight></codeline>
+<codeline lineno="188"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">friend</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classlabelling_1_1Label_1a7bd46e6920cac7ede4b725f2d33fb12b" kindref="member">operator&gt;</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref>&amp;<sp/>label1,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref>&amp;<sp/>label2);</highlight></codeline>
+<codeline lineno="189"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">friend</highlight><highlight class="normal"><sp/>std::ostream&amp;<sp/><ref refid="classlabelling_1_1Label_1ae52256a096ed1acaf1afaba6458b42ca" kindref="member">operator&lt;&lt;</ref>(std::ostream&amp;<sp/>os,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref>&amp;<sp/>label);</highlight></codeline>
+<codeline lineno="190"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">friend</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classlabelling_1_1Label_1abc60b45b5a5310043283c0e6c694cc92" kindref="member">operator==</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref>&amp;<sp/>label1,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref>&amp;<sp/>label2);</highlight></codeline>
+<codeline lineno="191" refid="classlabelling_1_1Label_1a48813c4c8ca8174edcdf9cf34358b442" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">friend</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classlabelling_1_1Label_1a48813c4c8ca8174edcdf9cf34358b442" kindref="member">operator!=</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref>&amp;<sp/>label1,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref>&amp;<sp/>label2)<sp/>{</highlight></codeline>
+<codeline lineno="192"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>!(label1<sp/>==<sp/>label2);</highlight></codeline>
+<codeline lineno="193"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="194"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="195"><highlight class="normal"></highlight></codeline>
+<codeline lineno="205"><highlight class="normal"><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref><sp/><ref refid="namespacelabelling_1a7d32365acb745f452e0b81beed2ce2be" kindref="member">getNextLabel</ref>(</highlight></codeline>
+<codeline lineno="206"><highlight class="normal"><sp/><sp/><sp/><sp/>std::vector&lt;Label&gt;*<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>labels,</highlight></codeline>
+<codeline lineno="207"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="namespacebidirectional_1a4cbe6f0bfbd3629c2cd44c98014aed70" kindref="member">bidirectional::Directions</ref>&amp;<sp/>direction);</highlight></codeline>
+<codeline lineno="208"><highlight class="normal"></highlight></codeline>
+<codeline lineno="223"><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="namespacelabelling_1ac6d6bb89c176d0f2db264457d60c5bd8" kindref="member">runDominanceEff</ref>(</highlight></codeline>
+<codeline lineno="224"><highlight class="normal"><sp/><sp/><sp/><sp/>std::vector&lt;Label&gt;*<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>efficient_labels_ptr,</highlight></codeline>
+<codeline lineno="225"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref>&amp;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>label,</highlight></codeline>
+<codeline lineno="226"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="namespacebidirectional_1a4cbe6f0bfbd3629c2cd44c98014aed70" kindref="member">bidirectional::Directions</ref>&amp;<sp/>direction,</highlight></codeline>
+<codeline lineno="227"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal">&amp;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>elementary);</highlight></codeline>
+<codeline lineno="228"><highlight class="normal"></highlight></codeline>
+<codeline lineno="241"><highlight class="normal"><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref><sp/><ref refid="namespacelabelling_1ae172758fb8d07cc0a490d8715966e1b7" kindref="member">processBwdLabel</ref>(</highlight></codeline>
+<codeline lineno="242"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label" kindref="compound">labelling::Label</ref>&amp;<sp/><sp/><sp/><sp/>label,</highlight></codeline>
+<codeline lineno="243"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;double&gt;&amp;<sp/>max_res,</highlight></codeline>
+<codeline lineno="244"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;double&gt;&amp;<sp/>cumulative_resource,</highlight></codeline>
+<codeline lineno="245"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal">&amp;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>invert_min_res<sp/>=<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="246"><highlight class="normal"></highlight></codeline>
+<codeline lineno="251"><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="namespacelabelling_1a9c2e8f16965144d445ba68216dae648f" kindref="member">mergePreCheck</ref>(</highlight></codeline>
+<codeline lineno="252"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label" kindref="compound">labelling::Label</ref>&amp;<sp/><sp/><sp/><sp/>fwd_label,</highlight></codeline>
+<codeline lineno="253"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label" kindref="compound">labelling::Label</ref>&amp;<sp/><sp/><sp/><sp/>bwd_label,</highlight></codeline>
+<codeline lineno="254"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;double&gt;&amp;<sp/>max_res);</highlight></codeline>
+<codeline lineno="255"><highlight class="normal"></highlight></codeline>
+<codeline lineno="260"><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="namespacelabelling_1a5bb0d5a3d1eeb92546902c6cdc12c71d" kindref="member">getPhiValue</ref>(</highlight></codeline>
+<codeline lineno="261"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label" kindref="compound">labelling::Label</ref>&amp;<sp/><sp/><sp/><sp/>fwd_label,</highlight></codeline>
+<codeline lineno="262"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label" kindref="compound">labelling::Label</ref>&amp;<sp/><sp/><sp/><sp/>bwd_label,</highlight></codeline>
+<codeline lineno="263"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;double&gt;&amp;<sp/>max_res);</highlight></codeline>
+<codeline lineno="264"><highlight class="normal"></highlight></codeline>
+<codeline lineno="271"><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="namespacelabelling_1ad7fee591bcb066e39ff97138ab0ba5ca" kindref="member">halfwayCheck</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref>&amp;<sp/>label,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;Label&gt;&amp;<sp/>labels);</highlight></codeline>
+<codeline lineno="272"><highlight class="normal"></highlight></codeline>
+<codeline lineno="280"><highlight class="normal"><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref><sp/><ref refid="namespacelabelling_1a19937349c6ec5c31d5994aac45c5d2fd" kindref="member">mergeLabels</ref>(</highlight></codeline>
+<codeline lineno="281"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label" kindref="compound">labelling::Label</ref>&amp;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fwd_label,</highlight></codeline>
+<codeline lineno="282"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label" kindref="compound">labelling::Label</ref>&amp;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>bwd_label,</highlight></codeline>
+<codeline lineno="283"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structbidirectional_1_1AdjVertex" kindref="compound">bidirectional::AdjVertex</ref>&amp;<sp/>adj_vertex,</highlight></codeline>
+<codeline lineno="284"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structbidirectional_1_1Vertex" kindref="compound">bidirectional::Vertex</ref>&amp;<sp/><sp/><sp/><sp/>sink,</highlight></codeline>
+<codeline lineno="285"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;double&gt;&amp;<sp/><sp/><sp/><sp/><sp/><sp/>max_res,</highlight></codeline>
+<codeline lineno="286"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;double&gt;&amp;<sp/><sp/><sp/><sp/><sp/><sp/>min_res);</highlight></codeline>
+<codeline lineno="287"><highlight class="normal"></highlight></codeline>
+<codeline lineno="288"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>labelling</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="289"><highlight class="normal"></highlight></codeline>
+<codeline lineno="290"><highlight class="normal"></highlight><highlight class="preprocessor">#endif<sp/>//<sp/>SRC_CC_LABELLING_H__</highlight></codeline>
+    </programlisting>
+    <location file="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.h"/>
+  </compounddef>
+</doxygen>

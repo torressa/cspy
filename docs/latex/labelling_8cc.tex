@@ -1,0 +1,37 @@
+\hypertarget{labelling_8cc}{}\section{/\+\_\+\+\_\+w/cspy/cspy/torressa/cspy/src/cc/labelling.cc File Reference}
+\label{labelling_8cc}\index{/\+\_\+\+\_\+w/cspy/cspy/torressa/cspy/src/cc/labelling.\+cc@{/\+\_\+\+\_\+w/cspy/cspy/torressa/cspy/src/cc/labelling.\+cc}}
+{\ttfamily \#include \char`\"{}labelling.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$algorithm$>$}\newline
+{\ttfamily \#include $<$iostream$>$}\newline
+Include dependency graph for labelling.\+cc\+:
+% FIG 0
+\subsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \hyperlink{namespacelabelling}{labelling}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \hyperlink{namespacelabelling_a96ce48b2672548c132a1032820202375}{labelling\+::operator==} (const Label \&label1, const Label \&label2)
+\item 
+bool \hyperlink{namespacelabelling_a71cfecc2e31a39a8743e584c12b3fd32}{labelling\+::operator$<$} (const Label \&label1, const Label \&label2)
+\item 
+bool \hyperlink{namespacelabelling_a079cd7339d7a3797d35ebbd5b4e930f6}{labelling\+::operator$>$} (const Label \&label1, const Label \&label2)
+\item 
+std\+::ostream \& \hyperlink{namespacelabelling_ac988eedb6084b429a46b070f3ff6d544}{labelling\+::operator$<$$<$} (std\+::ostream \&os, const Label \&label)
+\item 
+bool \hyperlink{namespacelabelling_ac6d6bb89c176d0f2db264457d60c5bd8}{labelling\+::run\+Dominance\+Eff} (std\+::vector$<$ Label $>$ $\ast$efficient\+\_\+labels\+\_\+ptr, const Label \&label, const \hyperlink{namespacebidirectional_a4cbe6f0bfbd3629c2cd44c98014aed70}{bidirectional\+::\+Directions} \&direction, const bool \&elementary)
+\item 
+Label \hyperlink{namespacelabelling_a7d32365acb745f452e0b81beed2ce2be}{labelling\+::get\+Next\+Label} (std\+::vector$<$ Label $>$ $\ast$labels\+\_\+ptr, const \hyperlink{namespacebidirectional_a4cbe6f0bfbd3629c2cd44c98014aed70}{bidirectional\+::\+Directions} \&direction)
+\item 
+Label \hyperlink{namespacelabelling_ae172758fb8d07cc0a490d8715966e1b7}{labelling\+::process\+Bwd\+Label} (const \hyperlink{classlabelling_1_1Label}{labelling\+::\+Label} \&label, const std\+::vector$<$ double $>$ \&max\+\_\+res, const std\+::vector$<$ double $>$ \&cumulative\+\_\+resource, const bool \&invert\+\_\+min\+\_\+res)
+\item 
+double \hyperlink{namespacelabelling_a5bb0d5a3d1eeb92546902c6cdc12c71d}{labelling\+::get\+Phi\+Value} (const \hyperlink{classlabelling_1_1Label}{labelling\+::\+Label} \&fwd\+\_\+label, const \hyperlink{classlabelling_1_1Label}{labelling\+::\+Label} \&bwd\+\_\+label, const std\+::vector$<$ double $>$ \&max\+\_\+res)
+\item 
+bool \hyperlink{namespacelabelling_ad7fee591bcb066e39ff97138ab0ba5ca}{labelling\+::halfway\+Check} (const Label \&label, const std\+::vector$<$ Label $>$ \&labels)
+\item 
+bool \hyperlink{namespacelabelling_a9c2e8f16965144d445ba68216dae648f}{labelling\+::merge\+Pre\+Check} (const \hyperlink{classlabelling_1_1Label}{labelling\+::\+Label} \&fwd\+\_\+label, const \hyperlink{classlabelling_1_1Label}{labelling\+::\+Label} \&bwd\+\_\+label, const std\+::vector$<$ double $>$ \&max\+\_\+res)
+\item 
+Label \hyperlink{namespacelabelling_a19937349c6ec5c31d5994aac45c5d2fd}{labelling\+::merge\+Labels} (const Label \&fwd\+\_\+label, const Label \&bwd\+\_\+label, const \hyperlink{structbidirectional_1_1AdjVertex}{bidirectional\+::\+Adj\+Vertex} \&adj\+\_\+vertex, const \hyperlink{structbidirectional_1_1Vertex}{bidirectional\+::\+Vertex} \&sink, const std\+::vector$<$ double $>$ \&max\+\_\+res, const std\+::vector$<$ double $>$ \&min\+\_\+res)
+\end{DoxyCompactItemize}

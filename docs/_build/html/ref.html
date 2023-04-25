@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Resource Extension Functions (REFs) &mdash; cspy 1.0.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="cspy.BiDirectional" href="python_api/cspy.BiDirectional.html" />
+    <link rel="prev" title="Using cspy" href="how_to.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            cspy
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="how_to.html">Using <cite>cspy</cite></a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Resource Extension Functions (REFs)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pre-requirements">Pre-requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#additive-refs">Additive REFs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#custom-refs">Custom REFs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#custom-ref-template">Custom REF template</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="python_api/cspy.BiDirectional.html">cspy.BiDirectional</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python_api/cspy.Tabu.html">cspy.Tabu</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python_api/cspy.GreedyElim.html">cspy.GreedyElim</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python_api/cspy.GRASP.html">cspy.GRASP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python_api/cspy.PSOLGENT.html">cspy.PSOLGENT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python_api/cspy.preprocess_graph.html">cspy.preprocess_graph</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python_api/cspy.check.html">cspy.check</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">C++ API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="cc_api/BiDirectional.html">BiDirectional</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cc_api/Search.html">Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cc_api/REFCallback.html">REFCallback</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cc_api/params.html">Params</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cc_api/DiGraph.html">DiGraph</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cc_api/Vertex.html">Vertex</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cc_api/Label.html">Labelling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cc_api/preprocessing.html">Preprocessing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">cspy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Resource Extension Functions (REFs)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/ref.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="resource-extension-functions-refs">
+<h1>Resource Extension Functions (REFs)<a class="headerlink" href="#resource-extension-functions-refs" title="Permalink to this heading"></a></h1>
+<div class="section" id="pre-requirements">
+<h2>Pre-requirements<a class="headerlink" href="#pre-requirements" title="Permalink to this heading"></a></h2>
+<p>For the <code class="xref py py-class docutils literal notranslate"><span class="pre">BiDirectional</span></code> algorithm, there is a number of assumptions required by definition (<a class="reference external" href="https://www.sciencedirect.com/science/article/pii/S0377221717302035">Tilk et al 2017</a>).</p>
+<ol class="arabic simple">
+<li><p>The first resource must be a monotone resource;</p></li>
+<li><p>The resource extension functions are invertible.</p></li>
+</ol>
+<p>For assumption 1, the resource can be either artificial,
+such as the number of edges in the graph, or real, for example time.
+This allows for the monotone resource to be comparable for the forward and backward directions.
+In practice, this means, that <code class="docutils literal notranslate"><span class="pre">res_cost[0]</span></code>, <code class="docutils literal notranslate"><span class="pre">max_res[0]</span></code>,
+and <code class="docutils literal notranslate"><span class="pre">min_res[0]</span></code> correspond to the monotone resource.</p>
+<p>The bounds chosen for the monotone resource
+(<code class="docutils literal notranslate"><span class="pre">max_res[0]</span></code> and <code class="docutils literal notranslate"><span class="pre">min_res[0]</span></code>), effectively represent the halfway points for the
+algorithm. Hence unless <code class="docutils literal notranslate"><span class="pre">max_res[0]</span></code> :math`&gt;` <code class="docutils literal notranslate"><span class="pre">min_res[0]</span></code>, the searches will not reach
+either end of the graph and the resulting path will be erroneous.
+Additionally, occasionally, the resource limits do not allow for a feasible path to be found.
+Some preprocessing routines have been implemented for the case of additive REFs.</p>
+<p>For assumption 2, if resource extension functions are additive, these are clearly invertible.
+However, when using custom resource extension functions (discussed below),
+it is up to the user to define them appropriately!</p>
+</div>
+<div class="section" id="additive-refs">
+<h2>Additive REFs<a class="headerlink" href="#additive-refs" title="Permalink to this heading"></a></h2>
+<p>Additive resource extension functions (REFs), are implemented by default in all the algorithms.
+If left unchanged, this means that resources propagate in the following fashion.
+Suppose we are considering extending partial path <span class="math">p_i</span>
+(a path from the source to node <span class="math">i</span>), along edge <span class="math">(i, j)</span>.
+Under the assumption that edge <span class="math">(i, j)</span> has a resource cost defined
+(one for each of the resources);
+the partial path <span class="math">p_j</span> (a path from the source to node <span class="math">j</span> passing
+through node <span class="math">i</span>) will have a resource consumption equal to the total resource accumulated along <span class="math">p_i</span> plus the resource cost of edge <span class="math">(i, j)</span>.
+If for instance, this resource consumption for a given resource exceeds the limit given in
+As discussed above, the resource costs are defined by the user in the input graph.</p>
+</div>
+<div class="section" id="custom-refs">
+<h2>Custom REFs<a class="headerlink" href="#custom-refs" title="Permalink to this heading"></a></h2>
+<p>Additionally, users can implement their own custom REFs.
+This allows the modelling of more complex relationships and more realistic evolution
+of resources.
+However, it is up the users to ensure that the custom REFs are well defined,
+it may be the case that the algorithm fails to find a feasible path, or gets stuck.</p>
+<p>For theoretical information on what REFs are we refer you to the paper by <a class="reference external" href="https://www.researchgate.net/publication/227142556_Shortest_Path_Problems_with_Resource_Constraints">Inrich 2005</a>.
+For a brief overview with a practical implementation see any of the <a class="reference external" href="https://github.com/torressa/cspy/tree/master/examples/">examples</a>.</p>
+</div>
+<div class="section" id="custom-ref-template">
+<h2>Custom REF template<a class="headerlink" href="#custom-ref-template" title="Permalink to this heading"></a></h2>
+<p>Practically, if you want more control on the propagation of resources,
+some custom REFs can be defined according to the following template:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cspy</span> <span class="kn">import</span> <span class="n">REFCallback</span>
+
+<span class="k">class</span> <span class="nc">MyCallback</span><span class="p">(</span><span class="n">REFCallback</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">REF_fwd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cumul_res</span><span class="p">,</span> <span class="n">tail</span><span class="p">,</span> <span class="n">head</span><span class="p">,</span> <span class="n">edge_res</span><span class="p">,</span> <span class="n">partial_path</span><span class="p">,</span>
+                <span class="n">cumul_cost</span><span class="p">):</span>
+        <span class="n">res_new</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">cumul_res</span><span class="p">)</span> <span class="c1"># local copy</span>
+        <span class="k">return</span> <span class="n">res_new</span>
+
+    <span class="k">def</span> <span class="nf">REF_bwd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cumul_res</span><span class="p">,</span> <span class="n">tail</span><span class="p">,</span> <span class="n">head</span><span class="p">,</span> <span class="n">edge_res</span><span class="p">,</span> <span class="n">partial_path</span><span class="p">,</span>
+                <span class="n">cumul_cost</span><span class="p">):</span>
+        <span class="n">res_new</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">cumul_res</span><span class="p">)</span> <span class="c1"># local copy</span>
+        <span class="k">return</span> <span class="n">res_new</span>
+
+    <span class="k">def</span> <span class="nf">REF_join</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fwd_resources</span><span class="p">,</span> <span class="n">bwd_resources</span><span class="p">,</span> <span class="n">tail</span><span class="p">,</span> <span class="n">head</span><span class="p">,</span> <span class="n">edge_res</span><span class="p">):</span>
+        <span class="n">fwd_res</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">fwd_resources</span><span class="p">)</span> <span class="c1"># local copy</span>
+        <span class="k">return</span> <span class="n">fwd_res</span>
+</pre></div>
+</div>
+<p>First, for forward and backward REFs, the overload requires several inputs:</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">cumulative_res</span></code>, a cumulative resource array,</p></li>
+<li><p>Some edge attributes to consider for the extension of the current partial path:</p></li>
+</ol>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">tail</span></code>, tail node (in str format)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">head</span></code>, head node (in str format)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">edge_res</span></code>, the resource consumption along the edge (in tuple format)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">partial_path</span></code>, the current partial path (in tuple format)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cumul_cost</span></code>, the current partial path (float)</p></li>
+</ol>
+</div></blockquote>
+<p>Second, for specifying label joining operations, <code class="docutils literal notranslate"><span class="pre">REF_join</span></code> requires several inputs</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">fwd_resources</span></code>, <code class="docutils literal notranslate"><span class="pre">bwd_resources</span></code>, cumulative resources for the forward and backward labels being joined</p></li>
+<li><p>And, similarly as before, some edge attributes (along the edge being joined):</p></li>
+</ol>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">tail</span></code>, tail node (in str format)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">head</span></code>, head node (in str format)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">edge_res</span></code>, the resource consumption along the edge (in tuple format)</p></li>
+</ol>
+</div></blockquote>
+<p>Depending on the application, you may choose not to use all of the arguments provided.</p>
+<p><strong>IMPORTANT NOTE</strong></p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>the naming of the functions has to match (<cite>REF_fwd</cite>, <cite>REF_bwd</cite> and <cite>REF_join</cite>)</p></li>
+<li><p>so does the number of arguments (not necessarily the naming of the variables though)</p></li>
+<li><p>not all three have to be implemented. If for example, one is just using <cite>direction=”forward”</cite>, then only <cite>REF_fwd</cite> would suffice. In the case of the callback being passed and only part of the functions implemented, the default implementation will used for the missing ones.</p></li>
+</ol>
+</div></blockquote>
+<p>As a word of warning, it is up to the user to ensure the custom REF behaves appropriately.
+Otherwise, you will most likely either stall the algorithms, get an exception saying that a resource
+feasible path could not be found, or get a path that’s not very meaningful.</p>
+<p>A full skeleton with custom attributes could be as follows:</p>
+<p>e.g.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cspy</span> <span class="kn">import</span> <span class="n">BiDirectional</span><span class="p">,</span> <span class="n">REFCallback</span>
+
+<span class="k">class</span> <span class="nc">MyCallback</span><span class="p">(</span><span class="n">REFCallback</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span><span class="p">):</span>
+        <span class="c1"># You can use custom arguments and save for later use</span>
+        <span class="n">REFCallback</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="c1"># Init parent</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_arg1</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">arg1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_arg2</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">arg2</span>
+
+    <span class="k">def</span> <span class="nf">REF_fwd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cumul_res</span><span class="p">,</span> <span class="n">tail</span><span class="p">,</span> <span class="n">head</span><span class="p">,</span> <span class="n">edge_res</span><span class="p">,</span> <span class="n">partial_path</span><span class="p">,</span>
+                <span class="n">cumul_cost</span><span class="p">):</span>
+        <span class="n">res_new</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">cumul_res</span><span class="p">)</span> <span class="c1"># local copy</span>
+        <span class="c1"># do some operations on `res_new` maybe using `self._arg1/2`</span>
+        <span class="k">return</span> <span class="n">res_new</span>
+
+    <span class="k">def</span> <span class="nf">REF_bwd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cumul_res</span><span class="p">,</span> <span class="n">tail</span><span class="p">,</span> <span class="n">head</span><span class="p">,</span> <span class="n">edge_res</span><span class="p">,</span> <span class="n">partial_path</span><span class="p">,</span>
+                <span class="n">cumul_cost</span><span class="p">):</span>
+        <span class="n">res_new</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">cumul_res</span><span class="p">)</span> <span class="c1"># local copy</span>
+        <span class="c1"># do some operations on `res_new` maybe using `self._arg1/2`</span>
+        <span class="k">return</span> <span class="n">res_new</span>
+
+    <span class="k">def</span> <span class="nf">REF_join</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fwd_resources</span><span class="p">,</span> <span class="n">bwd_resources</span><span class="p">,</span> <span class="n">tail</span><span class="p">,</span> <span class="n">head</span><span class="p">,</span> <span class="n">edge_res</span><span class="p">):</span>
+        <span class="n">fwd_res</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">fwd_resources</span><span class="p">)</span> <span class="c1"># local copy</span>
+        <span class="c1"># do some operations on `res_new` maybe using `self._arg1/2`</span>
+        <span class="k">return</span> <span class="n">fwd_res</span>
+
+<span class="c1"># Load G, max_res, min_res</span>
+<span class="n">alg</span> <span class="o">=</span> <span class="n">BiDirectional</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">max_res</span><span class="p">,</span> <span class="n">min_res</span><span class="p">,</span> <span class="n">REF_callback</span><span class="o">=</span><span class="n">MyCallback</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="kc">True</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>For a simple example of custom REFs, please see the <a class="reference external" href="https://github.com/torressa/cspy/tree/master/test/python/tests_issue32.py">unittest</a>.</p>
+<p>For more advanced examples, see the <a class="reference external" href="https://github.com/torressa/cspy/tree/master/examples/">examples</a> folder.</p>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="how_to.html" class="btn btn-neutral float-left" title="Using cspy" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="python_api/cspy.BiDirectional.html" class="btn btn-neutral float-right" title="cspy.BiDirectional" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, David Torres Sanchez.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

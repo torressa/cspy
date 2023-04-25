@@ -1,0 +1,17 @@
+digraph "bidirectional::AdjVertex"
+{
+  bgcolor="transparent";
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="{bidirectional::AdjVertex\n||+ AdjVertex()\l+ AdjVertex()\l+ ~AdjVertex()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node2 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +resource_consumption" ,arrowhead="odiamond"];
+  Node2 [label="{vector\< double \>\n||}",height=0.2,width=0.4,color="grey75"];
+  Node3 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +weight" ,arrowhead="odiamond"];
+  Node3 [label="{double\n||}",height=0.2,width=0.4,color="grey75"];
+  Node4 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +vertex" ,arrowhead="odiamond"];
+  Node4 [label="{bidirectional::Vertex\n||}",height=0.2,width=0.4,color="black",URL="$structbidirectional_1_1Vertex.html"];
+  Node5 -> Node4 [color="grey25",fontsize="10",style="solid",label=" +user_id\n+lemon_id" ,arrowhead="odiamond"];
+  Node5 [label="{int\n||}",height=0.2,width=0.4,color="grey75"];
+  Node6 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +init" ,arrowhead="odiamond"];
+  Node6 [label="{bool\n||}",height=0.2,width=0.4,color="grey75"];
+}

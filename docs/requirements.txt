@@ -1,0 +1,8 @@
+sphinx
+nbsphinx
+sphinx_material
+recommonmark
+sphinx_copybutton
+cspy
+breathe
+

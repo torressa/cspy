@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Using cspy &mdash; cspy 1.0.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Resource Extension Functions (REFs)" href="ref.html" />
+    <link rel="prev" title="Getting started" href="getting_started.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            cspy
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting started</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Using <cite>cspy</cite></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#input-requirements">Input Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#algorithms">Algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#simple-example">Simple Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ref.html">Resource Extension Functions (REFs)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="python_api/cspy.BiDirectional.html">cspy.BiDirectional</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python_api/cspy.Tabu.html">cspy.Tabu</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python_api/cspy.GreedyElim.html">cspy.GreedyElim</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python_api/cspy.GRASP.html">cspy.GRASP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python_api/cspy.PSOLGENT.html">cspy.PSOLGENT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python_api/cspy.preprocess_graph.html">cspy.preprocess_graph</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python_api/cspy.check.html">cspy.check</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">C++ API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="cc_api/BiDirectional.html">BiDirectional</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cc_api/Search.html">Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cc_api/REFCallback.html">REFCallback</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cc_api/params.html">Params</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cc_api/DiGraph.html">DiGraph</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cc_api/Vertex.html">Vertex</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cc_api/Label.html">Labelling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cc_api/preprocessing.html">Preprocessing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">cspy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Using <cite>cspy</cite></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/how_to.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="using-cspy">
+<h1>Using <cite>cspy</cite><a class="headerlink" href="#using-cspy" title="Permalink to this heading"></a></h1>
+<p>Here is the guide of how to use the <cite>cspy</cite> package and the algorithms within.</p>
+<div class="section" id="input-requirements">
+<h2>Input Requirements<a class="headerlink" href="#input-requirements" title="Permalink to this heading"></a></h2>
+<p>In order to use <cite>cspy</cite> package and the algorithms within, first, one has to create a directed graph on which to apply the algorithms.</p>
+<p>To do so, we make use of the well-known <cite>networkx</cite> package.
+To be able to apply resource constraints, we have the following input requirements,</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Input graphs must be of type <code class="xref py py-class docutils literal notranslate"><span class="pre">networkx.DiGraph</span></code>;</p></li>
+<li><p>Input graphs must have an attribute <code class="docutils literal notranslate"><span class="pre">n_res</span></code> (set when initialising the graph) which determines the number of resources we are considering for the particular problem;</p></li>
+<li><p>Input graphs must have a single <cite>Source</cite> and <cite>Sink</cite> nodes with no incoming or outgoing edges respectively;</p></li>
+<li><p>Edges in the input graph must have <code class="docutils literal notranslate"><span class="pre">res_cost</span></code> (of type <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.array</span></code>) and <code class="docutils literal notranslate"><span class="pre">weight</span></code> attributes.</p></li>
+</ul>
+</div></blockquote>
+<p>For example the following simple network fulfills all the requirements listed above:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">networkx</span> <span class="kn">import</span> <span class="n">DiGraph</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">array</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">DiGraph</span><span class="p">(</span><span class="n">directed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">n_res</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s1">&#39;Source&#39;</span><span class="p">,</span> <span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="n">res_cost</span><span class="o">=</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span> <span class="n">weight</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="n">res_cost</span><span class="o">=</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span> <span class="n">weight</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;Sink&#39;</span><span class="p">,</span> <span class="n">res_cost</span><span class="o">=</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span> <span class="n">weight</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The algorithms have some common inputs and requirements,</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Two lists <code class="docutils literal notranslate"><span class="pre">max_res</span></code> and <code class="docutils literal notranslate"><span class="pre">min_res</span></code>, with lists of the maximum and minimum resource usage to be enforced for the resulting path;</p></li>
+</ul>
+</div></blockquote>
+<p>For former, the user must ensure consistency between the index in <code class="docutils literal notranslate"><span class="pre">res_cost</span></code> and
+the index in <code class="docutils literal notranslate"><span class="pre">max_res</span></code>``min_res``, such that it corresponds to the same resource.
+The latter, is due to the fact that some algorithms depend standard shortest path algorithms
+(specifically <code class="xref py py-class docutils literal notranslate"><span class="pre">networkx.astar_path</span></code>), hence, they get stuck.</p>
+</div>
+<div class="section" id="algorithms">
+<h2>Algorithms<a class="headerlink" href="#algorithms" title="Permalink to this heading"></a></h2>
+<p>Have a look and choose which algorithm you’d like to use.
+In order to run the algorithms create a appropriate algorithm instance, say <code class="docutils literal notranslate"><span class="pre">alg</span></code>,
+(with the appropriate inputs), call <code class="docutils literal notranslate"><span class="pre">alg.run()</span></code>, and then access the different elements from the solution.
+Attributes include <code class="docutils literal notranslate"><span class="pre">alg.path</span></code> for a list with the nodes in the path,
+<code class="docutils literal notranslate"><span class="pre">alg.total_cost</span></code> for the accumulated cost of the path,
+and <code class="docutils literal notranslate"><span class="pre">alg.consumed_resources</span></code> for the accumulated resource usage of the path.</p>
+<ul class="simple">
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">BiDirectional</span></code>: <a class="reference external" href="https://cspy.readthedocs.io/en/latest/api/cspy.BiDirectional.html">Bidirectional and monodirectional algorithms</a></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Tabu</span></code> <a class="reference external" href="https://cspy.readthedocs.io/en/latest/api/cspy.Tabu.html">Heuristic Tabu Search</a></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">GreedyElim</span></code> <a class="reference external" href="https://cspy.readthedocs.io/en/latest/api/cspy.GreedyElim.html">Greedy Elimination Procedure</a></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">GRASP</span></code> <a class="reference external" href="https://cspy.readthedocs.io/en/latest/api/cspy.GRASP.html">GRASP</a></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">PSOLGENT</span></code> <a class="reference external" href="https://cspy.readthedocs.io/en/latest/api/cspy.PSOLGENT.html">Particle Swarm Optimization with combined Local and Global Expanding Neighbourhood Topology</a> (PSOLGENT)</p></li>
+</ul>
+<p>The first algorithm <code class="xref py py-class docutils literal notranslate"><span class="pre">BiDirectional</span></code>, is the only <em>exact</em> algorithm in the library.
+This means that it provides an exact (optimal) solution to the resource CSP problem.
+For this reason, it sometimes takes longer than the others.
+The remaining algorithms are metaheuristics,
+i.e. they provide fast and approximate solutions to the CSP problem.</p>
+<p>If you are interested in custom resource extension functions, see the <a class="reference external" href="https://cspy.readthedocs.io/en/latest/ref.html">REFs</a> section.</p>
+</div>
+<div class="section" id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading"></a></h2>
+<p>The following examples are included in the <a class="reference external" href="https://github.com/torressa/cspy/tree/master/examples/">examples</a> for more in-depth usage.</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/Kuifje02/vrpy">vrpy</a>: (under development) external vehicle routing framework which uses <code class="docutils literal notranslate"><span class="pre">cspy</span></code> to solve different variants of the vehicle routing problem using column generation.</p></li>
+<li><p><a class="reference external" href="https://github.com/torressa/cspy/tree/master/examples/jpath">jpath</a> : Simple example showing the necessary graph adptations and the use of custom resource extension functions. Also discussed below.</p></li>
+<li><p><a class="reference external" href="https://github.com/torressa/cspy/blob/master/examples/cgar/cgar.pdf">cgar</a>: Complex example using <code class="docutils literal notranslate"><span class="pre">cspy</span></code> for column generation applied to the aircraft recovery problem.</p></li>
+</ul>
+<p>Please see individual algorithm documentation for simple examples.</p>
+</div>
+<div class="section" id="simple-example">
+<h2>Simple Example<a class="headerlink" href="#simple-example" title="Permalink to this heading"></a></h2>
+<p>For illustration of most of the things discussed above, consider the following example.</p>
+<p>Jane is part-time postwoman working in Delft, Netherlands. However, she is assigned a small area (the Indische Buurt neighbourhood) so when planning her daily route she wants to make it as long and exciting as possible.
+That is, when planning her routes she has to consider the total shift time, sights visited, travel time, and delivery time. Her shift has to be at most 5 hours.</p>
+<p>This problem can easily be modelled as a CSP problem.
+With the description above, the set of resources can be defined as,</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">R</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;sights&#39;</span><span class="p">,</span> <span class="s1">&#39;shift&#39;</span><span class="p">,</span> <span class="s1">&#39;travel-time&#39;</span><span class="p">,</span> <span class="s1">&#39;delivery-time&#39;</span><span class="p">]</span>
+<span class="c1"># len(R) = 4</span>
+</pre></div>
+</div>
+<p>Let <code class="docutils literal notranslate"><span class="pre">G</span></code> denote a directed graph with edges to/from all streets of the Indische Buurt
+neighbourhood.
+Each edge has an attribute <code class="docutils literal notranslate"><span class="pre">weight</span></code> and an attribute <code class="docutils literal notranslate"><span class="pre">res_cost</span></code> which is an array (specifically, a <code class="docutils literal notranslate"><span class="pre">numpy.array</span></code>)
+with length <code class="docutils literal notranslate"><span class="pre">len(R)</span></code>.
+The entries of <code class="docutils literal notranslate"><span class="pre">res_cost</span></code> have the same order as the entries in <code class="docutils literal notranslate"><span class="pre">R</span></code>.
+The first entry of this array, corresponds to the <code class="docutils literal notranslate"><span class="pre">'sights'</span></code> resource, i.e. how many sights there are along a specific edge. The last entry of this array, corresponds to the <code class="docutils literal notranslate"><span class="pre">'delivery-time'</span></code> resource, i.e. time taken to deliver post along a specific edge. The remaining entries can be initialised to be 0.
+Also, when defining <code class="docutils literal notranslate"><span class="pre">G</span></code>, one has to specify the number of resources <code class="docutils literal notranslate"><span class="pre">n_res</span></code>, which also has to be equal to <code class="docutils literal notranslate"><span class="pre">len(R)</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">networkx</span> <span class="kn">import</span> <span class="n">DiGraph</span>
+<span class="n">G</span> <span class="o">=</span> <span class="n">DiGraph</span><span class="p">(</span><span class="n">directed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">n_res</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>  <span class="c1"># init network with 4 resources</span>
+</pre></div>
+</div>
+<p>Now, using the open source package OSMnx, we can easily generate a network for Jane’s neighbourhood</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">osmnx</span> <span class="kn">import</span> <span class="n">graph_from_address</span><span class="p">,</span> <span class="n">plot_graph</span>
+
+<span class="n">M</span> <span class="o">=</span> <span class="n">graph_from_address</span><span class="p">(</span><span class="s1">&#39;Ceramstraat, Delft, Netherlands&#39;</span><span class="p">,</span>
+                           <span class="n">distance</span><span class="o">=</span><span class="mi">1600</span><span class="p">,</span>
+                           <span class="n">network_type</span><span class="o">=</span><span class="s1">&#39;walk&#39;</span><span class="p">,</span>
+                           <span class="n">simplify</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We have to transform the network for one compatible with <code class="docutils literal notranslate"><span class="pre">cspy</span></code>,
+as per the <a class="reference external" href="https://cspy.readthedocs.io/en/latest/how_to.html#input-requirements">Input Requirements</a>.
+The following code will convert a city map into a directed graph,
+rename the start/end nodes of Janes walk to be <code class="docutils literal notranslate"><span class="pre">Source</span></code> and <code class="docutils literal notranslate"><span class="pre">Sink</span></code> (names which <code class="docutils literal notranslate"><span class="pre">cspy</span></code> uses),
+and calculate the specifics of Jane’s walk (figuring out travel time, adding buildings/sights, etc).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">networkx</span> <span class="kn">import</span> <span class="n">DiGraph</span>
+<span class="kn">from</span> <span class="nn">jpath_preprocessing</span> <span class="kn">import</span> <span class="n">relabel_source_sink</span><span class="p">,</span> <span class="n">add_cspy_edge_attributes</span>
+
+<span class="c1"># Transform M from networkx.MultiGraph to networkx.DiGraph</span>
+<span class="c1"># This is requirement by the algorithms</span>
+<span class="n">G</span> <span class="o">=</span> <span class="n">DiGraph</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">n_res</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="c1"># Relabel nodes the start/end nodes as &quot;Source&quot;/&quot;Sink&quot;</span>
+<span class="c1"># (The post-office is in Ternatestraat and Jane&#39;s home is in Delftweg)</span>
+<span class="n">G</span> <span class="o">=</span> <span class="n">relabel_source_sink</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;Source&quot;</span><span class="p">:</span> <span class="s2">&quot;Ternatestraat&quot;</span><span class="p">,</span> <span class="s2">&quot;Sink&quot;</span><span class="p">:</span> <span class="s2">&quot;Delftweg&quot;</span><span class="p">})</span>
+
+<span class="c1"># Add Jane&#39;s specific resources to the edges</span>
+<span class="c1"># (For each edge, adds a `res_cost` attribute with an array with the resources consumed along the specific edge)</span>
+<span class="n">G</span> <span class="o">=</span> <span class="n">add_cspy_edge_attributes</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To define the custom REFs,  <code class="docutils literal notranslate"><span class="pre">jane_REF</span></code>, that controls how resources evolve throughout the path,
+we require two inputs: an array of current cumulative resource values <code class="docutils literal notranslate"><span class="pre">res</span></code>,
+and the edge that is being considered for an extension of a path <code class="docutils literal notranslate"><span class="pre">edge</span></code>
+(which consists of two nodes and the edge data).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">array</span>
+<span class="kn">from</span> <span class="nn">cspy</span> <span class="kn">import</span> <span class="n">REFCallback</span>
+
+<span class="n">WALKING_SPEED</span> <span class="o">=</span> <span class="mi">3</span>
+
+<span class="k">class</span> <span class="nc">MyCallback</span><span class="p">(</span><span class="n">REFCallback</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">REFCallback</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="c1"># Empty attribute for later</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">G</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">REF_fwd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cumul_res</span><span class="p">,</span> <span class="n">tail</span><span class="p">,</span> <span class="n">head</span><span class="p">,</span> <span class="n">edge_res</span><span class="p">,</span> <span class="n">partial_path</span><span class="p">,</span>
+                <span class="n">cumul_cost</span><span class="p">):</span>
+        <span class="n">new_res</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">cumul_res</span><span class="p">)</span>
+        <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">tail</span><span class="p">,</span> <span class="n">head</span>
+        <span class="c1"># Monotone resource</span>
+        <span class="n">new_res</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="c1"># Update &#39;sights&#39; resource</span>
+        <span class="n">new_res</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">][</span><span class="s1">&#39;res_cost&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+        <span class="c1"># Extract the &#39;travel-time&#39; resource (distance/speed)</span>
+        <span class="n">new_res</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">][</span><span class="s1">&#39;weight&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">WALKING_SPEED</span><span class="p">)</span>
+        <span class="c1"># # Update &#39;delivery-time&#39; resource</span>
+        <span class="n">new_res</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">][</span><span class="s1">&#39;res_cost&#39;</span><span class="p">][</span><span class="mi">4</span><span class="p">]</span>
+        <span class="c1"># # Update &#39;shift&#39; resource</span>
+      <span class="n">new_res</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+=</span> <span class="p">(</span><span class="n">new_res</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="n">new_res</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span>  <span class="c1"># travel-time + delivery-time</span>
+      <span class="k">return</span> <span class="n">new_res</span>
+</pre></div>
+</div>
+<p>Hence, each resource is restricted and updated as follows:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">'sights'</span></code> : the cumulative number of sights visited has a dummy upper bound equal to the number of edges in the graph as there is no restriction to as how many sights Jane visits. Additionally, the value of this resource in the final path, will provide us with the accumulated number of sights in the path;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'shift'</span></code> : the cumulative shift time is updated as the travel time along the edge plus the delivery time, the upper bound of <code class="docutils literal notranslate"><span class="pre">SHIFT_DURATION</span></code> ensures that Jane doesn’t exceed her part-time hours;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'travel-time'</span></code> : the cumulative travel time is updated using the positive distance travelled (<code class="docutils literal notranslate"><span class="pre">-edge_data['weight']</span></code>) over an average walking speed. Given the relationship between this resource and</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'shift'</span></code> : a maximum of the shift duration provides no restriction.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'delivery-time'</span></code> : the cumulative delivery time is simply updated using edge data. Similarly as for the previous resource, a maximum of the shift duration provides no restriction.</p></li>
+</ul>
+<p>Using <code class="docutils literal notranslate"><span class="pre">cspy</span></code>, Jane can obtain a route <code class="docutils literal notranslate"><span class="pre">path</span></code> and subject to her constraints as,</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cspy</span> <span class="kn">import</span> <span class="n">Tabu</span><span class="p">,</span> <span class="n">BiDirectional</span>
+
+<span class="n">n_edges</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">())</span>  <span class="c1"># number of edges in network</span>
+<span class="n">max_res</span> <span class="o">=</span> <span class="p">[</span><span class="n">n_edges</span><span class="p">,</span> <span class="mi">5</span><span class="o">*</span><span class="n">n_edges</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+<span class="n">min_res</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+
+<span class="n">my_callback</span> <span class="o">=</span> <span class="n">MyCallback</span><span class="p">()</span>
+<span class="n">alg</span> <span class="o">=</span> <span class="n">BiDirectional</span><span class="p">(</span><span class="n">G</span><span class="p">,</span>
+                    <span class="n">max_res</span><span class="p">,</span>
+                    <span class="n">min_res</span><span class="p">,</span>
+                    <span class="n">REF_callback</span><span class="o">=</span><span class="n">my_callback</span><span class="p">,</span>
+                    <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;forward&quot;</span><span class="p">,</span>
+                    <span class="n">elementary</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="c1"># Pass preprocessed graph</span>
+<span class="n">my_callback</span><span class="o">.</span><span class="n">G</span> <span class="o">=</span> <span class="n">alg1</span><span class="o">.</span><span class="n">G</span>
+<span class="n">alg</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">alg</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>  <span class="c1"># print route</span>
+</pre></div>
+</div>
+<p>Additionally, we can query other useful attributes as</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">alg</span><span class="o">.</span><span class="n">total_cost</span>
+<span class="n">alg</span><span class="o">.</span><span class="n">consumed_resources</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="getting_started.html" class="btn btn-neutral float-left" title="Getting started" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ref.html" class="btn btn-neutral float-right" title="Resource Extension Functions (REFs)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, David Torres Sanchez.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

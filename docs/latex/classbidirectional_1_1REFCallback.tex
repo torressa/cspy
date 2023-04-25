@@ -1,0 +1,72 @@
+\hypertarget{classbidirectional_1_1REFCallback}{}\section{bidirectional\+:\+:R\+E\+F\+Callback Class Reference}
+\label{classbidirectional_1_1REFCallback}\index{bidirectional\+::\+R\+E\+F\+Callback@{bidirectional\+::\+R\+E\+F\+Callback}}
+
+
+{\ttfamily \#include $<$ref\+\_\+callback.\+h$>$}
+
+
+
+Collaboration diagram for bidirectional\+:\+:R\+E\+F\+Callback\+:
+% FIG 0
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classbidirectional_1_1REFCallback_a35f060b9fc08e58492493ea385f3af5d}{R\+E\+F\+Callback} ()
+\item 
+virtual \hyperlink{classbidirectional_1_1REFCallback_a893e00d4fe0105ca6d6309699e4d7749}{$\sim$\+R\+E\+F\+Callback} ()
+\item 
+virtual std\+::vector$<$ double $>$ \hyperlink{classbidirectional_1_1REFCallback_a08774ede77624500d8d8dbd0f3765610}{R\+E\+F\+\_\+fwd} (const std\+::vector$<$ double $>$ \&cumulative\+\_\+resource, const int \&tail, const int \&head, const std\+::vector$<$ double $>$ \&edge\+\_\+resource\+\_\+consumption, const std\+::vector$<$ int $>$ \&partial\+\_\+path, const double \&accummulated\+\_\+cost) const
+\begin{DoxyCompactList}\small\item\em Default implementation of a forward R\+EF. \end{DoxyCompactList}\item 
+virtual std\+::vector$<$ double $>$ \hyperlink{classbidirectional_1_1REFCallback_a829eafdc1f944c05a38835ec3a61abb7}{R\+E\+F\+\_\+bwd} (const std\+::vector$<$ double $>$ \&cumulative\+\_\+resource, const int \&tail, const int \&head, const std\+::vector$<$ double $>$ \&edge\+\_\+resource\+\_\+consumption, const std\+::vector$<$ int $>$ \&partial\+\_\+path, const double \&accummulated\+\_\+cost) const
+\item 
+virtual std\+::vector$<$ double $>$ \hyperlink{classbidirectional_1_1REFCallback_a82a485c94d647e74ee025a7dd3554224}{R\+E\+F\+\_\+join} (const std\+::vector$<$ double $>$ \&fwd\+\_\+resource, const std\+::vector$<$ double $>$ \&bwd\+\_\+resource, const int \&tail, const int \&head, const std\+::vector$<$ double $>$ \&edge\+\_\+resource\+\_\+consumption) const
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Generic callback for custom Resource Extensions. In the case the user has not defined all three, default additive R\+E\+Fs are used. 
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classbidirectional_1_1REFCallback_a35f060b9fc08e58492493ea385f3af5d}\label{classbidirectional_1_1REFCallback_a35f060b9fc08e58492493ea385f3af5d}} 
+\index{bidirectional\+::\+R\+E\+F\+Callback@{bidirectional\+::\+R\+E\+F\+Callback}!R\+E\+F\+Callback@{R\+E\+F\+Callback}}
+\index{R\+E\+F\+Callback@{R\+E\+F\+Callback}!bidirectional\+::\+R\+E\+F\+Callback@{bidirectional\+::\+R\+E\+F\+Callback}}
+\subsubsection{\texorpdfstring{R\+E\+F\+Callback()}{REFCallback()}}
+{\footnotesize\ttfamily bidirectional\+::\+R\+E\+F\+Callback\+::\+R\+E\+F\+Callback (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classbidirectional_1_1REFCallback_a893e00d4fe0105ca6d6309699e4d7749}\label{classbidirectional_1_1REFCallback_a893e00d4fe0105ca6d6309699e4d7749}} 
+\index{bidirectional\+::\+R\+E\+F\+Callback@{bidirectional\+::\+R\+E\+F\+Callback}!````~R\+E\+F\+Callback@{$\sim$\+R\+E\+F\+Callback}}
+\index{````~R\+E\+F\+Callback@{$\sim$\+R\+E\+F\+Callback}!bidirectional\+::\+R\+E\+F\+Callback@{bidirectional\+::\+R\+E\+F\+Callback}}
+\subsubsection{\texorpdfstring{$\sim$\+R\+E\+F\+Callback()}{~REFCallback()}}
+{\footnotesize\ttfamily virtual bidirectional\+::\+R\+E\+F\+Callback\+::$\sim$\+R\+E\+F\+Callback (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classbidirectional_1_1REFCallback_a829eafdc1f944c05a38835ec3a61abb7}\label{classbidirectional_1_1REFCallback_a829eafdc1f944c05a38835ec3a61abb7}} 
+\index{bidirectional\+::\+R\+E\+F\+Callback@{bidirectional\+::\+R\+E\+F\+Callback}!R\+E\+F\+\_\+bwd@{R\+E\+F\+\_\+bwd}}
+\index{R\+E\+F\+\_\+bwd@{R\+E\+F\+\_\+bwd}!bidirectional\+::\+R\+E\+F\+Callback@{bidirectional\+::\+R\+E\+F\+Callback}}
+\subsubsection{\texorpdfstring{R\+E\+F\+\_\+bwd()}{REF\_bwd()}}
+{\footnotesize\ttfamily std\+::vector$<$ double $>$ bidirectional\+::\+R\+E\+F\+Callback\+::\+R\+E\+F\+\_\+bwd (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ double $>$ \&}]{cumulative\+\_\+resource,  }\item[{const int \&}]{tail,  }\item[{const int \&}]{head,  }\item[{const std\+::vector$<$ double $>$ \&}]{edge\+\_\+resource\+\_\+consumption,  }\item[{const std\+::vector$<$ int $>$ \&}]{partial\+\_\+path,  }\item[{const double \&}]{accummulated\+\_\+cost }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Default implementation of a backward R\+EF (note that critical resource information is not an argument) \mbox{\Hypertarget{classbidirectional_1_1REFCallback_a08774ede77624500d8d8dbd0f3765610}\label{classbidirectional_1_1REFCallback_a08774ede77624500d8d8dbd0f3765610}} 
+\index{bidirectional\+::\+R\+E\+F\+Callback@{bidirectional\+::\+R\+E\+F\+Callback}!R\+E\+F\+\_\+fwd@{R\+E\+F\+\_\+fwd}}
+\index{R\+E\+F\+\_\+fwd@{R\+E\+F\+\_\+fwd}!bidirectional\+::\+R\+E\+F\+Callback@{bidirectional\+::\+R\+E\+F\+Callback}}
+\subsubsection{\texorpdfstring{R\+E\+F\+\_\+fwd()}{REF\_fwd()}}
+{\footnotesize\ttfamily std\+::vector$<$ double $>$ bidirectional\+::\+R\+E\+F\+Callback\+::\+R\+E\+F\+\_\+fwd (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ double $>$ \&}]{cumulative\+\_\+resource,  }\item[{const int \&}]{tail,  }\item[{const int \&}]{head,  }\item[{const std\+::vector$<$ double $>$ \&}]{edge\+\_\+resource\+\_\+consumption,  }\item[{const std\+::vector$<$ int $>$ \&}]{partial\+\_\+path,  }\item[{const double \&}]{accummulated\+\_\+cost }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Default implementation of a forward R\+EF. 
+
+\mbox{\Hypertarget{classbidirectional_1_1REFCallback_a82a485c94d647e74ee025a7dd3554224}\label{classbidirectional_1_1REFCallback_a82a485c94d647e74ee025a7dd3554224}} 
+\index{bidirectional\+::\+R\+E\+F\+Callback@{bidirectional\+::\+R\+E\+F\+Callback}!R\+E\+F\+\_\+join@{R\+E\+F\+\_\+join}}
+\index{R\+E\+F\+\_\+join@{R\+E\+F\+\_\+join}!bidirectional\+::\+R\+E\+F\+Callback@{bidirectional\+::\+R\+E\+F\+Callback}}
+\subsubsection{\texorpdfstring{R\+E\+F\+\_\+join()}{REF\_join()}}
+{\footnotesize\ttfamily std\+::vector$<$ double $>$ bidirectional\+::\+R\+E\+F\+Callback\+::\+R\+E\+F\+\_\+join (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ double $>$ \&}]{fwd\+\_\+resource,  }\item[{const std\+::vector$<$ double $>$ \&}]{bwd\+\_\+resource,  }\item[{const int \&}]{tail,  }\item[{const int \&}]{head,  }\item[{const std\+::vector$<$ double $>$ \&}]{edge\+\_\+resource\+\_\+consumption }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+Default implementation of a joining R\+EF (used to merge forward and backward paths) 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/\+\_\+\+\_\+w/cspy/cspy/torressa/cspy/src/cc/\hyperlink{ref__callback_8h}{ref\+\_\+callback.\+h}\item 
+/\+\_\+\+\_\+w/cspy/cspy/torressa/cspy/src/cc/\hyperlink{ref__callback_8cc}{ref\+\_\+callback.\+cc}\end{DoxyCompactItemize}

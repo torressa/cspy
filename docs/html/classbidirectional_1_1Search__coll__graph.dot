@@ -1,0 +1,25 @@
+digraph "bidirectional::Search"
+{
+  bgcolor="transparent";
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="{bidirectional::Search\n||+ makeHeap()\l+ pushHeap()\l+ pushUnprocessedLabel()\l+ pushEfficientLabel()\l+ replaceBestLabel()\l+ replaceCurrentLabel()\l+ replaceIntermediateLabel()\l+ addVisitedVertex()\l+ Search()\l+ ~Search()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node2 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +intermediate_label\n+current_label" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node2 [label="{shared_ptr\< labelling\l::Label \>\n||}",height=0.2,width=0.4,color="grey75"];
+  Node3 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +best_labels" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node3 [label="{vector\< std::shared\l_ptr\< labelling::Label \> \>\n||}",height=0.2,width=0.4,color="grey75"];
+  Node4 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +visited_vertices" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node4 [label="{set\< int \>\n||}",height=0.2,width=0.4,color="grey75"];
+  Node5 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +direction" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node5 [label="{Directions\n||}",height=0.2,width=0.4,color="grey75"];
+  Node6 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +lower_bound_weight" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node6 [label="{unique_ptr\< std::vector\l\< double \> \>\n||}",height=0.2,width=0.4,color="grey75"];
+  Node7 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +generated_count\n+unprocessed_count\n+processed_count" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node7 [label="{int\n||}",height=0.2,width=0.4,color="grey75"];
+  Node8 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +bound_exceeded\n+stop" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node8 [label="{bool\n||}",height=0.2,width=0.4,color="grey75"];
+  Node9 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +efficient_labels" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node9 [label="{vector\< std::vector\l\< labelling::Label \> \>\n||}",height=0.2,width=0.4,color="grey75"];
+  Node10 -> Node1 [color="grey25",fontsize="10",style="solid",label=" +unprocessed_labels" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node10 [label="{unique_ptr\< std::vector\l\< labelling::Label \> \>\n||}",height=0.2,width=0.4,color="grey75"];
+}

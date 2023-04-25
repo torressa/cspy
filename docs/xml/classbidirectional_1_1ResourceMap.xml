@@ -1,0 +1,109 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="classbidirectional_1_1ResourceMap" kind="class" language="C++" prot="public">
+    <compoundname>bidirectional::ResourceMap</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">lemon::MapBase&lt; LemonArc, double &gt;</basecompoundref>
+    <includes refid="digraph_8h" local="no">digraph.h</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classbidirectional_1_1ResourceMap_1aa10284e336ca07a61aea4e3c7513d7e0" prot="private" static="no" mutable="no">
+        <type>const LemonGraph::ArcMap&lt; std::vector&lt; double &gt; &gt; &amp;</type>
+        <definition>const LemonGraph::ArcMap&lt;std::vector&lt;double&gt; &gt;&amp; bidirectional::ResourceMap::resource_map</definition>
+        <argsstring></argsstring>
+        <name>resource_map</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/digraph.h" line="52" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/digraph.h" bodystart="52" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classbidirectional_1_1ResourceMap_1aeb5d1068a9d6f7690217e60a7dd30ab4" prot="private" static="no" mutable="no">
+        <type>const int</type>
+        <definition>const int bidirectional::ResourceMap::r</definition>
+        <argsstring></argsstring>
+        <name>r</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/digraph.h" line="53" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/digraph.h" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classbidirectional_1_1ResourceMap_1a0da7ed255fdf2bbc1a7bfc190c828bc4" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double bidirectional::ResourceMap::operator[]</definition>
+        <argsstring>(Key e) const</argsstring>
+        <name>operator[]</name>
+        <param>
+          <type>Key</type>
+          <declname>e</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/digraph.h" line="56" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/digraph.h" bodystart="56" bodyend="56"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1ResourceMap_1a8af0345e49b30df97d49d920730b9d9d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>bidirectional::ResourceMap::ResourceMap</definition>
+        <argsstring>(const LemonGraph::ArcMap&lt; std::vector&lt; double &gt;&gt; &amp;resource_map_in, const int r_in)</argsstring>
+        <name>ResourceMap</name>
+        <param>
+          <type>const LemonGraph::ArcMap&lt; std::vector&lt; double &gt;&gt; &amp;</type>
+          <declname>resource_map_in</declname>
+        </param>
+        <param>
+          <type>const int</type>
+          <declname>r_in</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/digraph.h" line="58" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/digraph.h" bodystart="58" bodyend="61"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="45">
+        <label>lemon::MapBase&lt; LemonArc, double &gt;</label>
+      </node>
+      <node id="44">
+        <label>bidirectional::ResourceMap</label>
+        <link refid="classbidirectional_1_1ResourceMap"/>
+        <childnode refid="45" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="47">
+        <label>lemon::MapBase&lt; LemonArc, double &gt;</label>
+      </node>
+      <node id="46">
+        <label>bidirectional::ResourceMap</label>
+        <link refid="classbidirectional_1_1ResourceMap"/>
+        <childnode refid="47" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="/__w/cspy/cspy/torressa/cspy/src/cc/digraph.h" line="51" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/digraph.h" bodystart="51" bodyend="62"/>
+    <listofallmembers>
+      <member refid="classbidirectional_1_1ResourceMap_1a0da7ed255fdf2bbc1a7bfc190c828bc4" prot="public" virt="non-virtual"><scope>bidirectional::ResourceMap</scope><name>operator[]</name></member>
+      <member refid="classbidirectional_1_1ResourceMap_1aeb5d1068a9d6f7690217e60a7dd30ab4" prot="private" virt="non-virtual"><scope>bidirectional::ResourceMap</scope><name>r</name></member>
+      <member refid="classbidirectional_1_1ResourceMap_1aa10284e336ca07a61aea4e3c7513d7e0" prot="private" virt="non-virtual"><scope>bidirectional::ResourceMap</scope><name>resource_map</name></member>
+      <member refid="classbidirectional_1_1ResourceMap_1a8af0345e49b30df97d49d920730b9d9d" prot="public" virt="non-virtual"><scope>bidirectional::ResourceMap</scope><name>ResourceMap</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

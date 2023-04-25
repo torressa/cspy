@@ -1,0 +1,167 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="structbidirectional_1_1AdjVertex" kind="struct" language="C++" prot="public">
+    <compoundname>bidirectional::AdjVertex</compoundname>
+    <includes refid="digraph_8h" local="no">digraph.h</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structbidirectional_1_1AdjVertex_1afd878dad03f7f4437cb135fc4f00c46c" prot="public" static="no" mutable="no">
+        <type><ref refid="structbidirectional_1_1Vertex" kindref="compound">Vertex</ref></type>
+        <definition>Vertex bidirectional::AdjVertex::vertex</definition>
+        <argsstring></argsstring>
+        <name>vertex</name>
+        <briefdescription>
+<para>Tail/head vertex. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/digraph.h" line="34" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/digraph.h" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structbidirectional_1_1AdjVertex_1a416d2c737409cf4ed7d7494508f3a7de" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double bidirectional::AdjVertex::weight</definition>
+        <argsstring></argsstring>
+        <name>weight</name>
+        <briefdescription>
+<para>Double with weight/cost for the arc. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/digraph.h" line="36" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/digraph.h" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structbidirectional_1_1AdjVertex_1a3755b5ef7a009834706922a54d115927" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; bidirectional::AdjVertex::resource_consumption</definition>
+        <argsstring></argsstring>
+        <name>resource_consumption</name>
+        <briefdescription>
+<para>Vector of doubles with resource consumption. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/digraph.h" line="38" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/digraph.h" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structbidirectional_1_1AdjVertex_1abf769818349400a6598021c1bed78045" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool bidirectional::AdjVertex::init</definition>
+        <argsstring></argsstring>
+        <name>init</name>
+        <initializer>= false</initializer>
+        <briefdescription>
+<para>Bool to check initialisation of the struct. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/digraph.h" line="40" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/digraph.h" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="structbidirectional_1_1AdjVertex_1ad199785e49b89a8066b7a4e73d6d9f5a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>bidirectional::AdjVertex::AdjVertex</definition>
+        <argsstring>()</argsstring>
+        <name>AdjVertex</name>
+        <briefdescription>
+<para>Dummy constructor. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/digraph.h" line="43" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/digraph.h" bodystart="43" bodyend="43"/>
+      </memberdef>
+      <memberdef kind="function" id="structbidirectional_1_1AdjVertex_1a7ae2095e5e51da0ce10408f37e2e602c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>bidirectional::AdjVertex::AdjVertex</definition>
+        <argsstring>(const Vertex &amp;v, const double &amp;w, const std::vector&lt; double &gt; &amp;r_c)</argsstring>
+        <name>AdjVertex</name>
+        <param>
+          <type>const <ref refid="structbidirectional_1_1Vertex" kindref="compound">Vertex</ref> &amp;</type>
+          <declname>v</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>w</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>r_c</declname>
+        </param>
+        <briefdescription>
+<para>Default constructor. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/digraph.h" line="45" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/digraph.h" bodystart="45" bodyend="46"/>
+      </memberdef>
+      <memberdef kind="function" id="structbidirectional_1_1AdjVertex_1a86d0c4e2bcd2c7915d9aa2fc5a38bd0c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>bidirectional::AdjVertex::~AdjVertex</definition>
+        <argsstring>()</argsstring>
+        <name>~AdjVertex</name>
+        <briefdescription>
+<para>Default destructor. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/digraph.h" line="48" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/digraph.h" bodystart="48" bodyend="48"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>Data structure to hold adjacent vertex attributes. (this way it can be used both forward and backward directions) </para>    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>vector&lt; double &gt;</label>
+      </node>
+      <node id="5">
+        <label>int</label>
+      </node>
+      <node id="3">
+        <label>double</label>
+      </node>
+      <node id="6">
+        <label>bool</label>
+      </node>
+      <node id="4">
+        <label>bidirectional::Vertex</label>
+        <link refid="structbidirectional_1_1Vertex"/>
+        <childnode refid="5" relation="usage">
+          <edgelabel>+user_id</edgelabel>
+          <edgelabel>+lemon_id</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>bidirectional::AdjVertex</label>
+        <link refid="structbidirectional_1_1AdjVertex"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>+resource_consumption</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>+weight</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>+vertex</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>+init</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="/__w/cspy/cspy/torressa/cspy/src/cc/digraph.h" line="31" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/digraph.h" bodystart="31" bodyend="49"/>
+    <listofallmembers>
+      <member refid="structbidirectional_1_1AdjVertex_1ad199785e49b89a8066b7a4e73d6d9f5a" prot="public" virt="non-virtual"><scope>bidirectional::AdjVertex</scope><name>AdjVertex</name></member>
+      <member refid="structbidirectional_1_1AdjVertex_1a7ae2095e5e51da0ce10408f37e2e602c" prot="public" virt="non-virtual"><scope>bidirectional::AdjVertex</scope><name>AdjVertex</name></member>
+      <member refid="structbidirectional_1_1AdjVertex_1abf769818349400a6598021c1bed78045" prot="public" virt="non-virtual"><scope>bidirectional::AdjVertex</scope><name>init</name></member>
+      <member refid="structbidirectional_1_1AdjVertex_1a3755b5ef7a009834706922a54d115927" prot="public" virt="non-virtual"><scope>bidirectional::AdjVertex</scope><name>resource_consumption</name></member>
+      <member refid="structbidirectional_1_1AdjVertex_1afd878dad03f7f4437cb135fc4f00c46c" prot="public" virt="non-virtual"><scope>bidirectional::AdjVertex</scope><name>vertex</name></member>
+      <member refid="structbidirectional_1_1AdjVertex_1a416d2c737409cf4ed7d7494508f3a7de" prot="public" virt="non-virtual"><scope>bidirectional::AdjVertex</scope><name>weight</name></member>
+      <member refid="structbidirectional_1_1AdjVertex_1a86d0c4e2bcd2c7915d9aa2fc5a38bd0c" prot="public" virt="non-virtual"><scope>bidirectional::AdjVertex</scope><name>~AdjVertex</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

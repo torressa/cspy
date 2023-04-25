@@ -1,0 +1,149 @@
+\hypertarget{namespacelabelling}{}\section{labelling Namespace Reference}
+\label{namespacelabelling}\index{labelling@{labelling}}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{classlabelling_1_1Label}{Label}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \hyperlink{namespacelabelling_a96ce48b2672548c132a1032820202375}{operator==} (const \hyperlink{classlabelling_1_1Label}{Label} \&label1, const \hyperlink{classlabelling_1_1Label}{Label} \&label2)
+\item 
+bool \hyperlink{namespacelabelling_a71cfecc2e31a39a8743e584c12b3fd32}{operator$<$} (const \hyperlink{classlabelling_1_1Label}{Label} \&label1, const \hyperlink{classlabelling_1_1Label}{Label} \&label2)
+\item 
+bool \hyperlink{namespacelabelling_a079cd7339d7a3797d35ebbd5b4e930f6}{operator$>$} (const \hyperlink{classlabelling_1_1Label}{Label} \&label1, const \hyperlink{classlabelling_1_1Label}{Label} \&label2)
+\item 
+std\+::ostream \& \hyperlink{namespacelabelling_ac988eedb6084b429a46b070f3ff6d544}{operator$<$$<$} (std\+::ostream \&os, const \hyperlink{classlabelling_1_1Label}{Label} \&label)
+\item 
+bool \hyperlink{namespacelabelling_ac6d6bb89c176d0f2db264457d60c5bd8}{run\+Dominance\+Eff} (std\+::vector$<$ \hyperlink{classlabelling_1_1Label}{Label} $>$ $\ast$efficient\+\_\+labels\+\_\+ptr, const \hyperlink{classlabelling_1_1Label}{Label} \&label, const \hyperlink{namespacebidirectional_a4cbe6f0bfbd3629c2cd44c98014aed70}{bidirectional\+::\+Directions} \&direction, const bool \&elementary)
+\item 
+\hyperlink{classlabelling_1_1Label}{Label} \hyperlink{namespacelabelling_a7d32365acb745f452e0b81beed2ce2be}{get\+Next\+Label} (std\+::vector$<$ \hyperlink{classlabelling_1_1Label}{Label} $>$ $\ast$labels\+\_\+ptr, const \hyperlink{namespacebidirectional_a4cbe6f0bfbd3629c2cd44c98014aed70}{bidirectional\+::\+Directions} \&direction)
+\item 
+\hyperlink{classlabelling_1_1Label}{Label} \hyperlink{namespacelabelling_ae172758fb8d07cc0a490d8715966e1b7}{process\+Bwd\+Label} (const \hyperlink{classlabelling_1_1Label}{labelling\+::\+Label} \&label, const std\+::vector$<$ double $>$ \&max\+\_\+res, const std\+::vector$<$ double $>$ \&cumulative\+\_\+resource, const bool \&invert\+\_\+min\+\_\+res)
+\item 
+double \hyperlink{namespacelabelling_a5bb0d5a3d1eeb92546902c6cdc12c71d}{get\+Phi\+Value} (const \hyperlink{classlabelling_1_1Label}{labelling\+::\+Label} \&fwd\+\_\+label, const \hyperlink{classlabelling_1_1Label}{labelling\+::\+Label} \&bwd\+\_\+label, const std\+::vector$<$ double $>$ \&max\+\_\+res)
+\item 
+bool \hyperlink{namespacelabelling_ad7fee591bcb066e39ff97138ab0ba5ca}{halfway\+Check} (const \hyperlink{classlabelling_1_1Label}{Label} \&label, const std\+::vector$<$ \hyperlink{classlabelling_1_1Label}{Label} $>$ \&labels)
+\item 
+bool \hyperlink{namespacelabelling_a9c2e8f16965144d445ba68216dae648f}{merge\+Pre\+Check} (const \hyperlink{classlabelling_1_1Label}{labelling\+::\+Label} \&fwd\+\_\+label, const \hyperlink{classlabelling_1_1Label}{labelling\+::\+Label} \&bwd\+\_\+label, const std\+::vector$<$ double $>$ \&max\+\_\+res)
+\item 
+\hyperlink{classlabelling_1_1Label}{Label} \hyperlink{namespacelabelling_a19937349c6ec5c31d5994aac45c5d2fd}{merge\+Labels} (const \hyperlink{classlabelling_1_1Label}{Label} \&fwd\+\_\+label, const \hyperlink{classlabelling_1_1Label}{Label} \&bwd\+\_\+label, const \hyperlink{structbidirectional_1_1AdjVertex}{bidirectional\+::\+Adj\+Vertex} \&adj\+\_\+vertex, const \hyperlink{structbidirectional_1_1Vertex}{bidirectional\+::\+Vertex} \&sink, const std\+::vector$<$ double $>$ \&max\+\_\+res, const std\+::vector$<$ double $>$ \&min\+\_\+res)
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{namespacelabelling_a7d32365acb745f452e0b81beed2ce2be}\label{namespacelabelling_a7d32365acb745f452e0b81beed2ce2be}} 
+\index{labelling@{labelling}!get\+Next\+Label@{get\+Next\+Label}}
+\index{get\+Next\+Label@{get\+Next\+Label}!labelling@{labelling}}
+\subsubsection{\texorpdfstring{get\+Next\+Label()}{getNextLabel()}}
+{\footnotesize\ttfamily \hyperlink{classlabelling_1_1Label}{Label} labelling\+::get\+Next\+Label (\begin{DoxyParamCaption}\item[{std\+::vector$<$ \hyperlink{classlabelling_1_1Label}{Label} $>$ $\ast$}]{labels,  }\item[{const \hyperlink{namespacebidirectional_a4cbe6f0bfbd3629c2cd44c98014aed70}{bidirectional\+::\+Directions} \&}]{direction }\end{DoxyParamCaption})}
+
+Get next label from ordered labels Grabs the next element in the heap (back) and removes it In the forward (backward) direction this is the label with lowest (highest) monotone resource.
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt out}  & {\em labels,std\+::vector$<$\+Label$>$} & pointer (heap) \\
+\hline
+\mbox{\tt in}  & {\em direction,Directions} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{namespacelabelling_a5bb0d5a3d1eeb92546902c6cdc12c71d}\label{namespacelabelling_a5bb0d5a3d1eeb92546902c6cdc12c71d}} 
+\index{labelling@{labelling}!get\+Phi\+Value@{get\+Phi\+Value}}
+\index{get\+Phi\+Value@{get\+Phi\+Value}!labelling@{labelling}}
+\subsubsection{\texorpdfstring{get\+Phi\+Value()}{getPhiValue()}}
+{\footnotesize\ttfamily double labelling\+::get\+Phi\+Value (\begin{DoxyParamCaption}\item[{const \hyperlink{classlabelling_1_1Label}{labelling\+::\+Label} \&}]{fwd\+\_\+label,  }\item[{const \hyperlink{classlabelling_1_1Label}{labelling\+::\+Label} \&}]{bwd\+\_\+label,  }\item[{const std\+::vector$<$ double $>$ \&}]{max\+\_\+res }\end{DoxyParamCaption})}
+
+Returns the phi value. As defined in Righini and Salani (2006) \mbox{\Hypertarget{namespacelabelling_ad7fee591bcb066e39ff97138ab0ba5ca}\label{namespacelabelling_ad7fee591bcb066e39ff97138ab0ba5ca}} 
+\index{labelling@{labelling}!halfway\+Check@{halfway\+Check}}
+\index{halfway\+Check@{halfway\+Check}!labelling@{labelling}}
+\subsubsection{\texorpdfstring{halfway\+Check()}{halfwayCheck()}}
+{\footnotesize\ttfamily bool labelling\+::halfway\+Check (\begin{DoxyParamCaption}\item[{const \hyperlink{classlabelling_1_1Label}{Label} \&}]{label,  }\item[{const std\+::vector$<$ \hyperlink{classlabelling_1_1Label}{Label} $>$ \&}]{labels }\end{DoxyParamCaption})}
+
+Check whether the pair (phi, path) is already contained in all the (phi, path) pairs with a lower phi.
+
+As defined in Righini and Salani (2006) \mbox{\Hypertarget{namespacelabelling_a19937349c6ec5c31d5994aac45c5d2fd}\label{namespacelabelling_a19937349c6ec5c31d5994aac45c5d2fd}} 
+\index{labelling@{labelling}!merge\+Labels@{merge\+Labels}}
+\index{merge\+Labels@{merge\+Labels}!labelling@{labelling}}
+\subsubsection{\texorpdfstring{merge\+Labels()}{mergeLabels()}}
+{\footnotesize\ttfamily \hyperlink{classlabelling_1_1Label}{Label} labelling\+::merge\+Labels (\begin{DoxyParamCaption}\item[{const \hyperlink{classlabelling_1_1Label}{labelling\+::\+Label} \&}]{fwd\+\_\+label,  }\item[{const \hyperlink{classlabelling_1_1Label}{labelling\+::\+Label} \&}]{bwd\+\_\+label,  }\item[{const \hyperlink{structbidirectional_1_1AdjVertex}{bidirectional\+::\+Adj\+Vertex} \&}]{adj\+\_\+vertex,  }\item[{const \hyperlink{structbidirectional_1_1Vertex}{bidirectional\+::\+Vertex} \&}]{sink,  }\item[{const std\+::vector$<$ double $>$ \&}]{max\+\_\+res,  }\item[{const std\+::vector$<$ double $>$ \&}]{min\+\_\+res }\end{DoxyParamCaption})}
+
+Merge labels produced by a backward and forward label. If an s-\/t compatible path can be obtained the appropriately extended and merged label is returned.
+
+\begin{DoxyReturn}{Returns}
+merged label with updated attributes and new phi value. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacelabelling_a9c2e8f16965144d445ba68216dae648f}\label{namespacelabelling_a9c2e8f16965144d445ba68216dae648f}} 
+\index{labelling@{labelling}!merge\+Pre\+Check@{merge\+Pre\+Check}}
+\index{merge\+Pre\+Check@{merge\+Pre\+Check}!labelling@{labelling}}
+\subsubsection{\texorpdfstring{merge\+Pre\+Check()}{mergePreCheck()}}
+{\footnotesize\ttfamily bool labelling\+::merge\+Pre\+Check (\begin{DoxyParamCaption}\item[{const \hyperlink{classlabelling_1_1Label}{labelling\+::\+Label} \&}]{fwd\+\_\+label,  }\item[{const \hyperlink{classlabelling_1_1Label}{labelling\+::\+Label} \&}]{bwd\+\_\+label,  }\item[{const std\+::vector$<$ double $>$ \&}]{max\+\_\+res }\end{DoxyParamCaption})}
+
+Check whether a pair of forward and backward labels are suitable for merging. To be used before attempting to merge. \mbox{\Hypertarget{namespacelabelling_a71cfecc2e31a39a8743e584c12b3fd32}\label{namespacelabelling_a71cfecc2e31a39a8743e584c12b3fd32}} 
+\index{labelling@{labelling}!operator$<$@{operator$<$}}
+\index{operator$<$@{operator$<$}!labelling@{labelling}}
+\subsubsection{\texorpdfstring{operator$<$()}{operator<()}}
+{\footnotesize\ttfamily bool labelling\+::operator$<$ (\begin{DoxyParamCaption}\item[{const \hyperlink{classlabelling_1_1Label}{Label} \&}]{label1,  }\item[{const \hyperlink{classlabelling_1_1Label}{Label} \&}]{label2 }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{namespacelabelling_ac988eedb6084b429a46b070f3ff6d544}\label{namespacelabelling_ac988eedb6084b429a46b070f3ff6d544}} 
+\index{labelling@{labelling}!operator$<$$<$@{operator$<$$<$}}
+\index{operator$<$$<$@{operator$<$$<$}!labelling@{labelling}}
+\subsubsection{\texorpdfstring{operator$<$$<$()}{operator<<()}}
+{\footnotesize\ttfamily std\+::ostream\& labelling\+::operator$<$$<$ (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{os,  }\item[{const \hyperlink{classlabelling_1_1Label}{Label} \&}]{label }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{namespacelabelling_a96ce48b2672548c132a1032820202375}\label{namespacelabelling_a96ce48b2672548c132a1032820202375}} 
+\index{labelling@{labelling}!operator==@{operator==}}
+\index{operator==@{operator==}!labelling@{labelling}}
+\subsubsection{\texorpdfstring{operator==()}{operator==()}}
+{\footnotesize\ttfamily bool labelling\+::operator== (\begin{DoxyParamCaption}\item[{const \hyperlink{classlabelling_1_1Label}{Label} \&}]{label1,  }\item[{const \hyperlink{classlabelling_1_1Label}{Label} \&}]{label2 }\end{DoxyParamCaption})}
+
+Check every resource for inequality \mbox{\Hypertarget{namespacelabelling_a079cd7339d7a3797d35ebbd5b4e930f6}\label{namespacelabelling_a079cd7339d7a3797d35ebbd5b4e930f6}} 
+\index{labelling@{labelling}!operator$>$@{operator$>$}}
+\index{operator$>$@{operator$>$}!labelling@{labelling}}
+\subsubsection{\texorpdfstring{operator$>$()}{operator>()}}
+{\footnotesize\ttfamily bool labelling\+::operator$>$ (\begin{DoxyParamCaption}\item[{const \hyperlink{classlabelling_1_1Label}{Label} \&}]{label1,  }\item[{const \hyperlink{classlabelling_1_1Label}{Label} \&}]{label2 }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{namespacelabelling_ae172758fb8d07cc0a490d8715966e1b7}\label{namespacelabelling_ae172758fb8d07cc0a490d8715966e1b7}} 
+\index{labelling@{labelling}!process\+Bwd\+Label@{process\+Bwd\+Label}}
+\index{process\+Bwd\+Label@{process\+Bwd\+Label}!labelling@{labelling}}
+\subsubsection{\texorpdfstring{process\+Bwd\+Label()}{processBwdLabel()}}
+{\footnotesize\ttfamily \hyperlink{classlabelling_1_1Label}{Label} labelling\+::process\+Bwd\+Label (\begin{DoxyParamCaption}\item[{const \hyperlink{classlabelling_1_1Label}{labelling\+::\+Label} \&}]{label,  }\item[{const std\+::vector$<$ double $>$ \&}]{max\+\_\+res,  }\item[{const std\+::vector$<$ double $>$ \&}]{cumulative\+\_\+resource,  }\item[{const bool \&}]{invert\+\_\+min\+\_\+res = {\ttfamily false} }\end{DoxyParamCaption})}
+
+Reverse backward path and inverts resource consumption and returns resulting forward-\/compatible label.
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt out}  & {\em label,\hyperlink{classlabelling_1_1Label}{labelling\+::\+Label},current} & label to extend (and maybe update {\ttfamily unreachable\+\_\+nodes}) \\
+\hline
+\mbox{\tt in}  & {\em max\+\_\+res,vector} & of double with upper bound(s) for resource consumption. To use to invert monotone resource \\
+\hline
+\mbox{\tt in}  & {\em invert\+\_\+min\+\_\+res,bool} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+inverted label 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacelabelling_ac6d6bb89c176d0f2db264457d60c5bd8}\label{namespacelabelling_ac6d6bb89c176d0f2db264457d60c5bd8}} 
+\index{labelling@{labelling}!run\+Dominance\+Eff@{run\+Dominance\+Eff}}
+\index{run\+Dominance\+Eff@{run\+Dominance\+Eff}!labelling@{labelling}}
+\subsubsection{\texorpdfstring{run\+Dominance\+Eff()}{runDominanceEff()}}
+{\footnotesize\ttfamily bool labelling\+::run\+Dominance\+Eff (\begin{DoxyParamCaption}\item[{std\+::vector$<$ \hyperlink{classlabelling_1_1Label}{Label} $>$ $\ast$}]{efficient\+\_\+labels\+\_\+ptr,  }\item[{const \hyperlink{classlabelling_1_1Label}{Label} \&}]{label,  }\item[{const \hyperlink{namespacebidirectional_a4cbe6f0bfbd3629c2cd44c98014aed70}{bidirectional\+::\+Directions} \&}]{direction,  }\item[{const bool \&}]{elementary }\end{DoxyParamCaption})}
+
+Misc functionality
+
+Check whether the input label dominates any efficient label (previously undominated labels) at the same node. If any label is dominated by the input label, they are removed.
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt out}  & {\em efficient\+\_\+labels,pointer} & to a vector of \hyperlink{classlabelling_1_1Label}{Label} with the efficient labels at the same node as {\ttfamily label}. If a label is dominated by {\ttfamily label}, it is removed from this vector. \\
+\hline
+\mbox{\tt in}  & {\em label,\hyperlink{classlabelling_1_1Label}{Label}} & to compare \\
+\hline
+\mbox{\tt in}  & {\em direction,Directions} & with direction of search \\
+\hline
+\mbox{\tt in}  & {\em elementary,bool} & with whether non-\/elementary paths are allowed\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+bool, true if {\ttfamily label} is dominated, false otherwise 
+\end{DoxyReturn}

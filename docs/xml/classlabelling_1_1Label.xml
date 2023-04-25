@@ -1,0 +1,872 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="classlabelling_1_1Label" kind="class" language="C++" prot="public">
+    <compoundname>labelling::Label</compoundname>
+    <includes refid="labelling_8h" local="no">labelling.h</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="classlabelling_1_1Label_1a478f34a67528586877720483c5f0d38b" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double labelling::Label::weight</definition>
+        <argsstring></argsstring>
+        <name>weight</name>
+        <initializer>= 0.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.h" line="26" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.h" bodystart="26" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classlabelling_1_1Label_1a7c8972ee9d1c00fd348025c321467f75" prot="public" static="no" mutable="no">
+        <type><ref refid="structbidirectional_1_1Vertex" kindref="compound">bidirectional::Vertex</ref></type>
+        <definition>bidirectional::Vertex labelling::Label::vertex</definition>
+        <argsstring></argsstring>
+        <name>vertex</name>
+        <initializer>= {-1, -1}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.h" line="27" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.h" bodystart="27" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classlabelling_1_1Label_1a2c185387fad46a29bce3dd99b111a1c4" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; labelling::Label::resource_consumption</definition>
+        <argsstring></argsstring>
+        <name>resource_consumption</name>
+        <initializer>= {}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.h" line="28" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.h" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classlabelling_1_1Label_1a7511d29a3aa0272b1a0e1ea5fb75ff14" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; int &gt;</type>
+        <definition>std::vector&lt;int&gt; labelling::Label::partial_path</definition>
+        <argsstring></argsstring>
+        <name>partial_path</name>
+        <initializer>= {}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.h" line="29" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.h" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classlabelling_1_1Label_1ae684804e463fe690b4fe6ee32812e123" prot="public" static="no" mutable="no">
+        <type>std::set&lt; int &gt;</type>
+        <definition>std::set&lt;int&gt; labelling::Label::unreachable_nodes</definition>
+        <argsstring></argsstring>
+        <name>unreachable_nodes</name>
+        <initializer>= {}</initializer>
+        <briefdescription>
+<para>Set of unreachable nodes. This is only used in the elementary case. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.h" line="31" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.h" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classlabelling_1_1Label_1a182759fd08c2536f9e6a2614c790b127" prot="public" static="no" mutable="no">
+        <type><ref refid="classbidirectional_1_1Params" kindref="compound">bidirectional::Params</ref> *</type>
+        <definition>bidirectional::Params* labelling::Label::params_ptr</definition>
+        <argsstring></argsstring>
+        <name>params_ptr</name>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.h" line="32" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.h" bodystart="32" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classlabelling_1_1Label_1a632cd90937f05a8ea69ad60d4c103c66" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double labelling::Label::phi</definition>
+        <argsstring></argsstring>
+        <name>phi</name>
+        <initializer>= std::nan(&quot;nan&quot;)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.h" line="34" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.h" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classlabelling_1_1Label_1a3728b76c8b32589e04ecaac821f11733" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>labelling::Label::Label</definition>
+        <argsstring>()</argsstring>
+        <name>Label</name>
+        <briefdescription>
+<para>Dummy constructor. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.h" line="38" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.h" bodystart="38" bodyend="38"/>
+      </memberdef>
+      <memberdef kind="function" id="classlabelling_1_1Label_1a6861a92f1825ed3bb9ea46515cdf1d16" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>labelling::Label::Label</definition>
+        <argsstring>(const double &amp;weight_in, const bidirectional::Vertex &amp;vertex_in, const std::vector&lt; double &gt; &amp;resource_consumption_in, const std::vector&lt; int &gt; &amp;partial_path_in, bidirectional::Params *params)</argsstring>
+        <name>Label</name>
+        <param>
+          <type>const double &amp;</type>
+          <declname>weight_in</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structbidirectional_1_1Vertex" kindref="compound">bidirectional::Vertex</ref> &amp;</type>
+          <declname>vertex_in</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>resource_consumption_in</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; int &gt; &amp;</type>
+          <declname>partial_path_in</declname>
+        </param>
+        <param>
+          <type><ref refid="classbidirectional_1_1Params" kindref="compound">bidirectional::Params</ref> *</type>
+          <declname>params</declname>
+          <defname>params_ptr_in</defname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>        </briefdescription>
+        <detaileddescription>
+<para><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref> </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.h" line="41" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.cc" bodystart="14" bodyend="29"/>
+      </memberdef>
+      <memberdef kind="function" id="classlabelling_1_1Label_1a255f1384159b9748980f824eb1ddb5f8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>labelling::Label::Label</definition>
+        <argsstring>(const double &amp;weight_in, const bidirectional::Vertex &amp;vertex_in, const std::vector&lt; double &gt; &amp;resource_consumption_in, const std::vector&lt; int &gt; &amp;partial_path_in, bidirectional::Params *params, const double &amp;phi_in)</argsstring>
+        <name>Label</name>
+        <param>
+          <type>const double &amp;</type>
+          <declname>weight_in</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structbidirectional_1_1Vertex" kindref="compound">bidirectional::Vertex</ref> &amp;</type>
+          <declname>vertex_in</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>resource_consumption_in</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; int &gt; &amp;</type>
+          <declname>partial_path_in</declname>
+        </param>
+        <param>
+          <type><ref refid="classbidirectional_1_1Params" kindref="compound">bidirectional::Params</ref> *</type>
+          <declname>params</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>phi_in</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.h" line="49" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.cc" bodystart="31" bodyend="45"/>
+      </memberdef>
+      <memberdef kind="function" id="classlabelling_1_1Label_1a72d8b0e24b8dbacc1ecb40b3c32265e2" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>labelling::Label::~Label</definition>
+        <argsstring>()</argsstring>
+        <name>~Label</name>
+        <briefdescription>
+<para>default destructor </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.h" line="58" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.h" bodystart="58" bodyend="58"/>
+      </memberdef>
+      <memberdef kind="function" id="classlabelling_1_1Label_1a23f7e5da2fb22dca07977aad9bfa9ad3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref></type>
+        <definition>Label labelling::Label::extend</definition>
+        <argsstring>(const bidirectional::AdjVertex &amp;adjacent_vertex, const bidirectional::Directions &amp;direction, const std::vector&lt; double &gt; &amp;max_res={}, const std::vector&lt; double &gt; &amp;min_res={})</argsstring>
+        <name>extend</name>
+        <param>
+          <type>const <ref refid="structbidirectional_1_1AdjVertex" kindref="compound">bidirectional::AdjVertex</ref> &amp;</type>
+          <declname>adjacent_vertex</declname>
+        </param>
+        <param>
+          <type>const <ref refid="namespacebidirectional_1a4cbe6f0bfbd3629c2cd44c98014aed70" kindref="member">bidirectional::Directions</ref> &amp;</type>
+          <declname>direction</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>max_res</declname>
+          <defval>{}</defval>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>min_res</declname>
+          <defval>{}</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Generate new label extensions from the current label and return only if resource feasible. The input label is a pointer as it may be modified in the case that the edge / adjacent_vertex is found to be resource infeasible, in which case, the head/tail node becomes unreachable and the attribute is updated.</para><para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">label</parametername>
+<parametername direction="out"><ref refid="classlabelling_1_1Label" kindref="compound">labelling::Label</ref></parametername>
+<parametername direction="out">current</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>label to extend (and maybe update <computeroutput>unreachable_nodes</computeroutput>) </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">adjacent_vertex</parametername>
+<parametername direction="in">AdjVertex</parametername>
+<parametername direction="in">edge</parametername>
+</parameternamelist>
+<parameterdescription>
+<para></para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">direction</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Directions </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">elementary</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>bool </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">max_res</parametername>
+<parametername direction="in">vector</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>of double with upper bound(s) for resource consumption </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">min_res</parametername>
+<parametername direction="in">vector</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>of double with lower bound(s) for resource consumption</para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref> object with extended label. Note this may be empty if the extension is resource infeasible </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.h" line="81" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.cc" bodystart="49" bodyend="111"/>
+      </memberdef>
+      <memberdef kind="function" id="classlabelling_1_1Label_1ad5afbf2f5d2c6f208283021186783883" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool labelling::Label::checkDominance</definition>
+        <argsstring>(const Label &amp;other, const bidirectional::Directions &amp;direction) const</argsstring>
+        <name>checkDominance</name>
+        <param>
+          <type>const <ref refid="classlabelling_1_1Label" kindref="compound">Label</ref> &amp;</type>
+          <declname>other</declname>
+        </param>
+        <param>
+          <type>const <ref refid="namespacebidirectional_1a4cbe6f0bfbd3629c2cd44c98014aed70" kindref="member">bidirectional::Directions</ref> &amp;</type>
+          <declname>direction</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Check if this dominates other. Assumes the labels are comparable i.e. same nodes</para><para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">other</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref> </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">direction</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Directions </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">elementary</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>bool, optional </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>bool </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.h" line="96" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.cc" bodystart="207" bodyend="258"/>
+      </memberdef>
+      <memberdef kind="function" id="classlabelling_1_1Label_1a3f59b4a2818a4b0096080cd5f830b73d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool labelling::Label::fullDominance</definition>
+        <argsstring>(const Label &amp;other, const bidirectional::Directions &amp;direction) const</argsstring>
+        <name>fullDominance</name>
+        <param>
+          <type>const <ref refid="classlabelling_1_1Label" kindref="compound">Label</ref> &amp;</type>
+          <declname>other</declname>
+        </param>
+        <param>
+          <type>const <ref refid="namespacebidirectional_1a4cbe6f0bfbd3629c2cd44c98014aed70" kindref="member">bidirectional::Directions</ref> &amp;</type>
+          <declname>direction</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Checks whether <computeroutput>this</computeroutput> dominates <computeroutput>other</computeroutput> for the input direction. In the case when neither dominates , i.e. they are non-dominated, the direction is flipped labels are compared again.</para><para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">other</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref> </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">direction</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Directions </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">elementary</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>bool </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>bool </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.h" line="110" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.cc" bodystart="260" bodyend="282"/>
+      </memberdef>
+      <memberdef kind="function" id="classlabelling_1_1Label_1adc3068c1147414d77f0f7696b4687e69" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool labelling::Label::checkFeasibility</definition>
+        <argsstring>(const std::vector&lt; double &gt; &amp;max_res, const std::vector&lt; double &gt; &amp;min_res, const bool &amp;soft=false) const</argsstring>
+        <name>checkFeasibility</name>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>max_res</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>min_res</declname>
+        </param>
+        <param>
+          <type>const bool &amp;</type>
+          <declname>soft</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Check resource feasibility of current label i.e. <computeroutput>min_res[i] &lt;= resource_consumption[i] &lt;= max_res[i]</computeroutput> for <computeroutput>i</computeroutput> in <computeroutput>0,...,resource_consumption.size()</computeroutput>. If &quot;soft&quot; check, then the lower bound is only checked if either: resource index <computeroutput>i</computeroutput> is the index of the critical resource or <computeroutput>min_res[i]&lt;= 0</computeroutput>(See issue #90). If not &quot;soft&quot;, then all lower bounds are checked as expected.</para><para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">max_res</parametername>
+<parametername direction="in">vector</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>of double with upper bound(s) for resource consumption. Checks values are &lt;= bound </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">min_res</parametername>
+<parametername direction="in">vector</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>of double with lower bound(s) for resource consumption. Checks values are &gt;= bound </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">soft</parametername>
+<parametername direction="in">bool</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>with whether the minimum resources should be checked &quot;softly&quot;. Default is false. </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.h" line="129" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.cc" bodystart="113" bodyend="143"/>
+      </memberdef>
+      <memberdef kind="function" id="classlabelling_1_1Label_1a72d0d91c2d99edbcdc36aa157586cf00" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool labelling::Label::checkThreshold</definition>
+        <argsstring>(const double &amp;threshold) const</argsstring>
+        <name>checkThreshold</name>
+        <param>
+          <type>const double &amp;</type>
+          <declname>threshold</declname>
+        </param>
+        <briefdescription>
+<para>Check if weight is under the input threshold. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.h" line="135" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.cc" bodystart="145" bodyend="149"/>
+      </memberdef>
+      <memberdef kind="function" id="classlabelling_1_1Label_1a0e4957ff69cf08cfdc743df10d50d3c7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool labelling::Label::checkStPath</definition>
+        <argsstring>(const int &amp;source_id, const int &amp;sink_id) const</argsstring>
+        <name>checkStPath</name>
+        <param>
+          <type>const int &amp;</type>
+          <declname>source_id</declname>
+        </param>
+        <param>
+          <type>const int &amp;</type>
+          <declname>sink_id</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Check whether the current partial path is Source - Sink</para><para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">source_id</parametername>
+<parametername direction="in">int</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>with user_id of the source node. </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">sink_id</parametername>
+<parametername direction="in">int</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>with user_id of the sink node. </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.h" line="143" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.cc" bodystart="151" bodyend="156"/>
+      </memberdef>
+      <memberdef kind="function" id="classlabelling_1_1Label_1a496b8a76fd2fe06265b1acc1a508b4ca" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool labelling::Label::checkPathExtension</definition>
+        <argsstring>(const int &amp;user_id) const</argsstring>
+        <name>checkPathExtension</name>
+        <param>
+          <type>const int &amp;</type>
+          <declname>user_id</declname>
+        </param>
+        <briefdescription>
+<para>Returns true is the partial path extension is OK. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.h" line="146" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.cc" bodystart="158" bodyend="169"/>
+      </memberdef>
+      <memberdef kind="function" id="classlabelling_1_1Label_1a5c8dc87a89577d00ccf86251867ec76a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool labelling::Label::checkSameFeasibleExtensionTwoCycleSimple</definition>
+        <argsstring>(const Label &amp;other) const</argsstring>
+        <name>checkSameFeasibleExtensionTwoCycleSimple</name>
+        <param>
+          <type>const <ref refid="classlabelling_1_1Label" kindref="compound">Label</ref> &amp;</type>
+          <declname>other</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Simple check if both lables have the same feasible extension with regard to 2-cycle elimination. this and other have same feasible extension if predecessor is the same. <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">other</parametername>
+<parametername direction="in"><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref></parametername>
+</parameternamelist>
+<parameterdescription>
+<para>with other label to compare </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>true if this and other have same feasible extension </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.h" line="155" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.cc" bodystart="171" bodyend="174"/>
+      </memberdef>
+      <memberdef kind="function" id="classlabelling_1_1Label_1a333b6fc9dba864b3df2cdf530a055aa7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool labelling::Label::checkSameFeasibleExtensionElementary</definition>
+        <argsstring>(const Label &amp;other) const</argsstring>
+        <name>checkSameFeasibleExtensionElementary</name>
+        <param>
+          <type>const <ref refid="classlabelling_1_1Label" kindref="compound">Label</ref> &amp;</type>
+          <declname>other</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Simple check if both lables have the same feasible extension under elementary conditions. this and other have the same feasible extension if unreachable_nodes of this is subset of unreachable_nodes of other <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">other</parametername>
+<parametername direction="in"><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref></parametername>
+</parameternamelist>
+<parameterdescription>
+<para>with other label to compare </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>true if this and other have same feasible extension </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.h" line="165" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.cc" bodystart="176" bodyend="192"/>
+      </memberdef>
+      <memberdef kind="function" id="classlabelling_1_1Label_1a02179d540444a13aa7cc3355d0a461b8" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool labelling::Label::checkSameFeasibleExtension</definition>
+        <argsstring>(const Label &amp;other) const</argsstring>
+        <name>checkSameFeasibleExtension</name>
+        <param>
+          <type>const <ref refid="classlabelling_1_1Label" kindref="compound">Label</ref> &amp;</type>
+          <declname>other</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Check if both lables have the same feasible extension, i.e., if they both can extend to the same nodes. Important for correct dominance check. Labels with different feasible extension cannot dominate each other. <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">other</parametername>
+<parametername direction="in"><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref></parametername>
+</parameternamelist>
+<parameterdescription>
+<para>with other label to compare </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>true if this and other have same feasible extension </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.h" line="175" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.cc" bodystart="194" bodyend="205"/>
+      </memberdef>
+      <memberdef kind="function" id="classlabelling_1_1Label_1afffea46e29dc7074edd10470c5dfeb87" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void labelling::Label::setPhi</definition>
+        <argsstring>(const double &amp;phi_in)</argsstring>
+        <name>setPhi</name>
+        <param>
+          <type>const double &amp;</type>
+          <declname>phi_in</declname>
+        </param>
+        <briefdescription>
+<para>set phi attribute for merged labels from Righini and Salani (2006) </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.h" line="178" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.h" bodystart="178" bodyend="178"/>
+      </memberdef>
+      <memberdef kind="function" id="classlabelling_1_1Label_1a676337cc2e66ddaba088c736b9220651" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>int</type>
+        <definition>int labelling::Label::getPredecessorId</definition>
+        <argsstring>() const</argsstring>
+        <name>getPredecessorId</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>gets the id of the predecessor node TODO can be replaced as member of label </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.h" line="182" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.h" bodystart="182" bodyend="182"/>
+      </memberdef>
+      <memberdef kind="function" id="classlabelling_1_1Label_1adc93c3a59a853bc559bb63e8df1ae67e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>std::string</type>
+        <definition>std::string labelling::Label::getString</definition>
+        <argsstring>() const</argsstring>
+        <name>getString</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.h" line="184" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.cc" bodystart="284" bodyend="297"/>
+      </memberdef>
+      <memberdef kind="function" id="classlabelling_1_1Label_1a96fec70e1378988bb3d01f3aee8ab676" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref> &amp;</type>
+        <definition>Label&amp; labelling::Label::operator=</definition>
+        <argsstring>(const Label &amp;other)=default</argsstring>
+        <name>operator=</name>
+        <param>
+          <type>const <ref refid="classlabelling_1_1Label" kindref="compound">Label</ref> &amp;</type>
+          <declname>other</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.h" line="186" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="friend">
+      <memberdef kind="friend" id="classlabelling_1_1Label_1aac0781be66b1d133b633cef3f60f8183" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>friend bool</type>
+        <definition>bool operator&lt;</definition>
+        <argsstring>(const Label &amp;label1, const Label &amp;label2)</argsstring>
+        <name>operator&lt;</name>
+        <param>
+          <type>const <ref refid="classlabelling_1_1Label" kindref="compound">Label</ref> &amp;</type>
+          <declname>label1</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classlabelling_1_1Label" kindref="compound">Label</ref> &amp;</type>
+          <declname>label2</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.h" line="187" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.cc" bodystart="317" bodyend="321"/>
+      </memberdef>
+      <memberdef kind="friend" id="classlabelling_1_1Label_1a7bd46e6920cac7ede4b725f2d33fb12b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>friend bool</type>
+        <definition>bool operator&gt;</definition>
+        <argsstring>(const Label &amp;label1, const Label &amp;label2)</argsstring>
+        <name>operator&gt;</name>
+        <param>
+          <type>const <ref refid="classlabelling_1_1Label" kindref="compound">Label</ref> &amp;</type>
+          <declname>label1</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classlabelling_1_1Label" kindref="compound">Label</ref> &amp;</type>
+          <declname>label2</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.h" line="188" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.cc" bodystart="323" bodyend="327"/>
+      </memberdef>
+      <memberdef kind="friend" id="classlabelling_1_1Label_1ae52256a096ed1acaf1afaba6458b42ca" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>friend std::ostream &amp;</type>
+        <definition>std::ostream&amp; operator&lt;&lt;</definition>
+        <argsstring>(std::ostream &amp;os, const Label &amp;label)</argsstring>
+        <name>operator&lt;&lt;</name>
+        <param>
+          <type>std::ostream &amp;</type>
+          <declname>os</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classlabelling_1_1Label" kindref="compound">Label</ref> &amp;</type>
+          <declname>label</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.h" line="189" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.cc" bodystart="329" bodyend="331"/>
+      </memberdef>
+      <memberdef kind="friend" id="classlabelling_1_1Label_1abc60b45b5a5310043283c0e6c694cc92" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>friend bool</type>
+        <definition>bool operator==</definition>
+        <argsstring>(const Label &amp;label1, const Label &amp;label2)</argsstring>
+        <name>operator==</name>
+        <param>
+          <type>const <ref refid="classlabelling_1_1Label" kindref="compound">Label</ref> &amp;</type>
+          <declname>label1</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classlabelling_1_1Label" kindref="compound">Label</ref> &amp;</type>
+          <declname>label2</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para>Check every resource for inequality </para>        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.h" line="190" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.cc" bodystart="301" bodyend="315"/>
+      </memberdef>
+      <memberdef kind="friend" id="classlabelling_1_1Label_1a48813c4c8ca8174edcdf9cf34358b442" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>friend bool</type>
+        <definition>bool operator!=</definition>
+        <argsstring>(const Label &amp;label1, const Label &amp;label2)</argsstring>
+        <name>operator!=</name>
+        <param>
+          <type>const <ref refid="classlabelling_1_1Label" kindref="compound">Label</ref> &amp;</type>
+          <declname>label1</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classlabelling_1_1Label" kindref="compound">Label</ref> &amp;</type>
+          <declname>label2</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.h" line="191" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.h" bodystart="191" bodyend="193"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>Single node label. With resource, cost and other attributes.</para><para>Main functionality includes:<itemizedlist>
+<listitem><para>Checking resource feasibility</para></listitem><listitem><para>Checking dominance </para></listitem></itemizedlist>
+</para>    </detaileddescription>
+    <collaborationgraph>
+      <node id="25">
+        <label>set&lt; int &gt;</label>
+      </node>
+      <node id="33">
+        <label>string</label>
+      </node>
+      <node id="23">
+        <label>vector&lt; double &gt;</label>
+      </node>
+      <node id="28">
+        <label>int</label>
+      </node>
+      <node id="24">
+        <label>double</label>
+      </node>
+      <node id="29">
+        <label>bidirectional::Params</label>
+        <link refid="classbidirectional_1_1Params"/>
+        <childnode refid="24" relation="usage">
+          <edgelabel>+threshold</edgelabel>
+          <edgelabel>+time_limit</edgelabel>
+        </childnode>
+        <childnode refid="30" relation="usage">
+          <edgelabel>+ref_callback</edgelabel>
+        </childnode>
+        <childnode refid="31" relation="usage">
+          <edgelabel>+direction</edgelabel>
+        </childnode>
+        <childnode refid="28" relation="usage">
+          <edgelabel>+critical_res</edgelabel>
+        </childnode>
+        <childnode refid="32" relation="usage">
+          <edgelabel>+bounds_pruning</edgelabel>
+          <edgelabel>+find_critical_res</edgelabel>
+          <edgelabel>+elementary</edgelabel>
+          <edgelabel>+two_cycle_elimination</edgelabel>
+        </childnode>
+        <childnode refid="33" relation="usage">
+          <edgelabel>+method</edgelabel>
+        </childnode>
+      </node>
+      <node id="26">
+        <label>vector&lt; int &gt;</label>
+      </node>
+      <node id="30">
+        <label>bidirectional::REFCallback</label>
+        <link refid="classbidirectional_1_1REFCallback"/>
+      </node>
+      <node id="31">
+        <label>Directions</label>
+      </node>
+      <node id="22">
+        <label>labelling::Label</label>
+        <link refid="classlabelling_1_1Label"/>
+        <childnode refid="23" relation="usage">
+          <edgelabel>+resource_consumption</edgelabel>
+        </childnode>
+        <childnode refid="24" relation="usage">
+          <edgelabel>+phi</edgelabel>
+          <edgelabel>+weight</edgelabel>
+        </childnode>
+        <childnode refid="25" relation="usage">
+          <edgelabel>+unreachable_nodes</edgelabel>
+        </childnode>
+        <childnode refid="26" relation="usage">
+          <edgelabel>+partial_path</edgelabel>
+        </childnode>
+        <childnode refid="27" relation="usage">
+          <edgelabel>+vertex</edgelabel>
+        </childnode>
+        <childnode refid="29" relation="usage">
+          <edgelabel>+params_ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="32">
+        <label>bool</label>
+      </node>
+      <node id="27">
+        <label>bidirectional::Vertex</label>
+        <link refid="structbidirectional_1_1Vertex"/>
+        <childnode refid="28" relation="usage">
+          <edgelabel>+user_id</edgelabel>
+          <edgelabel>+lemon_id</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.h" line="24" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.h" bodystart="24" bodyend="194"/>
+    <listofallmembers>
+      <member refid="classlabelling_1_1Label_1ad5afbf2f5d2c6f208283021186783883" prot="public" virt="non-virtual"><scope>labelling::Label</scope><name>checkDominance</name></member>
+      <member refid="classlabelling_1_1Label_1adc3068c1147414d77f0f7696b4687e69" prot="public" virt="non-virtual"><scope>labelling::Label</scope><name>checkFeasibility</name></member>
+      <member refid="classlabelling_1_1Label_1a496b8a76fd2fe06265b1acc1a508b4ca" prot="public" virt="non-virtual"><scope>labelling::Label</scope><name>checkPathExtension</name></member>
+      <member refid="classlabelling_1_1Label_1a02179d540444a13aa7cc3355d0a461b8" prot="public" virt="non-virtual"><scope>labelling::Label</scope><name>checkSameFeasibleExtension</name></member>
+      <member refid="classlabelling_1_1Label_1a333b6fc9dba864b3df2cdf530a055aa7" prot="public" virt="non-virtual"><scope>labelling::Label</scope><name>checkSameFeasibleExtensionElementary</name></member>
+      <member refid="classlabelling_1_1Label_1a5c8dc87a89577d00ccf86251867ec76a" prot="public" virt="non-virtual"><scope>labelling::Label</scope><name>checkSameFeasibleExtensionTwoCycleSimple</name></member>
+      <member refid="classlabelling_1_1Label_1a0e4957ff69cf08cfdc743df10d50d3c7" prot="public" virt="non-virtual"><scope>labelling::Label</scope><name>checkStPath</name></member>
+      <member refid="classlabelling_1_1Label_1a72d0d91c2d99edbcdc36aa157586cf00" prot="public" virt="non-virtual"><scope>labelling::Label</scope><name>checkThreshold</name></member>
+      <member refid="classlabelling_1_1Label_1a23f7e5da2fb22dca07977aad9bfa9ad3" prot="public" virt="non-virtual"><scope>labelling::Label</scope><name>extend</name></member>
+      <member refid="classlabelling_1_1Label_1a3f59b4a2818a4b0096080cd5f830b73d" prot="public" virt="non-virtual"><scope>labelling::Label</scope><name>fullDominance</name></member>
+      <member refid="classlabelling_1_1Label_1a676337cc2e66ddaba088c736b9220651" prot="public" virt="non-virtual"><scope>labelling::Label</scope><name>getPredecessorId</name></member>
+      <member refid="classlabelling_1_1Label_1adc93c3a59a853bc559bb63e8df1ae67e" prot="public" virt="non-virtual"><scope>labelling::Label</scope><name>getString</name></member>
+      <member refid="classlabelling_1_1Label_1a3728b76c8b32589e04ecaac821f11733" prot="public" virt="non-virtual"><scope>labelling::Label</scope><name>Label</name></member>
+      <member refid="classlabelling_1_1Label_1a6861a92f1825ed3bb9ea46515cdf1d16" prot="public" virt="non-virtual"><scope>labelling::Label</scope><name>Label</name></member>
+      <member refid="classlabelling_1_1Label_1a255f1384159b9748980f824eb1ddb5f8" prot="public" virt="non-virtual"><scope>labelling::Label</scope><name>Label</name></member>
+      <member refid="classlabelling_1_1Label_1a48813c4c8ca8174edcdf9cf34358b442" prot="public" virt="non-virtual"><scope>labelling::Label</scope><name>operator!=</name></member>
+      <member refid="classlabelling_1_1Label_1aac0781be66b1d133b633cef3f60f8183" prot="public" virt="non-virtual"><scope>labelling::Label</scope><name>operator&lt;</name></member>
+      <member refid="classlabelling_1_1Label_1ae52256a096ed1acaf1afaba6458b42ca" prot="public" virt="non-virtual"><scope>labelling::Label</scope><name>operator&lt;&lt;</name></member>
+      <member refid="classlabelling_1_1Label_1a96fec70e1378988bb3d01f3aee8ab676" prot="public" virt="non-virtual"><scope>labelling::Label</scope><name>operator=</name></member>
+      <member refid="classlabelling_1_1Label_1abc60b45b5a5310043283c0e6c694cc92" prot="public" virt="non-virtual"><scope>labelling::Label</scope><name>operator==</name></member>
+      <member refid="classlabelling_1_1Label_1a7bd46e6920cac7ede4b725f2d33fb12b" prot="public" virt="non-virtual"><scope>labelling::Label</scope><name>operator&gt;</name></member>
+      <member refid="classlabelling_1_1Label_1a182759fd08c2536f9e6a2614c790b127" prot="public" virt="non-virtual"><scope>labelling::Label</scope><name>params_ptr</name></member>
+      <member refid="classlabelling_1_1Label_1a7511d29a3aa0272b1a0e1ea5fb75ff14" prot="public" virt="non-virtual"><scope>labelling::Label</scope><name>partial_path</name></member>
+      <member refid="classlabelling_1_1Label_1a632cd90937f05a8ea69ad60d4c103c66" prot="public" virt="non-virtual"><scope>labelling::Label</scope><name>phi</name></member>
+      <member refid="classlabelling_1_1Label_1a2c185387fad46a29bce3dd99b111a1c4" prot="public" virt="non-virtual"><scope>labelling::Label</scope><name>resource_consumption</name></member>
+      <member refid="classlabelling_1_1Label_1afffea46e29dc7074edd10470c5dfeb87" prot="public" virt="non-virtual"><scope>labelling::Label</scope><name>setPhi</name></member>
+      <member refid="classlabelling_1_1Label_1ae684804e463fe690b4fe6ee32812e123" prot="public" virt="non-virtual"><scope>labelling::Label</scope><name>unreachable_nodes</name></member>
+      <member refid="classlabelling_1_1Label_1a7c8972ee9d1c00fd348025c321467f75" prot="public" virt="non-virtual"><scope>labelling::Label</scope><name>vertex</name></member>
+      <member refid="classlabelling_1_1Label_1a478f34a67528586877720483c5f0d38b" prot="public" virt="non-virtual"><scope>labelling::Label</scope><name>weight</name></member>
+      <member refid="classlabelling_1_1Label_1a72d8b0e24b8dbacc1ecb40b3c32265e2" prot="public" virt="non-virtual"><scope>labelling::Label</scope><name>~Label</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

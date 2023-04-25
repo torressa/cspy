@@ -1,0 +1,424 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="classbidirectional_1_1Params" kind="class" language="C++" prot="public">
+    <compoundname>bidirectional::Params</compoundname>
+    <includes refid="params_8h" local="no">params.h</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="classbidirectional_1_1Params_1a1d461034d1a1e04fa7f00cb63cd230d8" prot="public" static="no" mutable="no">
+        <type><ref refid="namespacebidirectional_1a4cbe6f0bfbd3629c2cd44c98014aed70" kindref="member">Directions</ref></type>
+        <definition>Directions bidirectional::Params::direction</definition>
+        <argsstring></argsstring>
+        <name>direction</name>
+        <initializer>= <ref refid="namespacebidirectional_1a4cbe6f0bfbd3629c2cd44c98014aed70ab50b3fbd895a667b43b3e9eb3bd54f85" kindref="member">bidirectional::BOTH</ref></initializer>
+        <briefdescription>
+<para>Direction for search. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/params.h" line="29" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/params.h" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classbidirectional_1_1Params_1a2faf36e89993c9fd0979e3e42b2332ea" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string bidirectional::Params::method</definition>
+        <argsstring></argsstring>
+        <name>method</name>
+        <initializer>= &quot;unprocessed&quot;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>string with method to determine the next direction of search. Options are: unprocessed, processed and generated. </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/params.h" line="32" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/params.h" bodystart="32" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classbidirectional_1_1Params_1a2c0fd34b19d753cfce75690a5d68e1e1" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double bidirectional::Params::time_limit</definition>
+        <argsstring></argsstring>
+        <name>time_limit</name>
+        <initializer>= std::nan(&quot;na&quot;)</initializer>
+        <briefdescription>
+<para>double with time limit in seconds </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/params.h" line="34" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/params.h" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classbidirectional_1_1Params_1ac7099f442d46b684fcbe55ba9c6657e4" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double bidirectional::Params::threshold</definition>
+        <argsstring></argsstring>
+        <name>threshold</name>
+        <initializer>= std::nan(&quot;na&quot;)</initializer>
+        <briefdescription>
+<para>double with threshold to stop search with total cost &lt;= threshold </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/params.h" line="36" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/params.h" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classbidirectional_1_1Params_1aa19060565463ffc251019a1dea026e6d" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool bidirectional::Params::elementary</definition>
+        <argsstring></argsstring>
+        <name>elementary</name>
+        <initializer>= false</initializer>
+        <briefdescription>
+<para>bool with whether output path is required to be elementary </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/params.h" line="38" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/params.h" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classbidirectional_1_1Params_1ade4211d18d72a33dccb323ea1861fe70" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool bidirectional::Params::two_cycle_elimination</definition>
+        <argsstring></argsstring>
+        <name>two_cycle_elimination</name>
+        <initializer>= false</initializer>
+        <briefdescription>
+<para>bool with whether 2-cycles should be eliminated for non-elementary RCSPP </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/params.h" line="40" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/params.h" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classbidirectional_1_1Params_1a1a452cc4956571752b946165a899f850" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool bidirectional::Params::bounds_pruning</definition>
+        <argsstring></argsstring>
+        <name>bounds_pruning</name>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>bool with whether lower bounds based on shortest paths are used to prune labels. Experimental! </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/params.h" line="43" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/params.h" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classbidirectional_1_1Params_1aafe66809d74beb22c445a72ca7955f85" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool bidirectional::Params::find_critical_res</definition>
+        <argsstring></argsstring>
+        <name>find_critical_res</name>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>bool with whether critical resource is found at the preprocessing stage. <simplesect kind="see"><para><ref refid="namespacebidirectional_1a7b92b2282139801a9e2668a743ad07a1" kindref="member">getCriticalRes</ref>. overrides <ref refid="classbidirectional_1_1Params_1a7d318c4af901a82c3f566d59c6de1b62" kindref="member">critical_res</ref> value. Default false. </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/params.h" line="46" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/params.h" bodystart="46" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classbidirectional_1_1Params_1a7d318c4af901a82c3f566d59c6de1b62" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int bidirectional::Params::critical_res</definition>
+        <argsstring></argsstring>
+        <name>critical_res</name>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Resource id for the critical resource used in dominance checks and choosing the halfway point. Default is 0. </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/params.h" line="49" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/params.h" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classbidirectional_1_1Params_1afa96dcebb31c930ea4bd339fc72779a5" prot="public" static="no" mutable="no">
+        <type><ref refid="classbidirectional_1_1REFCallback" kindref="compound">bidirectional::REFCallback</ref> *</type>
+        <definition>bidirectional::REFCallback* bidirectional::Params::ref_callback</definition>
+        <argsstring></argsstring>
+        <name>ref_callback</name>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+<para>Callback to custom REF. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/params.h" line="51" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/params.h" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classbidirectional_1_1Params_1a4873db87f0c812884543365b3a075de2" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>bidirectional::Params::Params</definition>
+        <argsstring>()</argsstring>
+        <name>Params</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/params.h" line="55" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/params.h" bodystart="55" bodyend="55"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1Params_1a2f4b540e09b10800d412da8af5ddfb2a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>bidirectional::Params::~Params</definition>
+        <argsstring>()</argsstring>
+        <name>~Params</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/params.h" line="56" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/params.h" bodystart="56" bodyend="59"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1Params_1a8cd76d63403256defcfff896d33a4fc6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void bidirectional::Params::setDirection</definition>
+        <argsstring>(const std::string &amp;direction_in)</argsstring>
+        <name>setDirection</name>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>direction_in</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/params.h" line="64" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/params.h" bodystart="64" bodyend="69"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1Params_1ac469873b9d5dbc166ee387b9ddc968f5" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void bidirectional::Params::setMethod</definition>
+        <argsstring>(const std::string &amp;method_in)</argsstring>
+        <name>setMethod</name>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>method_in</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/params.h" line="70" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/params.h" bodystart="70" bodyend="70"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1Params_1a6d2cd9d82200130aa3bca9f207e85422" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void bidirectional::Params::setTimeLimit</definition>
+        <argsstring>(const double &amp;time_limit_in)</argsstring>
+        <name>setTimeLimit</name>
+        <param>
+          <type>const double &amp;</type>
+          <declname>time_limit_in</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/params.h" line="71" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/params.h" bodystart="71" bodyend="71"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1Params_1a6c8b580515f2730f7b8362c8c86efc4d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void bidirectional::Params::setThreshold</definition>
+        <argsstring>(const double &amp;threshold_in)</argsstring>
+        <name>setThreshold</name>
+        <param>
+          <type>const double &amp;</type>
+          <declname>threshold_in</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/params.h" line="72" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/params.h" bodystart="72" bodyend="72"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1Params_1aeb8196a318f012a4fb1756c4f267f030" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void bidirectional::Params::setElementary</definition>
+        <argsstring>(const bool &amp;elementary_in)</argsstring>
+        <name>setElementary</name>
+        <param>
+          <type>const bool &amp;</type>
+          <declname>elementary_in</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/params.h" line="73" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/params.h" bodystart="73" bodyend="73"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1Params_1acc5edce835f155bb15c3edcb991d1fb0" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void bidirectional::Params::setTwoCycleElimination</definition>
+        <argsstring>(const bool &amp;two_cycle_elimination_in)</argsstring>
+        <name>setTwoCycleElimination</name>
+        <param>
+          <type>const bool &amp;</type>
+          <declname>two_cycle_elimination_in</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/params.h" line="74" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/params.h" bodystart="74" bodyend="76"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1Params_1adc2cc88c79856b8f6aed271b99c60bd2" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void bidirectional::Params::setBoundsPruning</definition>
+        <argsstring>(const bool &amp;bounds_pruning_in)</argsstring>
+        <name>setBoundsPruning</name>
+        <param>
+          <type>const bool &amp;</type>
+          <declname>bounds_pruning_in</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/params.h" line="77" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/params.h" bodystart="77" bodyend="79"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1Params_1a3c344fd31c2bd86c4308e65169546a1b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void bidirectional::Params::setFindCriticalRes</definition>
+        <argsstring>(const bool &amp;find_critical_res_in)</argsstring>
+        <name>setFindCriticalRes</name>
+        <param>
+          <type>const bool &amp;</type>
+          <declname>find_critical_res_in</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/params.h" line="80" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/params.h" bodystart="80" bodyend="82"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1Params_1a4cb80c6a553af542ee696b63f031d547" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void bidirectional::Params::setCriticalRes</definition>
+        <argsstring>(const int &amp;critical_res_in)</argsstring>
+        <name>setCriticalRes</name>
+        <param>
+          <type>const int &amp;</type>
+          <declname>critical_res_in</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/params.h" line="83" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/params.h" bodystart="83" bodyend="85"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1Params_1a1f73fd12554f071113a5487a78e53d49" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void bidirectional::Params::setREFCallback</definition>
+        <argsstring>(bidirectional::REFCallback *cb)</argsstring>
+        <name>setREFCallback</name>
+        <param>
+          <type><ref refid="classbidirectional_1_1REFCallback" kindref="compound">bidirectional::REFCallback</ref> *</type>
+          <declname>cb</declname>
+        </param>
+        <briefdescription>
+<para>Set callback for custom resource extensions. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/params.h" line="87" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/params.h" bodystart="87" bodyend="87"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>Input parameters. </para>    </detaileddescription>
+    <collaborationgraph>
+      <node id="41">
+        <label>string</label>
+      </node>
+      <node id="39">
+        <label>int</label>
+      </node>
+      <node id="36">
+        <label>double</label>
+      </node>
+      <node id="35">
+        <label>bidirectional::Params</label>
+        <link refid="classbidirectional_1_1Params"/>
+        <childnode refid="36" relation="usage">
+          <edgelabel>+threshold</edgelabel>
+          <edgelabel>+time_limit</edgelabel>
+        </childnode>
+        <childnode refid="37" relation="usage">
+          <edgelabel>+ref_callback</edgelabel>
+        </childnode>
+        <childnode refid="38" relation="usage">
+          <edgelabel>+direction</edgelabel>
+        </childnode>
+        <childnode refid="39" relation="usage">
+          <edgelabel>+critical_res</edgelabel>
+        </childnode>
+        <childnode refid="40" relation="usage">
+          <edgelabel>+bounds_pruning</edgelabel>
+          <edgelabel>+find_critical_res</edgelabel>
+          <edgelabel>+elementary</edgelabel>
+          <edgelabel>+two_cycle_elimination</edgelabel>
+        </childnode>
+        <childnode refid="41" relation="usage">
+          <edgelabel>+method</edgelabel>
+        </childnode>
+      </node>
+      <node id="37">
+        <label>bidirectional::REFCallback</label>
+        <link refid="classbidirectional_1_1REFCallback"/>
+      </node>
+      <node id="38">
+        <label>Directions</label>
+      </node>
+      <node id="40">
+        <label>bool</label>
+      </node>
+    </collaborationgraph>
+    <location file="/__w/cspy/cspy/torressa/cspy/src/cc/params.h" line="26" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/params.h" bodystart="26" bodyend="88"/>
+    <listofallmembers>
+      <member refid="classbidirectional_1_1Params_1a1a452cc4956571752b946165a899f850" prot="public" virt="non-virtual"><scope>bidirectional::Params</scope><name>bounds_pruning</name></member>
+      <member refid="classbidirectional_1_1Params_1a7d318c4af901a82c3f566d59c6de1b62" prot="public" virt="non-virtual"><scope>bidirectional::Params</scope><name>critical_res</name></member>
+      <member refid="classbidirectional_1_1Params_1a1d461034d1a1e04fa7f00cb63cd230d8" prot="public" virt="non-virtual"><scope>bidirectional::Params</scope><name>direction</name></member>
+      <member refid="classbidirectional_1_1Params_1aa19060565463ffc251019a1dea026e6d" prot="public" virt="non-virtual"><scope>bidirectional::Params</scope><name>elementary</name></member>
+      <member refid="classbidirectional_1_1Params_1aafe66809d74beb22c445a72ca7955f85" prot="public" virt="non-virtual"><scope>bidirectional::Params</scope><name>find_critical_res</name></member>
+      <member refid="classbidirectional_1_1Params_1a2faf36e89993c9fd0979e3e42b2332ea" prot="public" virt="non-virtual"><scope>bidirectional::Params</scope><name>method</name></member>
+      <member refid="classbidirectional_1_1Params_1a4873db87f0c812884543365b3a075de2" prot="public" virt="non-virtual"><scope>bidirectional::Params</scope><name>Params</name></member>
+      <member refid="classbidirectional_1_1Params_1afa96dcebb31c930ea4bd339fc72779a5" prot="public" virt="non-virtual"><scope>bidirectional::Params</scope><name>ref_callback</name></member>
+      <member refid="classbidirectional_1_1Params_1adc2cc88c79856b8f6aed271b99c60bd2" prot="public" virt="non-virtual"><scope>bidirectional::Params</scope><name>setBoundsPruning</name></member>
+      <member refid="classbidirectional_1_1Params_1a4cb80c6a553af542ee696b63f031d547" prot="public" virt="non-virtual"><scope>bidirectional::Params</scope><name>setCriticalRes</name></member>
+      <member refid="classbidirectional_1_1Params_1a8cd76d63403256defcfff896d33a4fc6" prot="public" virt="non-virtual"><scope>bidirectional::Params</scope><name>setDirection</name></member>
+      <member refid="classbidirectional_1_1Params_1aeb8196a318f012a4fb1756c4f267f030" prot="public" virt="non-virtual"><scope>bidirectional::Params</scope><name>setElementary</name></member>
+      <member refid="classbidirectional_1_1Params_1a3c344fd31c2bd86c4308e65169546a1b" prot="public" virt="non-virtual"><scope>bidirectional::Params</scope><name>setFindCriticalRes</name></member>
+      <member refid="classbidirectional_1_1Params_1ac469873b9d5dbc166ee387b9ddc968f5" prot="public" virt="non-virtual"><scope>bidirectional::Params</scope><name>setMethod</name></member>
+      <member refid="classbidirectional_1_1Params_1a1f73fd12554f071113a5487a78e53d49" prot="public" virt="non-virtual"><scope>bidirectional::Params</scope><name>setREFCallback</name></member>
+      <member refid="classbidirectional_1_1Params_1a6c8b580515f2730f7b8362c8c86efc4d" prot="public" virt="non-virtual"><scope>bidirectional::Params</scope><name>setThreshold</name></member>
+      <member refid="classbidirectional_1_1Params_1a6d2cd9d82200130aa3bca9f207e85422" prot="public" virt="non-virtual"><scope>bidirectional::Params</scope><name>setTimeLimit</name></member>
+      <member refid="classbidirectional_1_1Params_1acc5edce835f155bb15c3edcb991d1fb0" prot="public" virt="non-virtual"><scope>bidirectional::Params</scope><name>setTwoCycleElimination</name></member>
+      <member refid="classbidirectional_1_1Params_1ac7099f442d46b684fcbe55ba9c6657e4" prot="public" virt="non-virtual"><scope>bidirectional::Params</scope><name>threshold</name></member>
+      <member refid="classbidirectional_1_1Params_1a2c0fd34b19d753cfce75690a5d68e1e1" prot="public" virt="non-virtual"><scope>bidirectional::Params</scope><name>time_limit</name></member>
+      <member refid="classbidirectional_1_1Params_1ade4211d18d72a33dccb323ea1861fe70" prot="public" virt="non-virtual"><scope>bidirectional::Params</scope><name>two_cycle_elimination</name></member>
+      <member refid="classbidirectional_1_1Params_1a2f4b540e09b10800d412da8af5ddfb2a" prot="public" virt="non-virtual"><scope>bidirectional::Params</scope><name>~Params</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

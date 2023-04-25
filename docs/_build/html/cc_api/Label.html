@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Labelling &mdash; cspy 1.0.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Preprocessing" href="preprocessing.html" />
+    <link rel="prev" title="Vertex" href="Vertex.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            cspy
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how_to.html">Using <cite>cspy</cite></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ref.html">Resource Extension Functions (REFs)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../python_api/cspy.BiDirectional.html">cspy.BiDirectional</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python_api/cspy.Tabu.html">cspy.Tabu</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python_api/cspy.GreedyElim.html">cspy.GreedyElim</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python_api/cspy.GRASP.html">cspy.GRASP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python_api/cspy.PSOLGENT.html">cspy.PSOLGENT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python_api/cspy.preprocess_graph.html">cspy.preprocess_graph</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python_api/cspy.check.html">cspy.check</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">C++ API</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="BiDirectional.html">BiDirectional</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Search.html">Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="REFCallback.html">REFCallback</a></li>
+<li class="toctree-l1"><a class="reference internal" href="params.html">Params</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DiGraph.html">DiGraph</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Vertex.html">Vertex</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Labelling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="preprocessing.html">Preprocessing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">cspy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Labelling</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/cc_api/Label.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="labelling">
+<h1>Labelling<a class="headerlink" href="#labelling" title="Permalink to this heading"></a></h1>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N9labelling5LabelE">
+<span id="_CPPv3N9labelling5LabelE"></span><span id="_CPPv2N9labelling5LabelE"></span><span id="labelling::Label"></span><span class="target" id="classlabelling_1_1Label"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Label</span></span></span><a class="headerlink" href="#_CPPv4N9labelling5LabelE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Single node label. With resource, cost and other attributes.</p>
+<p>Main functionality includes:<ul class="simple">
+<li><p>Checking resource feasibility</p></li>
+<li><p>Checking dominance </p></li>
+</ul>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N9labelling5Label5LabelEv">
+<span id="_CPPv3N9labelling5Label5LabelEv"></span><span id="_CPPv2N9labelling5Label5LabelEv"></span><span id="labelling::Label::Label"></span><span class="target" id="classlabelling_1_1Label_1a3728b76c8b32589e04ecaac821f11733"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Label</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9labelling5Label5LabelEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Dummy constructor. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N9labelling5Label5LabelERKdRKN13bidirectional6VertexERKNSt6vectorIdEERKNSt6vectorIiEEPN13bidirectional6ParamsE">
+<span id="_CPPv3N9labelling5Label5LabelERKdRKN13bidirectional6VertexERKNSt6vectorIdEERKNSt6vectorIiEEPN13bidirectional6ParamsE"></span><span id="_CPPv2N9labelling5Label5LabelERKdRKN13bidirectional6VertexERKNSt6vectorIdEERKNSt6vectorIiEEPN13bidirectional6ParamsE"></span><span id="labelling::Label::Label__doubleCR.bidirectional::VertexCR.std::vector:double:CR.std::vector:i:CR.bidirectional::ParamsP"></span><span class="target" id="classlabelling_1_1Label_1a6861a92f1825ed3bb9ea46515cdf1d16"></span><span class="sig-name descname"><span class="n"><span class="pre">Label</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">weight_in</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">bidirectional</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="Vertex.html#_CPPv4N13bidirectional6VertexE" title="bidirectional::Vertex"><span class="n"><span class="pre">Vertex</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">vertex_in</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">resource_consumption_in</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">int</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">partial_path_in</span></span>, <span class="n"><span class="pre">bidirectional</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Params</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">params</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9labelling5Label5LabelERKdRKN13bidirectional6VertexERKNSt6vectorIdEERKNSt6vectorIiEEPN13bidirectional6ParamsE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Constructor. </p>
+<p><a class="reference internal" href="#classlabelling_1_1Label"><span class="std std-ref">Label</span></a></p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N9labelling5Label5LabelERKdRKN13bidirectional6VertexERKNSt6vectorIdEERKNSt6vectorIiEEPN13bidirectional6ParamsERKd">
+<span id="_CPPv3N9labelling5Label5LabelERKdRKN13bidirectional6VertexERKNSt6vectorIdEERKNSt6vectorIiEEPN13bidirectional6ParamsERKd"></span><span id="_CPPv2N9labelling5Label5LabelERKdRKN13bidirectional6VertexERKNSt6vectorIdEERKNSt6vectorIiEEPN13bidirectional6ParamsERKd"></span><span id="labelling::Label::Label__doubleCR.bidirectional::VertexCR.std::vector:double:CR.std::vector:i:CR.bidirectional::ParamsP.doubleCR"></span><span class="target" id="classlabelling_1_1Label_1a255f1384159b9748980f824eb1ddb5f8"></span><span class="sig-name descname"><span class="n"><span class="pre">Label</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">weight_in</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">bidirectional</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="Vertex.html#_CPPv4N13bidirectional6VertexE" title="bidirectional::Vertex"><span class="n"><span class="pre">Vertex</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">vertex_in</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">resource_consumption_in</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">int</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">partial_path_in</span></span>, <span class="n"><span class="pre">bidirectional</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Params</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">params</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">phi_in</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9labelling5Label5LabelERKdRKN13bidirectional6VertexERKNSt6vectorIdEERKNSt6vectorIiEEPN13bidirectional6ParamsERKd" title="Permalink to this definition"></a><br /></dt>
+<dd><p>This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N9labelling5LabelD0Ev">
+<span id="_CPPv3N9labelling5LabelD0Ev"></span><span id="_CPPv2N9labelling5LabelD0Ev"></span><span id="labelling::Label::~Label"></span><span class="target" id="classlabelling_1_1Label_1a72d8b0e24b8dbacc1ecb40b3c32265e2"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">~Label</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9labelling5LabelD0Ev" title="Permalink to this definition"></a><br /></dt>
+<dd><p>default destructor </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N9labelling5Label6extendERKN13bidirectional9AdjVertexERKN13bidirectional10DirectionsERKNSt6vectorIdEERKNSt6vectorIdEE">
+<span id="_CPPv3N9labelling5Label6extendERKN13bidirectional9AdjVertexERKN13bidirectional10DirectionsERKNSt6vectorIdEERKNSt6vectorIdEE"></span><span id="_CPPv2N9labelling5Label6extendERKN13bidirectional9AdjVertexERKN13bidirectional10DirectionsERKNSt6vectorIdEERKNSt6vectorIdEE"></span><span id="labelling::Label::extend__bidirectional::AdjVertexCR.bidirectional::DirectionsCR.std::vector:double:CR.std::vector:double:CR"></span><span class="target" id="classlabelling_1_1Label_1a23f7e5da2fb22dca07977aad9bfa9ad3"></span><a class="reference internal" href="#_CPPv4N9labelling5LabelE" title="labelling::Label"><span class="n"><span class="pre">Label</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">extend</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">bidirectional</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="Vertex.html#_CPPv4N13bidirectional9AdjVertexE" title="bidirectional::AdjVertex"><span class="n"><span class="pre">AdjVertex</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">adjacent_vertex</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">bidirectional</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="params.html#_CPPv4N13bidirectional10DirectionsE" title="bidirectional::Directions"><span class="n"><span class="pre">Directions</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">direction</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">max_res</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="p"><span class="pre">}</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">min_res</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="p"><span class="pre">}</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9labelling5Label6extendERKN13bidirectional9AdjVertexERKN13bidirectional10DirectionsERKNSt6vectorIdEERKNSt6vectorIdEE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Generate new label extensions from the current label and return only if resource feasible. The input label is a pointer as it may be modified in the case that the edge / adjacent_vertex is found to be resource infeasible, in which case, the head/tail node becomes unreachable and the attribute is updated.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>label, labelling::Label, current</strong> – <strong>[out]</strong> label to extend (and maybe update <code class="docutils literal notranslate"><span class="pre">unreachable_nodes</span></code>) </p></li>
+<li><p><strong>adjacent_vertex, AdjVertex, edge</strong> – <strong>[in]</strong> </p></li>
+<li><p><strong>direction</strong> – <strong>[in]</strong> Directions </p></li>
+<li><p><strong>elementary</strong> – <strong>[in]</strong> bool </p></li>
+<li><p><strong>max_res, vector</strong> – <strong>[in]</strong> of double with upper bound(s) for resource consumption </p></li>
+<li><p><strong>min_res, vector</strong> – <strong>[in]</strong> of double with lower bound(s) for resource consumption</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><a class="reference internal" href="#classlabelling_1_1Label"><span class="std std-ref">Label</span></a> object with extended label. Note this may be empty if the extension is resource infeasible </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK9labelling5Label14checkDominanceERK5LabelRKN13bidirectional10DirectionsE">
+<span id="_CPPv3NK9labelling5Label14checkDominanceERK5LabelRKN13bidirectional10DirectionsE"></span><span id="_CPPv2NK9labelling5Label14checkDominanceERK5LabelRKN13bidirectional10DirectionsE"></span><span id="labelling::Label::checkDominance__LabelCR.bidirectional::DirectionsCRC"></span><span class="target" id="classlabelling_1_1Label_1ad5afbf2f5d2c6f208283021186783883"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">checkDominance</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N9labelling5LabelE" title="labelling::Label"><span class="n"><span class="pre">Label</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">other</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">bidirectional</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="params.html#_CPPv4N13bidirectional10DirectionsE" title="bidirectional::Directions"><span class="n"><span class="pre">Directions</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">direction</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK9labelling5Label14checkDominanceERK5LabelRKN13bidirectional10DirectionsE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Check if this dominates other. Assumes the labels are comparable i.e. same nodes</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>other</strong> – <strong>[in]</strong> <a class="reference internal" href="#classlabelling_1_1Label"><span class="std std-ref">Label</span></a></p></li>
+<li><p><strong>direction</strong> – <strong>[in]</strong> Directions </p></li>
+<li><p><strong>elementary</strong> – <strong>[in]</strong> bool, optional </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>bool </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK9labelling5Label13fullDominanceERK5LabelRKN13bidirectional10DirectionsE">
+<span id="_CPPv3NK9labelling5Label13fullDominanceERK5LabelRKN13bidirectional10DirectionsE"></span><span id="_CPPv2NK9labelling5Label13fullDominanceERK5LabelRKN13bidirectional10DirectionsE"></span><span id="labelling::Label::fullDominance__LabelCR.bidirectional::DirectionsCRC"></span><span class="target" id="classlabelling_1_1Label_1a3f59b4a2818a4b0096080cd5f830b73d"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">fullDominance</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N9labelling5LabelE" title="labelling::Label"><span class="n"><span class="pre">Label</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">other</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">bidirectional</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="params.html#_CPPv4N13bidirectional10DirectionsE" title="bidirectional::Directions"><span class="n"><span class="pre">Directions</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">direction</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK9labelling5Label13fullDominanceERK5LabelRKN13bidirectional10DirectionsE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Checks whether <code class="docutils literal notranslate"><span class="pre">this</span></code> dominates <code class="docutils literal notranslate"><span class="pre">other</span></code> for the input direction. In the case when neither dominates , i.e. they are non-dominated, the direction is flipped labels are compared again.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>other</strong> – <strong>[in]</strong> <a class="reference internal" href="#classlabelling_1_1Label"><span class="std std-ref">Label</span></a></p></li>
+<li><p><strong>direction</strong> – <strong>[in]</strong> Directions </p></li>
+<li><p><strong>elementary</strong> – <strong>[in]</strong> bool </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>bool </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK9labelling5Label16checkFeasibilityERKNSt6vectorIdEERKNSt6vectorIdEERKb">
+<span id="_CPPv3NK9labelling5Label16checkFeasibilityERKNSt6vectorIdEERKNSt6vectorIdEERKb"></span><span id="_CPPv2NK9labelling5Label16checkFeasibilityERKNSt6vectorIdEERKNSt6vectorIdEERKb"></span><span id="labelling::Label::checkFeasibility__std::vector:double:CR.std::vector:double:CR.bCRC"></span><span class="target" id="classlabelling_1_1Label_1adc3068c1147414d77f0f7696b4687e69"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">checkFeasibility</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">max_res</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">min_res</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">soft</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">false</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK9labelling5Label16checkFeasibilityERKNSt6vectorIdEERKNSt6vectorIdEERKb" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Check resource feasibility of current label i.e. <code class="docutils literal notranslate"><span class="pre">min_res[i]</span> <span class="pre">&lt;=</span> <span class="pre">resource_consumption[i]</span> <span class="pre">&lt;=</span> <span class="pre">max_res[i]</span></code> for <code class="docutils literal notranslate"><span class="pre">i</span></code> in <code class="docutils literal notranslate"><span class="pre">0,...,resource_consumption.size()</span></code>. If “soft” check, then the lower bound is only checked if either: resource index <code class="docutils literal notranslate"><span class="pre">i</span></code> is the index of the critical resource or <code class="docutils literal notranslate"><span class="pre">min_res[i]&lt;=</span> <span class="pre">0</span></code>(See issue #90). If not “soft”, then all lower bounds are checked as expected.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>max_res, vector</strong> – <strong>[in]</strong> of double with upper bound(s) for resource consumption. Checks values are &lt;= bound </p></li>
+<li><p><strong>min_res, vector</strong> – <strong>[in]</strong> of double with lower bound(s) for resource consumption. Checks values are &gt;= bound </p></li>
+<li><p><strong>soft, bool</strong> – <strong>[in]</strong> with whether the minimum resources should be checked “softly”. Default is false. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK9labelling5Label14checkThresholdERKd">
+<span id="_CPPv3NK9labelling5Label14checkThresholdERKd"></span><span id="_CPPv2NK9labelling5Label14checkThresholdERKd"></span><span id="labelling::Label::checkThreshold__doubleCRC"></span><span class="target" id="classlabelling_1_1Label_1a72d0d91c2d99edbcdc36aa157586cf00"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">checkThreshold</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">threshold</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK9labelling5Label14checkThresholdERKd" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Check if weight is under the input threshold. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK9labelling5Label11checkStPathERKiRKi">
+<span id="_CPPv3NK9labelling5Label11checkStPathERKiRKi"></span><span id="_CPPv2NK9labelling5Label11checkStPathERKiRKi"></span><span id="labelling::Label::checkStPath__iCR.iCRC"></span><span class="target" id="classlabelling_1_1Label_1a0e4957ff69cf08cfdc743df10d50d3c7"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">checkStPath</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">source_id</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">sink_id</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK9labelling5Label11checkStPathERKiRKi" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Check whether the current partial path is Source - Sink</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>source_id, int</strong> – <strong>[in]</strong> with user_id of the source node. </p></li>
+<li><p><strong>sink_id, int</strong> – <strong>[in]</strong> with user_id of the sink node. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK9labelling5Label18checkPathExtensionERKi">
+<span id="_CPPv3NK9labelling5Label18checkPathExtensionERKi"></span><span id="_CPPv2NK9labelling5Label18checkPathExtensionERKi"></span><span id="labelling::Label::checkPathExtension__iCRC"></span><span class="target" id="classlabelling_1_1Label_1a496b8a76fd2fe06265b1acc1a508b4ca"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">checkPathExtension</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">user_id</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK9labelling5Label18checkPathExtensionERKi" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Returns true is the partial path extension is OK. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK9labelling5Label40checkSameFeasibleExtensionTwoCycleSimpleERK5Label">
+<span id="_CPPv3NK9labelling5Label40checkSameFeasibleExtensionTwoCycleSimpleERK5Label"></span><span id="_CPPv2NK9labelling5Label40checkSameFeasibleExtensionTwoCycleSimpleERK5Label"></span><span id="labelling::Label::checkSameFeasibleExtensionTwoCycleSimple__LabelCRC"></span><span class="target" id="classlabelling_1_1Label_1a5c8dc87a89577d00ccf86251867ec76a"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">checkSameFeasibleExtensionTwoCycleSimple</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N9labelling5LabelE" title="labelling::Label"><span class="n"><span class="pre">Label</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">other</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK9labelling5Label40checkSameFeasibleExtensionTwoCycleSimpleERK5Label" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Simple check if both lables have the same feasible extension with regard to 2-cycle elimination. this and other have same feasible extension if predecessor is the same. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>other, Label</strong> – <strong>[in]</strong> with other label to compare </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>true if this and other have same feasible extension </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK9labelling5Label36checkSameFeasibleExtensionElementaryERK5Label">
+<span id="_CPPv3NK9labelling5Label36checkSameFeasibleExtensionElementaryERK5Label"></span><span id="_CPPv2NK9labelling5Label36checkSameFeasibleExtensionElementaryERK5Label"></span><span id="labelling::Label::checkSameFeasibleExtensionElementary__LabelCRC"></span><span class="target" id="classlabelling_1_1Label_1a333b6fc9dba864b3df2cdf530a055aa7"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">checkSameFeasibleExtensionElementary</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N9labelling5LabelE" title="labelling::Label"><span class="n"><span class="pre">Label</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">other</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK9labelling5Label36checkSameFeasibleExtensionElementaryERK5Label" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Simple check if both lables have the same feasible extension under elementary conditions. this and other have the same feasible extension if unreachable_nodes of this is subset of unreachable_nodes of other </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>other, Label</strong> – <strong>[in]</strong> with other label to compare </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>true if this and other have same feasible extension </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK9labelling5Label26checkSameFeasibleExtensionERK5Label">
+<span id="_CPPv3NK9labelling5Label26checkSameFeasibleExtensionERK5Label"></span><span id="_CPPv2NK9labelling5Label26checkSameFeasibleExtensionERK5Label"></span><span id="labelling::Label::checkSameFeasibleExtension__LabelCRC"></span><span class="target" id="classlabelling_1_1Label_1a02179d540444a13aa7cc3355d0a461b8"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">checkSameFeasibleExtension</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N9labelling5LabelE" title="labelling::Label"><span class="n"><span class="pre">Label</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">other</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK9labelling5Label26checkSameFeasibleExtensionERK5Label" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Check if both lables have the same feasible extension, i.e., if they both can extend to the same nodes. Important for correct dominance check. Labels with different feasible extension cannot dominate each other. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>other, Label</strong> – <strong>[in]</strong> with other label to compare </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>true if this and other have same feasible extension </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N9labelling5Label6setPhiERKd">
+<span id="_CPPv3N9labelling5Label6setPhiERKd"></span><span id="_CPPv2N9labelling5Label6setPhiERKd"></span><span id="labelling::Label::setPhi__doubleCR"></span><span class="target" id="classlabelling_1_1Label_1afffea46e29dc7074edd10470c5dfeb87"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">setPhi</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">phi_in</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9labelling5Label6setPhiERKd" title="Permalink to this definition"></a><br /></dt>
+<dd><p>set phi attribute for merged labels from Righini and Salani (2006) </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK9labelling5Label16getPredecessorIdEv">
+<span id="_CPPv3NK9labelling5Label16getPredecessorIdEv"></span><span id="_CPPv2NK9labelling5Label16getPredecessorIdEv"></span><span id="labelling::Label::getPredecessorIdC"></span><span class="target" id="classlabelling_1_1Label_1a676337cc2e66ddaba088c736b9220651"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">getPredecessorId</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK9labelling5Label16getPredecessorIdEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>gets the id of the predecessor node TODO can be replaced as member of label </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N9labelling5Label17unreachable_nodesE">
+<span id="_CPPv3N9labelling5Label17unreachable_nodesE"></span><span id="_CPPv2N9labelling5Label17unreachable_nodesE"></span><span id="labelling::Label::unreachable_nodes__std::set:i:"></span><span class="target" id="classlabelling_1_1Label_1ae684804e463fe690b4fe6ee32812e123"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">set</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">int</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">unreachable_nodes</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#_CPPv4N9labelling5Label17unreachable_nodesE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Set of unreachable nodes. This is only used in the elementary case. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N9labelling15runDominanceEffEPNSt6vectorI5LabelEERK5LabelRKN13bidirectional10DirectionsERKb">
+<span id="_CPPv3N9labelling15runDominanceEffEPNSt6vectorI5LabelEERK5LabelRKN13bidirectional10DirectionsERKb"></span><span id="_CPPv2N9labelling15runDominanceEffEPNSt6vectorI5LabelEERK5LabelRKN13bidirectional10DirectionsERKb"></span><span id="labelling::runDominanceEff__std::vector:Label:P.LabelCR.bidirectional::DirectionsCR.bCR"></span><span class="target" id="namespacelabelling_1ac6d6bb89c176d0f2db264457d60c5bd8"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">labelling</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">runDominanceEff</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N9labelling5LabelE" title="labelling::Label"><span class="n"><span class="pre">Label</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">efficient_labels_ptr</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N9labelling5LabelE" title="labelling::Label"><span class="n"><span class="pre">Label</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">label</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">bidirectional</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="params.html#_CPPv4N13bidirectional10DirectionsE" title="bidirectional::Directions"><span class="n"><span class="pre">Directions</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">direction</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">elementary</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9labelling15runDominanceEffEPNSt6vectorI5LabelEERK5LabelRKN13bidirectional10DirectionsERKb" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Misc functionality</p>
+<p>Check whether the input label dominates any efficient label (previously undominated labels) at the same node. If any label is dominated by the input label, they are removed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>efficient_labels, pointer</strong> – <strong>[out]</strong> to a vector of <a class="reference internal" href="#classlabelling_1_1Label"><span class="std std-ref">Label</span></a> with the efficient labels at the same node as <code class="docutils literal notranslate"><span class="pre">label</span></code>. If a label is dominated by <code class="docutils literal notranslate"><span class="pre">label</span></code>, it is removed from this vector. </p></li>
+<li><p><strong>label, Label</strong> – <strong>[in]</strong> to compare </p></li>
+<li><p><strong>direction, Directions</strong> – <strong>[in]</strong> with direction of search </p></li>
+<li><p><strong>elementary, bool</strong> – <strong>[in]</strong> with whether non-elementary paths are allowed</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>bool, true if <code class="docutils literal notranslate"><span class="pre">label</span></code> is dominated, false otherwise </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N9labelling11mergeLabelsERK5LabelRK5LabelRKN13bidirectional9AdjVertexERKN13bidirectional6VertexERKNSt6vectorIdEERKNSt6vectorIdEE">
+<span id="_CPPv3N9labelling11mergeLabelsERK5LabelRK5LabelRKN13bidirectional9AdjVertexERKN13bidirectional6VertexERKNSt6vectorIdEERKNSt6vectorIdEE"></span><span id="_CPPv2N9labelling11mergeLabelsERK5LabelRK5LabelRKN13bidirectional9AdjVertexERKN13bidirectional6VertexERKNSt6vectorIdEERKNSt6vectorIdEE"></span><span id="labelling::mergeLabels__LabelCR.LabelCR.bidirectional::AdjVertexCR.bidirectional::VertexCR.std::vector:double:CR.std::vector:double:CR"></span><span class="target" id="namespacelabelling_1a19937349c6ec5c31d5994aac45c5d2fd"></span><a class="reference internal" href="#_CPPv4N9labelling5LabelE" title="labelling::Label"><span class="n"><span class="pre">Label</span></span></a><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">labelling</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">mergeLabels</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N9labelling5LabelE" title="labelling::Label"><span class="n"><span class="pre">Label</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">fwd_label</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N9labelling5LabelE" title="labelling::Label"><span class="n"><span class="pre">Label</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">bwd_label</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">bidirectional</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="Vertex.html#_CPPv4N13bidirectional9AdjVertexE" title="bidirectional::AdjVertex"><span class="n"><span class="pre">AdjVertex</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">adj_vertex</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">bidirectional</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="Vertex.html#_CPPv4N13bidirectional6VertexE" title="bidirectional::Vertex"><span class="n"><span class="pre">Vertex</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">sink</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">max_res</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">min_res</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9labelling11mergeLabelsERK5LabelRK5LabelRKN13bidirectional9AdjVertexERKN13bidirectional6VertexERKNSt6vectorIdEERKNSt6vectorIdEE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Merge labels produced by a backward and forward label. If an s-t compatible path can be obtained the appropriately extended and merged label is returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>merged label with updated attributes and new phi value. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N9labelling15processBwdLabelERKN9labelling5LabelERKNSt6vectorIdEERKNSt6vectorIdEERKb">
+<span id="_CPPv3N9labelling15processBwdLabelERKN9labelling5LabelERKNSt6vectorIdEERKNSt6vectorIdEERKb"></span><span id="_CPPv2N9labelling15processBwdLabelERKN9labelling5LabelERKNSt6vectorIdEERKNSt6vectorIdEERKb"></span><span id="labelling::processBwdLabel__labelling::LabelCR.std::vector:double:CR.std::vector:double:CR.bCR"></span><span class="target" id="namespacelabelling_1ae172758fb8d07cc0a490d8715966e1b7"></span><a class="reference internal" href="#_CPPv4N9labelling5LabelE" title="labelling::Label"><span class="n"><span class="pre">Label</span></span></a><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">labelling</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">processBwdLabel</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">labelling</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N9labelling5LabelE" title="labelling::Label"><span class="n"><span class="pre">Label</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">label</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">max_res</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">cumulative_resource</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">invert_min_res</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9labelling15processBwdLabelERKN9labelling5LabelERKNSt6vectorIdEERKNSt6vectorIdEERKb" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Reverse backward path and inverts resource consumption and returns resulting forward-compatible label.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>label, labelling::Label, current</strong> – <strong>[out]</strong> label to extend (and maybe update <code class="docutils literal notranslate"><span class="pre">unreachable_nodes</span></code>) </p></li>
+<li><p><strong>max_res, vector</strong> – <strong>[in]</strong> of double with upper bound(s) for resource consumption. To use to invert monotone resource </p></li>
+<li><p><strong>invert_min_res, bool</strong> – <strong>[in]</strong> </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>inverted label </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Vertex.html" class="btn btn-neutral float-left" title="Vertex" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="preprocessing.html" class="btn btn-neutral float-right" title="Preprocessing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, David Torres Sanchez.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

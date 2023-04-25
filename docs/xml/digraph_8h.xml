@@ -1,0 +1,309 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="digraph_8h" kind="file" language="C++">
+    <compoundname>digraph.h</compoundname>
+    <includes local="no">memory</includes>
+    <includes local="no">vector</includes>
+    <includes local="yes">lemon/maps.h</includes>
+    <includes local="yes">lemon/path.h</includes>
+    <includes local="yes">lemon/smart_graph.h</includes>
+    <includedby refid="bidirectional_8h" local="yes">/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h</includedby>
+    <includedby refid="digraph_8cc" local="yes">/__w/cspy/cspy/torressa/cspy/src/cc/digraph.cc</includedby>
+    <includedby refid="labelling_8h" local="yes">/__w/cspy/cspy/torressa/cspy/src/cc/labelling.h</includedby>
+    <includedby refid="preprocessing_8h" local="yes">/__w/cspy/cspy/torressa/cspy/src/cc/preprocessing.h</includedby>
+    <includedby refid="preprocessing_8cc" local="yes">/__w/cspy/cspy/torressa/cspy/src/cc/preprocessing.cc</includedby>
+    <incdepgraph>
+      <node id="55">
+        <label>lemon/maps.h</label>
+      </node>
+      <node id="57">
+        <label>lemon/smart_graph.h</label>
+      </node>
+      <node id="56">
+        <label>lemon/path.h</label>
+      </node>
+      <node id="54">
+        <label>vector</label>
+      </node>
+      <node id="52">
+        <label>/__w/cspy/cspy/torressa/cspy/src/cc/digraph.h</label>
+        <link refid="digraph_8h"/>
+        <childnode refid="53" relation="include">
+        </childnode>
+        <childnode refid="54" relation="include">
+        </childnode>
+        <childnode refid="55" relation="include">
+        </childnode>
+        <childnode refid="56" relation="include">
+        </childnode>
+        <childnode refid="57" relation="include">
+        </childnode>
+      </node>
+      <node id="53">
+        <label>memory</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="63">
+        <label>/__w/cspy/cspy/torressa/cspy/src/cc/labelling.cc</label>
+        <link refid="labelling_8cc"/>
+      </node>
+      <node id="60">
+        <label>/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.cc</label>
+        <link refid="bidirectional_8cc"/>
+      </node>
+      <node id="67">
+        <label>/__w/cspy/cspy/torressa/cspy/src/cc/preprocessing.cc</label>
+        <link refid="preprocessing_8cc"/>
+      </node>
+      <node id="59">
+        <label>/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h</label>
+        <link refid="bidirectional_8h"/>
+        <childnode refid="60" relation="include">
+        </childnode>
+      </node>
+      <node id="61">
+        <label>/__w/cspy/cspy/torressa/cspy/src/cc/digraph.cc</label>
+        <link refid="digraph_8cc"/>
+      </node>
+      <node id="58">
+        <label>/__w/cspy/cspy/torressa/cspy/src/cc/digraph.h</label>
+        <link refid="digraph_8h"/>
+        <childnode refid="59" relation="include">
+        </childnode>
+        <childnode refid="61" relation="include">
+        </childnode>
+        <childnode refid="62" relation="include">
+        </childnode>
+        <childnode refid="66" relation="include">
+        </childnode>
+        <childnode refid="67" relation="include">
+        </childnode>
+      </node>
+      <node id="64">
+        <label>/__w/cspy/cspy/torressa/cspy/src/cc/search.h</label>
+        <link refid="search_8h"/>
+        <childnode refid="59" relation="include">
+        </childnode>
+        <childnode refid="65" relation="include">
+        </childnode>
+      </node>
+      <node id="62">
+        <label>/__w/cspy/cspy/torressa/cspy/src/cc/labelling.h</label>
+        <link refid="labelling_8h"/>
+        <childnode refid="63" relation="include">
+        </childnode>
+        <childnode refid="64" relation="include">
+        </childnode>
+      </node>
+      <node id="65">
+        <label>/__w/cspy/cspy/torressa/cspy/src/cc/search.cc</label>
+        <link refid="search_8cc"/>
+      </node>
+      <node id="66">
+        <label>/__w/cspy/cspy/torressa/cspy/src/cc/preprocessing.h</label>
+        <link refid="preprocessing_8h"/>
+        <childnode refid="60" relation="include">
+        </childnode>
+        <childnode refid="67" relation="include">
+        </childnode>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="structbidirectional_1_1Vertex" prot="public">bidirectional::Vertex</innerclass>
+    <innerclass refid="structbidirectional_1_1AdjVertex" prot="public">bidirectional::AdjVertex</innerclass>
+    <innerclass refid="classbidirectional_1_1ResourceMap" prot="public">bidirectional::ResourceMap</innerclass>
+    <innerclass refid="classbidirectional_1_1DiGraph" prot="public">bidirectional::DiGraph</innerclass>
+    <innernamespace refid="namespacebidirectional">bidirectional</innernamespace>
+      <sectiondef kind="typedef">
+      <memberdef kind="typedef" id="digraph_8h_1a537ef8dbf2625a2629b10f4121e6db2b" prot="public" static="no">
+        <type>lemon::SmartDigraph</type>
+        <definition>typedef lemon::SmartDigraph LemonGraph</definition>
+        <argsstring></argsstring>
+        <name>LemonGraph</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/digraph.h" line="12" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/digraph.h" bodystart="12" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="digraph_8h_1a952c6b935f7521c3435dbd13b255246b" prot="public" static="no">
+        <type>LemonGraph::Node</type>
+        <definition>typedef LemonGraph::Node LemonNode</definition>
+        <argsstring></argsstring>
+        <name>LemonNode</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/digraph.h" line="13" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/digraph.h" bodystart="13" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="digraph_8h_1a0f10c67f03c054baec3e3bab6a92171e" prot="public" static="no">
+        <type>LemonGraph::Arc</type>
+        <definition>typedef LemonGraph::Arc LemonArc</definition>
+        <argsstring></argsstring>
+        <name>LemonArc</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/digraph.h" line="14" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/digraph.h" bodystart="14" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="digraph_8h_1a261c69ea112177ad64fd27d10b23f4b7" prot="public" static="no">
+        <type>lemon::Path&lt; <ref refid="digraph_8h_1a537ef8dbf2625a2629b10f4121e6db2b" kindref="member">LemonGraph</ref> &gt;</type>
+        <definition>typedef lemon::Path&lt;LemonGraph&gt; LemonPath</definition>
+        <argsstring></argsstring>
+        <name>LemonPath</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/digraph.h" line="15" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/digraph.h" bodystart="15" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#ifndef<sp/>SRC_CC_DIGRAPH_H__</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SRC_CC_DIGRAPH_H__</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;memory&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;vector&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;lemon/maps.h&quot;</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>MapBase</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;lemon/path.h&quot;</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Path</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;lemon/smart_graph.h&quot;</highlight><highlight class="normal"><sp/></highlight><highlight class="comment">//<sp/>SmartDigraph</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Type<sp/>defs<sp/>for<sp/>LEMON</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="12" refid="digraph_8h_1a537ef8dbf2625a2629b10f4121e6db2b" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/>lemon::SmartDigraph<sp/><sp/><sp/><sp/><sp/><ref refid="digraph_8h_1a537ef8dbf2625a2629b10f4121e6db2b" kindref="member">LemonGraph</ref>;</highlight></codeline>
+<codeline lineno="13" refid="digraph_8h_1a952c6b935f7521c3435dbd13b255246b" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/>LemonGraph::Node<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="digraph_8h_1a952c6b935f7521c3435dbd13b255246b" kindref="member">LemonNode</ref>;</highlight></codeline>
+<codeline lineno="14" refid="digraph_8h_1a0f10c67f03c054baec3e3bab6a92171e" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/>LemonGraph::Arc<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="digraph_8h_1a0f10c67f03c054baec3e3bab6a92171e" kindref="member">LemonArc</ref>;</highlight></codeline>
+<codeline lineno="15" refid="digraph_8h_1a261c69ea112177ad64fd27d10b23f4b7" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">typedef</highlight><highlight class="normal"><sp/>lemon::Path&lt;LemonGraph&gt;<sp/><ref refid="digraph_8h_1a261c69ea112177ad64fd27d10b23f4b7" kindref="member">LemonPath</ref>;</highlight></codeline>
+<codeline lineno="16"><highlight class="normal"></highlight></codeline>
+<codeline lineno="17"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespacebidirectional" kindref="compound">bidirectional</ref><sp/>{</highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight></codeline>
+<codeline lineno="21" refid="structbidirectional_1_1Vertex" refkind="compound"><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structbidirectional_1_1Vertex" kindref="compound">Vertex</ref><sp/>{</highlight></codeline>
+<codeline lineno="22"><highlight class="normal"><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="23" refid="structbidirectional_1_1Vertex_1a93afb7643b7fb823dc2e337d233bef9e" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="structbidirectional_1_1Vertex_1a93afb7643b7fb823dc2e337d233bef9e" kindref="member">lemon_id</ref>;</highlight></codeline>
+<codeline lineno="24" refid="structbidirectional_1_1Vertex_1a31a815c1052e67dbe13c7327b020aa0c" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="structbidirectional_1_1Vertex_1a31a815c1052e67dbe13c7327b020aa0c" kindref="member">user_id</ref>;</highlight></codeline>
+<codeline lineno="25"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="26"><highlight class="normal"></highlight></codeline>
+<codeline lineno="31" refid="structbidirectional_1_1AdjVertex" refkind="compound"><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structbidirectional_1_1AdjVertex" kindref="compound">AdjVertex</ref><sp/>{</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="34" refid="structbidirectional_1_1AdjVertex_1afd878dad03f7f4437cb135fc4f00c46c" refkind="member"><highlight class="normal"><sp/><sp/><ref refid="structbidirectional_1_1Vertex" kindref="compound">Vertex</ref><sp/><ref refid="structbidirectional_1_1AdjVertex_1afd878dad03f7f4437cb135fc4f00c46c" kindref="member">vertex</ref>;</highlight></codeline>
+<codeline lineno="36" refid="structbidirectional_1_1AdjVertex_1a416d2c737409cf4ed7d7494508f3a7de" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="structbidirectional_1_1AdjVertex_1a416d2c737409cf4ed7d7494508f3a7de" kindref="member">weight</ref>;</highlight></codeline>
+<codeline lineno="38" refid="structbidirectional_1_1AdjVertex_1a3755b5ef7a009834706922a54d115927" refkind="member"><highlight class="normal"><sp/><sp/>std::vector&lt;double&gt;<sp/><ref refid="structbidirectional_1_1AdjVertex_1a3755b5ef7a009834706922a54d115927" kindref="member">resource_consumption</ref>;</highlight></codeline>
+<codeline lineno="40" refid="structbidirectional_1_1AdjVertex_1abf769818349400a6598021c1bed78045" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>init<sp/>=<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"></highlight></codeline>
+<codeline lineno="43" refid="structbidirectional_1_1AdjVertex_1ad199785e49b89a8066b7a4e73d6d9f5a" refkind="member"><highlight class="normal"><sp/><sp/><ref refid="structbidirectional_1_1AdjVertex_1ad199785e49b89a8066b7a4e73d6d9f5a" kindref="member">AdjVertex</ref>(){};</highlight></codeline>
+<codeline lineno="45" refid="structbidirectional_1_1AdjVertex_1a7ae2095e5e51da0ce10408f37e2e602c" refkind="member"><highlight class="normal"><sp/><sp/><ref refid="structbidirectional_1_1AdjVertex_1a7ae2095e5e51da0ce10408f37e2e602c" kindref="member">AdjVertex</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structbidirectional_1_1Vertex" kindref="compound">Vertex</ref>&amp;<sp/>v,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">&amp;<sp/>w,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;double&gt;&amp;<sp/>r_c)</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>:<sp/>vertex(v),<sp/>weight(w),<sp/>resource_consumption(r_c),<sp/>init(true){};</highlight></codeline>
+<codeline lineno="48" refid="structbidirectional_1_1AdjVertex_1a86d0c4e2bcd2c7915d9aa2fc5a38bd0c" refkind="member"><highlight class="normal"><sp/><sp/><ref refid="structbidirectional_1_1AdjVertex_1a86d0c4e2bcd2c7915d9aa2fc5a38bd0c" kindref="member">~AdjVertex</ref>(){};</highlight></codeline>
+<codeline lineno="49"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="50"><highlight class="normal"></highlight></codeline>
+<codeline lineno="51" refid="classbidirectional_1_1ResourceMap" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="classbidirectional_1_1ResourceMap" kindref="compound">ResourceMap</ref><sp/>:<sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/>lemon::MapBase&lt;LemonArc,<sp/>double&gt;<sp/>{</highlight></codeline>
+<codeline lineno="52"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>LemonGraph::ArcMap&lt;std::vector&lt;double&gt;&gt;&amp;<sp/>resource_map;</highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>r;</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"></highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="56" refid="classbidirectional_1_1ResourceMap_1a0da7ed255fdf2bbc1a7bfc190c828bc4" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classbidirectional_1_1ResourceMap_1a0da7ed255fdf2bbc1a7bfc190c828bc4" kindref="member">operator[]</ref>(Key<sp/>e)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>-resource_map[e][r];<sp/>}</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"></highlight></codeline>
+<codeline lineno="58" refid="classbidirectional_1_1ResourceMap_1a8af0345e49b30df97d49d920730b9d9d" refkind="member"><highlight class="normal"><sp/><sp/><ref refid="classbidirectional_1_1ResourceMap_1a8af0345e49b30df97d49d920730b9d9d" kindref="member">ResourceMap</ref>(</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>LemonGraph::ArcMap&lt;std::vector&lt;double&gt;&gt;&amp;<sp/>resource_map_in,</highlight></codeline>
+<codeline lineno="60"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>r_in)</highlight></codeline>
+<codeline lineno="61"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>:<sp/>resource_map(resource_map_in),<sp/>r(r_in){};</highlight></codeline>
+<codeline lineno="62"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"></highlight></codeline>
+<codeline lineno="64" refid="namespacebidirectional_1a507ec433f8ac22a92fcc3b8aad252f29aa5cae7e7a4dd360b53f1c5532ed64f59" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">enum</highlight><highlight class="normal"><sp/><ref refid="namespacebidirectional_1a507ec433f8ac22a92fcc3b8aad252f29" kindref="member">NegativeCostCyclePresent</ref><sp/>{<sp/><ref refid="namespacebidirectional_1a507ec433f8ac22a92fcc3b8aad252f29a50727807c27ff7820eef09fbe631eba9" kindref="member">TRUE</ref>,<sp/><ref refid="namespacebidirectional_1a507ec433f8ac22a92fcc3b8aad252f29a7fcb4521ab8f836164a0670be9848d18" kindref="member">FALSE</ref>,<sp/><ref refid="namespacebidirectional_1a507ec433f8ac22a92fcc3b8aad252f29aa5cae7e7a4dd360b53f1c5532ed64f59" kindref="member">UNKNOWN</ref><sp/>};</highlight></codeline>
+<codeline lineno="65"><highlight class="normal"></highlight></codeline>
+<codeline lineno="70" refid="classbidirectional_1_1DiGraph" refkind="compound"><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="classbidirectional_1_1DiGraph" kindref="compound">DiGraph</ref><sp/>{</highlight></codeline>
+<codeline lineno="71"><highlight class="normal"><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="73" refid="classbidirectional_1_1DiGraph_1a55a3ad47c4958000a7b68e0afd566d4f" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="classbidirectional_1_1DiGraph_1a55a3ad47c4958000a7b68e0afd566d4f" kindref="member">number_vertices</ref>;</highlight></codeline>
+<codeline lineno="75" refid="classbidirectional_1_1DiGraph_1a8c53e94a9b9e41a50e0f3ecf348d1b87" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="classbidirectional_1_1DiGraph_1a8c53e94a9b9e41a50e0f3ecf348d1b87" kindref="member">number_edges</ref>;</highlight></codeline>
+<codeline lineno="77" refid="classbidirectional_1_1DiGraph_1a8a790a14fd031fbe7a95fefe5f01fa0c" refkind="member"><highlight class="normal"><sp/><sp/><ref refid="structbidirectional_1_1Vertex" kindref="compound">Vertex</ref><sp/><ref refid="classbidirectional_1_1DiGraph_1a8a790a14fd031fbe7a95fefe5f01fa0c" kindref="member">source</ref>;</highlight></codeline>
+<codeline lineno="78" refid="classbidirectional_1_1DiGraph_1a11aab634efaff2bdbdbd77436d799206" refkind="member"><highlight class="normal"><sp/><sp/><ref refid="structbidirectional_1_1Vertex" kindref="compound">Vertex</ref><sp/><ref refid="classbidirectional_1_1DiGraph_1a11aab634efaff2bdbdbd77436d799206" kindref="member">sink</ref>;</highlight></codeline>
+<codeline lineno="80" refid="classbidirectional_1_1DiGraph_1a8acd5e0889d880b5b98d1c67a356c4e2" refkind="member"><highlight class="normal"><sp/><sp/>std::unique_ptr&lt;LemonGraph&gt;<sp/><ref refid="classbidirectional_1_1DiGraph_1a8acd5e0889d880b5b98d1c67a356c4e2" kindref="member">lemon_graph_ptr</ref>;</highlight></codeline>
+<codeline lineno="82" refid="classbidirectional_1_1DiGraph_1a19b9b7f89e09c77cfeb5ce3a19f2e677" refkind="member"><highlight class="normal"><sp/><sp/>std::unique_ptr&lt;LemonGraph::ArcMap&lt;double&gt;&gt;<sp/><ref refid="classbidirectional_1_1DiGraph_1a19b9b7f89e09c77cfeb5ce3a19f2e677" kindref="member">weight_map_ptr</ref>;</highlight></codeline>
+<codeline lineno="84" refid="classbidirectional_1_1DiGraph_1acfed46f3f0adb003d0c90d713c1418cb" refkind="member"><highlight class="normal"><sp/><sp/>std::unique_ptr&lt;LemonGraph::ArcMap&lt;std::vector&lt;double&gt;&gt;&gt;<sp/><ref refid="classbidirectional_1_1DiGraph_1acfed46f3f0adb003d0c90d713c1418cb" kindref="member">res_map_ptr</ref>;</highlight></codeline>
+<codeline lineno="86" refid="classbidirectional_1_1DiGraph_1ac1922b68a5f05cc890fcad5acf0b4c35" refkind="member"><highlight class="normal"><sp/><sp/>std::vector&lt;Vertex&gt;<sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classbidirectional_1_1DiGraph_1ac1922b68a5f05cc890fcad5acf0b4c35" kindref="member">vertices</ref>;</highlight></codeline>
+<codeline lineno="87" refid="classbidirectional_1_1DiGraph_1aeeadd4ac80efd524ce85763e1fd30768" refkind="member"><highlight class="normal"><sp/><sp/><ref refid="namespacebidirectional_1a507ec433f8ac22a92fcc3b8aad252f29" kindref="member">NegativeCostCyclePresent</ref><sp/><ref refid="classbidirectional_1_1DiGraph_1aeeadd4ac80efd524ce85763e1fd30768" kindref="member">negative_cost_cycle_present</ref>;</highlight></codeline>
+<codeline lineno="88" refid="classbidirectional_1_1DiGraph_1ae31e98d4867f98174ec40f911d6be14e" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classbidirectional_1_1DiGraph_1ae31e98d4867f98174ec40f911d6be14e" kindref="member">all_resources_positive</ref>;</highlight></codeline>
+<codeline lineno="89"><highlight class="normal"></highlight></codeline>
+<codeline lineno="100"><highlight class="normal"><sp/><sp/><ref refid="classbidirectional_1_1DiGraph" kindref="compound">DiGraph</ref>(</highlight></codeline>
+<codeline lineno="101"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">&amp;<sp/>num_nodes_in,</highlight></codeline>
+<codeline lineno="102"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">&amp;<sp/>num_arcs_in,</highlight></codeline>
+<codeline lineno="103"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">&amp;<sp/>source_id_in,</highlight></codeline>
+<codeline lineno="104"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">&amp;<sp/>sink_id_in);</highlight></codeline>
+<codeline lineno="105"><highlight class="normal"></highlight></codeline>
+<codeline lineno="106"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">/*<sp/>Graph<sp/>Construction<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="107"><highlight class="normal"></highlight></codeline>
+<codeline lineno="113"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>addNodes(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;int&gt;&amp;<sp/>user_nodes);</highlight></codeline>
+<codeline lineno="114"><highlight class="normal"></highlight></codeline>
+<codeline lineno="125"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>addEdge(</highlight></codeline>
+<codeline lineno="126"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">&amp;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>tail,</highlight></codeline>
+<codeline lineno="127"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">&amp;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>head,</highlight></codeline>
+<codeline lineno="128"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">&amp;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>weight,</highlight></codeline>
+<codeline lineno="129"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;double&gt;&amp;<sp/>resource_consumption);</highlight></codeline>
+<codeline lineno="130"><highlight class="normal"></highlight></codeline>
+<codeline lineno="131"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">/*<sp/>Graph<sp/>Querying<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="132"><highlight class="normal"></highlight></codeline>
+<codeline lineno="139" refid="classbidirectional_1_1DiGraph_1aa0379cf603a76b85a8ef3ca5ad03d4af" refkind="member"><highlight class="normal"><sp/><sp/><ref refid="digraph_8h_1a952c6b935f7521c3435dbd13b255246b" kindref="member">LemonNode</ref><sp/><ref refid="classbidirectional_1_1DiGraph_1aa0379cf603a76b85a8ef3ca5ad03d4af" kindref="member">head</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="digraph_8h_1a0f10c67f03c054baec3e3bab6a92171e" kindref="member">LemonArc</ref>&amp;<sp/>arc)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="140"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>lemon_graph_ptr-&gt;target(arc);</highlight></codeline>
+<codeline lineno="141"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="142"><highlight class="normal"></highlight></codeline>
+<codeline lineno="149" refid="classbidirectional_1_1DiGraph_1a0be9d9f87409f523306babcfef8a7f46" refkind="member"><highlight class="normal"><sp/><sp/><ref refid="digraph_8h_1a952c6b935f7521c3435dbd13b255246b" kindref="member">LemonNode</ref><sp/><ref refid="classbidirectional_1_1DiGraph_1a0be9d9f87409f523306babcfef8a7f46" kindref="member">tail</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="digraph_8h_1a0f10c67f03c054baec3e3bab6a92171e" kindref="member">LemonArc</ref>&amp;<sp/>arc)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="150"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>lemon_graph_ptr-&gt;source(arc);</highlight></codeline>
+<codeline lineno="151"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="152"><highlight class="normal"></highlight></codeline>
+<codeline lineno="160"><highlight class="normal"><sp/><sp/><ref refid="structbidirectional_1_1AdjVertex" kindref="compound">AdjVertex</ref><sp/>getAdjVertex(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="digraph_8h_1a0f10c67f03c054baec3e3bab6a92171e" kindref="member">LemonArc</ref>&amp;<sp/>arc,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal">&amp;<sp/>forward)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="161"><highlight class="normal"></highlight></codeline>
+<codeline lineno="168" refid="classbidirectional_1_1DiGraph_1a966eb000fda1f5dac268f8f4ae6b19cb" refkind="member"><highlight class="normal"><sp/><sp/><ref refid="digraph_8h_1a952c6b935f7521c3435dbd13b255246b" kindref="member">LemonNode</ref><sp/><ref refid="classbidirectional_1_1DiGraph_1a966eb000fda1f5dac268f8f4ae6b19cb" kindref="member">getLNodeFromId</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">&amp;<sp/></highlight><highlight class="keywordtype">id</highlight><highlight class="normal">)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="169"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>lemon_graph_ptr-&gt;nodeFromId(</highlight><highlight class="keywordtype">id</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="170"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="171"><highlight class="normal"></highlight></codeline>
+<codeline lineno="178"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>getNodeIdFromUserId(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">&amp;<sp/><ref refid="structbidirectional_1_1Vertex_1a31a815c1052e67dbe13c7327b020aa0c" kindref="member">user_id</ref>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="179"><highlight class="normal"></highlight></codeline>
+<codeline lineno="186" refid="classbidirectional_1_1DiGraph_1aba1a01186d95c4a9ac73031ed1de5432" refkind="member"><highlight class="normal"><sp/><sp/><ref refid="structbidirectional_1_1Vertex" kindref="compound">Vertex</ref><sp/><ref refid="classbidirectional_1_1DiGraph_1aba1a01186d95c4a9ac73031ed1de5432" kindref="member">getVertexFromLNode</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="digraph_8h_1a952c6b935f7521c3435dbd13b255246b" kindref="member">LemonNode</ref>&amp;<sp/>node)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="187"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>vertices.at(getId(node));</highlight></codeline>
+<codeline lineno="188"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="189"><highlight class="normal"></highlight></codeline>
+<codeline lineno="196" refid="classbidirectional_1_1DiGraph_1aa2b4359a9ed9574384d38e37310601df" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">&amp;<sp/><ref refid="classbidirectional_1_1DiGraph_1aa2b4359a9ed9574384d38e37310601df" kindref="member">getWeight</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="digraph_8h_1a0f10c67f03c054baec3e3bab6a92171e" kindref="member">LemonArc</ref>&amp;<sp/>arc)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="197"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>(*weight_map_ptr)[arc];</highlight></codeline>
+<codeline lineno="198"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="199"><highlight class="normal"></highlight></codeline>
+<codeline lineno="206" refid="classbidirectional_1_1DiGraph_1a7b16dcef9b23770124b19a295f06178a" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="classbidirectional_1_1DiGraph_1a7b16dcef9b23770124b19a295f06178a" kindref="member">getId</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="digraph_8h_1a0f10c67f03c054baec3e3bab6a92171e" kindref="member">LemonArc</ref>&amp;<sp/>arc)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>lemon_graph_ptr-&gt;id(arc);<sp/>}</highlight></codeline>
+<codeline lineno="207"><highlight class="normal"></highlight></codeline>
+<codeline lineno="214" refid="classbidirectional_1_1DiGraph_1afb87bafec6ea1764bd19509f0b0ca4e9" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="classbidirectional_1_1DiGraph_1afb87bafec6ea1764bd19509f0b0ca4e9" kindref="member">getId</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="digraph_8h_1a952c6b935f7521c3435dbd13b255246b" kindref="member">LemonNode</ref>&amp;<sp/>node)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>lemon_graph_ptr-&gt;id(node);<sp/>}</highlight></codeline>
+<codeline lineno="215"><highlight class="normal"></highlight></codeline>
+<codeline lineno="216" refid="classbidirectional_1_1DiGraph_1a45a3d6b4164c0881cdad5ab23aa9eda8" refkind="member"><highlight class="normal"><sp/><sp/><ref refid="classbidirectional_1_1ResourceMap" kindref="compound">ResourceMap</ref><sp/><ref refid="classbidirectional_1_1DiGraph_1a45a3d6b4164c0881cdad5ab23aa9eda8" kindref="member">getResourceMap</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">&amp;<sp/>r)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="217"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="classbidirectional_1_1ResourceMap" kindref="compound">ResourceMap</ref>(*res_map_ptr,<sp/>r);</highlight></codeline>
+<codeline lineno="218"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="219"><highlight class="normal"></highlight></codeline>
+<codeline lineno="220"><highlight class="normal"><sp/></highlight><highlight class="keyword">private</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="222"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>source_id_,<sp/>sink_id_;</highlight></codeline>
+<codeline lineno="223"><highlight class="normal"></highlight></codeline>
+<codeline lineno="230"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;double&gt;&amp;<sp/>getRes(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="digraph_8h_1a0f10c67f03c054baec3e3bab6a92171e" kindref="member">LemonArc</ref>&amp;<sp/>arc)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="231"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>(*res_map_ptr)[arc];</highlight></codeline>
+<codeline lineno="232"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="233"><highlight class="normal"></highlight></codeline>
+<codeline lineno="240"><highlight class="normal"><sp/><sp/><ref refid="digraph_8h_1a952c6b935f7521c3435dbd13b255246b" kindref="member">LemonNode</ref><sp/>getLNodeFromUserId(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">&amp;<sp/>user_id)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="241"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>lemon_graph_ptr-&gt;nodeFromId(getNodeIdFromUserId(user_id));</highlight></codeline>
+<codeline lineno="242"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="243"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="244"><highlight class="normal"></highlight></codeline>
+<codeline lineno="245"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>bidirectional</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="246"><highlight class="normal"></highlight></codeline>
+<codeline lineno="247"><highlight class="normal"></highlight><highlight class="preprocessor">#endif<sp/>//<sp/>SRC_CC_DIGRAPH_H__</highlight></codeline>
+    </programlisting>
+    <location file="/__w/cspy/cspy/torressa/cspy/src/cc/digraph.h"/>
+  </compounddef>
+</doxygen>

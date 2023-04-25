@@ -1,0 +1,1209 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="classbidirectional_1_1BiDirectional" kind="class" language="C++" prot="public">
+    <compoundname>bidirectional::BiDirectional</compoundname>
+    <includes refid="bidirectional_8h" local="no">bidirectional.h</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="classbidirectional_1_1BiDirectional_1af181d7ebb76e773b7aa5da0da40cc74d" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; bidirectional::BiDirectional::max_res</definition>
+        <argsstring></argsstring>
+        <name>max_res</name>
+        <briefdescription>
+<para>vector with upper and lower bounds for resources </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="55" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classbidirectional_1_1BiDirectional_1af144538113c466b21e18a128f1ffb18e" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; bidirectional::BiDirectional::min_res</definition>
+        <argsstring></argsstring>
+        <name>min_res</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="56" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" bodystart="56" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classbidirectional_1_1BiDirectional_1ae8256189cc23d7033a5e8e36ac36ec4a" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int bidirectional::BiDirectional::source_id</definition>
+        <argsstring></argsstring>
+        <name>source_id</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="57" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" bodystart="57" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classbidirectional_1_1BiDirectional_1a742976c94bdf77c2bfae680ffd2e468d" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int bidirectional::BiDirectional::sink_id</definition>
+        <argsstring></argsstring>
+        <name>sink_id</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="58" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" bodystart="58" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classbidirectional_1_1BiDirectional_1a9cae0f1d49f9662891b6efb8903367ce" prot="private" static="no" mutable="no">
+        <type>std::unique_ptr&lt; <ref refid="classbidirectional_1_1Params" kindref="compound">Params</ref> &gt;</type>
+        <definition>std::unique_ptr&lt;Params&gt; bidirectional::BiDirectional::params_ptr_</definition>
+        <argsstring></argsstring>
+        <name>params_ptr_</name>
+        <briefdescription>
+<para>set random using a given seed </para>        </briefdescription>
+        <detaileddescription>
+<para><ref refid="classbidirectional_1_1Search" kindref="compound">Search</ref> options for the algorithm. <simplesect kind="see"><para><ref refid="classbidirectional_1_1Params" kindref="compound">bidirectional::Params</ref> </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="137" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" bodystart="137" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classbidirectional_1_1BiDirectional_1a6f9816dcc58bb79eb6872fea915b526c" prot="private" static="no" mutable="no">
+        <type>std::unique_ptr&lt; <ref refid="classbidirectional_1_1DiGraph" kindref="compound">DiGraph</ref> &gt;</type>
+        <definition>std::unique_ptr&lt;DiGraph&gt; bidirectional::BiDirectional::graph_ptr_</definition>
+        <argsstring></argsstring>
+        <name>graph_ptr_</name>
+        <briefdescription>
+<para>Pointer to graph. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="139" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" bodystart="139" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classbidirectional_1_1BiDirectional_1aea673f3e05e26573d40a99c6a0bf1e21" prot="private" static="no" mutable="no">
+        <type>std::chrono::time_point&lt; std::chrono::system_clock &gt;</type>
+        <definition>std::chrono::time_point&lt;std::chrono::system_clock&gt; bidirectional::BiDirectional::start_time_</definition>
+        <argsstring></argsstring>
+        <name>start_time_</name>
+        <briefdescription>
+<para>Start time to ensure time limit is met. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="141" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" bodystart="141" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classbidirectional_1_1BiDirectional_1a5850093992af2aa62a4dcf525b6d0a71" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double bidirectional::BiDirectional::primal_st_bound_</definition>
+        <argsstring></argsstring>
+        <name>primal_st_bound_</name>
+        <initializer>= std::nan(&quot;nan&quot;)</initializer>
+        <briefdescription>
+<para>Current primal bound for a complete source-sink path. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="143" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" bodystart="143" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classbidirectional_1_1BiDirectional_1abd00c3e1e9bd1cda16d4a005472a1068" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int bidirectional::BiDirectional::iteration_</definition>
+        <argsstring></argsstring>
+        <name>iteration_</name>
+        <initializer>= 0</initializer>
+        <briefdescription>
+<para>iteration number </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="145" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" bodystart="145" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classbidirectional_1_1BiDirectional_1acbb3f4df8464fee5e3606c80c8d345f0" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool bidirectional::BiDirectional::terminated_early_w_st_path_</definition>
+        <argsstring></argsstring>
+        <name>terminated_early_w_st_path_</name>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="147" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" bodystart="147" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classbidirectional_1_1BiDirectional_1a40a94af6d0a184c1073f6008fdd7acd4" prot="private" static="no" mutable="no">
+        <type><ref refid="namespacebidirectional_1a4cbe6f0bfbd3629c2cd44c98014aed70" kindref="member">Directions</ref></type>
+        <definition>Directions bidirectional::BiDirectional::terminated_early_w_st_path_direction_</definition>
+        <argsstring></argsstring>
+        <name>terminated_early_w_st_path_direction_</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="148" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" bodystart="148" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classbidirectional_1_1BiDirectional_1a882bdfe6d83c174c0ff1828ad5790263" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; bidirectional::BiDirectional::max_res_curr_</definition>
+        <argsstring></argsstring>
+        <name>max_res_curr_</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Vectors with current maximum and minimum resources (first entry contains the dynamic halfway point). </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="152" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" bodystart="152" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classbidirectional_1_1BiDirectional_1a2b8637b42d32e0424b826a82a430797f" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; bidirectional::BiDirectional::min_res_curr_</definition>
+        <argsstring></argsstring>
+        <name>min_res_curr_</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="152" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" bodystart="152" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classbidirectional_1_1BiDirectional_1a306fd2bd0119c00b4ff7c497684186ba" prot="private" static="no" mutable="no">
+        <type>std::shared_ptr&lt; <ref refid="classlabelling_1_1Label" kindref="compound">labelling::Label</ref> &gt;</type>
+        <definition>std::shared_ptr&lt;labelling::Label&gt; bidirectional::BiDirectional::best_label_</definition>
+        <argsstring></argsstring>
+        <name>best_label_</name>
+        <briefdescription>
+<para>Final best label (merged or otherwise) </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="157" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" bodystart="157" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classbidirectional_1_1BiDirectional_1ac25b54a2fcc5c4618b8f96e206587eb5" prot="private" static="no" mutable="no">
+        <type>std::unique_ptr&lt; <ref refid="classbidirectional_1_1Search" kindref="compound">Search</ref> &gt;</type>
+        <definition>std::unique_ptr&lt;Search&gt; bidirectional::BiDirectional::fwd_search_ptr_</definition>
+        <argsstring></argsstring>
+        <name>fwd_search_ptr_</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="159" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" bodystart="159" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classbidirectional_1_1BiDirectional_1a30ac2256c858c8152b1cf26c8df7caa0" prot="private" static="no" mutable="no">
+        <type>std::unique_ptr&lt; <ref refid="classbidirectional_1_1Search" kindref="compound">Search</ref> &gt;</type>
+        <definition>std::unique_ptr&lt;Search&gt; bidirectional::BiDirectional::bwd_search_ptr_</definition>
+        <argsstring></argsstring>
+        <name>bwd_search_ptr_</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="159" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" bodystart="159" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classbidirectional_1_1BiDirectional_1aa8fc8de56198cce766bf887248136fc2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>bidirectional::BiDirectional::BiDirectional</definition>
+        <argsstring>(const int &amp;number_vertices, const int &amp;number_edges, const int &amp;source_id, const int &amp;sink_id, const std::vector&lt; double &gt; &amp;max_res_in, const std::vector&lt; double &gt; &amp;min_res_in)</argsstring>
+        <name>BiDirectional</name>
+        <param>
+          <type>const int &amp;</type>
+          <declname>number_vertices</declname>
+        </param>
+        <param>
+          <type>const int &amp;</type>
+          <declname>number_edges</declname>
+        </param>
+        <param>
+          <type>const int &amp;</type>
+          <declname>source_id</declname>
+        </param>
+        <param>
+          <type>const int &amp;</type>
+          <declname>sink_id</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>max_res_in</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>min_res_in</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">number_vertices</parametername>
+<parametername direction="in">int</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>number of vertices in the graph (to be added using addEdge) </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">number_edges</parametername>
+<parametername direction="in">int</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>number of edges in the graph </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">source_id</parametername>
+<parametername direction="in">int</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>vertex id for the source </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">sink_id</parametername>
+<parametername direction="in">int</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>vertex id for the sink </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">max_res</parametername>
+<parametername direction="in">vector</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>of double with upper bound for resource consumption </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">min_res</parametername>
+<parametername direction="in">vector</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>of double with lower bound for resource consumption </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="42" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.cc" bodystart="12" bodyend="39"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1BiDirectional_1ae8a303f1eab194fb7df356c1900c9c7f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>bidirectional::BiDirectional::~BiDirectional</definition>
+        <argsstring>()</argsstring>
+        <name>~BiDirectional</name>
+        <briefdescription>
+<para>Default destructor. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="51" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" bodystart="51" bodyend="51"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1BiDirectional_1a37633f0f701bfb6a5f3a212212316f29" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void bidirectional::BiDirectional::addNodes</definition>
+        <argsstring>(const std::vector&lt; int &gt; &amp;nodes)</argsstring>
+        <name>addNodes</name>
+        <param>
+          <type>const std::vector&lt; int &gt; &amp;</type>
+          <declname>nodes</declname>
+        </param>
+        <briefdescription>
+<para>Wrapper to add nodes to the graph. </para>        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ref refid="classbidirectional_1_1DiGraph_1a483c50e9b5b483472ae7ee2910f3bcda" kindref="member">DiGraph::addNodes</ref> </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="64" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" bodystart="64" bodyend="64"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1BiDirectional_1a5e4873f624300e7c3620e00758c98a35" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void bidirectional::BiDirectional::addEdge</definition>
+        <argsstring>(const int &amp;tail, const int &amp;head, const double &amp;weight, const std::vector&lt; double &gt; &amp;resource_consumption)</argsstring>
+        <name>addEdge</name>
+        <param>
+          <type>const int &amp;</type>
+          <declname>tail</declname>
+        </param>
+        <param>
+          <type>const int &amp;</type>
+          <declname>head</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>weight</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>resource_consumption</declname>
+        </param>
+        <briefdescription>
+<para>Add an edge to the graph. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="66" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" bodystart="66" bodyend="72"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1BiDirectional_1ac29ad49abb6001ad50f4dac4a5775b3c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void bidirectional::BiDirectional::run</definition>
+        <argsstring>()</argsstring>
+        <name>run</name>
+        <briefdescription>
+<para>run the algorithm (assumes all the appropriate options are set) </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="74" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.cc" bodystart="71" bodyend="88"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1BiDirectional_1a25af01f68ffce330a85922d02aa2ce88" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>std::vector&lt; int &gt;</type>
+        <definition>std::vector&lt; int &gt; bidirectional::BiDirectional::getPath</definition>
+        <argsstring>() const</argsstring>
+        <name>getPath</name>
+        <briefdescription>
+<para>Return the final path. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="79" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.cc" bodystart="41" bodyend="43"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1BiDirectional_1a426412403ca7693f52b12a198d3f57c5" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt; double &gt; bidirectional::BiDirectional::getConsumedResources</definition>
+        <argsstring>() const</argsstring>
+        <name>getConsumedResources</name>
+        <briefdescription>
+<para>Return the consumed resources. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="81" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.cc" bodystart="45" bodyend="47"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1BiDirectional_1a7f18313a5858ce248b7819f7c214a43f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double bidirectional::BiDirectional::getTotalCost</definition>
+        <argsstring>() const</argsstring>
+        <name>getTotalCost</name>
+        <briefdescription>
+<para>Return the total cost. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="83" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.cc" bodystart="49" bodyend="51"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1BiDirectional_1ad57667c8edeafda55eba523d02ff33e6" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void bidirectional::BiDirectional::checkCriticalRes</definition>
+        <argsstring>() const</argsstring>
+        <name>checkCriticalRes</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>After running the algorithm, one can check if critical resource is tight (difference between final resource and maximum) and prints a message if it doesn&apos;t match to the one chosen in <ref refid="classbidirectional_1_1Params" kindref="compound">Params</ref>. </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="87" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.cc" bodystart="53" bodyend="69"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1BiDirectional_1ac0961c36b450c9886562b0c63156da12" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void bidirectional::BiDirectional::setDirection</definition>
+        <argsstring>(const std::string &amp;direction_in)</argsstring>
+        <name>setDirection</name>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>direction_in</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ref refid="classbidirectional_1_1Params" kindref="compound">bidirectional::Params</ref> </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="92" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" bodystart="92" bodyend="94"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1BiDirectional_1a11320df93ad8e5747aa1f3e14cbe44bd" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void bidirectional::BiDirectional::setMethod</definition>
+        <argsstring>(const std::string &amp;method_in)</argsstring>
+        <name>setMethod</name>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>method_in</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ref refid="classbidirectional_1_1Params" kindref="compound">bidirectional::Params</ref> </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="96" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" bodystart="96" bodyend="98"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1BiDirectional_1af21bde5b9190abb4f0ea10ef3f8b30b4" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void bidirectional::BiDirectional::setTimeLimit</definition>
+        <argsstring>(const double &amp;time_limit_in)</argsstring>
+        <name>setTimeLimit</name>
+        <param>
+          <type>const double &amp;</type>
+          <declname>time_limit_in</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ref refid="classbidirectional_1_1Params" kindref="compound">bidirectional::Params</ref> </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="100" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" bodystart="100" bodyend="102"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1BiDirectional_1a007a9d61310ec94a2470c75dd62b537a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void bidirectional::BiDirectional::setThreshold</definition>
+        <argsstring>(const double &amp;threshold_in)</argsstring>
+        <name>setThreshold</name>
+        <param>
+          <type>const double &amp;</type>
+          <declname>threshold_in</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ref refid="classbidirectional_1_1Params" kindref="compound">bidirectional::Params</ref> </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="104" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" bodystart="104" bodyend="106"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1BiDirectional_1aafbbf3fb26308432be606799903f430e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void bidirectional::BiDirectional::setElementary</definition>
+        <argsstring>(const bool &amp;elementary_in)</argsstring>
+        <name>setElementary</name>
+        <param>
+          <type>const bool &amp;</type>
+          <declname>elementary_in</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ref refid="classbidirectional_1_1Params" kindref="compound">bidirectional::Params</ref> </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="108" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" bodystart="108" bodyend="110"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1BiDirectional_1adc4255b9f2ad9c9271805a64f93ea7c9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void bidirectional::BiDirectional::setTwoCycleElimination</definition>
+        <argsstring>(const bool &amp;two_cycle_elimination_in)</argsstring>
+        <name>setTwoCycleElimination</name>
+        <param>
+          <type>const bool &amp;</type>
+          <declname>two_cycle_elimination_in</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ref refid="classbidirectional_1_1Params" kindref="compound">bidirectional::Params</ref> </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="112" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" bodystart="112" bodyend="114"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1BiDirectional_1ac3cb989cdc2f4c1cedde6b30a9e7c1d8" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void bidirectional::BiDirectional::setBoundsPruning</definition>
+        <argsstring>(const bool &amp;bounds_pruning_in)</argsstring>
+        <name>setBoundsPruning</name>
+        <param>
+          <type>const bool &amp;</type>
+          <declname>bounds_pruning_in</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ref refid="classbidirectional_1_1Params" kindref="compound">bidirectional::Params</ref> </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="116" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" bodystart="116" bodyend="118"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1BiDirectional_1ad309aa627316fbccdf1d6e747d064c05" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void bidirectional::BiDirectional::setFindCriticalRes</definition>
+        <argsstring>(const bool &amp;find_critical_res_in)</argsstring>
+        <name>setFindCriticalRes</name>
+        <param>
+          <type>const bool &amp;</type>
+          <declname>find_critical_res_in</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ref refid="classbidirectional_1_1Params" kindref="compound">bidirectional::Params</ref> and <ref refid="namespacebidirectional_1a7b92b2282139801a9e2668a743ad07a1" kindref="member">getCriticalRes</ref> </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="120" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" bodystart="120" bodyend="122"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1BiDirectional_1ad0a3ef7e4a5fcabfa34f9401532258b5" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void bidirectional::BiDirectional::setCriticalRes</definition>
+        <argsstring>(const int &amp;critical_res_in)</argsstring>
+        <name>setCriticalRes</name>
+        <param>
+          <type>const int &amp;</type>
+          <declname>critical_res_in</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="see"><para><ref refid="classbidirectional_1_1Params" kindref="compound">bidirectional::Params</ref> </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="124" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" bodystart="124" bodyend="126"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1BiDirectional_1a901d84e260c2d18c3a3f2d14a5492278" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void bidirectional::BiDirectional::setREFCallback</definition>
+        <argsstring>(bidirectional::REFCallback *cb)</argsstring>
+        <name>setREFCallback</name>
+        <param>
+          <type><ref refid="classbidirectional_1_1REFCallback" kindref="compound">bidirectional::REFCallback</ref> *</type>
+          <declname>cb</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Pass python callback for label extensions. Note: swig needs namespace specifier </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="129" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" bodystart="129" bodyend="131"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="classbidirectional_1_1BiDirectional_1aff81cb033adff2f0093b3ea5cab84b0f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void bidirectional::BiDirectional::init</definition>
+        <argsstring>()</argsstring>
+        <name>init</name>
+        <briefdescription>
+<para>Wrapper to initialise search in the appropriate direction. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="164" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.cc" bodystart="130" bodyend="153"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1BiDirectional_1a3406946d52e744b65e9381ff8a253dd0" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void bidirectional::BiDirectional::initSearch</definition>
+        <argsstring>(const Directions &amp;direction)</argsstring>
+        <name>initSearch</name>
+        <param>
+          <type>const <ref refid="namespacebidirectional_1a4cbe6f0bfbd3629c2cd44c98014aed70" kindref="member">Directions</ref> &amp;</type>
+          <declname>direction</declname>
+        </param>
+        <briefdescription>
+<para>Initialise respective <ref refid="classbidirectional_1_1Search" kindref="compound">Search</ref>. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="166" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.cc" bodystart="155" bodyend="161"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1BiDirectional_1a260c7a1ccbf1a69b5bb246cad4f81ea2" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void bidirectional::BiDirectional::initResourceBounds</definition>
+        <argsstring>()</argsstring>
+        <name>initResourceBounds</name>
+        <briefdescription>
+<para>Initialise labels with appropriate resources. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="168" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.cc" bodystart="163" bodyend="166"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1BiDirectional_1a6660185ec81c5b4fa5660f11400b4b99" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void bidirectional::BiDirectional::initContainers</definition>
+        <argsstring>()</argsstring>
+        <name>initContainers</name>
+        <briefdescription>
+<para>Make <computeroutput>unprocessed_labels_</computeroutput> a heap. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="170" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.cc" bodystart="200" bodyend="208"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1BiDirectional_1a5ec54d7bd530df479dd7c6cf3435cae0" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void bidirectional::BiDirectional::initLabels</definition>
+        <argsstring>(const Directions &amp;direction)</argsstring>
+        <name>initLabels</name>
+        <param>
+          <type>const <ref refid="namespacebidirectional_1a4cbe6f0bfbd3629c2cd44c98014aed70" kindref="member">Directions</ref> &amp;</type>
+          <declname>direction</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Construct first label and initialise <computeroutput>unprocessed_labels_</computeroutput> heap, <computeroutput>best_labels</computeroutput> source bucket and <computeroutput>visited_vertices</computeroutput>. </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="173" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.cc" bodystart="168" bodyend="198"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1BiDirectional_1ae351b1cfd8f74f8cf787b6be409ac394" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void bidirectional::BiDirectional::runPreprocessing</definition>
+        <argsstring>()</argsstring>
+        <name>runPreprocessing</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Run preprocessing steps if required. Currently includes:<itemizedlist>
+<listitem><para>Obtain shortest paths bounds</para></listitem><listitem><para>TODO: Bounding and adjusting of resource bounds </para></listitem></itemizedlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="179" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.cc" bodystart="94" bodyend="128"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1BiDirectional_1a0a1f9801408dedebf6ebfa5f788376e8" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="namespacebidirectional_1a4cbe6f0bfbd3629c2cd44c98014aed70" kindref="member">Directions</ref></type>
+        <definition>Directions bidirectional::BiDirectional::getDirection</definition>
+        <argsstring>() const</argsstring>
+        <name>getDirection</name>
+        <briefdescription>
+<para>Get the next direction to search. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="183" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.cc" bodystart="212" bodyend="263"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1BiDirectional_1ae5254d4c072a9d9e27eaecd9c97acf7a" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="classbidirectional_1_1Search" kindref="compound">Search</ref> *</type>
+        <definition>Search* bidirectional::BiDirectional::getSearchPtr</definition>
+        <argsstring>(Directions direction)</argsstring>
+        <name>getSearchPtr</name>
+        <param>
+          <type><ref refid="namespacebidirectional_1a4cbe6f0bfbd3629c2cd44c98014aed70" kindref="member">Directions</ref></type>
+          <declname>direction</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="185" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" bodystart="185" bodyend="189"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1BiDirectional_1a82bf8cc7ca72688753baa31f26cf7543" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void bidirectional::BiDirectional::move</definition>
+        <argsstring>(const Directions &amp;direction)</argsstring>
+        <name>move</name>
+        <param>
+          <type>const <ref refid="namespacebidirectional_1a4cbe6f0bfbd3629c2cd44c98014aed70" kindref="member">Directions</ref> &amp;</type>
+          <declname>direction</declname>
+        </param>
+        <briefdescription>
+<para>Advance the search in a given direction. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="192" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.cc" bodystart="265" bodyend="278"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1BiDirectional_1a3e03f725e273ecd0fe8b23dad15cd9b3" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool bidirectional::BiDirectional::terminate</definition>
+        <argsstring>(const Directions &amp;direction, const labelling::Label &amp;label)</argsstring>
+        <name>terminate</name>
+        <param>
+          <type>const <ref refid="namespacebidirectional_1a4cbe6f0bfbd3629c2cd44c98014aed70" kindref="member">Directions</ref> &amp;</type>
+          <declname>direction</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classlabelling_1_1Label" kindref="compound">labelling::Label</ref> &amp;</type>
+          <declname>label</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>checks if the time_limit if over (if set) or if a label under the threshold has been found (if set). Sets terminated_early_w_st_path_ </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="196" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.cc" bodystart="285" bodyend="295"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1BiDirectional_1a0a13e79110feb1527adc5af9bf92a976" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool bidirectional::BiDirectional::terminate</definition>
+        <argsstring>(const Directions &amp;direction)</argsstring>
+        <name>terminate</name>
+        <param>
+          <type>const <ref refid="namespacebidirectional_1a4cbe6f0bfbd3629c2cd44c98014aed70" kindref="member">Directions</ref> &amp;</type>
+          <declname>direction</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="198" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.cc" bodystart="280" bodyend="283"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1BiDirectional_1a38735093a7446bc9d653ac8955b6f3a7" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool bidirectional::BiDirectional::checkValidLabel</definition>
+        <argsstring>(const Directions &amp;direction, const labelling::Label &amp;label)</argsstring>
+        <name>checkValidLabel</name>
+        <param>
+          <type>const <ref refid="namespacebidirectional_1a4cbe6f0bfbd3629c2cd44c98014aed70" kindref="member">Directions</ref> &amp;</type>
+          <declname>direction</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classlabelling_1_1Label" kindref="compound">labelling::Label</ref> &amp;</type>
+          <declname>label</declname>
+        </param>
+        <briefdescription>
+<para>Wrapper to check whether a label is valid. Checks s-t path + threshold. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="203" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.cc" bodystart="314" bodyend="327"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1BiDirectional_1a8da8869897a46e9436debda90c8d7c86" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool bidirectional::BiDirectional::checkBounds</definition>
+        <argsstring>(const Directions &amp;direction)</argsstring>
+        <name>checkBounds</name>
+        <param>
+          <type>const <ref refid="namespacebidirectional_1a4cbe6f0bfbd3629c2cd44c98014aed70" kindref="member">Directions</ref> &amp;</type>
+          <declname>direction</declname>
+        </param>
+        <briefdescription>
+<para>Returns true if half-way points are being violated. False otherwise. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="208" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.cc" bodystart="329" bodyend="348"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1BiDirectional_1a6e53bef30584998da196de0c9198bdac" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool bidirectional::BiDirectional::checkPrimalBound</definition>
+        <argsstring>(const Directions &amp;direction, const labelling::Label &amp;candidate_label)</argsstring>
+        <name>checkPrimalBound</name>
+        <param>
+          <type>const <ref refid="namespacebidirectional_1a4cbe6f0bfbd3629c2cd44c98014aed70" kindref="member">Directions</ref> &amp;</type>
+          <declname>direction</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classlabelling_1_1Label" kindref="compound">labelling::Label</ref> &amp;</type>
+          <declname>candidate_label</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>If bounds_pruning is true then check whether an input label plus a lower bound for the path (from the node of the label to the source/sink) violates the current primal bound.</para><para><simplesect kind="return"><para>true if primal bound is violated, false otherwise. i.e. if true, then input label cannot appear in the optimal solution. </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="218" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.cc" bodystart="350" bodyend="366"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1BiDirectional_1ae735d767c710e83ae00a0a24fb4b9880" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool bidirectional::BiDirectional::checkVertexVisited</definition>
+        <argsstring>(const Directions &amp;direction, const int &amp;vertex_idx)</argsstring>
+        <name>checkVertexVisited</name>
+        <param>
+          <type>const <ref refid="namespacebidirectional_1a4cbe6f0bfbd3629c2cd44c98014aed70" kindref="member">Directions</ref> &amp;</type>
+          <declname>direction</declname>
+        </param>
+        <param>
+          <type>const int &amp;</type>
+          <declname>vertex_idx</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>checks if a given vertex has been visited in a given direction</para><para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">direction</parametername>
+<parametername direction="in">Directions</parametername>
+</parameternamelist>
+<parameterdescription>
+<para></para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">vertex_idx</parametername>
+<parametername direction="in">int.</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Lemon id of vertex to check. </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>true if it has been visited false otherwise </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="229" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.cc" bodystart="368" bodyend="375"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1BiDirectional_1a8ca5703178beddb8d36a73a18980fa72" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void bidirectional::BiDirectional::updateCurrentLabel</definition>
+        <argsstring>(const Directions &amp;direction)</argsstring>
+        <name>updateCurrentLabel</name>
+        <param>
+          <type>const <ref refid="namespacebidirectional_1a4cbe6f0bfbd3629c2cd44c98014aed70" kindref="member">Directions</ref> &amp;</type>
+          <declname>direction</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Call <ref refid="namespacelabelling_1a7d32365acb745f452e0b81beed2ce2be" kindref="member">labelling::getNextLabel</ref> to get next label in the heap (unprocessed_labels_) and update the current_label member </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="233" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.cc" bodystart="297" bodyend="311"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1BiDirectional_1a5d74eb1905283342846fdd69f22517ea" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void bidirectional::BiDirectional::updateHalfWayPoints</definition>
+        <argsstring>(const Directions &amp;direction)</argsstring>
+        <name>updateHalfWayPoints</name>
+        <param>
+          <type>const <ref refid="namespacebidirectional_1a4cbe6f0bfbd3629c2cd44c98014aed70" kindref="member">Directions</ref> &amp;</type>
+          <declname>direction</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Update half-way points and check if the current labels violates them, in which case sets the stop member to true. </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="237" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.cc" bodystart="377" bodyend="393"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1BiDirectional_1a1a08c86e364b89efd4531399586a296c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void bidirectional::BiDirectional::updateEfficientLabels</definition>
+        <argsstring>(const Directions &amp;direction, const labelling::Label &amp;candidate_label)</argsstring>
+        <name>updateEfficientLabels</name>
+        <param>
+          <type>const <ref refid="namespacebidirectional_1a4cbe6f0bfbd3629c2cd44c98014aed70" kindref="member">Directions</ref> &amp;</type>
+          <declname>direction</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classlabelling_1_1Label" kindref="compound">labelling::Label</ref> &amp;</type>
+          <declname>candidate_label</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Given a candidate_label by looking at the vector of labels (bucket) for that node, we can check if the candidate_label has already been saved or it is dominated. If both of these conditions are false, not seen and not dominated, then we add it to the bucket. Additionally, if the bounds_pruning option is active, we check the bounds here, as an extra condition to add a label to the bucket. Also, <computeroutput>visited_vertices</computeroutput> is updated here. </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="248" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.cc" bodystart="460" bodyend="502"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1BiDirectional_1addd9656f84b74cfaf9e7775a3da9470a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void bidirectional::BiDirectional::updateBestLabels</definition>
+        <argsstring>(const Directions &amp;direction, const labelling::Label &amp;candidate_label)</argsstring>
+        <name>updateBestLabels</name>
+        <param>
+          <type>const <ref refid="namespacebidirectional_1a4cbe6f0bfbd3629c2cd44c98014aed70" kindref="member">Directions</ref> &amp;</type>
+          <declname>direction</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classlabelling_1_1Label" kindref="compound">labelling::Label</ref> &amp;</type>
+          <declname>candidate_label</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Update <computeroutput>best_labels</computeroutput> entry by node with the candidate_label if appropriate </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="254" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.cc" bodystart="504" bodyend="535"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1BiDirectional_1a2ff186ea4e83f3c6177c4271c24db9dd" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void bidirectional::BiDirectional::extendCurrentLabel</definition>
+        <argsstring>(const Directions &amp;direction)</argsstring>
+        <name>extendCurrentLabel</name>
+        <param>
+          <type>const <ref refid="namespacebidirectional_1a4cbe6f0bfbd3629c2cd44c98014aed70" kindref="member">Directions</ref> &amp;</type>
+          <declname>direction</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Iterate over the neighbours for the current label node and extends it when appropriate. </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="262" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.cc" bodystart="395" bodyend="429"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1BiDirectional_1ab20c45ea50c4ef464caee021ed7489cc" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void bidirectional::BiDirectional::extendSingleLabel</definition>
+        <argsstring>(labelling::Label *label, const Directions &amp;direction, const AdjVertex &amp;adj_vertex)</argsstring>
+        <name>extendSingleLabel</name>
+        <param>
+          <type><ref refid="classlabelling_1_1Label" kindref="compound">labelling::Label</ref> *</type>
+          <declname>label</declname>
+        </param>
+        <param>
+          <type>const <ref refid="namespacebidirectional_1a4cbe6f0bfbd3629c2cd44c98014aed70" kindref="member">Directions</ref> &amp;</type>
+          <declname>direction</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structbidirectional_1_1AdjVertex" kindref="compound">AdjVertex</ref> &amp;</type>
+          <declname>adj_vertex</declname>
+        </param>
+        <briefdescription>
+<para>Helper function to extend along a given arc. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="265" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.cc" bodystart="431" bodyend="458"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1BiDirectional_1ae1a276649ec8a57ee174379006d0351d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void bidirectional::BiDirectional::saveCurrentBestLabel</definition>
+        <argsstring>(const Directions &amp;direction)</argsstring>
+        <name>saveCurrentBestLabel</name>
+        <param>
+          <type>const <ref refid="namespacebidirectional_1a4cbe6f0bfbd3629c2cd44c98014aed70" kindref="member">Directions</ref> &amp;</type>
+          <declname>direction</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Saves/updates globally best label and check if it is Source-Sink so we can use it in the bounding. Sets <computeroutput>final_label</computeroutput> </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="274" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.cc" bodystart="537" bodyend="589"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1BiDirectional_1a0c4451d6286c0167fc274d365c85758d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void bidirectional::BiDirectional::postProcessing</definition>
+        <argsstring>()</argsstring>
+        <name>postProcessing</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Wrapper to process of output path. Either saves appropriate label (single-direction search or early termination) or, calls joinLabels to merge forward + backward labels</para><para>Post-processing methods </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="284" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.cc" bodystart="595" bodyend="630"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1BiDirectional_1a1eb2085ce3f4dce8b97ee409055ebd1f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double bidirectional::BiDirectional::getUB</definition>
+        <argsstring>()</argsstring>
+        <name>getUB</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>get upper bound using a valid source-sink path (minimum of both forward and backward source-sink paths) <simplesect kind="return"><para>double with upper bound </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="291" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.cc" bodystart="632" bodyend="649"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1BiDirectional_1a291f4d5ce53e932247a8bff9059c9bcf" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void bidirectional::BiDirectional::getMinimumWeights</definition>
+        <argsstring>(double *fwd_min, double *bwd_min)</argsstring>
+        <name>getMinimumWeights</name>
+        <param>
+          <type>double *</type>
+          <declname>fwd_min</declname>
+        </param>
+        <param>
+          <type>double *</type>
+          <declname>bwd_min</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>get minimum weight across all forward / backward labels</para><para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">fwd_min</parametername>
+<parametername direction="out">double</parametername>
+<parametername direction="out">minimum</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>across all forward labels </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">bwd_min</parametername>
+<parametername direction="out">double</parametername>
+<parametername direction="out">minimum</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>across all backward labels </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="299" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.cc" bodystart="651" bodyend="669"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1BiDirectional_1ac0316e4ac4a036e8a4c57adae1074df6" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double bidirectional::BiDirectional::getElapsedTime</definition>
+        <argsstring>()</argsstring>
+        <name>getElapsedTime</name>
+        <briefdescription>
+<para>return time since start time in seconds. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="303" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" bodystart="303" bodyend="307"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1BiDirectional_1aeb5a7e851086ff00091edee9316cd5c7" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void bidirectional::BiDirectional::joinLabels</definition>
+        <argsstring>()</argsstring>
+        <name>joinLabels</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The procedure &quot;Join&quot; or Algorithm 3 from Righini and Salani (2006).</para><para><simplesect kind="see"><para>: <ulink url="https://www.sciencedirect.com/science/article/pii/S1572528606000417">https://www.sciencedirect.com/science/article/pii/S1572528606000417</ulink> </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="314" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.cc" bodystart="671" bodyend="762"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para><ref refid="classbidirectional_1_1BiDirectional" kindref="compound">BiDirectional</ref> algorithm. see docs</para><para><orderedlist>
+<listitem><para>ctor (memory allocation for the graph)</para></listitem><listitem><para>add edges to graph using <computeroutput>addEdge</computeroutput>.</para></listitem><listitem><para>[optional] set solving parameters if desired (e.g. time_limit, ...) 3.1. [optional] set callback using <computeroutput>setREFCallback</computeroutput> 3.2. [optional] set seed using <computeroutput>setSeed</computeroutput></para></listitem><listitem><para>call <computeroutput>run</computeroutput> </para></listitem></orderedlist>
+</para>    </detaileddescription>
+    <collaborationgraph>
+      <node id="9">
+        <label>vector&lt; double &gt;</label>
+      </node>
+      <node id="10">
+        <label>int</label>
+      </node>
+      <node id="8">
+        <label>bidirectional::BiDirectional</label>
+        <link refid="classbidirectional_1_1BiDirectional"/>
+        <childnode refid="9" relation="usage">
+          <edgelabel>+min_res</edgelabel>
+          <edgelabel>+max_res</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="usage">
+          <edgelabel>+sink_id</edgelabel>
+          <edgelabel>+source_id</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" line="29" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h" bodystart="29" bodyend="315"/>
+    <listofallmembers>
+      <member refid="classbidirectional_1_1BiDirectional_1a5e4873f624300e7c3620e00758c98a35" prot="public" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>addEdge</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1a37633f0f701bfb6a5f3a212212316f29" prot="public" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>addNodes</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1a306fd2bd0119c00b4ff7c497684186ba" prot="private" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>best_label_</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1aa8fc8de56198cce766bf887248136fc2" prot="public" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>BiDirectional</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1a30ac2256c858c8152b1cf26c8df7caa0" prot="private" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>bwd_search_ptr_</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1a8da8869897a46e9436debda90c8d7c86" prot="private" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>checkBounds</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1ad57667c8edeafda55eba523d02ff33e6" prot="public" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>checkCriticalRes</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1a6e53bef30584998da196de0c9198bdac" prot="private" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>checkPrimalBound</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1a38735093a7446bc9d653ac8955b6f3a7" prot="private" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>checkValidLabel</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1ae735d767c710e83ae00a0a24fb4b9880" prot="private" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>checkVertexVisited</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1a2ff186ea4e83f3c6177c4271c24db9dd" prot="private" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>extendCurrentLabel</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1ab20c45ea50c4ef464caee021ed7489cc" prot="private" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>extendSingleLabel</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1ac25b54a2fcc5c4618b8f96e206587eb5" prot="private" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>fwd_search_ptr_</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1a426412403ca7693f52b12a198d3f57c5" prot="public" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>getConsumedResources</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1a0a1f9801408dedebf6ebfa5f788376e8" prot="private" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>getDirection</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1ac0316e4ac4a036e8a4c57adae1074df6" prot="private" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>getElapsedTime</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1a291f4d5ce53e932247a8bff9059c9bcf" prot="private" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>getMinimumWeights</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1a25af01f68ffce330a85922d02aa2ce88" prot="public" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>getPath</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1ae5254d4c072a9d9e27eaecd9c97acf7a" prot="private" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>getSearchPtr</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1a7f18313a5858ce248b7819f7c214a43f" prot="public" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>getTotalCost</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1a1eb2085ce3f4dce8b97ee409055ebd1f" prot="private" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>getUB</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1a6f9816dcc58bb79eb6872fea915b526c" prot="private" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>graph_ptr_</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1aff81cb033adff2f0093b3ea5cab84b0f" prot="private" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>init</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1a6660185ec81c5b4fa5660f11400b4b99" prot="private" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>initContainers</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1a5ec54d7bd530df479dd7c6cf3435cae0" prot="private" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>initLabels</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1a260c7a1ccbf1a69b5bb246cad4f81ea2" prot="private" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>initResourceBounds</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1a3406946d52e744b65e9381ff8a253dd0" prot="private" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>initSearch</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1abd00c3e1e9bd1cda16d4a005472a1068" prot="private" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>iteration_</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1aeb5a7e851086ff00091edee9316cd5c7" prot="private" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>joinLabels</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1af181d7ebb76e773b7aa5da0da40cc74d" prot="public" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>max_res</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1a882bdfe6d83c174c0ff1828ad5790263" prot="private" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>max_res_curr_</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1af144538113c466b21e18a128f1ffb18e" prot="public" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>min_res</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1a2b8637b42d32e0424b826a82a430797f" prot="private" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>min_res_curr_</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1a82bf8cc7ca72688753baa31f26cf7543" prot="private" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>move</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1a9cae0f1d49f9662891b6efb8903367ce" prot="private" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>params_ptr_</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1a0c4451d6286c0167fc274d365c85758d" prot="private" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>postProcessing</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1a5850093992af2aa62a4dcf525b6d0a71" prot="private" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>primal_st_bound_</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1ac29ad49abb6001ad50f4dac4a5775b3c" prot="public" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>run</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1ae351b1cfd8f74f8cf787b6be409ac394" prot="private" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>runPreprocessing</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1ae1a276649ec8a57ee174379006d0351d" prot="private" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>saveCurrentBestLabel</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1ac3cb989cdc2f4c1cedde6b30a9e7c1d8" prot="public" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>setBoundsPruning</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1ad0a3ef7e4a5fcabfa34f9401532258b5" prot="public" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>setCriticalRes</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1ac0961c36b450c9886562b0c63156da12" prot="public" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>setDirection</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1aafbbf3fb26308432be606799903f430e" prot="public" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>setElementary</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1ad309aa627316fbccdf1d6e747d064c05" prot="public" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>setFindCriticalRes</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1a11320df93ad8e5747aa1f3e14cbe44bd" prot="public" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>setMethod</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1a901d84e260c2d18c3a3f2d14a5492278" prot="public" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>setREFCallback</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1a007a9d61310ec94a2470c75dd62b537a" prot="public" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>setThreshold</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1af21bde5b9190abb4f0ea10ef3f8b30b4" prot="public" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>setTimeLimit</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1adc4255b9f2ad9c9271805a64f93ea7c9" prot="public" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>setTwoCycleElimination</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1a742976c94bdf77c2bfae680ffd2e468d" prot="public" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>sink_id</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1ae8256189cc23d7033a5e8e36ac36ec4a" prot="public" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>source_id</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1aea673f3e05e26573d40a99c6a0bf1e21" prot="private" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>start_time_</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1a3e03f725e273ecd0fe8b23dad15cd9b3" prot="private" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>terminate</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1a0a13e79110feb1527adc5af9bf92a976" prot="private" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>terminate</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1acbb3f4df8464fee5e3606c80c8d345f0" prot="private" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>terminated_early_w_st_path_</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1a40a94af6d0a184c1073f6008fdd7acd4" prot="private" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>terminated_early_w_st_path_direction_</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1addd9656f84b74cfaf9e7775a3da9470a" prot="private" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>updateBestLabels</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1a8ca5703178beddb8d36a73a18980fa72" prot="private" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>updateCurrentLabel</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1a1a08c86e364b89efd4531399586a296c" prot="private" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>updateEfficientLabels</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1a5d74eb1905283342846fdd69f22517ea" prot="private" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>updateHalfWayPoints</name></member>
+      <member refid="classbidirectional_1_1BiDirectional_1ae8a303f1eab194fb7df356c1900c9c7f" prot="public" virt="non-virtual"><scope>bidirectional::BiDirectional</scope><name>~BiDirectional</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

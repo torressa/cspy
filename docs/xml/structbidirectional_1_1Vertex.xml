@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="structbidirectional_1_1Vertex" kind="struct" language="C++" prot="public">
+    <compoundname>bidirectional::Vertex</compoundname>
+    <includes refid="digraph_8h" local="no">digraph.h</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structbidirectional_1_1Vertex_1a93afb7643b7fb823dc2e337d233bef9e" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int bidirectional::Vertex::lemon_id</definition>
+        <argsstring></argsstring>
+        <name>lemon_id</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/digraph.h" line="23" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/digraph.h" bodystart="23" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structbidirectional_1_1Vertex_1a31a815c1052e67dbe13c7327b020aa0c" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int bidirectional::Vertex::user_id</definition>
+        <argsstring></argsstring>
+        <name>user_id</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/digraph.h" line="24" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/digraph.h" bodystart="24" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para><ref refid="structbidirectional_1_1Vertex" kindref="compound">Vertex</ref> to hold lemon id in the graph and the corresponding user id (may be different) </para>    </detaileddescription>
+    <collaborationgraph>
+      <node id="61">
+        <label>int</label>
+      </node>
+      <node id="60">
+        <label>bidirectional::Vertex</label>
+        <link refid="structbidirectional_1_1Vertex"/>
+        <childnode refid="61" relation="usage">
+          <edgelabel>+user_id</edgelabel>
+          <edgelabel>+lemon_id</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="/__w/cspy/cspy/torressa/cspy/src/cc/digraph.h" line="21" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/digraph.h" bodystart="21" bodyend="25"/>
+    <listofallmembers>
+      <member refid="structbidirectional_1_1Vertex_1a93afb7643b7fb823dc2e337d233bef9e" prot="public" virt="non-virtual"><scope>bidirectional::Vertex</scope><name>lemon_id</name></member>
+      <member refid="structbidirectional_1_1Vertex_1a31a815c1052e67dbe13c7327b020aa0c" prot="public" virt="non-virtual"><scope>bidirectional::Vertex</scope><name>user_id</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

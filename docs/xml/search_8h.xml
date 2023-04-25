@@ -1,0 +1,213 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="search_8h" kind="file" language="C++">
+    <compoundname>search.h</compoundname>
+    <includes local="no">memory</includes>
+    <includes local="no">set</includes>
+    <includes local="no">vector</includes>
+    <includes refid="labelling_8h" local="yes">labelling.h</includes>
+    <includedby refid="bidirectional_8h" local="yes">/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h</includedby>
+    <includedby refid="search_8cc" local="yes">/__w/cspy/cspy/torressa/cspy/src/cc/search.cc</includedby>
+    <incdepgraph>
+      <node id="185">
+        <label>lemon/maps.h</label>
+      </node>
+      <node id="187">
+        <label>lemon/smart_graph.h</label>
+      </node>
+      <node id="182">
+        <label>cmath</label>
+      </node>
+      <node id="190">
+        <label>string</label>
+      </node>
+      <node id="191">
+        <label>spdlog/spdlog.h</label>
+      </node>
+      <node id="186">
+        <label>lemon/path.h</label>
+      </node>
+      <node id="180">
+        <label>vector</label>
+      </node>
+      <node id="183">
+        <label>src/cc/config.h</label>
+      </node>
+      <node id="188">
+        <label>src/cc/params.h</label>
+        <link refid="params_8h"/>
+        <childnode refid="182" relation="include">
+        </childnode>
+        <childnode refid="180" relation="include">
+        </childnode>
+        <childnode refid="189" relation="include">
+        </childnode>
+      </node>
+      <node id="179">
+        <label>set</label>
+      </node>
+      <node id="184">
+        <label>src/cc/digraph.h</label>
+        <link refid="digraph_8h"/>
+        <childnode refid="178" relation="include">
+        </childnode>
+        <childnode refid="180" relation="include">
+        </childnode>
+        <childnode refid="185" relation="include">
+        </childnode>
+        <childnode refid="186" relation="include">
+        </childnode>
+        <childnode refid="187" relation="include">
+        </childnode>
+      </node>
+      <node id="177">
+        <label>/__w/cspy/cspy/torressa/cspy/src/cc/search.h</label>
+        <link refid="search_8h"/>
+        <childnode refid="178" relation="include">
+        </childnode>
+        <childnode refid="179" relation="include">
+        </childnode>
+        <childnode refid="180" relation="include">
+        </childnode>
+        <childnode refid="181" relation="include">
+        </childnode>
+      </node>
+      <node id="181">
+        <label>labelling.h</label>
+        <link refid="labelling_8h"/>
+        <childnode refid="182" relation="include">
+        </childnode>
+        <childnode refid="179" relation="include">
+        </childnode>
+        <childnode refid="180" relation="include">
+        </childnode>
+        <childnode refid="183" relation="include">
+        </childnode>
+        <childnode refid="184" relation="include">
+        </childnode>
+        <childnode refid="188" relation="include">
+        </childnode>
+        <childnode refid="191" relation="include">
+        </childnode>
+      </node>
+      <node id="189">
+        <label>ref_callback.h</label>
+        <link refid="ref__callback_8h"/>
+        <childnode refid="190" relation="include">
+        </childnode>
+        <childnode refid="180" relation="include">
+        </childnode>
+      </node>
+      <node id="178">
+        <label>memory</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="194">
+        <label>/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.cc</label>
+        <link refid="bidirectional_8cc"/>
+      </node>
+      <node id="193">
+        <label>/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.h</label>
+        <link refid="bidirectional_8h"/>
+        <childnode refid="194" relation="include">
+        </childnode>
+      </node>
+      <node id="192">
+        <label>/__w/cspy/cspy/torressa/cspy/src/cc/search.h</label>
+        <link refid="search_8h"/>
+        <childnode refid="193" relation="include">
+        </childnode>
+        <childnode refid="195" relation="include">
+        </childnode>
+      </node>
+      <node id="195">
+        <label>/__w/cspy/cspy/torressa/cspy/src/cc/search.cc</label>
+        <link refid="search_8cc"/>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="classbidirectional_1_1Search" prot="public">bidirectional::Search</innerclass>
+    <innernamespace refid="namespacebidirectional">bidirectional</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#ifndef<sp/>SRC_CC_SEARCH_H__</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SRC_CC_SEARCH_H__</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;memory&gt;</highlight><highlight class="normal"><sp/></highlight><highlight class="comment">//<sp/>unique_ptr</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;set&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;vector&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="labelling_8h" kindref="compound">labelling.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespacebidirectional" kindref="compound">bidirectional</ref><sp/>{</highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight></codeline>
+<codeline lineno="12" refid="classbidirectional_1_1Search" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="classbidirectional_1_1Search" kindref="compound">Search</ref><sp/>{</highlight></codeline>
+<codeline lineno="13"><highlight class="normal"><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="15" refid="classbidirectional_1_1Search_1ad5a262892bdeae2978453c9967ab7372" refkind="member"><highlight class="normal"><sp/><sp/><ref refid="namespacebidirectional_1a4cbe6f0bfbd3629c2cd44c98014aed70" kindref="member">Directions</ref><sp/><ref refid="classbidirectional_1_1Search_1ad5a262892bdeae2978453c9967ab7372" kindref="member">direction</ref>;</highlight></codeline>
+<codeline lineno="16"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/><sp/>Params<sp/><sp/><sp/><sp/><sp/>params;</highlight></codeline>
+<codeline lineno="18" refid="classbidirectional_1_1Search_1a0d03b4c804f947b14f7ec603d7005055" refkind="member"><highlight class="comment"></highlight><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classbidirectional_1_1Search_1a0d03b4c804f947b14f7ec603d7005055" kindref="member">stop</ref><sp/>=<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="20" refid="classbidirectional_1_1Search_1a51f9dea11b07ce6e196df86ce0912d7d" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classbidirectional_1_1Search_1a51f9dea11b07ce6e196df86ce0912d7d" kindref="member">bound_exceeded</ref><sp/>=<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="22" refid="classbidirectional_1_1Search_1a5143275aff96ad18651c6050832a854a" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="classbidirectional_1_1Search_1a5143275aff96ad18651c6050832a854a" kindref="member">unprocessed_count</ref><sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="24" refid="classbidirectional_1_1Search_1a951da4144a4cf70e3288d0c5898769b9" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="classbidirectional_1_1Search_1a951da4144a4cf70e3288d0c5898769b9" kindref="member">processed_count</ref><sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="26" refid="classbidirectional_1_1Search_1a3a9007631e48d796e85ae2cfc3a247ab" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="classbidirectional_1_1Search_1a3a9007631e48d796e85ae2cfc3a247ab" kindref="member">generated_count</ref><sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="27"><highlight class="normal"></highlight></codeline>
+<codeline lineno="28"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">/*<sp/>Search-related<sp/>parameters<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="29"><highlight class="normal"></highlight></codeline>
+<codeline lineno="31" refid="classbidirectional_1_1Search_1ac06fcd122e7d2bb99e493c9a82cbecd1" refkind="member"><highlight class="normal"><sp/><sp/>std::unique_ptr&lt;std::vector&lt;double&gt;&gt;<sp/><ref refid="classbidirectional_1_1Search_1ac06fcd122e7d2bb99e493c9a82cbecd1" kindref="member">lower_bound_weight</ref>;</highlight></codeline>
+<codeline lineno="33" refid="classbidirectional_1_1Search_1a7548a1928ca152017f6f4fe7a5c55089" refkind="member"><highlight class="normal"><sp/><sp/>std::set&lt;int&gt;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classbidirectional_1_1Search_1a7548a1928ca152017f6f4fe7a5c55089" kindref="member">visited_vertices</ref>;</highlight></codeline>
+<codeline lineno="34" refid="classbidirectional_1_1Search_1a3c1bc6eaad5e1dfe7d8181b4c34db1bd" refkind="member"><highlight class="normal"><sp/><sp/>std::shared_ptr&lt;labelling::Label&gt;<sp/><ref refid="classbidirectional_1_1Search_1a3c1bc6eaad5e1dfe7d8181b4c34db1bd" kindref="member">current_label</ref>;</highlight></codeline>
+<codeline lineno="38" refid="classbidirectional_1_1Search_1aa7996593da90536ffce5cb681dc26a9b" refkind="member"><highlight class="normal"><sp/><sp/>std::shared_ptr&lt;labelling::Label&gt;<sp/><ref refid="classbidirectional_1_1Search_1aa7996593da90536ffce5cb681dc26a9b" kindref="member">intermediate_label</ref>;</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"></highlight></codeline>
+<codeline lineno="41" refid="classbidirectional_1_1Search_1aa9159c191cdef5d5555614b9efcb8dc5" refkind="member"><highlight class="normal"><sp/><sp/>std::vector&lt;std::vector&lt;labelling::Label&gt;&gt;<sp/><ref refid="classbidirectional_1_1Search_1aa9159c191cdef5d5555614b9efcb8dc5" kindref="member">efficient_labels</ref>;</highlight></codeline>
+<codeline lineno="44" refid="classbidirectional_1_1Search_1a4b87b9c1f546b3138cb1bba0cc309a80" refkind="member"><highlight class="normal"><sp/><sp/>std::vector&lt;std::shared_ptr&lt;labelling::Label&gt;&gt;<sp/><ref refid="classbidirectional_1_1Search_1a4b87b9c1f546b3138cb1bba0cc309a80" kindref="member">best_labels</ref>;</highlight></codeline>
+<codeline lineno="51" refid="classbidirectional_1_1Search_1aeb057642c57dde16fec701f625781651" refkind="member"><highlight class="normal"><sp/><sp/>std::unique_ptr&lt;std::vector&lt;labelling::Label&gt;&gt;<sp/><ref refid="classbidirectional_1_1Search_1aeb057642c57dde16fec701f625781651" kindref="member">unprocessed_labels</ref>;</highlight></codeline>
+<codeline lineno="52"><highlight class="normal"></highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>TODO:<sp/>Use<sp/>bucket-heap</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">/*<sp/>Heap<sp/>operations<sp/>for<sp/>vector<sp/>of<sp/>labels<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="55"><highlight class="normal"></highlight></codeline>
+<codeline lineno="61"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classbidirectional_1_1Search_1af38a13e27dcd3b69e78dc7943ee90f46" kindref="member">makeHeap</ref>();</highlight></codeline>
+<codeline lineno="62"><highlight class="normal"></highlight></codeline>
+<codeline lineno="68"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classbidirectional_1_1Search_1a2c1a7067a4ce02805e8ab5f9beac8c7c" kindref="member">pushHeap</ref>();</highlight></codeline>
+<codeline lineno="69"><highlight class="normal"></highlight></codeline>
+<codeline lineno="70" refid="classbidirectional_1_1Search_1ab2c67d7e3c1040f4d2586f3e5a82e1bf" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classbidirectional_1_1Search_1ab2c67d7e3c1040f4d2586f3e5a82e1bf" kindref="member">pushUnprocessedLabel</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label" kindref="compound">labelling::Label</ref>&amp;<sp/>label)<sp/>{</highlight></codeline>
+<codeline lineno="71"><highlight class="normal"><sp/><sp/><sp/><sp/>unprocessed_labels-&gt;push_back(label);</highlight></codeline>
+<codeline lineno="72"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classbidirectional_1_1Search_1a2c1a7067a4ce02805e8ab5f9beac8c7c" kindref="member">pushHeap</ref>();</highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="74"><highlight class="normal"></highlight></codeline>
+<codeline lineno="75" refid="classbidirectional_1_1Search_1a729c7a379b04d777ac0bc844e5b488b7" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classbidirectional_1_1Search_1a729c7a379b04d777ac0bc844e5b488b7" kindref="member">pushEfficientLabel</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">&amp;<sp/>lemon_id,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label" kindref="compound">labelling::Label</ref>&amp;<sp/>label)<sp/>{</highlight></codeline>
+<codeline lineno="76"><highlight class="normal"><sp/><sp/><sp/><sp/>efficient_labels[lemon_id].push_back(label);</highlight></codeline>
+<codeline lineno="77"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"></highlight></codeline>
+<codeline lineno="80" refid="classbidirectional_1_1Search_1a25ab49cfbc9f074630e059429fc7f0cc" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classbidirectional_1_1Search_1a25ab49cfbc9f074630e059429fc7f0cc" kindref="member">replaceBestLabel</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">&amp;<sp/>lemon_id,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label" kindref="compound">labelling::Label</ref>&amp;<sp/>label)<sp/>{</highlight></codeline>
+<codeline lineno="81"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>label_ptr<sp/>=<sp/>std::make_shared&lt;labelling::Label&gt;(label);</highlight></codeline>
+<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/>best_labels[lemon_id].swap(label_ptr);</highlight></codeline>
+<codeline lineno="83"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="84"><highlight class="normal"></highlight></codeline>
+<codeline lineno="86" refid="classbidirectional_1_1Search_1a2b2e85f750fd35df23f470ce2222dcfb" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classbidirectional_1_1Search_1a2b2e85f750fd35df23f470ce2222dcfb" kindref="member">replaceCurrentLabel</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label" kindref="compound">labelling::Label</ref>&amp;<sp/>label)<sp/>{</highlight></codeline>
+<codeline lineno="87"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>label_ptr<sp/>=<sp/>std::make_shared&lt;labelling::Label&gt;(label);</highlight></codeline>
+<codeline lineno="88"><highlight class="normal"><sp/><sp/><sp/><sp/>current_label.swap(label_ptr);</highlight></codeline>
+<codeline lineno="89"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="90"><highlight class="normal"></highlight></codeline>
+<codeline lineno="92" refid="classbidirectional_1_1Search_1a66b5168d25b5fe7f673f6d335ae716d1" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classbidirectional_1_1Search_1a66b5168d25b5fe7f673f6d335ae716d1" kindref="member">replaceIntermediateLabel</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label" kindref="compound">labelling::Label</ref>&amp;<sp/>label)<sp/>{</highlight></codeline>
+<codeline lineno="93"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>label_ptr<sp/>=<sp/>std::make_shared&lt;labelling::Label&gt;(label);</highlight></codeline>
+<codeline lineno="94"><highlight class="normal"><sp/><sp/><sp/><sp/>intermediate_label.swap(label_ptr);</highlight></codeline>
+<codeline lineno="95"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="96"><highlight class="normal"></highlight></codeline>
+<codeline lineno="98" refid="classbidirectional_1_1Search_1a91b68db5c76c29195db8b2e4566fc601" refkind="member"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classbidirectional_1_1Search_1a91b68db5c76c29195db8b2e4566fc601" kindref="member">addVisitedVertex</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">&amp;<sp/>lemon_id)<sp/>{</highlight></codeline>
+<codeline lineno="99"><highlight class="normal"><sp/><sp/><sp/><sp/>visited_vertices.insert(lemon_id);</highlight></codeline>
+<codeline lineno="100"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="101"><highlight class="normal"></highlight></codeline>
+<codeline lineno="102"><highlight class="normal"><sp/><sp/><ref refid="classbidirectional_1_1Search_1a6d5235bb92e3ca770634e5a77b55c4e4" kindref="member">Search</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="namespacebidirectional_1a4cbe6f0bfbd3629c2cd44c98014aed70" kindref="member">Directions</ref>&amp;<sp/>direction_in);</highlight></codeline>
+<codeline lineno="103" refid="classbidirectional_1_1Search_1a4a361bd0416ed0208792b19fabc4e749" refkind="member"><highlight class="normal"><sp/><sp/><ref refid="classbidirectional_1_1Search_1a4a361bd0416ed0208792b19fabc4e749" kindref="member">~Search</ref>(){};</highlight></codeline>
+<codeline lineno="104"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="105"><highlight class="normal"></highlight></codeline>
+<codeline lineno="106"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>bidirectional</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="107"><highlight class="normal"></highlight></codeline>
+<codeline lineno="108"><highlight class="normal"></highlight><highlight class="preprocessor">#endif<sp/>//<sp/>SRC_CC_SEARCH_H__</highlight></codeline>
+    </programlisting>
+    <location file="/__w/cspy/cspy/torressa/cspy/src/cc/search.h"/>
+  </compounddef>
+</doxygen>

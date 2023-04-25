@@ -1,0 +1,267 @@
+\hypertarget{classbidirectional_1_1Search}{}\section{bidirectional\+:\+:Search Class Reference}
+\label{classbidirectional_1_1Search}\index{bidirectional\+::\+Search@{bidirectional\+::\+Search}}
+
+
+{\ttfamily \#include $<$search.\+h$>$}
+
+
+
+Collaboration diagram for bidirectional\+:\+:Search\+:
+% FIG 0
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{classbidirectional_1_1Search_af38a13e27dcd3b69e78dc7943ee90f46}{make\+Heap} ()
+\item 
+void \hyperlink{classbidirectional_1_1Search_a2c1a7067a4ce02805e8ab5f9beac8c7c}{push\+Heap} ()
+\item 
+void \hyperlink{classbidirectional_1_1Search_ab2c67d7e3c1040f4d2586f3e5a82e1bf}{push\+Unprocessed\+Label} (const \hyperlink{classlabelling_1_1Label}{labelling\+::\+Label} \&label)
+\item 
+void \hyperlink{classbidirectional_1_1Search_a729c7a379b04d777ac0bc844e5b488b7}{push\+Efficient\+Label} (const int \&lemon\+\_\+id, const \hyperlink{classlabelling_1_1Label}{labelling\+::\+Label} \&label)
+\item 
+void \hyperlink{classbidirectional_1_1Search_a25ab49cfbc9f074630e059429fc7f0cc}{replace\+Best\+Label} (const int \&lemon\+\_\+id, const \hyperlink{classlabelling_1_1Label}{labelling\+::\+Label} \&label)
+\begin{DoxyCompactList}\small\item\em Replace best label. \end{DoxyCompactList}\item 
+void \hyperlink{classbidirectional_1_1Search_a2b2e85f750fd35df23f470ce2222dcfb}{replace\+Current\+Label} (const \hyperlink{classlabelling_1_1Label}{labelling\+::\+Label} \&label)
+\begin{DoxyCompactList}\small\item\em Replace best label. \end{DoxyCompactList}\item 
+void \hyperlink{classbidirectional_1_1Search_a66b5168d25b5fe7f673f6d335ae716d1}{replace\+Intermediate\+Label} (const \hyperlink{classlabelling_1_1Label}{labelling\+::\+Label} \&label)
+\begin{DoxyCompactList}\small\item\em Replace intermediate label. \end{DoxyCompactList}\item 
+void \hyperlink{classbidirectional_1_1Search_a91b68db5c76c29195db8b2e4566fc601}{add\+Visited\+Vertex} (const int \&lemon\+\_\+id)
+\begin{DoxyCompactList}\small\item\em Update vertices visited. \end{DoxyCompactList}\item 
+\hyperlink{classbidirectional_1_1Search_a6d5235bb92e3ca770634e5a77b55c4e4}{Search} (const \hyperlink{namespacebidirectional_a4cbe6f0bfbd3629c2cd44c98014aed70}{Directions} \&direction\+\_\+in)
+\item 
+\hyperlink{classbidirectional_1_1Search_a4a361bd0416ed0208792b19fabc4e749}{$\sim$\+Search} ()
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{namespacebidirectional_a4cbe6f0bfbd3629c2cd44c98014aed70}{Directions} \hyperlink{classbidirectional_1_1Search_ad5a262892bdeae2978453c9967ab7372}{direction}
+\begin{DoxyCompactList}\small\item\em Direction of \hyperlink{classbidirectional_1_1Search}{Search}. \end{DoxyCompactList}\item 
+bool \hyperlink{classbidirectional_1_1Search_a0d03b4c804f947b14f7ec603d7005055}{stop} = false
+\begin{DoxyCompactList}\small\item\em Stopping criteria for each direction. \end{DoxyCompactList}\item 
+bool \hyperlink{classbidirectional_1_1Search_a51f9dea11b07ce6e196df86ce0912d7d}{bound\+\_\+exceeded} = false
+\begin{DoxyCompactList}\small\item\em Stopping criteria for each direction. \end{DoxyCompactList}\item 
+int \hyperlink{classbidirectional_1_1Search_a5143275aff96ad18651c6050832a854a}{unprocessed\+\_\+count} = 0
+\begin{DoxyCompactList}\small\item\em Number of unprocessed labels generated. \end{DoxyCompactList}\item 
+int \hyperlink{classbidirectional_1_1Search_a951da4144a4cf70e3288d0c5898769b9}{processed\+\_\+count} = 0
+\begin{DoxyCompactList}\small\item\em Number of labels processed. \end{DoxyCompactList}\item 
+int \hyperlink{classbidirectional_1_1Search_a3a9007631e48d796e85ae2cfc3a247ab}{generated\+\_\+count} = 0
+\begin{DoxyCompactList}\small\item\em Number of labels generated (includes the possibly infeasible extensions) \end{DoxyCompactList}\item 
+std\+::unique\+\_\+ptr$<$ std\+::vector$<$ double $>$ $>$ \hyperlink{classbidirectional_1_1Search_ac06fcd122e7d2bb99e493c9a82cbecd1}{lower\+\_\+bound\+\_\+weight}
+\begin{DoxyCompactList}\small\item\em Lower bounds from any node to sink. \end{DoxyCompactList}\item 
+std\+::set$<$ int $>$ \hyperlink{classbidirectional_1_1Search_a7548a1928ca152017f6f4fe7a5c55089}{visited\+\_\+vertices}
+\begin{DoxyCompactList}\small\item\em vector with indices of vertices visited \end{DoxyCompactList}\item 
+std\+::shared\+\_\+ptr$<$ \hyperlink{classlabelling_1_1Label}{labelling\+::\+Label} $>$ \hyperlink{classbidirectional_1_1Search_a3c1bc6eaad5e1dfe7d8181b4c34db1bd}{current\+\_\+label}
+\item 
+std\+::shared\+\_\+ptr$<$ \hyperlink{classlabelling_1_1Label}{labelling\+::\+Label} $>$ \hyperlink{classbidirectional_1_1Search_aa7996593da90536ffce5cb681dc26a9b}{intermediate\+\_\+label}
+\item 
+std\+::vector$<$ std\+::vector$<$ \hyperlink{classlabelling_1_1Label}{labelling\+::\+Label} $>$ $>$ \hyperlink{classbidirectional_1_1Search_aa9159c191cdef5d5555614b9efcb8dc5}{efficient\+\_\+labels}
+\begin{DoxyCompactList}\small\item\em vector with pareto optimal labels (per node) in each direction \end{DoxyCompactList}\item 
+std\+::vector$<$ std\+::shared\+\_\+ptr$<$ \hyperlink{classlabelling_1_1Label}{labelling\+::\+Label} $>$ $>$ \hyperlink{classbidirectional_1_1Search_a4b87b9c1f546b3138cb1bba0cc309a80}{best\+\_\+labels}
+\item 
+std\+::unique\+\_\+ptr$<$ std\+::vector$<$ \hyperlink{classlabelling_1_1Label}{labelling\+::\+Label} $>$ $>$ \hyperlink{classbidirectional_1_1Search_aeb057642c57dde16fec701f625781651}{unprocessed\+\_\+labels}
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classbidirectional_1_1Search_a6d5235bb92e3ca770634e5a77b55c4e4}\label{classbidirectional_1_1Search_a6d5235bb92e3ca770634e5a77b55c4e4}} 
+\index{bidirectional\+::\+Search@{bidirectional\+::\+Search}!Search@{Search}}
+\index{Search@{Search}!bidirectional\+::\+Search@{bidirectional\+::\+Search}}
+\subsubsection{\texorpdfstring{Search()}{Search()}}
+{\footnotesize\ttfamily bidirectional\+::\+Search\+::\+Search (\begin{DoxyParamCaption}\item[{const \hyperlink{namespacebidirectional_a4cbe6f0bfbd3629c2cd44c98014aed70}{Directions} \&}]{direction\+\_\+in }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{classbidirectional_1_1Search_a4a361bd0416ed0208792b19fabc4e749}\label{classbidirectional_1_1Search_a4a361bd0416ed0208792b19fabc4e749}} 
+\index{bidirectional\+::\+Search@{bidirectional\+::\+Search}!````~Search@{$\sim$\+Search}}
+\index{````~Search@{$\sim$\+Search}!bidirectional\+::\+Search@{bidirectional\+::\+Search}}
+\subsubsection{\texorpdfstring{$\sim$\+Search()}{~Search()}}
+{\footnotesize\ttfamily bidirectional\+::\+Search\+::$\sim$\+Search (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classbidirectional_1_1Search_a91b68db5c76c29195db8b2e4566fc601}\label{classbidirectional_1_1Search_a91b68db5c76c29195db8b2e4566fc601}} 
+\index{bidirectional\+::\+Search@{bidirectional\+::\+Search}!add\+Visited\+Vertex@{add\+Visited\+Vertex}}
+\index{add\+Visited\+Vertex@{add\+Visited\+Vertex}!bidirectional\+::\+Search@{bidirectional\+::\+Search}}
+\subsubsection{\texorpdfstring{add\+Visited\+Vertex()}{addVisitedVertex()}}
+{\footnotesize\ttfamily void bidirectional\+::\+Search\+::add\+Visited\+Vertex (\begin{DoxyParamCaption}\item[{const int \&}]{lemon\+\_\+id }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Update vertices visited. 
+
+\mbox{\Hypertarget{classbidirectional_1_1Search_af38a13e27dcd3b69e78dc7943ee90f46}\label{classbidirectional_1_1Search_af38a13e27dcd3b69e78dc7943ee90f46}} 
+\index{bidirectional\+::\+Search@{bidirectional\+::\+Search}!make\+Heap@{make\+Heap}}
+\index{make\+Heap@{make\+Heap}!bidirectional\+::\+Search@{bidirectional\+::\+Search}}
+\subsubsection{\texorpdfstring{make\+Heap()}{makeHeap()}}
+{\footnotesize\ttfamily void bidirectional\+::\+Search\+::make\+Heap (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Initialises heap using the appropriate comparison i.\+e. increasing in the monotone resource forward lists, decreasing otherwise \mbox{\Hypertarget{classbidirectional_1_1Search_a729c7a379b04d777ac0bc844e5b488b7}\label{classbidirectional_1_1Search_a729c7a379b04d777ac0bc844e5b488b7}} 
+\index{bidirectional\+::\+Search@{bidirectional\+::\+Search}!push\+Efficient\+Label@{push\+Efficient\+Label}}
+\index{push\+Efficient\+Label@{push\+Efficient\+Label}!bidirectional\+::\+Search@{bidirectional\+::\+Search}}
+\subsubsection{\texorpdfstring{push\+Efficient\+Label()}{pushEfficientLabel()}}
+{\footnotesize\ttfamily void bidirectional\+::\+Search\+::push\+Efficient\+Label (\begin{DoxyParamCaption}\item[{const int \&}]{lemon\+\_\+id,  }\item[{const \hyperlink{classlabelling_1_1Label}{labelling\+::\+Label} \&}]{label }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classbidirectional_1_1Search_a2c1a7067a4ce02805e8ab5f9beac8c7c}\label{classbidirectional_1_1Search_a2c1a7067a4ce02805e8ab5f9beac8c7c}} 
+\index{bidirectional\+::\+Search@{bidirectional\+::\+Search}!push\+Heap@{push\+Heap}}
+\index{push\+Heap@{push\+Heap}!bidirectional\+::\+Search@{bidirectional\+::\+Search}}
+\subsubsection{\texorpdfstring{push\+Heap()}{pushHeap()}}
+{\footnotesize\ttfamily void bidirectional\+::\+Search\+::push\+Heap (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Push new elements in heap using the appropriate comparison i.\+e. increasing in the monotone resource forward lists, decreasing otherwise \mbox{\Hypertarget{classbidirectional_1_1Search_ab2c67d7e3c1040f4d2586f3e5a82e1bf}\label{classbidirectional_1_1Search_ab2c67d7e3c1040f4d2586f3e5a82e1bf}} 
+\index{bidirectional\+::\+Search@{bidirectional\+::\+Search}!push\+Unprocessed\+Label@{push\+Unprocessed\+Label}}
+\index{push\+Unprocessed\+Label@{push\+Unprocessed\+Label}!bidirectional\+::\+Search@{bidirectional\+::\+Search}}
+\subsubsection{\texorpdfstring{push\+Unprocessed\+Label()}{pushUnprocessedLabel()}}
+{\footnotesize\ttfamily void bidirectional\+::\+Search\+::push\+Unprocessed\+Label (\begin{DoxyParamCaption}\item[{const \hyperlink{classlabelling_1_1Label}{labelling\+::\+Label} \&}]{label }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{classbidirectional_1_1Search_a25ab49cfbc9f074630e059429fc7f0cc}\label{classbidirectional_1_1Search_a25ab49cfbc9f074630e059429fc7f0cc}} 
+\index{bidirectional\+::\+Search@{bidirectional\+::\+Search}!replace\+Best\+Label@{replace\+Best\+Label}}
+\index{replace\+Best\+Label@{replace\+Best\+Label}!bidirectional\+::\+Search@{bidirectional\+::\+Search}}
+\subsubsection{\texorpdfstring{replace\+Best\+Label()}{replaceBestLabel()}}
+{\footnotesize\ttfamily void bidirectional\+::\+Search\+::replace\+Best\+Label (\begin{DoxyParamCaption}\item[{const int \&}]{lemon\+\_\+id,  }\item[{const \hyperlink{classlabelling_1_1Label}{labelling\+::\+Label} \&}]{label }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Replace best label. 
+
+\mbox{\Hypertarget{classbidirectional_1_1Search_a2b2e85f750fd35df23f470ce2222dcfb}\label{classbidirectional_1_1Search_a2b2e85f750fd35df23f470ce2222dcfb}} 
+\index{bidirectional\+::\+Search@{bidirectional\+::\+Search}!replace\+Current\+Label@{replace\+Current\+Label}}
+\index{replace\+Current\+Label@{replace\+Current\+Label}!bidirectional\+::\+Search@{bidirectional\+::\+Search}}
+\subsubsection{\texorpdfstring{replace\+Current\+Label()}{replaceCurrentLabel()}}
+{\footnotesize\ttfamily void bidirectional\+::\+Search\+::replace\+Current\+Label (\begin{DoxyParamCaption}\item[{const \hyperlink{classlabelling_1_1Label}{labelling\+::\+Label} \&}]{label }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Replace best label. 
+
+\mbox{\Hypertarget{classbidirectional_1_1Search_a66b5168d25b5fe7f673f6d335ae716d1}\label{classbidirectional_1_1Search_a66b5168d25b5fe7f673f6d335ae716d1}} 
+\index{bidirectional\+::\+Search@{bidirectional\+::\+Search}!replace\+Intermediate\+Label@{replace\+Intermediate\+Label}}
+\index{replace\+Intermediate\+Label@{replace\+Intermediate\+Label}!bidirectional\+::\+Search@{bidirectional\+::\+Search}}
+\subsubsection{\texorpdfstring{replace\+Intermediate\+Label()}{replaceIntermediateLabel()}}
+{\footnotesize\ttfamily void bidirectional\+::\+Search\+::replace\+Intermediate\+Label (\begin{DoxyParamCaption}\item[{const \hyperlink{classlabelling_1_1Label}{labelling\+::\+Label} \&}]{label }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Replace intermediate label. 
+
+
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{classbidirectional_1_1Search_a4b87b9c1f546b3138cb1bba0cc309a80}\label{classbidirectional_1_1Search_a4b87b9c1f546b3138cb1bba0cc309a80}} 
+\index{bidirectional\+::\+Search@{bidirectional\+::\+Search}!best\+\_\+labels@{best\+\_\+labels}}
+\index{best\+\_\+labels@{best\+\_\+labels}!bidirectional\+::\+Search@{bidirectional\+::\+Search}}
+\subsubsection{\texorpdfstring{best\+\_\+labels}{best\_labels}}
+{\footnotesize\ttfamily std\+::vector$<$std\+::shared\+\_\+ptr$<$\hyperlink{classlabelling_1_1Label}{labelling\+::\+Label}$>$ $>$ bidirectional\+::\+Search\+::best\+\_\+labels}
+
+vector with pointer to label with least weight (per node) in each direction \mbox{\Hypertarget{classbidirectional_1_1Search_a51f9dea11b07ce6e196df86ce0912d7d}\label{classbidirectional_1_1Search_a51f9dea11b07ce6e196df86ce0912d7d}} 
+\index{bidirectional\+::\+Search@{bidirectional\+::\+Search}!bound\+\_\+exceeded@{bound\+\_\+exceeded}}
+\index{bound\+\_\+exceeded@{bound\+\_\+exceeded}!bidirectional\+::\+Search@{bidirectional\+::\+Search}}
+\subsubsection{\texorpdfstring{bound\+\_\+exceeded}{bound\_exceeded}}
+{\footnotesize\ttfamily bool bidirectional\+::\+Search\+::bound\+\_\+exceeded = false}
+
+
+
+Stopping criteria for each direction. 
+
+\mbox{\Hypertarget{classbidirectional_1_1Search_a3c1bc6eaad5e1dfe7d8181b4c34db1bd}\label{classbidirectional_1_1Search_a3c1bc6eaad5e1dfe7d8181b4c34db1bd}} 
+\index{bidirectional\+::\+Search@{bidirectional\+::\+Search}!current\+\_\+label@{current\+\_\+label}}
+\index{current\+\_\+label@{current\+\_\+label}!bidirectional\+::\+Search@{bidirectional\+::\+Search}}
+\subsubsection{\texorpdfstring{current\+\_\+label}{current\_label}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$\hyperlink{classlabelling_1_1Label}{labelling\+::\+Label}$>$ bidirectional\+::\+Search\+::current\+\_\+label}
+
+\mbox{\Hypertarget{classbidirectional_1_1Search_ad5a262892bdeae2978453c9967ab7372}\label{classbidirectional_1_1Search_ad5a262892bdeae2978453c9967ab7372}} 
+\index{bidirectional\+::\+Search@{bidirectional\+::\+Search}!direction@{direction}}
+\index{direction@{direction}!bidirectional\+::\+Search@{bidirectional\+::\+Search}}
+\subsubsection{\texorpdfstring{direction}{direction}}
+{\footnotesize\ttfamily \hyperlink{namespacebidirectional_a4cbe6f0bfbd3629c2cd44c98014aed70}{Directions} bidirectional\+::\+Search\+::direction}
+
+
+
+Direction of \hyperlink{classbidirectional_1_1Search}{Search}. 
+
+\mbox{\Hypertarget{classbidirectional_1_1Search_aa9159c191cdef5d5555614b9efcb8dc5}\label{classbidirectional_1_1Search_aa9159c191cdef5d5555614b9efcb8dc5}} 
+\index{bidirectional\+::\+Search@{bidirectional\+::\+Search}!efficient\+\_\+labels@{efficient\+\_\+labels}}
+\index{efficient\+\_\+labels@{efficient\+\_\+labels}!bidirectional\+::\+Search@{bidirectional\+::\+Search}}
+\subsubsection{\texorpdfstring{efficient\+\_\+labels}{efficient\_labels}}
+{\footnotesize\ttfamily std\+::vector$<$std\+::vector$<$\hyperlink{classlabelling_1_1Label}{labelling\+::\+Label}$>$ $>$ bidirectional\+::\+Search\+::efficient\+\_\+labels}
+
+
+
+vector with pareto optimal labels (per node) in each direction 
+
+\mbox{\Hypertarget{classbidirectional_1_1Search_a3a9007631e48d796e85ae2cfc3a247ab}\label{classbidirectional_1_1Search_a3a9007631e48d796e85ae2cfc3a247ab}} 
+\index{bidirectional\+::\+Search@{bidirectional\+::\+Search}!generated\+\_\+count@{generated\+\_\+count}}
+\index{generated\+\_\+count@{generated\+\_\+count}!bidirectional\+::\+Search@{bidirectional\+::\+Search}}
+\subsubsection{\texorpdfstring{generated\+\_\+count}{generated\_count}}
+{\footnotesize\ttfamily int bidirectional\+::\+Search\+::generated\+\_\+count = 0}
+
+
+
+Number of labels generated (includes the possibly infeasible extensions) 
+
+\mbox{\Hypertarget{classbidirectional_1_1Search_aa7996593da90536ffce5cb681dc26a9b}\label{classbidirectional_1_1Search_aa7996593da90536ffce5cb681dc26a9b}} 
+\index{bidirectional\+::\+Search@{bidirectional\+::\+Search}!intermediate\+\_\+label@{intermediate\+\_\+label}}
+\index{intermediate\+\_\+label@{intermediate\+\_\+label}!bidirectional\+::\+Search@{bidirectional\+::\+Search}}
+\subsubsection{\texorpdfstring{intermediate\+\_\+label}{intermediate\_label}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$\hyperlink{classlabelling_1_1Label}{labelling\+::\+Label}$>$ bidirectional\+::\+Search\+::intermediate\+\_\+label}
+
+Intermediate current best label with possibly complete source-\/sink path (shared pointer as we want to be able to substitute it without resetting) \mbox{\Hypertarget{classbidirectional_1_1Search_ac06fcd122e7d2bb99e493c9a82cbecd1}\label{classbidirectional_1_1Search_ac06fcd122e7d2bb99e493c9a82cbecd1}} 
+\index{bidirectional\+::\+Search@{bidirectional\+::\+Search}!lower\+\_\+bound\+\_\+weight@{lower\+\_\+bound\+\_\+weight}}
+\index{lower\+\_\+bound\+\_\+weight@{lower\+\_\+bound\+\_\+weight}!bidirectional\+::\+Search@{bidirectional\+::\+Search}}
+\subsubsection{\texorpdfstring{lower\+\_\+bound\+\_\+weight}{lower\_bound\_weight}}
+{\footnotesize\ttfamily std\+::unique\+\_\+ptr$<$std\+::vector$<$double$>$ $>$ bidirectional\+::\+Search\+::lower\+\_\+bound\+\_\+weight}
+
+
+
+Lower bounds from any node to sink. 
+
+\mbox{\Hypertarget{classbidirectional_1_1Search_a951da4144a4cf70e3288d0c5898769b9}\label{classbidirectional_1_1Search_a951da4144a4cf70e3288d0c5898769b9}} 
+\index{bidirectional\+::\+Search@{bidirectional\+::\+Search}!processed\+\_\+count@{processed\+\_\+count}}
+\index{processed\+\_\+count@{processed\+\_\+count}!bidirectional\+::\+Search@{bidirectional\+::\+Search}}
+\subsubsection{\texorpdfstring{processed\+\_\+count}{processed\_count}}
+{\footnotesize\ttfamily int bidirectional\+::\+Search\+::processed\+\_\+count = 0}
+
+
+
+Number of labels processed. 
+
+\mbox{\Hypertarget{classbidirectional_1_1Search_a0d03b4c804f947b14f7ec603d7005055}\label{classbidirectional_1_1Search_a0d03b4c804f947b14f7ec603d7005055}} 
+\index{bidirectional\+::\+Search@{bidirectional\+::\+Search}!stop@{stop}}
+\index{stop@{stop}!bidirectional\+::\+Search@{bidirectional\+::\+Search}}
+\subsubsection{\texorpdfstring{stop}{stop}}
+{\footnotesize\ttfamily bool bidirectional\+::\+Search\+::stop = false}
+
+
+
+Stopping criteria for each direction. 
+
+\mbox{\Hypertarget{classbidirectional_1_1Search_a5143275aff96ad18651c6050832a854a}\label{classbidirectional_1_1Search_a5143275aff96ad18651c6050832a854a}} 
+\index{bidirectional\+::\+Search@{bidirectional\+::\+Search}!unprocessed\+\_\+count@{unprocessed\+\_\+count}}
+\index{unprocessed\+\_\+count@{unprocessed\+\_\+count}!bidirectional\+::\+Search@{bidirectional\+::\+Search}}
+\subsubsection{\texorpdfstring{unprocessed\+\_\+count}{unprocessed\_count}}
+{\footnotesize\ttfamily int bidirectional\+::\+Search\+::unprocessed\+\_\+count = 0}
+
+
+
+Number of unprocessed labels generated. 
+
+\mbox{\Hypertarget{classbidirectional_1_1Search_aeb057642c57dde16fec701f625781651}\label{classbidirectional_1_1Search_aeb057642c57dde16fec701f625781651}} 
+\index{bidirectional\+::\+Search@{bidirectional\+::\+Search}!unprocessed\+\_\+labels@{unprocessed\+\_\+labels}}
+\index{unprocessed\+\_\+labels@{unprocessed\+\_\+labels}!bidirectional\+::\+Search@{bidirectional\+::\+Search}}
+\subsubsection{\texorpdfstring{unprocessed\+\_\+labels}{unprocessed\_labels}}
+{\footnotesize\ttfamily std\+::unique\+\_\+ptr$<$std\+::vector$<$\hyperlink{classlabelling_1_1Label}{labelling\+::\+Label}$>$ $>$ bidirectional\+::\+Search\+::unprocessed\+\_\+labels}
+
+heap vector to keep unprocessed labels ordered. the order depends on the on the direction of the search. i.\+e. forward -\/$>$ increasing in the monotone resource, backward -\/$>$ decreasing in the monotone resource. \mbox{\Hypertarget{classbidirectional_1_1Search_a7548a1928ca152017f6f4fe7a5c55089}\label{classbidirectional_1_1Search_a7548a1928ca152017f6f4fe7a5c55089}} 
+\index{bidirectional\+::\+Search@{bidirectional\+::\+Search}!visited\+\_\+vertices@{visited\+\_\+vertices}}
+\index{visited\+\_\+vertices@{visited\+\_\+vertices}!bidirectional\+::\+Search@{bidirectional\+::\+Search}}
+\subsubsection{\texorpdfstring{visited\+\_\+vertices}{visited\_vertices}}
+{\footnotesize\ttfamily std\+::set$<$int$>$ bidirectional\+::\+Search\+::visited\+\_\+vertices}
+
+
+
+vector with indices of vertices visited 
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/\+\_\+\+\_\+w/cspy/cspy/torressa/cspy/src/cc/\hyperlink{search_8h}{search.\+h}\item 
+/\+\_\+\+\_\+w/cspy/cspy/torressa/cspy/src/cc/\hyperlink{search_8cc}{search.\+cc}\end{DoxyCompactItemize}

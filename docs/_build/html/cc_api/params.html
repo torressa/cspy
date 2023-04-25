@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Params &mdash; cspy 1.0.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="DiGraph" href="DiGraph.html" />
+    <link rel="prev" title="REFCallback" href="REFCallback.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            cspy
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how_to.html">Using <cite>cspy</cite></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ref.html">Resource Extension Functions (REFs)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../python_api/cspy.BiDirectional.html">cspy.BiDirectional</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python_api/cspy.Tabu.html">cspy.Tabu</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python_api/cspy.GreedyElim.html">cspy.GreedyElim</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python_api/cspy.GRASP.html">cspy.GRASP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python_api/cspy.PSOLGENT.html">cspy.PSOLGENT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python_api/cspy.preprocess_graph.html">cspy.preprocess_graph</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python_api/cspy.check.html">cspy.check</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">C++ API</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="BiDirectional.html">BiDirectional</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Search.html">Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="REFCallback.html">REFCallback</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Params</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DiGraph.html">DiGraph</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Vertex.html">Vertex</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Label.html">Labelling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="preprocessing.html">Preprocessing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">cspy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Params</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/cc_api/params.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="params">
+<h1>Params<a class="headerlink" href="#params" title="Permalink to this heading"></a></h1>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp" id="_CPPv4N13bidirectional10DirectionsE">
+<span id="_CPPv3N13bidirectional10DirectionsE"></span><span id="_CPPv2N13bidirectional10DirectionsE"></span><span class="target" id="namespacebidirectional_1a4cbe6f0bfbd3629c2cd44c98014aed70"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">bidirectional</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">Directions</span></span></span><a class="headerlink" href="#_CPPv4N13bidirectional10DirectionsE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Internal enum for directions. </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N13bidirectional10Directions3FWDE">
+<span id="_CPPv3N13bidirectional10Directions3FWDE"></span><span id="_CPPv2N13bidirectional10Directions3FWDE"></span><span class="target" id="namespacebidirectional_1a4cbe6f0bfbd3629c2cd44c98014aed70a798987f7644a83982bae650870e1ccc0"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">FWD</span></span></span><a class="headerlink" href="#_CPPv4N13bidirectional10Directions3FWDE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Forward. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N13bidirectional10Directions3BWDE">
+<span id="_CPPv3N13bidirectional10Directions3BWDE"></span><span id="_CPPv2N13bidirectional10Directions3BWDE"></span><span class="target" id="namespacebidirectional_1a4cbe6f0bfbd3629c2cd44c98014aed70a3e91263cd11d5fd4ceaec8830938740f"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BWD</span></span></span><a class="headerlink" href="#_CPPv4N13bidirectional10Directions3BWDE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Backward. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N13bidirectional10Directions4BOTHE">
+<span id="_CPPv3N13bidirectional10Directions4BOTHE"></span><span id="_CPPv2N13bidirectional10Directions4BOTHE"></span><span class="target" id="namespacebidirectional_1a4cbe6f0bfbd3629c2cd44c98014aed70ab50b3fbd895a667b43b3e9eb3bd54f85"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BOTH</span></span></span><a class="headerlink" href="#_CPPv4N13bidirectional10Directions4BOTHE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Both. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N13bidirectional10Directions5NODIRE">
+<span id="_CPPv3N13bidirectional10Directions5NODIRE"></span><span id="_CPPv2N13bidirectional10Directions5NODIRE"></span><span class="target" id="namespacebidirectional_1a4cbe6f0bfbd3629c2cd44c98014aed70a37837b18a2ed90dd3c428984af217f47"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">NODIR</span></span></span><a class="headerlink" href="#_CPPv4N13bidirectional10Directions5NODIRE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>No direction. </p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="REFCallback.html" class="btn btn-neutral float-left" title="REFCallback" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="DiGraph.html" class="btn btn-neutral float-right" title="DiGraph" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, David Torres Sanchez.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

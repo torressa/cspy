@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="CMakeLists_8txt" kind="file" language="C++">
+    <compoundname>CMakeLists.txt</compoundname>
+      <sectiondef kind="func">
+      <memberdef kind="function" id="CMakeLists_8txt_1a30b21a2f5b025b5bf7cdd639acbc26b2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>add_library</definition>
+        <argsstring>(BiDirectionalCpp &quot;&quot;) configure_file($</argsstring>
+        <name>add_library</name>
+        <param>
+          <type>BiDirectionalCpp &quot;&quot;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/CMakeLists.txt" line="1" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/CMakeLists.txt" bodystart="1" bodyend="4"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="normal"><ref refid="CMakeLists_8txt_1a30b21a2f5b025b5bf7cdd639acbc26b2" kindref="member">add_library</ref>(BiDirectionalCpp<sp/></highlight><highlight class="stringliteral">&quot;&quot;</highlight><highlight class="normal">)</highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="preprocessor">#<sp/>Configure</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal">configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.in</highlight></codeline>
+<codeline lineno="5"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>${CMAKE_CURRENT_BINARY_DIR}/config.h)</highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal">target_sources(</highlight></codeline>
+<codeline lineno="8"><highlight class="normal"><sp/><sp/>BiDirectionalCpp<sp/>PRIVATE<sp/><ref refid="namespacebidirectional" kindref="compound">bidirectional</ref>.cc<sp/>digraph.cc<sp/><ref refid="namespacelabelling" kindref="compound">labelling</ref>.cc</highlight></codeline>
+<codeline lineno="9"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>preprocessing.cc<sp/>search.cc<sp/>ref_callback.cc)</highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal">target_include_directories(</highlight></codeline>
+<codeline lineno="12"><highlight class="normal"><sp/><sp/>BiDirectionalCpp</highlight></codeline>
+<codeline lineno="13"><highlight class="normal"><sp/><sp/>PUBLIC<sp/>$&lt;BUILD_INTERFACE:${PROJECT_SOURCE_DIR}&gt;</highlight></codeline>
+<codeline lineno="14"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>$&lt;BUILD_INTERFACE:${PROJECT_BINARY_DIR}&gt;</highlight></codeline>
+<codeline lineno="15"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>$&lt;BUILD_INTERFACE:${spdlog_SOURCE_DIR}/include&gt;)</highlight></codeline>
+<codeline lineno="16"><highlight class="normal"></highlight></codeline>
+<codeline lineno="17"><highlight class="normal">target_compile_features(BiDirectionalCpp<sp/>PUBLIC<sp/>cxx_std_20)</highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal">set_target_properties(BiDirectionalCpp<sp/>PROPERTIES<sp/>CXX_EXTENSIONS<sp/><ref refid="namespacebidirectional_1a507ec433f8ac22a92fcc3b8aad252f29a50727807c27ff7820eef09fbe631eba9" kindref="member">TRUE</ref></highlight></codeline>
+<codeline lineno="20"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>VERSION<sp/>${PROJECT_VERSION})</highlight></codeline>
+<codeline lineno="21"><highlight class="normal">set_target_properties(</highlight></codeline>
+<codeline lineno="22"><highlight class="normal"><sp/><sp/>BiDirectionalCpp</highlight></codeline>
+<codeline lineno="23"><highlight class="normal"><sp/><sp/>PROPERTIES<sp/>CXX_EXTENSIONS<sp/><ref refid="namespacebidirectional_1a507ec433f8ac22a92fcc3b8aad252f29a50727807c27ff7820eef09fbe631eba9" kindref="member">TRUE</ref></highlight></codeline>
+<codeline lineno="24"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>VERSION<sp/>${PROJECT_VERSION}</highlight></codeline>
+<codeline lineno="25"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>PUBLIC_HEADER<sp/></highlight><highlight class="stringliteral">&quot;${CMAKE_CURRENT_BINARY_DIR}/config.h&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="26"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>VERSION<sp/>${PROJECT_VERSION})</highlight></codeline>
+<codeline lineno="27"><highlight class="normal"></highlight></codeline>
+<codeline lineno="28"><highlight class="normal">target_link_libraries(BiDirectionalCpp<sp/>PRIVATE<sp/>LEMON::LEMON)</highlight></codeline>
+<codeline lineno="29"><highlight class="normal"></highlight></codeline>
+<codeline lineno="30"><highlight class="normal"><ref refid="CMakeLists_8txt_1a30b21a2f5b025b5bf7cdd639acbc26b2" kindref="member">add_library</ref>(${PROJECT_NAME}::BiDirectionalCpp<sp/>ALIAS<sp/>BiDirectionalCpp)</highlight></codeline>
+<codeline lineno="31"><highlight class="normal"></highlight></codeline>
+<codeline lineno="32"><highlight class="normal">#<sp/>Install</highlight></codeline>
+<codeline lineno="33"><highlight class="normal">include(GNUInstallDirs)</highlight></codeline>
+<codeline lineno="34"><highlight class="normal">install(</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"><sp/><sp/>TARGETS<sp/>BiDirectionalCpp</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"><sp/><sp/>EXPORT<sp/>${PROJECT_NAME}Targets</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"><sp/><sp/>PUBLIC_HEADER<sp/>DESTINATION<sp/>${CMAKE_INSTALL_INCLUDEDIR}/<ref refid="namespacebidirectional" kindref="compound">bidirectional</ref></highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/>ARCHIVE<sp/>DESTINATION<sp/>${CMAKE_INSTALL_LIBDIR}</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/>LIBRARY<sp/>DESTINATION<sp/>${CMAKE_INSTALL_LIBDIR}<sp/>#<sp/>RUNTIME<sp/>DESTINATION</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"></highlight><highlight class="preprocessor"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>#<sp/>${CMAKE_INSTALL_BINDIR}</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="41"><highlight class="normal">)</highlight></codeline>
+    </programlisting>
+    <location file="/__w/cspy/cspy/torressa/cspy/src/cc/CMakeLists.txt"/>
+  </compounddef>
+</doxygen>

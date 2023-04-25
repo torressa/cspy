@@ -1,0 +1,244 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="namespacebidirectional" kind="namespace" language="C++">
+    <compoundname>bidirectional</compoundname>
+    <innerclass refid="structbidirectional_1_1AdjVertex" prot="public">bidirectional::AdjVertex</innerclass>
+    <innerclass refid="classbidirectional_1_1BiDirectional" prot="public">bidirectional::BiDirectional</innerclass>
+    <innerclass refid="classbidirectional_1_1DiGraph" prot="public">bidirectional::DiGraph</innerclass>
+    <innerclass refid="classbidirectional_1_1Params" prot="public">bidirectional::Params</innerclass>
+    <innerclass refid="classbidirectional_1_1REFCallback" prot="public">bidirectional::REFCallback</innerclass>
+    <innerclass refid="classbidirectional_1_1ResourceMap" prot="public">bidirectional::ResourceMap</innerclass>
+    <innerclass refid="classbidirectional_1_1Search" prot="public">bidirectional::Search</innerclass>
+    <innerclass refid="structbidirectional_1_1Vertex" prot="public">bidirectional::Vertex</innerclass>
+      <sectiondef kind="enum">
+      <memberdef kind="enum" id="namespacebidirectional_1a507ec433f8ac22a92fcc3b8aad252f29" prot="public" static="no">
+        <name>NegativeCostCyclePresent</name>
+        <enumvalue id="namespacebidirectional_1a507ec433f8ac22a92fcc3b8aad252f29a50727807c27ff7820eef09fbe631eba9" prot="public">
+          <name>TRUE</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="namespacebidirectional_1a507ec433f8ac22a92fcc3b8aad252f29a7fcb4521ab8f836164a0670be9848d18" prot="public">
+          <name>FALSE</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="namespacebidirectional_1a507ec433f8ac22a92fcc3b8aad252f29aa5cae7e7a4dd360b53f1c5532ed64f59" prot="public">
+          <name>UNKNOWN</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/digraph.h" line="64" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/digraph.h" bodystart="64" bodyend="64"/>
+      </memberdef>
+      <memberdef kind="enum" id="namespacebidirectional_1a4cbe6f0bfbd3629c2cd44c98014aed70" prot="public" static="no">
+        <name>Directions</name>
+        <enumvalue id="namespacebidirectional_1a4cbe6f0bfbd3629c2cd44c98014aed70a798987f7644a83982bae650870e1ccc0" prot="public">
+          <name>FWD</name>
+          <briefdescription>
+<para>Forward. </para>          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="namespacebidirectional_1a4cbe6f0bfbd3629c2cd44c98014aed70a3e91263cd11d5fd4ceaec8830938740f" prot="public">
+          <name>BWD</name>
+          <briefdescription>
+<para>Backward. </para>          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="namespacebidirectional_1a4cbe6f0bfbd3629c2cd44c98014aed70ab50b3fbd895a667b43b3e9eb3bd54f85" prot="public">
+          <name>BOTH</name>
+          <briefdescription>
+<para>Both. </para>          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="namespacebidirectional_1a4cbe6f0bfbd3629c2cd44c98014aed70a37837b18a2ed90dd3c428984af217f47" prot="public">
+          <name>NODIR</name>
+          <briefdescription>
+<para>No direction. </para>          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+<para>Internal enum for directions. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/params.h" line="12" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/params.h" bodystart="12" bodyend="21"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="func">
+      <memberdef kind="function" id="namespacebidirectional_1a13e4a7c0617b0c9092e57cba21c75438" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void bidirectional::detectNegativeCostCycle</definition>
+        <argsstring>(DiGraph *graph_ptr)</argsstring>
+        <name>detectNegativeCostCycle</name>
+        <param>
+          <type><ref refid="classbidirectional_1_1DiGraph" kindref="compound">DiGraph</ref> *</type>
+          <declname>graph</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Detect if a negative cost cycle is present.</para><para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">graph</parametername>
+<parametername direction="out"><ref refid="classbidirectional_1_1DiGraph" kindref="compound">DiGraph</ref></parametername>
+</parameternamelist>
+<parameterdescription>
+<para></para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/preprocessing.cc" line="14" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/preprocessing.cc" bodystart="14" bodyend="27"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacebidirectional_1a35feb503e8ae674a3756aebc9a3b1d0f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void bidirectional::lowerBoundWeight</definition>
+        <argsstring>(std::vector&lt; double &gt; *lower_bound_weight, const DiGraph &amp;graph, const bool &amp;forward)</argsstring>
+        <name>lowerBoundWeight</name>
+        <param>
+          <type>std::vector&lt; double &gt; *</type>
+          <declname>lower_bound_weight</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classbidirectional_1_1DiGraph" kindref="compound">DiGraph</ref> &amp;</type>
+          <declname>graph</declname>
+        </param>
+        <param>
+          <type>const bool &amp;</type>
+          <declname>forward</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Solve shortest path using the distance provided as input and set the lower_bound_weight for each node. Uses LEMON&apos;s Bellman-Ford (just in case of negative weights) <simplesect kind="see"><para>: <ulink url="https://lemon.cs.elte.hu/pub/doc/latest/a00038.html">https://lemon.cs.elte.hu/pub/doc/latest/a00038.html</ulink></para></simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">lower_bound_weight</parametername>
+<parametername direction="out">vector</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>of double that contains the lower bound in the appropriate vertex index </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">graph</parametername>
+</parameternamelist>
+<parameterdescription>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/preprocessing.cc" line="30" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/preprocessing.cc" bodystart="30" bodyend="84"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacebidirectional_1a7b92b2282139801a9e2668a743ad07a1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int bidirectional::getCriticalRes</definition>
+        <argsstring>(const std::vector&lt; double &gt; &amp;max_res, const DiGraph &amp;graph)</argsstring>
+        <name>getCriticalRes</name>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>max_res</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classbidirectional_1_1DiGraph" kindref="compound">DiGraph</ref> &amp;</type>
+          <declname>graph</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>[EXPERIMENTAL] Get possible critical resource by solving longest paths on the graph with each resource as distance for each edge.</para><para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">vector</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>of double with maximum resources (upper bounds). </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in"><ref refid="classbidirectional_1_1DiGraph" kindref="compound">bidirectional::DiGraph</ref></parametername>
+<parametername direction="in">with</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>graph. </para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>int with critical resource id. </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/preprocessing.cc" line="86" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/preprocessing.cc" bodystart="86" bodyend="109"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacebidirectional_1a6b3d052fd58c8158b4e7a79acbed3c0e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt; double &gt; bidirectional::additiveForwardREF</definition>
+        <argsstring>(const std::vector&lt; double &gt; &amp;cumulative_resource, const std::vector&lt; double &gt; &amp;edge_resource_consumption)</argsstring>
+        <name>additiveForwardREF</name>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>cumulative_resource</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>edge_resource_consumption</declname>
+        </param>
+        <briefdescription>
+<para>Default additive REF for forward labels. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/ref_callback.cc" line="7" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/ref_callback.cc" bodystart="7" bodyend="19"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacebidirectional_1a36f100766b94f6950283274ff7d4e7a6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt; double &gt; bidirectional::additiveBackwardREF</definition>
+        <argsstring>(const std::vector&lt; double &gt; &amp;cumulative_resource, const std::vector&lt; double &gt; &amp;edge_resource_consumption, const int &amp;critical_res=0)</argsstring>
+        <name>additiveBackwardREF</name>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>cumulative_resource</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>edge_resource_consumption</declname>
+        </param>
+        <param>
+          <type>const int &amp;</type>
+          <declname>critical_res</declname>
+        </param>
+        <briefdescription>
+<para>Default additive REF for backward labels. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/ref_callback.cc" line="21" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/ref_callback.cc" bodystart="21" bodyend="39"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/__w/cspy/cspy/torressa/cspy/src/cc/bidirectional.cc" line="8" column="1"/>
+  </compounddef>
+</doxygen>

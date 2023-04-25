@@ -1,0 +1,303 @@
+\hypertarget{classbidirectional_1_1BiDirectional}{}\section{bidirectional\+:\+:Bi\+Directional Class Reference}
+\label{classbidirectional_1_1BiDirectional}\index{bidirectional\+::\+Bi\+Directional@{bidirectional\+::\+Bi\+Directional}}
+
+
+{\ttfamily \#include $<$bidirectional.\+h$>$}
+
+
+
+Collaboration diagram for bidirectional\+:\+:Bi\+Directional\+:
+% FIG 0
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classbidirectional_1_1BiDirectional_aa8fc8de56198cce766bf887248136fc2}{Bi\+Directional} (const int \&number\+\_\+vertices, const int \&number\+\_\+edges, const int \&\hyperlink{classbidirectional_1_1BiDirectional_ae8256189cc23d7033a5e8e36ac36ec4a}{source\+\_\+id}, const int \&\hyperlink{classbidirectional_1_1BiDirectional_a742976c94bdf77c2bfae680ffd2e468d}{sink\+\_\+id}, const std\+::vector$<$ double $>$ \&max\+\_\+res\+\_\+in, const std\+::vector$<$ double $>$ \&min\+\_\+res\+\_\+in)
+\item 
+\hyperlink{classbidirectional_1_1BiDirectional_ae8a303f1eab194fb7df356c1900c9c7f}{$\sim$\+Bi\+Directional} ()
+\begin{DoxyCompactList}\small\item\em Default destructor. \end{DoxyCompactList}\item 
+void \hyperlink{classbidirectional_1_1BiDirectional_a37633f0f701bfb6a5f3a212212316f29}{add\+Nodes} (const std\+::vector$<$ int $>$ \&nodes)
+\begin{DoxyCompactList}\small\item\em Wrapper to add nodes to the graph. \end{DoxyCompactList}\item 
+void \hyperlink{classbidirectional_1_1BiDirectional_a5e4873f624300e7c3620e00758c98a35}{add\+Edge} (const int \&tail, const int \&head, const double \&weight, const std\+::vector$<$ double $>$ \&resource\+\_\+consumption)
+\begin{DoxyCompactList}\small\item\em Add an edge to the graph. \end{DoxyCompactList}\item 
+void \hyperlink{classbidirectional_1_1BiDirectional_ac29ad49abb6001ad50f4dac4a5775b3c}{run} ()
+\begin{DoxyCompactList}\small\item\em run the algorithm (assumes all the appropriate options are set) \end{DoxyCompactList}\item 
+std\+::vector$<$ int $>$ \hyperlink{classbidirectional_1_1BiDirectional_a25af01f68ffce330a85922d02aa2ce88}{get\+Path} () const
+\begin{DoxyCompactList}\small\item\em Return the final path. \end{DoxyCompactList}\item 
+std\+::vector$<$ double $>$ \hyperlink{classbidirectional_1_1BiDirectional_a426412403ca7693f52b12a198d3f57c5}{get\+Consumed\+Resources} () const
+\begin{DoxyCompactList}\small\item\em Return the consumed resources. \end{DoxyCompactList}\item 
+double \hyperlink{classbidirectional_1_1BiDirectional_a7f18313a5858ce248b7819f7c214a43f}{get\+Total\+Cost} () const
+\begin{DoxyCompactList}\small\item\em Return the total cost. \end{DoxyCompactList}\item 
+void \hyperlink{classbidirectional_1_1BiDirectional_ad57667c8edeafda55eba523d02ff33e6}{check\+Critical\+Res} () const
+\item 
+void \hyperlink{classbidirectional_1_1BiDirectional_ac0961c36b450c9886562b0c63156da12}{set\+Direction} (const std\+::string \&direction\+\_\+in)
+\item 
+void \hyperlink{classbidirectional_1_1BiDirectional_a11320df93ad8e5747aa1f3e14cbe44bd}{set\+Method} (const std\+::string \&method\+\_\+in)
+\item 
+void \hyperlink{classbidirectional_1_1BiDirectional_af21bde5b9190abb4f0ea10ef3f8b30b4}{set\+Time\+Limit} (const double \&time\+\_\+limit\+\_\+in)
+\item 
+void \hyperlink{classbidirectional_1_1BiDirectional_a007a9d61310ec94a2470c75dd62b537a}{set\+Threshold} (const double \&threshold\+\_\+in)
+\item 
+void \hyperlink{classbidirectional_1_1BiDirectional_aafbbf3fb26308432be606799903f430e}{set\+Elementary} (const bool \&elementary\+\_\+in)
+\item 
+void \hyperlink{classbidirectional_1_1BiDirectional_adc4255b9f2ad9c9271805a64f93ea7c9}{set\+Two\+Cycle\+Elimination} (const bool \&two\+\_\+cycle\+\_\+elimination\+\_\+in)
+\item 
+void \hyperlink{classbidirectional_1_1BiDirectional_ac3cb989cdc2f4c1cedde6b30a9e7c1d8}{set\+Bounds\+Pruning} (const bool \&bounds\+\_\+pruning\+\_\+in)
+\item 
+void \hyperlink{classbidirectional_1_1BiDirectional_ad309aa627316fbccdf1d6e747d064c05}{set\+Find\+Critical\+Res} (const bool \&find\+\_\+critical\+\_\+res\+\_\+in)
+\item 
+void \hyperlink{classbidirectional_1_1BiDirectional_ad0a3ef7e4a5fcabfa34f9401532258b5}{set\+Critical\+Res} (const int \&critical\+\_\+res\+\_\+in)
+\item 
+void \hyperlink{classbidirectional_1_1BiDirectional_a901d84e260c2d18c3a3f2d14a5492278}{set\+R\+E\+F\+Callback} (\hyperlink{classbidirectional_1_1REFCallback}{bidirectional\+::\+R\+E\+F\+Callback} $\ast$cb)
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::vector$<$ double $>$ \hyperlink{classbidirectional_1_1BiDirectional_af181d7ebb76e773b7aa5da0da40cc74d}{max\+\_\+res}
+\begin{DoxyCompactList}\small\item\em vector with upper and lower bounds for resources \end{DoxyCompactList}\item 
+std\+::vector$<$ double $>$ \hyperlink{classbidirectional_1_1BiDirectional_af144538113c466b21e18a128f1ffb18e}{min\+\_\+res}
+\item 
+int \hyperlink{classbidirectional_1_1BiDirectional_ae8256189cc23d7033a5e8e36ac36ec4a}{source\+\_\+id}
+\item 
+int \hyperlink{classbidirectional_1_1BiDirectional_a742976c94bdf77c2bfae680ffd2e468d}{sink\+\_\+id}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\hyperlink{classbidirectional_1_1BiDirectional}{Bi\+Directional} algorithm. see docs
+
+
+\begin{DoxyEnumerate}
+\item ctor (memory allocation for the graph)
+\item add edges to graph using {\ttfamily add\+Edge}.
+\item \mbox{[}optional\mbox{]} set solving parameters if desired (e.\+g. time\+\_\+limit, ...) 3.\+1. \mbox{[}optional\mbox{]} set callback using {\ttfamily set\+R\+E\+F\+Callback} 3.\+2. \mbox{[}optional\mbox{]} set seed using {\ttfamily set\+Seed}
+\item call {\ttfamily run} 
+\end{DoxyEnumerate}
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classbidirectional_1_1BiDirectional_aa8fc8de56198cce766bf887248136fc2}\label{classbidirectional_1_1BiDirectional_aa8fc8de56198cce766bf887248136fc2}} 
+\index{bidirectional\+::\+Bi\+Directional@{bidirectional\+::\+Bi\+Directional}!Bi\+Directional@{Bi\+Directional}}
+\index{Bi\+Directional@{Bi\+Directional}!bidirectional\+::\+Bi\+Directional@{bidirectional\+::\+Bi\+Directional}}
+\subsubsection{\texorpdfstring{Bi\+Directional()}{BiDirectional()}}
+{\footnotesize\ttfamily bidirectional\+::\+Bi\+Directional\+::\+Bi\+Directional (\begin{DoxyParamCaption}\item[{const int \&}]{number\+\_\+vertices,  }\item[{const int \&}]{number\+\_\+edges,  }\item[{const int \&}]{source\+\_\+id,  }\item[{const int \&}]{sink\+\_\+id,  }\item[{const std\+::vector$<$ double $>$ \&}]{max\+\_\+res\+\_\+in,  }\item[{const std\+::vector$<$ double $>$ \&}]{min\+\_\+res\+\_\+in }\end{DoxyParamCaption})}
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em number\+\_\+vertices,int} & number of vertices in the graph (to be added using add\+Edge) \\
+\hline
+\mbox{\tt in}  & {\em number\+\_\+edges,int} & number of edges in the graph \\
+\hline
+\mbox{\tt in}  & {\em source\+\_\+id,int} & vertex id for the source \\
+\hline
+\mbox{\tt in}  & {\em sink\+\_\+id,int} & vertex id for the sink \\
+\hline
+\mbox{\tt in}  & {\em max\+\_\+res,vector} & of double with upper bound for resource consumption \\
+\hline
+\mbox{\tt in}  & {\em min\+\_\+res,vector} & of double with lower bound for resource consumption \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classbidirectional_1_1BiDirectional_ae8a303f1eab194fb7df356c1900c9c7f}\label{classbidirectional_1_1BiDirectional_ae8a303f1eab194fb7df356c1900c9c7f}} 
+\index{bidirectional\+::\+Bi\+Directional@{bidirectional\+::\+Bi\+Directional}!````~Bi\+Directional@{$\sim$\+Bi\+Directional}}
+\index{````~Bi\+Directional@{$\sim$\+Bi\+Directional}!bidirectional\+::\+Bi\+Directional@{bidirectional\+::\+Bi\+Directional}}
+\subsubsection{\texorpdfstring{$\sim$\+Bi\+Directional()}{~BiDirectional()}}
+{\footnotesize\ttfamily bidirectional\+::\+Bi\+Directional\+::$\sim$\+Bi\+Directional (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Default destructor. 
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classbidirectional_1_1BiDirectional_a5e4873f624300e7c3620e00758c98a35}\label{classbidirectional_1_1BiDirectional_a5e4873f624300e7c3620e00758c98a35}} 
+\index{bidirectional\+::\+Bi\+Directional@{bidirectional\+::\+Bi\+Directional}!add\+Edge@{add\+Edge}}
+\index{add\+Edge@{add\+Edge}!bidirectional\+::\+Bi\+Directional@{bidirectional\+::\+Bi\+Directional}}
+\subsubsection{\texorpdfstring{add\+Edge()}{addEdge()}}
+{\footnotesize\ttfamily void bidirectional\+::\+Bi\+Directional\+::add\+Edge (\begin{DoxyParamCaption}\item[{const int \&}]{tail,  }\item[{const int \&}]{head,  }\item[{const double \&}]{weight,  }\item[{const std\+::vector$<$ double $>$ \&}]{resource\+\_\+consumption }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Add an edge to the graph. 
+
+\mbox{\Hypertarget{classbidirectional_1_1BiDirectional_a37633f0f701bfb6a5f3a212212316f29}\label{classbidirectional_1_1BiDirectional_a37633f0f701bfb6a5f3a212212316f29}} 
+\index{bidirectional\+::\+Bi\+Directional@{bidirectional\+::\+Bi\+Directional}!add\+Nodes@{add\+Nodes}}
+\index{add\+Nodes@{add\+Nodes}!bidirectional\+::\+Bi\+Directional@{bidirectional\+::\+Bi\+Directional}}
+\subsubsection{\texorpdfstring{add\+Nodes()}{addNodes()}}
+{\footnotesize\ttfamily void bidirectional\+::\+Bi\+Directional\+::add\+Nodes (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ int $>$ \&}]{nodes }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Wrapper to add nodes to the graph. 
+
+\begin{DoxySeeAlso}{See also}
+\hyperlink{classbidirectional_1_1DiGraph_a483c50e9b5b483472ae7ee2910f3bcda}{Di\+Graph\+::add\+Nodes} 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{classbidirectional_1_1BiDirectional_ad57667c8edeafda55eba523d02ff33e6}\label{classbidirectional_1_1BiDirectional_ad57667c8edeafda55eba523d02ff33e6}} 
+\index{bidirectional\+::\+Bi\+Directional@{bidirectional\+::\+Bi\+Directional}!check\+Critical\+Res@{check\+Critical\+Res}}
+\index{check\+Critical\+Res@{check\+Critical\+Res}!bidirectional\+::\+Bi\+Directional@{bidirectional\+::\+Bi\+Directional}}
+\subsubsection{\texorpdfstring{check\+Critical\+Res()}{checkCriticalRes()}}
+{\footnotesize\ttfamily void bidirectional\+::\+Bi\+Directional\+::check\+Critical\+Res (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+After running the algorithm, one can check if critical resource is tight (difference between final resource and maximum) and prints a message if it doesn\textquotesingle{}t match to the one chosen in \hyperlink{classbidirectional_1_1Params}{Params}. \mbox{\Hypertarget{classbidirectional_1_1BiDirectional_a426412403ca7693f52b12a198d3f57c5}\label{classbidirectional_1_1BiDirectional_a426412403ca7693f52b12a198d3f57c5}} 
+\index{bidirectional\+::\+Bi\+Directional@{bidirectional\+::\+Bi\+Directional}!get\+Consumed\+Resources@{get\+Consumed\+Resources}}
+\index{get\+Consumed\+Resources@{get\+Consumed\+Resources}!bidirectional\+::\+Bi\+Directional@{bidirectional\+::\+Bi\+Directional}}
+\subsubsection{\texorpdfstring{get\+Consumed\+Resources()}{getConsumedResources()}}
+{\footnotesize\ttfamily std\+::vector$<$ double $>$ bidirectional\+::\+Bi\+Directional\+::get\+Consumed\+Resources (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Return the consumed resources. 
+
+\mbox{\Hypertarget{classbidirectional_1_1BiDirectional_a25af01f68ffce330a85922d02aa2ce88}\label{classbidirectional_1_1BiDirectional_a25af01f68ffce330a85922d02aa2ce88}} 
+\index{bidirectional\+::\+Bi\+Directional@{bidirectional\+::\+Bi\+Directional}!get\+Path@{get\+Path}}
+\index{get\+Path@{get\+Path}!bidirectional\+::\+Bi\+Directional@{bidirectional\+::\+Bi\+Directional}}
+\subsubsection{\texorpdfstring{get\+Path()}{getPath()}}
+{\footnotesize\ttfamily std\+::vector$<$ int $>$ bidirectional\+::\+Bi\+Directional\+::get\+Path (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Return the final path. 
+
+\mbox{\Hypertarget{classbidirectional_1_1BiDirectional_a7f18313a5858ce248b7819f7c214a43f}\label{classbidirectional_1_1BiDirectional_a7f18313a5858ce248b7819f7c214a43f}} 
+\index{bidirectional\+::\+Bi\+Directional@{bidirectional\+::\+Bi\+Directional}!get\+Total\+Cost@{get\+Total\+Cost}}
+\index{get\+Total\+Cost@{get\+Total\+Cost}!bidirectional\+::\+Bi\+Directional@{bidirectional\+::\+Bi\+Directional}}
+\subsubsection{\texorpdfstring{get\+Total\+Cost()}{getTotalCost()}}
+{\footnotesize\ttfamily double bidirectional\+::\+Bi\+Directional\+::get\+Total\+Cost (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Return the total cost. 
+
+\mbox{\Hypertarget{classbidirectional_1_1BiDirectional_ac29ad49abb6001ad50f4dac4a5775b3c}\label{classbidirectional_1_1BiDirectional_ac29ad49abb6001ad50f4dac4a5775b3c}} 
+\index{bidirectional\+::\+Bi\+Directional@{bidirectional\+::\+Bi\+Directional}!run@{run}}
+\index{run@{run}!bidirectional\+::\+Bi\+Directional@{bidirectional\+::\+Bi\+Directional}}
+\subsubsection{\texorpdfstring{run()}{run()}}
+{\footnotesize\ttfamily void bidirectional\+::\+Bi\+Directional\+::run (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+run the algorithm (assumes all the appropriate options are set) 
+
+\mbox{\Hypertarget{classbidirectional_1_1BiDirectional_ac3cb989cdc2f4c1cedde6b30a9e7c1d8}\label{classbidirectional_1_1BiDirectional_ac3cb989cdc2f4c1cedde6b30a9e7c1d8}} 
+\index{bidirectional\+::\+Bi\+Directional@{bidirectional\+::\+Bi\+Directional}!set\+Bounds\+Pruning@{set\+Bounds\+Pruning}}
+\index{set\+Bounds\+Pruning@{set\+Bounds\+Pruning}!bidirectional\+::\+Bi\+Directional@{bidirectional\+::\+Bi\+Directional}}
+\subsubsection{\texorpdfstring{set\+Bounds\+Pruning()}{setBoundsPruning()}}
+{\footnotesize\ttfamily void bidirectional\+::\+Bi\+Directional\+::set\+Bounds\+Pruning (\begin{DoxyParamCaption}\item[{const bool \&}]{bounds\+\_\+pruning\+\_\+in }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\begin{DoxySeeAlso}{See also}
+\hyperlink{classbidirectional_1_1Params}{bidirectional\+::\+Params} 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{classbidirectional_1_1BiDirectional_ad0a3ef7e4a5fcabfa34f9401532258b5}\label{classbidirectional_1_1BiDirectional_ad0a3ef7e4a5fcabfa34f9401532258b5}} 
+\index{bidirectional\+::\+Bi\+Directional@{bidirectional\+::\+Bi\+Directional}!set\+Critical\+Res@{set\+Critical\+Res}}
+\index{set\+Critical\+Res@{set\+Critical\+Res}!bidirectional\+::\+Bi\+Directional@{bidirectional\+::\+Bi\+Directional}}
+\subsubsection{\texorpdfstring{set\+Critical\+Res()}{setCriticalRes()}}
+{\footnotesize\ttfamily void bidirectional\+::\+Bi\+Directional\+::set\+Critical\+Res (\begin{DoxyParamCaption}\item[{const int \&}]{critical\+\_\+res\+\_\+in }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\begin{DoxySeeAlso}{See also}
+\hyperlink{classbidirectional_1_1Params}{bidirectional\+::\+Params} 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{classbidirectional_1_1BiDirectional_ac0961c36b450c9886562b0c63156da12}\label{classbidirectional_1_1BiDirectional_ac0961c36b450c9886562b0c63156da12}} 
+\index{bidirectional\+::\+Bi\+Directional@{bidirectional\+::\+Bi\+Directional}!set\+Direction@{set\+Direction}}
+\index{set\+Direction@{set\+Direction}!bidirectional\+::\+Bi\+Directional@{bidirectional\+::\+Bi\+Directional}}
+\subsubsection{\texorpdfstring{set\+Direction()}{setDirection()}}
+{\footnotesize\ttfamily void bidirectional\+::\+Bi\+Directional\+::set\+Direction (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{direction\+\_\+in }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\begin{DoxySeeAlso}{See also}
+\hyperlink{classbidirectional_1_1Params}{bidirectional\+::\+Params} 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{classbidirectional_1_1BiDirectional_aafbbf3fb26308432be606799903f430e}\label{classbidirectional_1_1BiDirectional_aafbbf3fb26308432be606799903f430e}} 
+\index{bidirectional\+::\+Bi\+Directional@{bidirectional\+::\+Bi\+Directional}!set\+Elementary@{set\+Elementary}}
+\index{set\+Elementary@{set\+Elementary}!bidirectional\+::\+Bi\+Directional@{bidirectional\+::\+Bi\+Directional}}
+\subsubsection{\texorpdfstring{set\+Elementary()}{setElementary()}}
+{\footnotesize\ttfamily void bidirectional\+::\+Bi\+Directional\+::set\+Elementary (\begin{DoxyParamCaption}\item[{const bool \&}]{elementary\+\_\+in }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\begin{DoxySeeAlso}{See also}
+\hyperlink{classbidirectional_1_1Params}{bidirectional\+::\+Params} 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{classbidirectional_1_1BiDirectional_ad309aa627316fbccdf1d6e747d064c05}\label{classbidirectional_1_1BiDirectional_ad309aa627316fbccdf1d6e747d064c05}} 
+\index{bidirectional\+::\+Bi\+Directional@{bidirectional\+::\+Bi\+Directional}!set\+Find\+Critical\+Res@{set\+Find\+Critical\+Res}}
+\index{set\+Find\+Critical\+Res@{set\+Find\+Critical\+Res}!bidirectional\+::\+Bi\+Directional@{bidirectional\+::\+Bi\+Directional}}
+\subsubsection{\texorpdfstring{set\+Find\+Critical\+Res()}{setFindCriticalRes()}}
+{\footnotesize\ttfamily void bidirectional\+::\+Bi\+Directional\+::set\+Find\+Critical\+Res (\begin{DoxyParamCaption}\item[{const bool \&}]{find\+\_\+critical\+\_\+res\+\_\+in }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\begin{DoxySeeAlso}{See also}
+\hyperlink{classbidirectional_1_1Params}{bidirectional\+::\+Params} and \hyperlink{namespacebidirectional_a7b92b2282139801a9e2668a743ad07a1}{get\+Critical\+Res} 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{classbidirectional_1_1BiDirectional_a11320df93ad8e5747aa1f3e14cbe44bd}\label{classbidirectional_1_1BiDirectional_a11320df93ad8e5747aa1f3e14cbe44bd}} 
+\index{bidirectional\+::\+Bi\+Directional@{bidirectional\+::\+Bi\+Directional}!set\+Method@{set\+Method}}
+\index{set\+Method@{set\+Method}!bidirectional\+::\+Bi\+Directional@{bidirectional\+::\+Bi\+Directional}}
+\subsubsection{\texorpdfstring{set\+Method()}{setMethod()}}
+{\footnotesize\ttfamily void bidirectional\+::\+Bi\+Directional\+::set\+Method (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{method\+\_\+in }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\begin{DoxySeeAlso}{See also}
+\hyperlink{classbidirectional_1_1Params}{bidirectional\+::\+Params} 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{classbidirectional_1_1BiDirectional_a901d84e260c2d18c3a3f2d14a5492278}\label{classbidirectional_1_1BiDirectional_a901d84e260c2d18c3a3f2d14a5492278}} 
+\index{bidirectional\+::\+Bi\+Directional@{bidirectional\+::\+Bi\+Directional}!set\+R\+E\+F\+Callback@{set\+R\+E\+F\+Callback}}
+\index{set\+R\+E\+F\+Callback@{set\+R\+E\+F\+Callback}!bidirectional\+::\+Bi\+Directional@{bidirectional\+::\+Bi\+Directional}}
+\subsubsection{\texorpdfstring{set\+R\+E\+F\+Callback()}{setREFCallback()}}
+{\footnotesize\ttfamily void bidirectional\+::\+Bi\+Directional\+::set\+R\+E\+F\+Callback (\begin{DoxyParamCaption}\item[{\hyperlink{classbidirectional_1_1REFCallback}{bidirectional\+::\+R\+E\+F\+Callback} $\ast$}]{cb }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Pass python callback for label extensions. Note\+: swig needs namespace specifier \mbox{\Hypertarget{classbidirectional_1_1BiDirectional_a007a9d61310ec94a2470c75dd62b537a}\label{classbidirectional_1_1BiDirectional_a007a9d61310ec94a2470c75dd62b537a}} 
+\index{bidirectional\+::\+Bi\+Directional@{bidirectional\+::\+Bi\+Directional}!set\+Threshold@{set\+Threshold}}
+\index{set\+Threshold@{set\+Threshold}!bidirectional\+::\+Bi\+Directional@{bidirectional\+::\+Bi\+Directional}}
+\subsubsection{\texorpdfstring{set\+Threshold()}{setThreshold()}}
+{\footnotesize\ttfamily void bidirectional\+::\+Bi\+Directional\+::set\+Threshold (\begin{DoxyParamCaption}\item[{const double \&}]{threshold\+\_\+in }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\begin{DoxySeeAlso}{See also}
+\hyperlink{classbidirectional_1_1Params}{bidirectional\+::\+Params} 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{classbidirectional_1_1BiDirectional_af21bde5b9190abb4f0ea10ef3f8b30b4}\label{classbidirectional_1_1BiDirectional_af21bde5b9190abb4f0ea10ef3f8b30b4}} 
+\index{bidirectional\+::\+Bi\+Directional@{bidirectional\+::\+Bi\+Directional}!set\+Time\+Limit@{set\+Time\+Limit}}
+\index{set\+Time\+Limit@{set\+Time\+Limit}!bidirectional\+::\+Bi\+Directional@{bidirectional\+::\+Bi\+Directional}}
+\subsubsection{\texorpdfstring{set\+Time\+Limit()}{setTimeLimit()}}
+{\footnotesize\ttfamily void bidirectional\+::\+Bi\+Directional\+::set\+Time\+Limit (\begin{DoxyParamCaption}\item[{const double \&}]{time\+\_\+limit\+\_\+in }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\begin{DoxySeeAlso}{See also}
+\hyperlink{classbidirectional_1_1Params}{bidirectional\+::\+Params} 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{classbidirectional_1_1BiDirectional_adc4255b9f2ad9c9271805a64f93ea7c9}\label{classbidirectional_1_1BiDirectional_adc4255b9f2ad9c9271805a64f93ea7c9}} 
+\index{bidirectional\+::\+Bi\+Directional@{bidirectional\+::\+Bi\+Directional}!set\+Two\+Cycle\+Elimination@{set\+Two\+Cycle\+Elimination}}
+\index{set\+Two\+Cycle\+Elimination@{set\+Two\+Cycle\+Elimination}!bidirectional\+::\+Bi\+Directional@{bidirectional\+::\+Bi\+Directional}}
+\subsubsection{\texorpdfstring{set\+Two\+Cycle\+Elimination()}{setTwoCycleElimination()}}
+{\footnotesize\ttfamily void bidirectional\+::\+Bi\+Directional\+::set\+Two\+Cycle\+Elimination (\begin{DoxyParamCaption}\item[{const bool \&}]{two\+\_\+cycle\+\_\+elimination\+\_\+in }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\begin{DoxySeeAlso}{See also}
+\hyperlink{classbidirectional_1_1Params}{bidirectional\+::\+Params} 
+\end{DoxySeeAlso}
+
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{classbidirectional_1_1BiDirectional_af181d7ebb76e773b7aa5da0da40cc74d}\label{classbidirectional_1_1BiDirectional_af181d7ebb76e773b7aa5da0da40cc74d}} 
+\index{bidirectional\+::\+Bi\+Directional@{bidirectional\+::\+Bi\+Directional}!max\+\_\+res@{max\+\_\+res}}
+\index{max\+\_\+res@{max\+\_\+res}!bidirectional\+::\+Bi\+Directional@{bidirectional\+::\+Bi\+Directional}}
+\subsubsection{\texorpdfstring{max\+\_\+res}{max\_res}}
+{\footnotesize\ttfamily std\+::vector$<$double$>$ bidirectional\+::\+Bi\+Directional\+::max\+\_\+res}
+
+
+
+vector with upper and lower bounds for resources 
+
+\mbox{\Hypertarget{classbidirectional_1_1BiDirectional_af144538113c466b21e18a128f1ffb18e}\label{classbidirectional_1_1BiDirectional_af144538113c466b21e18a128f1ffb18e}} 
+\index{bidirectional\+::\+Bi\+Directional@{bidirectional\+::\+Bi\+Directional}!min\+\_\+res@{min\+\_\+res}}
+\index{min\+\_\+res@{min\+\_\+res}!bidirectional\+::\+Bi\+Directional@{bidirectional\+::\+Bi\+Directional}}
+\subsubsection{\texorpdfstring{min\+\_\+res}{min\_res}}
+{\footnotesize\ttfamily std\+::vector$<$double$>$ bidirectional\+::\+Bi\+Directional\+::min\+\_\+res}
+
+\mbox{\Hypertarget{classbidirectional_1_1BiDirectional_a742976c94bdf77c2bfae680ffd2e468d}\label{classbidirectional_1_1BiDirectional_a742976c94bdf77c2bfae680ffd2e468d}} 
+\index{bidirectional\+::\+Bi\+Directional@{bidirectional\+::\+Bi\+Directional}!sink\+\_\+id@{sink\+\_\+id}}
+\index{sink\+\_\+id@{sink\+\_\+id}!bidirectional\+::\+Bi\+Directional@{bidirectional\+::\+Bi\+Directional}}
+\subsubsection{\texorpdfstring{sink\+\_\+id}{sink\_id}}
+{\footnotesize\ttfamily int bidirectional\+::\+Bi\+Directional\+::sink\+\_\+id}
+
+\mbox{\Hypertarget{classbidirectional_1_1BiDirectional_ae8256189cc23d7033a5e8e36ac36ec4a}\label{classbidirectional_1_1BiDirectional_ae8256189cc23d7033a5e8e36ac36ec4a}} 
+\index{bidirectional\+::\+Bi\+Directional@{bidirectional\+::\+Bi\+Directional}!source\+\_\+id@{source\+\_\+id}}
+\index{source\+\_\+id@{source\+\_\+id}!bidirectional\+::\+Bi\+Directional@{bidirectional\+::\+Bi\+Directional}}
+\subsubsection{\texorpdfstring{source\+\_\+id}{source\_id}}
+{\footnotesize\ttfamily int bidirectional\+::\+Bi\+Directional\+::source\+\_\+id}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/\+\_\+\+\_\+w/cspy/cspy/torressa/cspy/src/cc/\hyperlink{bidirectional_8h}{bidirectional.\+h}\item 
+/\+\_\+\+\_\+w/cspy/cspy/torressa/cspy/src/cc/\hyperlink{bidirectional_8cc}{bidirectional.\+cc}\end{DoxyCompactItemize}

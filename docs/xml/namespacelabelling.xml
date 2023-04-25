@@ -1,0 +1,365 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="namespacelabelling" kind="namespace" language="C++">
+    <compoundname>labelling</compoundname>
+    <innerclass refid="classlabelling_1_1Label" prot="public">labelling::Label</innerclass>
+      <sectiondef kind="func">
+      <memberdef kind="function" id="namespacelabelling_1a96ce48b2672548c132a1032820202375" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool labelling::operator==</definition>
+        <argsstring>(const Label &amp;label1, const Label &amp;label2)</argsstring>
+        <name>operator==</name>
+        <param>
+          <type>const <ref refid="classlabelling_1_1Label" kindref="compound">Label</ref> &amp;</type>
+          <declname>label1</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classlabelling_1_1Label" kindref="compound">Label</ref> &amp;</type>
+          <declname>label2</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+<para>Check every resource for inequality </para>        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.cc" line="301" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.cc" bodystart="301" bodyend="315"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacelabelling_1a71cfecc2e31a39a8743e584c12b3fd32" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool labelling::operator&lt;</definition>
+        <argsstring>(const Label &amp;label1, const Label &amp;label2)</argsstring>
+        <name>operator&lt;</name>
+        <param>
+          <type>const <ref refid="classlabelling_1_1Label" kindref="compound">Label</ref> &amp;</type>
+          <declname>label1</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classlabelling_1_1Label" kindref="compound">Label</ref> &amp;</type>
+          <declname>label2</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.cc" line="317" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.cc" bodystart="317" bodyend="321"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacelabelling_1a079cd7339d7a3797d35ebbd5b4e930f6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool labelling::operator&gt;</definition>
+        <argsstring>(const Label &amp;label1, const Label &amp;label2)</argsstring>
+        <name>operator&gt;</name>
+        <param>
+          <type>const <ref refid="classlabelling_1_1Label" kindref="compound">Label</ref> &amp;</type>
+          <declname>label1</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classlabelling_1_1Label" kindref="compound">Label</ref> &amp;</type>
+          <declname>label2</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.cc" line="323" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.cc" bodystart="323" bodyend="327"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacelabelling_1ac988eedb6084b429a46b070f3ff6d544" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::ostream &amp;</type>
+        <definition>std::ostream&amp; labelling::operator&lt;&lt;</definition>
+        <argsstring>(std::ostream &amp;os, const Label &amp;label)</argsstring>
+        <name>operator&lt;&lt;</name>
+        <param>
+          <type>std::ostream &amp;</type>
+          <declname>os</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classlabelling_1_1Label" kindref="compound">Label</ref> &amp;</type>
+          <declname>label</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.cc" line="329" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.cc" bodystart="329" bodyend="331"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacelabelling_1ac6d6bb89c176d0f2db264457d60c5bd8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool labelling::runDominanceEff</definition>
+        <argsstring>(std::vector&lt; Label &gt; *efficient_labels_ptr, const Label &amp;label, const bidirectional::Directions &amp;direction, const bool &amp;elementary)</argsstring>
+        <name>runDominanceEff</name>
+        <param>
+          <type>std::vector&lt; <ref refid="classlabelling_1_1Label" kindref="compound">Label</ref> &gt; *</type>
+          <declname>efficient_labels_ptr</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classlabelling_1_1Label" kindref="compound">Label</ref> &amp;</type>
+          <declname>label</declname>
+        </param>
+        <param>
+          <type>const <ref refid="namespacebidirectional_1a4cbe6f0bfbd3629c2cd44c98014aed70" kindref="member">bidirectional::Directions</ref> &amp;</type>
+          <declname>direction</declname>
+        </param>
+        <param>
+          <type>const bool &amp;</type>
+          <declname>elementary</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Misc functionality</para><para>Check whether the input label dominates any efficient label (previously undominated labels) at the same node. If any label is dominated by the input label, they are removed.</para><para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">efficient_labels</parametername>
+<parametername direction="out">pointer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>to a vector of <ref refid="classlabelling_1_1Label" kindref="compound">Label</ref> with the efficient labels at the same node as <computeroutput>label</computeroutput>. If a label is dominated by <computeroutput>label</computeroutput>, it is removed from this vector. </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">label</parametername>
+<parametername direction="in"><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref></parametername>
+</parameternamelist>
+<parameterdescription>
+<para>to compare </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">direction</parametername>
+<parametername direction="in">Directions</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>with direction of search </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">elementary</parametername>
+<parametername direction="in">bool</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>with whether non-elementary paths are allowed</para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>bool, true if <computeroutput>label</computeroutput> is dominated, false otherwise </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.cc" line="337" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.cc" bodystart="337" bodyend="366"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacelabelling_1a7d32365acb745f452e0b81beed2ce2be" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref></type>
+        <definition>Label labelling::getNextLabel</definition>
+        <argsstring>(std::vector&lt; Label &gt; *labels_ptr, const bidirectional::Directions &amp;direction)</argsstring>
+        <name>getNextLabel</name>
+        <param>
+          <type>std::vector&lt; <ref refid="classlabelling_1_1Label" kindref="compound">Label</ref> &gt; *</type>
+          <declname>labels</declname>
+        </param>
+        <param>
+          <type>const <ref refid="namespacebidirectional_1a4cbe6f0bfbd3629c2cd44c98014aed70" kindref="member">bidirectional::Directions</ref> &amp;</type>
+          <declname>direction</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Get next label from ordered labels Grabs the next element in the heap (back) and removes it In the forward (backward) direction this is the label with lowest (highest) monotone resource.</para><para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">labels</parametername>
+<parametername direction="out">std::vector&lt;Label&gt;</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>pointer (heap) </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">direction</parametername>
+<parametername direction="in">Directions</parametername>
+</parameternamelist>
+<parameterdescription>
+<para></para></parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.cc" line="368" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.cc" bodystart="368" bodyend="380"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacelabelling_1ae172758fb8d07cc0a490d8715966e1b7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref></type>
+        <definition>Label labelling::processBwdLabel</definition>
+        <argsstring>(const labelling::Label &amp;label, const std::vector&lt; double &gt; &amp;max_res, const std::vector&lt; double &gt; &amp;cumulative_resource, const bool &amp;invert_min_res)</argsstring>
+        <name>processBwdLabel</name>
+        <param>
+          <type>const <ref refid="classlabelling_1_1Label" kindref="compound">labelling::Label</ref> &amp;</type>
+          <declname>label</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>max_res</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>cumulative_resource</declname>
+        </param>
+        <param>
+          <type>const bool &amp;</type>
+          <declname>invert_min_res</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Reverse backward path and inverts resource consumption and returns resulting forward-compatible label.</para><para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">label</parametername>
+<parametername direction="out"><ref refid="classlabelling_1_1Label" kindref="compound">labelling::Label</ref></parametername>
+<parametername direction="out">current</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>label to extend (and maybe update <computeroutput>unreachable_nodes</computeroutput>) </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">max_res</parametername>
+<parametername direction="in">vector</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>of double with upper bound(s) for resource consumption. To use to invert monotone resource </para></parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">invert_min_res</parametername>
+<parametername direction="in">bool</parametername>
+</parameternamelist>
+<parameterdescription>
+<para></para></parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>inverted label </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.cc" line="382" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.cc" bodystart="382" bodyend="407"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacelabelling_1a5bb0d5a3d1eeb92546902c6cdc12c71d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double labelling::getPhiValue</definition>
+        <argsstring>(const labelling::Label &amp;fwd_label, const labelling::Label &amp;bwd_label, const std::vector&lt; double &gt; &amp;max_res)</argsstring>
+        <name>getPhiValue</name>
+        <param>
+          <type>const <ref refid="classlabelling_1_1Label" kindref="compound">labelling::Label</ref> &amp;</type>
+          <declname>fwd_label</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classlabelling_1_1Label" kindref="compound">labelling::Label</ref> &amp;</type>
+          <declname>bwd_label</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>max_res</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Returns the phi value. As defined in Righini and Salani (2006) </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.cc" line="409" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.cc" bodystart="409" bodyend="417"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacelabelling_1ad7fee591bcb066e39ff97138ab0ba5ca" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool labelling::halfwayCheck</definition>
+        <argsstring>(const Label &amp;label, const std::vector&lt; Label &gt; &amp;labels)</argsstring>
+        <name>halfwayCheck</name>
+        <param>
+          <type>const <ref refid="classlabelling_1_1Label" kindref="compound">Label</ref> &amp;</type>
+          <declname>label</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; <ref refid="classlabelling_1_1Label" kindref="compound">Label</ref> &gt; &amp;</type>
+          <declname>labels</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Check whether the pair (phi, path) is already contained in all the (phi, path) pairs with a lower phi.</para><para>As defined in Righini and Salani (2006) </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.cc" line="419" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.cc" bodystart="419" bodyend="438"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacelabelling_1a9c2e8f16965144d445ba68216dae648f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool labelling::mergePreCheck</definition>
+        <argsstring>(const labelling::Label &amp;fwd_label, const labelling::Label &amp;bwd_label, const std::vector&lt; double &gt; &amp;max_res)</argsstring>
+        <name>mergePreCheck</name>
+        <param>
+          <type>const <ref refid="classlabelling_1_1Label" kindref="compound">labelling::Label</ref> &amp;</type>
+          <declname>fwd_label</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classlabelling_1_1Label" kindref="compound">labelling::Label</ref> &amp;</type>
+          <declname>bwd_label</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>max_res</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Check whether a pair of forward and backward labels are suitable for merging. To be used before attempting to merge. </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.cc" line="440" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.cc" bodystart="440" bodyend="473"/>
+      </memberdef>
+      <memberdef kind="function" id="namespacelabelling_1a19937349c6ec5c31d5994aac45c5d2fd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref></type>
+        <definition>Label labelling::mergeLabels</definition>
+        <argsstring>(const Label &amp;fwd_label, const Label &amp;bwd_label, const bidirectional::AdjVertex &amp;adj_vertex, const bidirectional::Vertex &amp;sink, const std::vector&lt; double &gt; &amp;max_res, const std::vector&lt; double &gt; &amp;min_res)</argsstring>
+        <name>mergeLabels</name>
+        <param>
+          <type>const <ref refid="classlabelling_1_1Label" kindref="compound">labelling::Label</ref> &amp;</type>
+          <declname>fwd_label</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classlabelling_1_1Label" kindref="compound">labelling::Label</ref> &amp;</type>
+          <declname>bwd_label</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structbidirectional_1_1AdjVertex" kindref="compound">bidirectional::AdjVertex</ref> &amp;</type>
+          <declname>adj_vertex</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structbidirectional_1_1Vertex" kindref="compound">bidirectional::Vertex</ref> &amp;</type>
+          <declname>sink</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>max_res</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>min_res</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Merge labels produced by a backward and forward label. If an s-t compatible path can be obtained the appropriately extended and merged label is returned.</para><para><simplesect kind="return"><para>merged label with updated attributes and new phi value. </para></simplesect>
+</para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.cc" line="475" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.cc" bodystart="475" bodyend="537"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.cc" line="6" column="1"/>
+  </compounddef>
+</doxygen>

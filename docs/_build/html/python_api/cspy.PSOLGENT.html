@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>cspy.PSOLGENT &mdash; cspy 1.0.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="cspy.preprocess_graph" href="cspy.preprocess_graph.html" />
+    <link rel="prev" title="cspy.GRASP" href="cspy.GRASP.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            cspy
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how_to.html">Using <cite>cspy</cite></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ref.html">Resource Extension Functions (REFs)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python API</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="cspy.BiDirectional.html">cspy.BiDirectional</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cspy.Tabu.html">cspy.Tabu</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cspy.GreedyElim.html">cspy.GreedyElim</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cspy.GRASP.html">cspy.GRASP</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">cspy.PSOLGENT</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#parameters">Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#raises">Raises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#notes">Notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example">Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cspy.preprocess_graph.html">cspy.preprocess_graph</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cspy.check.html">cspy.check</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">C++ API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../cc_api/BiDirectional.html">BiDirectional</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cc_api/Search.html">Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cc_api/REFCallback.html">REFCallback</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cc_api/params.html">Params</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cc_api/DiGraph.html">DiGraph</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cc_api/Vertex.html">Vertex</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cc_api/Label.html">Labelling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cc_api/preprocessing.html">Preprocessing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">cspy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">cspy.PSOLGENT</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/python_api/cspy.PSOLGENT.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="module-cspy.PSOLGENT">
+<span id="cspy-psolgent"></span><h1>cspy.PSOLGENT<a class="headerlink" href="#module-cspy.PSOLGENT" title="Permalink to this heading"></a></h1>
+<p>Particle Swarm Optimization with combined Local and Global Expanding
+Neighborhood Topology (PSOLGENT) algorithm for the (resource)
+constrained shortest path problem (<a class="reference external" href="https://www.sciencedirect.com/science/article/abs/pii/S0377221717302357">Marinakis et al 2017</a>).</p>
+<p>Note. Neighborhood expansion not implemented yet, so PSOLGNT.</p>
+<p>Given the nature of our problem we have set the default parameters of
+the algorithm as suggested in the paper mentioned.</p>
+<p>Code adapted from <a class="reference external" href="https://github.com/100/Solid/blob/master/Solid/ParticleSwarm.py">Solid</a>.</p>
+<div class="section" id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt>G<span class="classifier">object</span></dt><dd><p><code class="xref py py-class docutils literal notranslate"><span class="pre">nx.Digraph()</span></code> must have <code class="docutils literal notranslate"><span class="pre">n_res</span></code> graph attribute and all edges must have
+<code class="docutils literal notranslate"><span class="pre">res_cost</span></code> attribute.</p>
+</dd>
+<dt>max_res<span class="classifier">list of floats</span></dt><dd><p><span class="math">[M_1, M_2, ..., M_{n\_res}]</span> upper bounds for resource
+usage.</p>
+</dd>
+<dt>min_res<span class="classifier">list of floats</span></dt><dd><p><span class="math">[L_1, L_2, ..., L_{n\_res}]</span> lower bounds for resource
+usage.</p>
+</dd>
+<dt>preprocess<span class="classifier">bool, optional</span></dt><dd><p>enables preprocessing routine. Default : False.</p>
+</dd>
+<dt>max_iter<span class="classifier">int, optional</span></dt><dd><p>Maximum number of iterations for algorithm. Default : 100.</p>
+</dd>
+<dt>max_localiter<span class="classifier">int, optional</span></dt><dd><p>Maximum number of local search iterations. Default : 10.</p>
+</dd>
+<dt>time_limit<span class="classifier">int, optional</span></dt><dd><p>time limit in seconds.
+Default: None</p>
+</dd>
+<dt>threshold<span class="classifier">float, optional</span></dt><dd><p>specify a threshold for a an acceptable resource feasible path with
+total cost &lt;= threshold.
+Note this typically causes the search to terminate early.
+Default: None</p>
+</dd>
+<dt>swarm_size<span class="classifier">int, optional</span></dt><dd><p>number of members in swarm. Default : 50.</p>
+</dd>
+<dt>member_size<span class="classifier">int, optional</span></dt><dd><p>number of components per member vector. Default : <code class="docutils literal notranslate"><span class="pre">len(G.nodes())</span></code>.</p>
+</dd>
+<dt>neighbourhood_size<span class="classifier">int, optional</span></dt><dd><p>size of neighbourhood. Default : 10.</p>
+</dd>
+<dt>lower_bound<span class="classifier">float, optional</span></dt><dd><p>lower bound of initial positions. Default : -1.</p>
+</dd>
+<dt>upper_bound<span class="classifier">float, optional</span></dt><dd><p>upper bound of initial positions. Default : 1.</p>
+</dd>
+<dt>c1<span class="classifier">float, optional</span></dt><dd><p>constant for 1st term in the velocity equation.
+Default : 1.35.</p>
+</dd>
+<dt>c2<span class="classifier">float, optional</span></dt><dd><p>contsant for 2nd term in the velocity equation.
+Default : 1.35.</p>
+</dd>
+<dt>c3<span class="classifier">float, optional</span></dt><dd><p>constant for 3rd term in the velocity equation.
+Default : 1.4.</p>
+</dd>
+<dt>seed<span class="classifier">None or int or numpy.random.RandomState instance, optional</span></dt><dd><p>seed for PSOLGENT class. Default : None (which gives a single value
+numpy.random.RandomState).</p>
+</dd>
+<dt>REF_callback<span class="classifier">REFCallback, optional</span></dt><dd><p>Custom resource extension callback. See <a class="reference external" href="https://cspy.readthedocs.io/en/latest/ref.html">REFs</a> for more details.
+Default : None</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="raises">
+<h2>Raises<a class="headerlink" href="#raises" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt>Exception</dt><dd><p>if no resource feasible path is found</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Permalink to this heading"></a></h2>
+<p>The input graph must have a <code class="docutils literal notranslate"><span class="pre">n_res</span></code> attribute.
+The edges in the graph must all have a <code class="docutils literal notranslate"><span class="pre">res_cost</span></code> attribute.
+Also, we must have <code class="docutils literal notranslate"><span class="pre">len(min_res)</span></code> <span class="math">=</span> <code class="docutils literal notranslate"><span class="pre">len(max_res)</span></code>.
+See <a class="reference external" href="https://cspy.readthedocs.io/en/latest/how_to.html">Using cspy</a>.</p>
+<p>This algorithm requires a consistent sorting of the nodes in the graph.
+Please see comments and edit the function <code class="docutils literal notranslate"><span class="pre">_sort_nodes</span></code> accordingly.</p>
+</div>
+<div class="section" id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cspy</span> <span class="kn">import</span> <span class="n">PSOLGENT</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">networkx</span> <span class="kn">import</span> <span class="n">DiGraph</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">zeros</span><span class="p">,</span> <span class="n">ones</span><span class="p">,</span> <span class="n">array</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span> <span class="o">=</span> <span class="n">DiGraph</span><span class="p">(</span><span class="n">directed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">n_res</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s1">&#39;Source&#39;</span><span class="p">,</span> <span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="n">res_cost</span><span class="o">=</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span> <span class="n">weight</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s1">&#39;Source&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="n">res_cost</span><span class="o">=</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span> <span class="n">weight</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s1">&#39;Source&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="n">res_cost</span><span class="o">=</span><span class="n">array</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span> <span class="n">weight</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="n">res_cost</span><span class="o">=</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span> <span class="n">weight</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;E&#39;</span><span class="p">,</span> <span class="n">res_cost</span><span class="o">=</span><span class="n">array</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span> <span class="n">weight</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;F&#39;</span><span class="p">,</span> <span class="n">res_cost</span><span class="o">=</span><span class="n">array</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span> <span class="n">weight</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="n">res_cost</span><span class="o">=</span><span class="n">array</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span> <span class="n">weight</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;F&#39;</span><span class="p">,</span> <span class="n">res_cost</span><span class="o">=</span><span class="n">array</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span> <span class="n">weight</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;E&#39;</span><span class="p">,</span> <span class="n">res_cost</span><span class="o">=</span><span class="n">array</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span> <span class="n">weight</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="s1">&#39;D&#39;</span><span class="p">,</span> <span class="n">res_cost</span><span class="o">=</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span> <span class="n">weight</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s1">&#39;D&#39;</span><span class="p">,</span> <span class="s1">&#39;E&#39;</span><span class="p">,</span> <span class="n">res_cost</span><span class="o">=</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span> <span class="n">weight</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s1">&#39;D&#39;</span><span class="p">,</span> <span class="s1">&#39;F&#39;</span><span class="p">,</span> <span class="n">res_cost</span><span class="o">=</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span> <span class="n">weight</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s1">&#39;D&#39;</span><span class="p">,</span> <span class="s1">&#39;Sink&#39;</span><span class="p">,</span> <span class="n">res_cost</span><span class="o">=</span><span class="n">array</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">]),</span> <span class="n">weight</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s1">&#39;F&#39;</span><span class="p">,</span> <span class="s1">&#39;Sink&#39;</span><span class="p">,</span> <span class="n">res_cost</span><span class="o">=</span><span class="n">array</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span> <span class="n">weight</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="s1">&#39;E&#39;</span><span class="p">,</span> <span class="s1">&#39;Sink&#39;</span><span class="p">,</span> <span class="n">res_cost</span><span class="o">=</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span> <span class="n">weight</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">n_nodes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">psolgent</span> <span class="o">=</span> <span class="n">PSOLGENT</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+<span class="go">                        max_iter=200,</span>
+<span class="go">                        swarm_size=50,</span>
+<span class="go">                        member_size=n_nodes,</span>
+<span class="go">                        neighbourhood_size=50)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">psolgent</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">psolgent</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+<span class="go">[&#39;Source&#39;, &#39;A&#39;, &#39;C&#39;, &#39;D&#39;, &#39;E&#39;, &#39;Sink&#39;]</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="cspy.GRASP.html" class="btn btn-neutral float-left" title="cspy.GRASP" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="cspy.preprocess_graph.html" class="btn btn-neutral float-right" title="cspy.preprocess_graph" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, David Torres Sanchez.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

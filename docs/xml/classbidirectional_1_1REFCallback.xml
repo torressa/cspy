@@ -1,0 +1,160 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="classbidirectional_1_1REFCallback" kind="class" language="C++" prot="public">
+    <compoundname>bidirectional::REFCallback</compoundname>
+    <includes refid="ref__callback_8h" local="no">ref_callback.h</includes>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classbidirectional_1_1REFCallback_1a35f060b9fc08e58492493ea385f3af5d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>bidirectional::REFCallback::REFCallback</definition>
+        <argsstring>()</argsstring>
+        <name>REFCallback</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/ref_callback.h" line="16" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/ref_callback.h" bodystart="16" bodyend="16"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1REFCallback_1a893e00d4fe0105ca6d6309699e4d7749" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type></type>
+        <definition>virtual bidirectional::REFCallback::~REFCallback</definition>
+        <argsstring>()</argsstring>
+        <name>~REFCallback</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/ref_callback.h" line="17" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/ref_callback.h" bodystart="17" bodyend="17"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1REFCallback_1a08774ede77624500d8d8dbd0f3765610" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt; double &gt; bidirectional::REFCallback::REF_fwd</definition>
+        <argsstring>(const std::vector&lt; double &gt; &amp;cumulative_resource, const int &amp;tail, const int &amp;head, const std::vector&lt; double &gt; &amp;edge_resource_consumption, const std::vector&lt; int &gt; &amp;partial_path, const double &amp;accummulated_cost) const</argsstring>
+        <name>REF_fwd</name>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>cumulative_resource</declname>
+        </param>
+        <param>
+          <type>const int &amp;</type>
+          <declname>tail</declname>
+        </param>
+        <param>
+          <type>const int &amp;</type>
+          <declname>head</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>edge_resource_consumption</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; int &gt; &amp;</type>
+          <declname>partial_path</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>accummulated_cost</declname>
+        </param>
+        <briefdescription>
+<para>Default implementation of a forward REF. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/ref_callback.h" line="20" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/ref_callback.cc" bodystart="41" bodyend="49"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1REFCallback_1a829eafdc1f944c05a38835ec3a61abb7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt; double &gt; bidirectional::REFCallback::REF_bwd</definition>
+        <argsstring>(const std::vector&lt; double &gt; &amp;cumulative_resource, const int &amp;tail, const int &amp;head, const std::vector&lt; double &gt; &amp;edge_resource_consumption, const std::vector&lt; int &gt; &amp;partial_path, const double &amp;accummulated_cost) const</argsstring>
+        <name>REF_bwd</name>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>cumulative_resource</declname>
+        </param>
+        <param>
+          <type>const int &amp;</type>
+          <declname>tail</declname>
+        </param>
+        <param>
+          <type>const int &amp;</type>
+          <declname>head</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>edge_resource_consumption</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; int &gt; &amp;</type>
+          <declname>partial_path</declname>
+        </param>
+        <param>
+          <type>const double &amp;</type>
+          <declname>accummulated_cost</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Default implementation of a backward REF (note that critical resource information is not an argument) </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/ref_callback.h" line="30" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/ref_callback.cc" bodystart="51" bodyend="59"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1REFCallback_1a82a485c94d647e74ee025a7dd3554224" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt; double &gt; bidirectional::REFCallback::REF_join</definition>
+        <argsstring>(const std::vector&lt; double &gt; &amp;fwd_resource, const std::vector&lt; double &gt; &amp;bwd_resource, const int &amp;tail, const int &amp;head, const std::vector&lt; double &gt; &amp;edge_resource_consumption) const</argsstring>
+        <name>REF_join</name>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>fwd_resource</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>bwd_resource</declname>
+        </param>
+        <param>
+          <type>const int &amp;</type>
+          <declname>tail</declname>
+        </param>
+        <param>
+          <type>const int &amp;</type>
+          <declname>head</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; double &gt; &amp;</type>
+          <declname>edge_resource_consumption</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Default implementation of a joining REF (used to merge forward and backward paths) </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/ref_callback.h" line="40" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/ref_callback.cc" bodystart="61" bodyend="68"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>Generic callback for custom Resource Extensions. In the case the user has not defined all three, default additive REFs are used. </para>    </detaileddescription>
+    <collaborationgraph>
+      <node id="43">
+        <label>bidirectional::REFCallback</label>
+        <link refid="classbidirectional_1_1REFCallback"/>
+      </node>
+    </collaborationgraph>
+    <location file="/__w/cspy/cspy/torressa/cspy/src/cc/ref_callback.h" line="14" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/ref_callback.h" bodystart="14" bodyend="46"/>
+    <listofallmembers>
+      <member refid="classbidirectional_1_1REFCallback_1a829eafdc1f944c05a38835ec3a61abb7" prot="public" virt="virtual"><scope>bidirectional::REFCallback</scope><name>REF_bwd</name></member>
+      <member refid="classbidirectional_1_1REFCallback_1a08774ede77624500d8d8dbd0f3765610" prot="public" virt="virtual"><scope>bidirectional::REFCallback</scope><name>REF_fwd</name></member>
+      <member refid="classbidirectional_1_1REFCallback_1a82a485c94d647e74ee025a7dd3554224" prot="public" virt="virtual"><scope>bidirectional::REFCallback</scope><name>REF_join</name></member>
+      <member refid="classbidirectional_1_1REFCallback_1a35f060b9fc08e58492493ea385f3af5d" prot="public" virt="non-virtual"><scope>bidirectional::REFCallback</scope><name>REFCallback</name></member>
+      <member refid="classbidirectional_1_1REFCallback_1a893e00d4fe0105ca6d6309699e4d7749" prot="public" virt="virtual"><scope>bidirectional::REFCallback</scope><name>~REFCallback</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,645 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="labelling_8cc" kind="file" language="C++">
+    <compoundname>labelling.cc</compoundname>
+    <includes refid="labelling_8h" local="yes">labelling.h</includes>
+    <includes local="no">algorithm</includes>
+    <includes local="no">iostream</includes>
+    <incdepgraph>
+      <node id="76">
+        <label>lemon/maps.h</label>
+      </node>
+      <node id="78">
+        <label>lemon/smart_graph.h</label>
+      </node>
+      <node id="68">
+        <label>/__w/cspy/cspy/torressa/cspy/src/cc/labelling.cc</label>
+        <link refid="labelling_8cc"/>
+        <childnode refid="69" relation="include">
+        </childnode>
+        <childnode refid="83" relation="include">
+        </childnode>
+        <childnode refid="84" relation="include">
+        </childnode>
+      </node>
+      <node id="70">
+        <label>cmath</label>
+      </node>
+      <node id="81">
+        <label>string</label>
+      </node>
+      <node id="82">
+        <label>spdlog/spdlog.h</label>
+      </node>
+      <node id="77">
+        <label>lemon/path.h</label>
+      </node>
+      <node id="72">
+        <label>vector</label>
+      </node>
+      <node id="84">
+        <label>iostream</label>
+      </node>
+      <node id="73">
+        <label>src/cc/config.h</label>
+      </node>
+      <node id="79">
+        <label>src/cc/params.h</label>
+        <link refid="params_8h"/>
+        <childnode refid="70" relation="include">
+        </childnode>
+        <childnode refid="72" relation="include">
+        </childnode>
+        <childnode refid="80" relation="include">
+        </childnode>
+      </node>
+      <node id="71">
+        <label>set</label>
+      </node>
+      <node id="83">
+        <label>algorithm</label>
+      </node>
+      <node id="74">
+        <label>src/cc/digraph.h</label>
+        <link refid="digraph_8h"/>
+        <childnode refid="75" relation="include">
+        </childnode>
+        <childnode refid="72" relation="include">
+        </childnode>
+        <childnode refid="76" relation="include">
+        </childnode>
+        <childnode refid="77" relation="include">
+        </childnode>
+        <childnode refid="78" relation="include">
+        </childnode>
+      </node>
+      <node id="69">
+        <label>labelling.h</label>
+        <link refid="labelling_8h"/>
+        <childnode refid="70" relation="include">
+        </childnode>
+        <childnode refid="71" relation="include">
+        </childnode>
+        <childnode refid="72" relation="include">
+        </childnode>
+        <childnode refid="73" relation="include">
+        </childnode>
+        <childnode refid="74" relation="include">
+        </childnode>
+        <childnode refid="79" relation="include">
+        </childnode>
+        <childnode refid="82" relation="include">
+        </childnode>
+      </node>
+      <node id="80">
+        <label>ref_callback.h</label>
+        <link refid="ref__callback_8h"/>
+        <childnode refid="81" relation="include">
+        </childnode>
+        <childnode refid="72" relation="include">
+        </childnode>
+      </node>
+      <node id="75">
+        <label>memory</label>
+      </node>
+    </incdepgraph>
+    <innernamespace refid="namespacelabelling">labelling</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#include<sp/>&quot;<ref refid="labelling_8h" kindref="compound">labelling.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;algorithm&gt;</highlight><highlight class="normal"><sp/></highlight><highlight class="comment">//<sp/>sort,<sp/>includes,<sp/>copy_if,<sp/>push/make_heap</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;iostream&gt;</highlight><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>ostream</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight></codeline>
+<codeline lineno="6" refid="namespacelabelling" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespacelabelling" kindref="compound">labelling</ref><sp/>{</highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="comment">/*<sp/>Constructors<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight></codeline>
+<codeline lineno="14"><highlight class="normal"><ref refid="classlabelling_1_1Label_1a3728b76c8b32589e04ecaac821f11733" kindref="member">Label::Label</ref>(</highlight></codeline>
+<codeline lineno="15"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">&amp;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>weight_in,</highlight></codeline>
+<codeline lineno="16"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structbidirectional_1_1Vertex" kindref="compound">bidirectional::Vertex</ref>&amp;<sp/>vertex_in,</highlight></codeline>
+<codeline lineno="17"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;double&gt;&amp;<sp/><sp/><sp/>resource_consumption_in,</highlight></codeline>
+<codeline lineno="18"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;int&gt;&amp;<sp/><sp/><sp/><sp/><sp/><sp/>partial_path_in,</highlight></codeline>
+<codeline lineno="19"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classbidirectional_1_1Params" kindref="compound">bidirectional::Params</ref>*<sp/><sp/><sp/><sp/><sp/><sp/><sp/>params_ptr_in)</highlight></codeline>
+<codeline lineno="20"><highlight class="normal"><sp/><sp/><sp/><sp/>:<sp/>weight(weight_in),</highlight></codeline>
+<codeline lineno="21"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>vertex(vertex_in),</highlight></codeline>
+<codeline lineno="22"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>resource_consumption(resource_consumption_in),</highlight></codeline>
+<codeline lineno="23"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>partial_path(partial_path_in),</highlight></codeline>
+<codeline lineno="24"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>params_ptr(params_ptr_in)<sp/>{</highlight></codeline>
+<codeline lineno="25"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(params_ptr-&gt;elementary)<sp/>{</highlight></codeline>
+<codeline lineno="26"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Insert<sp/>elements<sp/>of<sp/>partial_path</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="27"><highlight class="normal"><sp/><sp/><sp/><sp/>unreachable_nodes.insert(partial_path.cbegin(),<sp/>partial_path.cend());</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="29"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="30"><highlight class="normal"></highlight></codeline>
+<codeline lineno="31"><highlight class="normal"><ref refid="classlabelling_1_1Label_1a3728b76c8b32589e04ecaac821f11733" kindref="member">Label::Label</ref>(</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">&amp;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>weight_in,</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structbidirectional_1_1Vertex" kindref="compound">bidirectional::Vertex</ref>&amp;<sp/>vertex_in,</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;double&gt;&amp;<sp/><sp/><sp/>resource_consumption_in,</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;int&gt;&amp;<sp/><sp/><sp/><sp/><sp/><sp/>partial_path_in,</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classbidirectional_1_1Params" kindref="compound">bidirectional::Params</ref>*<sp/><sp/><sp/><sp/><sp/><sp/><sp/>params_ptr_in,</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">&amp;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>phi_in)</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/>:<sp/><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref>(</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>weight_in,</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>vertex_in,</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>resource_consumption_in,</highlight></codeline>
+<codeline lineno="42"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>partial_path_in,</highlight></codeline>
+<codeline lineno="43"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>params_ptr_in)<sp/>{</highlight></codeline>
+<codeline lineno="44"><highlight class="normal"><sp/><sp/>setPhi(phi_in);</highlight></codeline>
+<codeline lineno="45"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"></highlight></codeline>
+<codeline lineno="47"><highlight class="normal"></highlight><highlight class="comment">/*<sp/>Public<sp/>methods<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="48"><highlight class="normal"></highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref><sp/><ref refid="classlabelling_1_1Label_1a23f7e5da2fb22dca07977aad9bfa9ad3" kindref="member">Label::extend</ref>(</highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structbidirectional_1_1AdjVertex" kindref="compound">bidirectional::AdjVertex</ref>&amp;<sp/><sp/>adjacent_vertex,</highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="namespacebidirectional_1a4cbe6f0bfbd3629c2cd44c98014aed70" kindref="member">bidirectional::Directions</ref>&amp;<sp/>direction,</highlight></codeline>
+<codeline lineno="52"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;double&gt;&amp;<sp/><sp/><sp/><sp/><sp/><sp/><sp/>max_res,</highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;double&gt;&amp;<sp/><sp/><sp/><sp/><sp/><sp/><sp/>min_res)<sp/>{</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>extract<sp/>partial_path</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>new_partial_path<sp/>=<sp/><ref refid="classlabelling_1_1Label_1a7511d29a3aa0272b1a0e1ea5fb75ff14" kindref="member">partial_path</ref>;</highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>extract<sp/>vertex</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structbidirectional_1_1Vertex" kindref="compound">bidirectional::Vertex</ref>&amp;<sp/>new_node<sp/>=<sp/>adjacent_vertex.<ref refid="structbidirectional_1_1AdjVertex_1afd878dad03f7f4437cb135fc4f00c46c" kindref="member">vertex</ref>;</highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>update<sp/>partial_path</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="59"><highlight class="normal"><sp/><sp/>new_partial_path.push_back(new_node.<ref refid="structbidirectional_1_1Vertex_1a31a815c1052e67dbe13c7327b020aa0c" kindref="member">user_id</ref>);</highlight></codeline>
+<codeline lineno="60"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>Propagate<sp/>resources</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="61"><highlight class="normal"><sp/><sp/>std::vector&lt;double&gt;<sp/>new_resources;</highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(direction<sp/>==<sp/><ref refid="namespacebidirectional_1a4cbe6f0bfbd3629c2cd44c98014aed70a798987f7644a83982bae650870e1ccc0" kindref="member">bidirectional::FWD</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<ref refid="classlabelling_1_1Label_1a182759fd08c2536f9e6a2614c790b127" kindref="member">params_ptr</ref>-&gt;<ref refid="classbidirectional_1_1Params_1afa96dcebb31c930ea4bd339fc72779a5" kindref="member">ref_callback</ref><sp/>==<sp/></highlight><highlight class="keyword">nullptr</highlight><highlight class="normal">)<sp/>{</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>new_resources<sp/>=<sp/><ref refid="namespacebidirectional_1a6b3d052fd58c8158b4e7a79acbed3c0e" kindref="member">bidirectional::additiveForwardREF</ref>(</highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classlabelling_1_1Label_1a2c185387fad46a29bce3dd99b111a1c4" kindref="member">resource_consumption</ref>,<sp/>adjacent_vertex.<ref refid="structbidirectional_1_1AdjVertex_1a3755b5ef7a009834706922a54d115927" kindref="member">resource_consumption</ref>);</highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="67"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>new_resources<sp/>=<sp/><ref refid="classlabelling_1_1Label_1a182759fd08c2536f9e6a2614c790b127" kindref="member">params_ptr</ref>-&gt;<ref refid="classbidirectional_1_1Params_1afa96dcebb31c930ea4bd339fc72779a5" kindref="member">ref_callback</ref>-&gt;<ref refid="classbidirectional_1_1REFCallback_1a08774ede77624500d8d8dbd0f3765610" kindref="member">REF_fwd</ref>(</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classlabelling_1_1Label_1a2c185387fad46a29bce3dd99b111a1c4" kindref="member">resource_consumption</ref>,</highlight></codeline>
+<codeline lineno="69"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classlabelling_1_1Label_1a7c8972ee9d1c00fd348025c321467f75" kindref="member">vertex</ref>.<ref refid="structbidirectional_1_1Vertex_1a31a815c1052e67dbe13c7327b020aa0c" kindref="member">user_id</ref>,</highlight></codeline>
+<codeline lineno="70"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>new_node.<ref refid="structbidirectional_1_1Vertex_1a31a815c1052e67dbe13c7327b020aa0c" kindref="member">user_id</ref>,</highlight></codeline>
+<codeline lineno="71"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>adjacent_vertex.<ref refid="structbidirectional_1_1AdjVertex_1a3755b5ef7a009834706922a54d115927" kindref="member">resource_consumption</ref>,</highlight></codeline>
+<codeline lineno="72"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classlabelling_1_1Label_1a7511d29a3aa0272b1a0e1ea5fb75ff14" kindref="member">partial_path</ref>,</highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classlabelling_1_1Label_1a478f34a67528586877720483c5f0d38b" kindref="member">weight</ref>);</highlight></codeline>
+<codeline lineno="74"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="75"><highlight class="normal"><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="76"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>backward</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="77"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<ref refid="classlabelling_1_1Label_1a182759fd08c2536f9e6a2614c790b127" kindref="member">params_ptr</ref>-&gt;<ref refid="classbidirectional_1_1Params_1afa96dcebb31c930ea4bd339fc72779a5" kindref="member">ref_callback</ref><sp/>==<sp/></highlight><highlight class="keyword">nullptr</highlight><highlight class="normal">)<sp/>{</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>new_resources<sp/>=<sp/><ref refid="namespacebidirectional_1a36f100766b94f6950283274ff7d4e7a6" kindref="member">bidirectional::additiveBackwardREF</ref>(</highlight></codeline>
+<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classlabelling_1_1Label_1a2c185387fad46a29bce3dd99b111a1c4" kindref="member">resource_consumption</ref>,</highlight></codeline>
+<codeline lineno="80"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>adjacent_vertex.<ref refid="structbidirectional_1_1AdjVertex_1a3755b5ef7a009834706922a54d115927" kindref="member">resource_consumption</ref>,</highlight></codeline>
+<codeline lineno="81"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classlabelling_1_1Label_1a182759fd08c2536f9e6a2614c790b127" kindref="member">params_ptr</ref>-&gt;<ref refid="classbidirectional_1_1Params_1a7d318c4af901a82c3f566d59c6de1b62" kindref="member">critical_res</ref>);</highlight></codeline>
+<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="83"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>new_resources<sp/>=<sp/><ref refid="classlabelling_1_1Label_1a182759fd08c2536f9e6a2614c790b127" kindref="member">params_ptr</ref>-&gt;<ref refid="classbidirectional_1_1Params_1afa96dcebb31c930ea4bd339fc72779a5" kindref="member">ref_callback</ref>-&gt;<ref refid="classbidirectional_1_1REFCallback_1a829eafdc1f944c05a38835ec3a61abb7" kindref="member">REF_bwd</ref>(</highlight></codeline>
+<codeline lineno="84"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classlabelling_1_1Label_1a2c185387fad46a29bce3dd99b111a1c4" kindref="member">resource_consumption</ref>,</highlight></codeline>
+<codeline lineno="85"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>new_node.<ref refid="structbidirectional_1_1Vertex_1a31a815c1052e67dbe13c7327b020aa0c" kindref="member">user_id</ref>,</highlight></codeline>
+<codeline lineno="86"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classlabelling_1_1Label_1a7c8972ee9d1c00fd348025c321467f75" kindref="member">vertex</ref>.<ref refid="structbidirectional_1_1Vertex_1a31a815c1052e67dbe13c7327b020aa0c" kindref="member">user_id</ref>,</highlight></codeline>
+<codeline lineno="87"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>adjacent_vertex.<ref refid="structbidirectional_1_1AdjVertex_1a3755b5ef7a009834706922a54d115927" kindref="member">resource_consumption</ref>,</highlight></codeline>
+<codeline lineno="88"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classlabelling_1_1Label_1a7511d29a3aa0272b1a0e1ea5fb75ff14" kindref="member">partial_path</ref>,</highlight></codeline>
+<codeline lineno="89"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classlabelling_1_1Label_1a478f34a67528586877720483c5f0d38b" kindref="member">weight</ref>);</highlight></codeline>
+<codeline lineno="90"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="91"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="92"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>Create<sp/>new<sp/>label</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="93"><highlight class="normal"><sp/><sp/><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref><sp/>new_label(</highlight></codeline>
+<codeline lineno="94"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classlabelling_1_1Label_1a478f34a67528586877720483c5f0d38b" kindref="member">weight</ref><sp/>+<sp/>adjacent_vertex.<ref refid="structbidirectional_1_1AdjVertex_1a416d2c737409cf4ed7d7494508f3a7de" kindref="member">weight</ref>,</highlight></codeline>
+<codeline lineno="95"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>new_node,</highlight></codeline>
+<codeline lineno="96"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>new_resources,</highlight></codeline>
+<codeline lineno="97"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>new_partial_path,</highlight></codeline>
+<codeline lineno="98"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classlabelling_1_1Label_1a182759fd08c2536f9e6a2614c790b127" kindref="member">params_ptr</ref>);</highlight></codeline>
+<codeline lineno="99"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>Check<sp/>feasibility<sp/>(soft=true)<sp/>before<sp/>returning<sp/>label</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="100"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(new_label.<ref refid="classlabelling_1_1Label_1adc3068c1147414d77f0f7696b4687e69" kindref="member">checkFeasibility</ref>(max_res,<sp/>min_res,<sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">))<sp/>{</highlight></codeline>
+<codeline lineno="101"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>new_label;</highlight></codeline>
+<codeline lineno="102"><highlight class="normal"><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="103"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Update<sp/>current<sp/>labels<sp/>unreachable_nodes</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="104"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<ref refid="classlabelling_1_1Label_1a182759fd08c2536f9e6a2614c790b127" kindref="member">params_ptr</ref>-&gt;<ref refid="classbidirectional_1_1Params_1aa19060565463ffc251019a1dea026e6d" kindref="member">elementary</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="105"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Push<sp/>new<sp/>node<sp/>(direction<sp/>doesn&apos;t<sp/>matter<sp/>here<sp/>as<sp/>edges<sp/>have<sp/>been</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="106"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>reversed<sp/>for<sp/>backward<sp/>extensions)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="107"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classlabelling_1_1Label_1ae684804e463fe690b4fe6ee32812e123" kindref="member">unreachable_nodes</ref>.insert(new_node.<ref refid="structbidirectional_1_1Vertex_1a31a815c1052e67dbe13c7327b020aa0c" kindref="member">user_id</ref>);</highlight></codeline>
+<codeline lineno="108"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="109"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="110"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label_1a3728b76c8b32589e04ecaac821f11733" kindref="member">Label</ref>();</highlight></codeline>
+<codeline lineno="111"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="112"><highlight class="normal"></highlight></codeline>
+<codeline lineno="113"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label_1adc3068c1147414d77f0f7696b4687e69" kindref="member">Label::checkFeasibility</ref>(</highlight></codeline>
+<codeline lineno="114"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;double&gt;&amp;<sp/>max_res,</highlight></codeline>
+<codeline lineno="115"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;double&gt;&amp;<sp/>min_res,</highlight></codeline>
+<codeline lineno="116"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal">&amp;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>soft)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="117"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">&amp;<sp/>resource_size<sp/>=<sp/><ref refid="classlabelling_1_1Label_1a2c185387fad46a29bce3dd99b111a1c4" kindref="member">resource_consumption</ref>.size();</highlight></codeline>
+<codeline lineno="118"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">&amp;<sp/>c_res<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/><ref refid="classlabelling_1_1Label_1a182759fd08c2536f9e6a2614c790b127" kindref="member">params_ptr</ref>-&gt;<ref refid="classbidirectional_1_1Params_1a7d318c4af901a82c3f566d59c6de1b62" kindref="member">critical_res</ref>;</highlight></codeline>
+<codeline lineno="119"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/>resource_size;<sp/>i++)<sp/>{</highlight></codeline>
+<codeline lineno="120"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Always<sp/>check<sp/>maximum<sp/>resources</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="121"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<ref refid="classlabelling_1_1Label_1a2c185387fad46a29bce3dd99b111a1c4" kindref="member">resource_consumption</ref>[i]<sp/>&lt;=<sp/>max_res[i])<sp/>{</highlight></codeline>
+<codeline lineno="122"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Check<sp/>against<sp/>minimum<sp/>resources<sp/>only<sp/>if:</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="123"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>1.<sp/>`i`<sp/>is<sp/>the<sp/>index<sp/>of<sp/>the<sp/>critical<sp/>resource<sp/>(as<sp/>the<sp/>value<sp/>will<sp/>carry</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="124"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>the<sp/>halfway<sp/>point<sp/>and<sp/>should<sp/>always<sp/>be<sp/>checked).</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="125"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>2.<sp/>The<sp/>check<sp/>is<sp/>not<sp/>soft.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="126"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>3.<sp/>The<sp/>check<sp/>is<sp/>soft<sp/>and<sp/>value<sp/>is<sp/>&lt;=<sp/>0<sp/>(in<sp/>case<sp/>we<sp/>have<sp/>negative</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="127"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>minimum<sp/>resources).</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="128"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(i<sp/>==<sp/>c_res<sp/>||<sp/>!soft<sp/>||<sp/>(soft<sp/>&amp;&amp;<sp/>min_res[i]<sp/>&lt;=<sp/>0))</highlight></codeline>
+<codeline lineno="129"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<ref refid="classlabelling_1_1Label_1a2c185387fad46a29bce3dd99b111a1c4" kindref="member">resource_consumption</ref>[i]<sp/>&gt;=<sp/>min_res[i])<sp/>{</highlight></codeline>
+<codeline lineno="130"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>;</highlight></codeline>
+<codeline lineno="131"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="132"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>The<sp/>label<sp/>is<sp/>infeasible<sp/>because<sp/>of<sp/>violating<sp/>a<sp/>minimum<sp/>resource</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="133"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>bound</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="134"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="135"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="136"><highlight class="normal"><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="137"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>The<sp/>label<sp/>is<sp/>infeasible<sp/>because<sp/>of<sp/>violating<sp/>a<sp/>maximum<sp/>resource<sp/>bound</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="138"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="139"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="140"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="141"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>The<sp/>label<sp/>is<sp/>feasible</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="142"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="143"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="144"><highlight class="normal"></highlight></codeline>
+<codeline lineno="145"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label_1a72d0d91c2d99edbcdc36aa157586cf00" kindref="member">Label::checkThreshold</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">&amp;<sp/>threshold)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="146"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<ref refid="classlabelling_1_1Label_1a478f34a67528586877720483c5f0d38b" kindref="member">weight</ref><sp/>&lt;=<sp/>threshold)</highlight></codeline>
+<codeline lineno="147"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="148"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="149"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="150"><highlight class="normal"></highlight></codeline>
+<codeline lineno="151"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label_1a0e4957ff69cf08cfdc743df10d50d3c7" kindref="member">Label::checkStPath</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">&amp;<sp/>source_id,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">&amp;<sp/>sink_id)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="152"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>((<ref refid="classlabelling_1_1Label_1a7511d29a3aa0272b1a0e1ea5fb75ff14" kindref="member">partial_path</ref>[0]<sp/>==<sp/>source_id<sp/>&amp;&amp;<sp/><ref refid="classlabelling_1_1Label_1a7511d29a3aa0272b1a0e1ea5fb75ff14" kindref="member">partial_path</ref>.back()<sp/>==<sp/>sink_id)<sp/>||</highlight></codeline>
+<codeline lineno="153"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>(<ref refid="classlabelling_1_1Label_1a7511d29a3aa0272b1a0e1ea5fb75ff14" kindref="member">partial_path</ref>.back()<sp/>==<sp/>source_id<sp/>&amp;&amp;<sp/><ref refid="classlabelling_1_1Label_1a7511d29a3aa0272b1a0e1ea5fb75ff14" kindref="member">partial_path</ref>[0]<sp/>==<sp/>sink_id))</highlight></codeline>
+<codeline lineno="154"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="155"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="156"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="157"><highlight class="normal"></highlight></codeline>
+<codeline lineno="158"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label_1a496b8a76fd2fe06265b1acc1a508b4ca" kindref="member">Label::checkPathExtension</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">&amp;<sp/>user_id)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="159"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<ref refid="classlabelling_1_1Label_1a7511d29a3aa0272b1a0e1ea5fb75ff14" kindref="member">partial_path</ref>.back()<sp/>==<sp/>user_id)<sp/>{</highlight></codeline>
+<codeline lineno="160"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="161"><highlight class="normal"><sp/><sp/>};</highlight></codeline>
+<codeline lineno="162"><highlight class="normal"></highlight></codeline>
+<codeline lineno="163"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<ref refid="classlabelling_1_1Label_1a182759fd08c2536f9e6a2614c790b127" kindref="member">params_ptr</ref>-&gt;<ref refid="classbidirectional_1_1Params_1ade4211d18d72a33dccb323ea1861fe70" kindref="member">two_cycle_elimination</ref><sp/>&amp;&amp;<sp/><ref refid="classlabelling_1_1Label_1a7511d29a3aa0272b1a0e1ea5fb75ff14" kindref="member">partial_path</ref>.size()<sp/>&gt;<sp/>1<sp/>&amp;&amp;</highlight></codeline>
+<codeline lineno="164"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classlabelling_1_1Label_1a676337cc2e66ddaba088c736b9220651" kindref="member">getPredecessorId</ref>()<sp/>==<sp/>user_id)<sp/>{</highlight></codeline>
+<codeline lineno="165"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="166"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="167"><highlight class="normal"></highlight></codeline>
+<codeline lineno="168"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="169"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="170"><highlight class="normal"></highlight></codeline>
+<codeline lineno="171"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label_1a5c8dc87a89577d00ccf86251867ec76a" kindref="member">Label::checkSameFeasibleExtensionTwoCycleSimple</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref>&amp;<sp/>other)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="172"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>other.<ref refid="classlabelling_1_1Label_1a7511d29a3aa0272b1a0e1ea5fb75ff14" kindref="member">partial_path</ref>.size()<sp/>&gt;<sp/>1<sp/>&amp;&amp;<sp/><ref refid="classlabelling_1_1Label_1a7511d29a3aa0272b1a0e1ea5fb75ff14" kindref="member">partial_path</ref>.size()<sp/>&gt;<sp/>1<sp/>&amp;&amp;</highlight></codeline>
+<codeline lineno="173"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>other.<ref refid="classlabelling_1_1Label_1a676337cc2e66ddaba088c736b9220651" kindref="member">getPredecessorId</ref>()<sp/>==<sp/><ref refid="classlabelling_1_1Label_1a676337cc2e66ddaba088c736b9220651" kindref="member">getPredecessorId</ref>();</highlight></codeline>
+<codeline lineno="174"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="175"><highlight class="normal"></highlight></codeline>
+<codeline lineno="176"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label_1a333b6fc9dba864b3df2cdf530a055aa7" kindref="member">Label::checkSameFeasibleExtensionElementary</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref>&amp;<sp/>other)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="177"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<ref refid="classlabelling_1_1Label_1ae684804e463fe690b4fe6ee32812e123" kindref="member">unreachable_nodes</ref>.size()<sp/>==<sp/>0)</highlight></codeline>
+<codeline lineno="178"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="179"><highlight class="normal"></highlight></codeline>
+<codeline lineno="180"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(other.<ref refid="classlabelling_1_1Label_1ae684804e463fe690b4fe6ee32812e123" kindref="member">unreachable_nodes</ref>.size()<sp/>==<sp/>0)</highlight></codeline>
+<codeline lineno="181"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="182"><highlight class="normal"></highlight></codeline>
+<codeline lineno="183"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!std::includes(</highlight></codeline>
+<codeline lineno="184"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>other.<ref refid="classlabelling_1_1Label_1ae684804e463fe690b4fe6ee32812e123" kindref="member">unreachable_nodes</ref>.begin(),</highlight></codeline>
+<codeline lineno="185"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>other.<ref refid="classlabelling_1_1Label_1ae684804e463fe690b4fe6ee32812e123" kindref="member">unreachable_nodes</ref>.end(),</highlight></codeline>
+<codeline lineno="186"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classlabelling_1_1Label_1ae684804e463fe690b4fe6ee32812e123" kindref="member">unreachable_nodes</ref>.begin(),</highlight></codeline>
+<codeline lineno="187"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classlabelling_1_1Label_1ae684804e463fe690b4fe6ee32812e123" kindref="member">unreachable_nodes</ref>.end()))<sp/>{</highlight></codeline>
+<codeline lineno="188"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="189"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="190"><highlight class="normal"></highlight></codeline>
+<codeline lineno="191"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="192"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="193"><highlight class="normal"></highlight></codeline>
+<codeline lineno="194"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label_1a02179d540444a13aa7cc3355d0a461b8" kindref="member">Label::checkSameFeasibleExtension</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref>&amp;<sp/>other)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="195"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<ref refid="classlabelling_1_1Label_1a182759fd08c2536f9e6a2614c790b127" kindref="member">params_ptr</ref>-&gt;<ref refid="classbidirectional_1_1Params_1aa19060565463ffc251019a1dea026e6d" kindref="member">elementary</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="196"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label_1a333b6fc9dba864b3df2cdf530a055aa7" kindref="member">checkSameFeasibleExtensionElementary</ref>(other);</highlight></codeline>
+<codeline lineno="197"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="198"><highlight class="normal"></highlight></codeline>
+<codeline lineno="199"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<ref refid="classlabelling_1_1Label_1a182759fd08c2536f9e6a2614c790b127" kindref="member">params_ptr</ref>-&gt;<ref refid="classbidirectional_1_1Params_1ade4211d18d72a33dccb323ea1861fe70" kindref="member">two_cycle_elimination</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="200"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label_1a5c8dc87a89577d00ccf86251867ec76a" kindref="member">checkSameFeasibleExtensionTwoCycleSimple</ref>(other);</highlight></codeline>
+<codeline lineno="201"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="202"><highlight class="normal"></highlight></codeline>
+<codeline lineno="203"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>always<sp/>same<sp/>extension<sp/>if<sp/>RCSPP<sp/>without<sp/>cycle-elimination</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="204"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="205"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="206"><highlight class="normal"></highlight></codeline>
+<codeline lineno="207"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label_1ad5afbf2f5d2c6f208283021186783883" kindref="member">Label::checkDominance</ref>(</highlight></codeline>
+<codeline lineno="208"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref>&amp;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>other,</highlight></codeline>
+<codeline lineno="209"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="namespacebidirectional_1a4cbe6f0bfbd3629c2cd44c98014aed70" kindref="member">bidirectional::Directions</ref>&amp;<sp/>direction)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="210"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">&amp;<sp/>resource_size<sp/>=<sp/><ref refid="classlabelling_1_1Label_1a2c185387fad46a29bce3dd99b111a1c4" kindref="member">resource_consumption</ref>.size();</highlight></codeline>
+<codeline lineno="211"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">&amp;<sp/>c_res<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>=<sp/><ref refid="classlabelling_1_1Label_1a182759fd08c2536f9e6a2614c790b127" kindref="member">params_ptr</ref>-&gt;<ref refid="classbidirectional_1_1Params_1a7d318c4af901a82c3f566d59c6de1b62" kindref="member">critical_res</ref>;</highlight></codeline>
+<codeline lineno="212"><highlight class="normal"></highlight></codeline>
+<codeline lineno="213"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<ref refid="classlabelling_1_1Label_1a478f34a67528586877720483c5f0d38b" kindref="member">weight</ref><sp/>==<sp/>other.<ref refid="classlabelling_1_1Label_1a478f34a67528586877720483c5f0d38b" kindref="member">weight</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="214"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Check<sp/>if<sp/>all<sp/>resources<sp/>are<sp/>equal</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="215"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>all_res_equal<sp/>=<sp/>std::equal(</highlight></codeline>
+<codeline lineno="216"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classlabelling_1_1Label_1a2c185387fad46a29bce3dd99b111a1c4" kindref="member">resource_consumption</ref>.cbegin(),</highlight></codeline>
+<codeline lineno="217"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classlabelling_1_1Label_1a2c185387fad46a29bce3dd99b111a1c4" kindref="member">resource_consumption</ref>.cend(),</highlight></codeline>
+<codeline lineno="218"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>other.<ref refid="classlabelling_1_1Label_1a2c185387fad46a29bce3dd99b111a1c4" kindref="member">resource_consumption</ref>.cbegin(),</highlight></codeline>
+<codeline lineno="219"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>other.<ref refid="classlabelling_1_1Label_1a2c185387fad46a29bce3dd99b111a1c4" kindref="member">resource_consumption</ref>.cend());</highlight></codeline>
+<codeline lineno="220"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(all_res_equal)<sp/>{</highlight></codeline>
+<codeline lineno="221"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="222"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="223"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="224"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>Compare<sp/>weight</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="225"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<ref refid="classlabelling_1_1Label_1a478f34a67528586877720483c5f0d38b" kindref="member">weight</ref><sp/>&gt;<sp/>other.<ref refid="classlabelling_1_1Label_1a478f34a67528586877720483c5f0d38b" kindref="member">weight</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="226"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="227"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="228"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(direction<sp/>==<sp/><ref refid="namespacebidirectional_1a4cbe6f0bfbd3629c2cd44c98014aed70a798987f7644a83982bae650870e1ccc0" kindref="member">bidirectional::FWD</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="229"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Forward</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="230"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/>resource_size;<sp/>i++)<sp/>{</highlight></codeline>
+<codeline lineno="231"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<ref refid="classlabelling_1_1Label_1a2c185387fad46a29bce3dd99b111a1c4" kindref="member">resource_consumption</ref>[i]<sp/>&gt;<sp/>other.<ref refid="classlabelling_1_1Label_1a2c185387fad46a29bce3dd99b111a1c4" kindref="member">resource_consumption</ref>[i])<sp/>{</highlight></codeline>
+<codeline lineno="232"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="233"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="234"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="235"><highlight class="normal"><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="236"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Backward</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="237"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Compare<sp/>critical<sp/>resource</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="238"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<ref refid="classlabelling_1_1Label_1a2c185387fad46a29bce3dd99b111a1c4" kindref="member">resource_consumption</ref>[c_res]<sp/>&lt;<sp/>other.<ref refid="classlabelling_1_1Label_1a2c185387fad46a29bce3dd99b111a1c4" kindref="member">resource_consumption</ref>[c_res])<sp/>{</highlight></codeline>
+<codeline lineno="239"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="240"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="241"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Compare<sp/>the<sp/>rest</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="242"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/>resource_size;<sp/>i++)<sp/>{</highlight></codeline>
+<codeline lineno="243"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Exclude<sp/>critical_res</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="244"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(i<sp/>!=<sp/>c_res)<sp/>{</highlight></codeline>
+<codeline lineno="245"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<ref refid="classlabelling_1_1Label_1a2c185387fad46a29bce3dd99b111a1c4" kindref="member">resource_consumption</ref>[i]<sp/>&gt;<sp/>other.<ref refid="classlabelling_1_1Label_1a2c185387fad46a29bce3dd99b111a1c4" kindref="member">resource_consumption</ref>[i])<sp/>{</highlight></codeline>
+<codeline lineno="246"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="247"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="248"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="249"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="250"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="251"><highlight class="normal"></highlight></codeline>
+<codeline lineno="252"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!<ref refid="classlabelling_1_1Label_1a02179d540444a13aa7cc3355d0a461b8" kindref="member">checkSameFeasibleExtension</ref>(other))<sp/>{</highlight></codeline>
+<codeline lineno="253"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="254"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="255"><highlight class="normal"></highlight></codeline>
+<codeline lineno="256"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>this<sp/>dominates<sp/>other</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="257"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="258"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="259"><highlight class="normal"></highlight></codeline>
+<codeline lineno="260"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label_1a3f59b4a2818a4b0096080cd5f830b73d" kindref="member">Label::fullDominance</ref>(</highlight></codeline>
+<codeline lineno="261"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref>&amp;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>other,</highlight></codeline>
+<codeline lineno="262"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="namespacebidirectional_1a4cbe6f0bfbd3629c2cd44c98014aed70" kindref="member">bidirectional::Directions</ref>&amp;<sp/>direction)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="263"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal">&amp;<sp/>this_dominates<sp/><sp/>=<sp/><ref refid="classlabelling_1_1Label_1ad5afbf2f5d2c6f208283021186783883" kindref="member">checkDominance</ref>(other,<sp/>direction);</highlight></codeline>
+<codeline lineno="264"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal">&amp;<sp/>other_dominates<sp/>=<sp/><ref refid="classlabelling_1_1Label_1ad5afbf2f5d2c6f208283021186783883" kindref="member">checkDominance</ref>(other,<sp/>direction);</highlight></codeline>
+<codeline lineno="265"><highlight class="normal"></highlight></codeline>
+<codeline lineno="266"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(this_dominates)</highlight></codeline>
+<codeline lineno="267"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="268"><highlight class="normal"></highlight></codeline>
+<codeline lineno="269"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>result<sp/>=<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="270"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!this_dominates<sp/>&amp;&amp;<sp/>!other_dominates)<sp/>{</highlight></codeline>
+<codeline lineno="271"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="namespacebidirectional_1a4cbe6f0bfbd3629c2cd44c98014aed70" kindref="member">bidirectional::Directions</ref><sp/>flipped_direction;</highlight></codeline>
+<codeline lineno="272"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(direction<sp/>==<sp/><ref refid="namespacebidirectional_1a4cbe6f0bfbd3629c2cd44c98014aed70a798987f7644a83982bae650870e1ccc0" kindref="member">bidirectional::FWD</ref>)</highlight></codeline>
+<codeline lineno="273"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>flipped_direction<sp/>=<sp/><ref refid="namespacebidirectional_1a4cbe6f0bfbd3629c2cd44c98014aed70a3e91263cd11d5fd4ceaec8830938740f" kindref="member">bidirectional::BWD</ref>;</highlight></codeline>
+<codeline lineno="274"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="275"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>flipped_direction<sp/>=<sp/><ref refid="namespacebidirectional_1a4cbe6f0bfbd3629c2cd44c98014aed70a798987f7644a83982bae650870e1ccc0" kindref="member">bidirectional::FWD</ref>;</highlight></codeline>
+<codeline lineno="276"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal">&amp;<sp/>this_dominates_flipped<sp/>=</highlight></codeline>
+<codeline lineno="277"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classlabelling_1_1Label_1ad5afbf2f5d2c6f208283021186783883" kindref="member">checkDominance</ref>(other,<sp/>flipped_direction);</highlight></codeline>
+<codeline lineno="278"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(this_dominates_flipped<sp/>||<sp/><ref refid="classlabelling_1_1Label_1a478f34a67528586877720483c5f0d38b" kindref="member">weight</ref><sp/>&lt;<sp/>other.<ref refid="classlabelling_1_1Label_1a478f34a67528586877720483c5f0d38b" kindref="member">weight</ref>)</highlight></codeline>
+<codeline lineno="279"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>result<sp/>=<sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="280"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="281"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>result;</highlight></codeline>
+<codeline lineno="282"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="283"><highlight class="normal"></highlight></codeline>
+<codeline lineno="284"><highlight class="normal">std::string<sp/><ref refid="classlabelling_1_1Label_1adc93c3a59a853bc559bb63e8df1ae67e" kindref="member">Label::getString</ref>()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="285"><highlight class="normal"><sp/><sp/>std::string<sp/>s<sp/>=<sp/></highlight><highlight class="stringliteral">&quot;&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="286"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(<ref refid="classlabelling_1_1Label_1a7511d29a3aa0272b1a0e1ea5fb75ff14" kindref="member">partial_path</ref>.size()<sp/>&gt;<sp/>0)<sp/>{</highlight></codeline>
+<codeline lineno="287"><highlight class="normal"><sp/><sp/><sp/><sp/>s<sp/>+=<sp/></highlight><highlight class="stringliteral">&quot;Label(node=&quot;</highlight><highlight class="normal"><sp/>+<sp/>std::to_string(<ref refid="classlabelling_1_1Label_1a7c8972ee9d1c00fd348025c321467f75" kindref="member">vertex</ref>.<ref refid="structbidirectional_1_1Vertex_1a31a815c1052e67dbe13c7327b020aa0c" kindref="member">user_id</ref>);</highlight></codeline>
+<codeline lineno="288"><highlight class="normal"><sp/><sp/><sp/><sp/>s<sp/>+=<sp/></highlight><highlight class="stringliteral">&quot;,<sp/>weight=<sp/>&quot;</highlight><highlight class="normal"><sp/>+<sp/>std::to_string(<ref refid="classlabelling_1_1Label_1a478f34a67528586877720483c5f0d38b" kindref="member">weight</ref>)<sp/>+<sp/></highlight><highlight class="stringliteral">&quot;,<sp/>res[&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="289"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal">&amp;<sp/>r<sp/>:<sp/><ref refid="classlabelling_1_1Label_1a2c185387fad46a29bce3dd99b111a1c4" kindref="member">resource_consumption</ref>)</highlight></codeline>
+<codeline lineno="290"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>s<sp/>+=<sp/>std::to_string(r)<sp/>+<sp/></highlight><highlight class="stringliteral">&quot;,&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="291"><highlight class="normal"><sp/><sp/><sp/><sp/>s<sp/>+=<sp/></highlight><highlight class="stringliteral">&quot;],<sp/>partial_path=[&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="292"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal">&amp;<sp/>n<sp/>:<sp/><ref refid="classlabelling_1_1Label_1a7511d29a3aa0272b1a0e1ea5fb75ff14" kindref="member">partial_path</ref>)</highlight></codeline>
+<codeline lineno="293"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>s<sp/>+=<sp/>std::to_string(n)<sp/>+<sp/></highlight><highlight class="stringliteral">&quot;,&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="294"><highlight class="normal"><sp/><sp/><sp/><sp/>s<sp/>+=<sp/></highlight><highlight class="stringliteral">&quot;])&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="295"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="296"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>s;</highlight></codeline>
+<codeline lineno="297"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="298"><highlight class="normal"></highlight></codeline>
+<codeline lineno="299"><highlight class="normal"></highlight><highlight class="comment">/*<sp/>Operator<sp/>Overloads<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="300"><highlight class="normal"></highlight></codeline>
+<codeline lineno="301"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label_1abc60b45b5a5310043283c0e6c694cc92" kindref="member">operator==</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref>&amp;<sp/>label1,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref>&amp;<sp/>label2)<sp/>{</highlight></codeline>
+<codeline lineno="302"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(label1.<ref refid="classlabelling_1_1Label_1a7c8972ee9d1c00fd348025c321467f75" kindref="member">vertex</ref>.<ref refid="structbidirectional_1_1Vertex_1a93afb7643b7fb823dc2e337d233bef9e" kindref="member">lemon_id</ref><sp/>!=<sp/>label2.<ref refid="classlabelling_1_1Label_1a7c8972ee9d1c00fd348025c321467f75" kindref="member">vertex</ref>.<ref refid="structbidirectional_1_1Vertex_1a93afb7643b7fb823dc2e337d233bef9e" kindref="member">lemon_id</ref>)</highlight></codeline>
+<codeline lineno="303"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="304"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(label1.<ref refid="classlabelling_1_1Label_1a478f34a67528586877720483c5f0d38b" kindref="member">weight</ref><sp/>!=<sp/>label2.<ref refid="classlabelling_1_1Label_1a478f34a67528586877720483c5f0d38b" kindref="member">weight</ref>)</highlight></codeline>
+<codeline lineno="305"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="306"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(label1.<ref refid="classlabelling_1_1Label_1a7511d29a3aa0272b1a0e1ea5fb75ff14" kindref="member">partial_path</ref><sp/>!=<sp/>label2.<ref refid="classlabelling_1_1Label_1a7511d29a3aa0272b1a0e1ea5fb75ff14" kindref="member">partial_path</ref>)</highlight></codeline>
+<codeline lineno="307"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="309"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/>label1.<ref refid="classlabelling_1_1Label_1a2c185387fad46a29bce3dd99b111a1c4" kindref="member">resource_consumption</ref>.size();<sp/>i++)<sp/>{</highlight></codeline>
+<codeline lineno="310"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(label1.<ref refid="classlabelling_1_1Label_1a2c185387fad46a29bce3dd99b111a1c4" kindref="member">resource_consumption</ref>[i]<sp/>!=<sp/>label2.<ref refid="classlabelling_1_1Label_1a2c185387fad46a29bce3dd99b111a1c4" kindref="member">resource_consumption</ref>[i])<sp/>{</highlight></codeline>
+<codeline lineno="311"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="312"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="313"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="314"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="315"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="316"><highlight class="normal"></highlight></codeline>
+<codeline lineno="317"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label_1aac0781be66b1d133b633cef3f60f8183" kindref="member">operator&lt;</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref>&amp;<sp/>label1,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref>&amp;<sp/>label2)<sp/>{</highlight></codeline>
+<codeline lineno="318"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">&amp;<sp/>c_res<sp/>=<sp/>label1.<ref refid="classlabelling_1_1Label_1a182759fd08c2536f9e6a2614c790b127" kindref="member">params_ptr</ref>-&gt;<ref refid="classbidirectional_1_1Params_1a7d318c4af901a82c3f566d59c6de1b62" kindref="member">critical_res</ref>;</highlight></codeline>
+<codeline lineno="319"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>(</highlight></codeline>
+<codeline lineno="320"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>label1.<ref refid="classlabelling_1_1Label_1a2c185387fad46a29bce3dd99b111a1c4" kindref="member">resource_consumption</ref>[c_res]<sp/>&lt;<sp/>label2.<ref refid="classlabelling_1_1Label_1a2c185387fad46a29bce3dd99b111a1c4" kindref="member">resource_consumption</ref>[c_res]);</highlight></codeline>
+<codeline lineno="321"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="322"><highlight class="normal"></highlight></codeline>
+<codeline lineno="323"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label_1a7bd46e6920cac7ede4b725f2d33fb12b" kindref="member">operator&gt;</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref>&amp;<sp/>label1,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref>&amp;<sp/>label2)<sp/>{</highlight></codeline>
+<codeline lineno="324"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">&amp;<sp/>c_res<sp/>=<sp/>label1.<ref refid="classlabelling_1_1Label_1a182759fd08c2536f9e6a2614c790b127" kindref="member">params_ptr</ref>-&gt;<ref refid="classbidirectional_1_1Params_1a7d318c4af901a82c3f566d59c6de1b62" kindref="member">critical_res</ref>;</highlight></codeline>
+<codeline lineno="325"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>(</highlight></codeline>
+<codeline lineno="326"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>label1.<ref refid="classlabelling_1_1Label_1a2c185387fad46a29bce3dd99b111a1c4" kindref="member">resource_consumption</ref>[c_res]<sp/>&gt;<sp/>label2.<ref refid="classlabelling_1_1Label_1a2c185387fad46a29bce3dd99b111a1c4" kindref="member">resource_consumption</ref>[c_res]);</highlight></codeline>
+<codeline lineno="327"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="328"><highlight class="normal"></highlight></codeline>
+<codeline lineno="329"><highlight class="normal">std::ostream&amp;<sp/><ref refid="classlabelling_1_1Label_1ae52256a096ed1acaf1afaba6458b42ca" kindref="member">operator&lt;&lt;</ref>(std::ostream&amp;<sp/>os,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref>&amp;<sp/>label)<sp/>{</highlight></codeline>
+<codeline lineno="330"><highlight class="normal"><sp/><sp/>os<sp/>&lt;&lt;<sp/>label.<ref refid="classlabelling_1_1Label_1adc93c3a59a853bc559bb63e8df1ae67e" kindref="member">getString</ref>();</highlight></codeline>
+<codeline lineno="331"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="332"><highlight class="normal"></highlight></codeline>
+<codeline lineno="337"><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="namespacelabelling_1ac6d6bb89c176d0f2db264457d60c5bd8" kindref="member">runDominanceEff</ref>(</highlight></codeline>
+<codeline lineno="338"><highlight class="normal"><sp/><sp/><sp/><sp/>std::vector&lt;Label&gt;*<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>efficient_labels_ptr,</highlight></codeline>
+<codeline lineno="339"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref>&amp;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>label,</highlight></codeline>
+<codeline lineno="340"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="namespacebidirectional_1a4cbe6f0bfbd3629c2cd44c98014aed70" kindref="member">bidirectional::Directions</ref>&amp;<sp/>direction,</highlight></codeline>
+<codeline lineno="341"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal">&amp;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>elementary)<sp/>{</highlight></codeline>
+<codeline lineno="342"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>dominated<sp/>=<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="343"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>it<sp/>=<sp/>efficient_labels_ptr-&gt;begin();</highlight></codeline>
+<codeline lineno="344"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/>it<sp/>!=<sp/>efficient_labels_ptr-&gt;end();)<sp/>{</highlight></codeline>
+<codeline lineno="345"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>deleted<sp/>=<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="346"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref>&amp;<sp/>label2<sp/><sp/>=<sp/>*it;</highlight></codeline>
+<codeline lineno="347"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(label<sp/>!=<sp/>label2)<sp/>{</highlight></codeline>
+<codeline lineno="348"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>check<sp/>if<sp/>label<sp/>dominates<sp/>label2</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="349"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(label.<ref refid="classlabelling_1_1Label_1ad5afbf2f5d2c6f208283021186783883" kindref="member">checkDominance</ref>(label2,<sp/>direction))<sp/>{</highlight></codeline>
+<codeline lineno="350"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Delete<sp/>label2</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="351"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>SPDLOG_DEBUG(</highlight></codeline>
+<codeline lineno="352"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="stringliteral">&quot;[runDominanceEff]:<sp/>Label<sp/>{}<sp/>is<sp/>dominated<sp/>by<sp/>candidate.&quot;</highlight><highlight class="normal">,</highlight></codeline>
+<codeline lineno="353"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>label2.<ref refid="classlabelling_1_1Label_1adc93c3a59a853bc559bb63e8df1ae67e" kindref="member">getString</ref>());</highlight></codeline>
+<codeline lineno="354"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>it<sp/><sp/><sp/><sp/><sp/><sp/>=<sp/>efficient_labels_ptr-&gt;erase(it);</highlight></codeline>
+<codeline lineno="355"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>deleted<sp/>=<sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="356"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(label2.<ref refid="classlabelling_1_1Label_1ad5afbf2f5d2c6f208283021186783883" kindref="member">checkDominance</ref>(label,<sp/>direction))<sp/>{</highlight></codeline>
+<codeline lineno="357"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>dominated<sp/>=<sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="358"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">break</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="359"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="360"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="361"><highlight class="normal"></highlight></codeline>
+<codeline lineno="362"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!deleted)</highlight></codeline>
+<codeline lineno="363"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>++it;</highlight></codeline>
+<codeline lineno="364"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="365"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>dominated;</highlight></codeline>
+<codeline lineno="366"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="367"><highlight class="normal"></highlight></codeline>
+<codeline lineno="368"><highlight class="normal"><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref><sp/><ref refid="namespacelabelling_1a7d32365acb745f452e0b81beed2ce2be" kindref="member">getNextLabel</ref>(</highlight></codeline>
+<codeline lineno="369"><highlight class="normal"><sp/><sp/><sp/><sp/>std::vector&lt;Label&gt;*<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>labels_ptr,</highlight></codeline>
+<codeline lineno="370"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="namespacebidirectional_1a4cbe6f0bfbd3629c2cd44c98014aed70" kindref="member">bidirectional::Directions</ref>&amp;<sp/>direction)<sp/>{</highlight></codeline>
+<codeline lineno="371"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(direction<sp/>==<sp/><ref refid="namespacebidirectional_1a4cbe6f0bfbd3629c2cd44c98014aed70a798987f7644a83982bae650870e1ccc0" kindref="member">bidirectional::FWD</ref>)</highlight></codeline>
+<codeline lineno="372"><highlight class="normal"><sp/><sp/><sp/><sp/>std::pop_heap(labels_ptr-&gt;begin(),<sp/>labels_ptr-&gt;end(),<sp/>std::greater&lt;&gt;{});</highlight></codeline>
+<codeline lineno="373"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="374"><highlight class="normal"><sp/><sp/><sp/><sp/>std::pop_heap(labels_ptr-&gt;begin(),<sp/>labels_ptr-&gt;end());</highlight></codeline>
+<codeline lineno="375"><highlight class="normal"></highlight></codeline>
+<codeline lineno="376"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>Get<sp/>next<sp/>label<sp/>as<sp/>the<sp/>back<sp/>of<sp/>the<sp/>heap</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="377"><highlight class="normal"><sp/><sp/><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref><sp/>next_label<sp/>=<sp/>labels_ptr-&gt;back();</highlight></codeline>
+<codeline lineno="378"><highlight class="normal"><sp/><sp/>labels_ptr-&gt;pop_back();</highlight></codeline>
+<codeline lineno="379"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>next_label;</highlight></codeline>
+<codeline lineno="380"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="381"><highlight class="normal"></highlight></codeline>
+<codeline lineno="382"><highlight class="normal"><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref><sp/><ref refid="namespacelabelling_1ae172758fb8d07cc0a490d8715966e1b7" kindref="member">processBwdLabel</ref>(</highlight></codeline>
+<codeline lineno="383"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label" kindref="compound">labelling::Label</ref>&amp;<sp/><sp/><sp/><sp/>label,</highlight></codeline>
+<codeline lineno="384"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;double&gt;&amp;<sp/>max_res,</highlight></codeline>
+<codeline lineno="385"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;double&gt;&amp;<sp/>cumulative_resource,</highlight></codeline>
+<codeline lineno="386"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal">&amp;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>invert_min_res)<sp/>{</highlight></codeline>
+<codeline lineno="387"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>Invert<sp/>path</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="388"><highlight class="normal"><sp/><sp/>std::vector&lt;int&gt;<sp/>new_path<sp/>=<sp/>label.<ref refid="classlabelling_1_1Label_1a7511d29a3aa0272b1a0e1ea5fb75ff14" kindref="member">partial_path</ref>;</highlight></codeline>
+<codeline lineno="389"><highlight class="normal"><sp/><sp/>std::reverse(new_path.begin(),<sp/>new_path.end());</highlight></codeline>
+<codeline lineno="390"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>Init<sp/>resources</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="391"><highlight class="normal"><sp/><sp/>std::vector&lt;double&gt;<sp/>new_resources(label.<ref refid="classlabelling_1_1Label_1a2c185387fad46a29bce3dd99b111a1c4" kindref="member">resource_consumption</ref>);</highlight></codeline>
+<codeline lineno="392"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>Invert<sp/>monotone<sp/>resource</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="393"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">&amp;<sp/>c_res<sp/><sp/><sp/><sp/><sp/>=<sp/>label.<ref refid="classlabelling_1_1Label_1a182759fd08c2536f9e6a2614c790b127" kindref="member">params_ptr</ref>-&gt;<ref refid="classbidirectional_1_1Params_1a7d318c4af901a82c3f566d59c6de1b62" kindref="member">critical_res</ref>;</highlight></codeline>
+<codeline lineno="394"><highlight class="normal"><sp/><sp/>new_resources[c_res]<sp/>=<sp/>max_res[c_res]<sp/>-<sp/>new_resources[c_res];</highlight></codeline>
+<codeline lineno="395"><highlight class="normal"></highlight></codeline>
+<codeline lineno="396"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!invert_min_res)<sp/>{</highlight></codeline>
+<codeline lineno="397"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Elementwise<sp/>cumulative_resource<sp/>+<sp/>new_resources</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="398"><highlight class="normal"><sp/><sp/><sp/><sp/>std::transform(</highlight></codeline>
+<codeline lineno="399"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>new_resources.begin(),</highlight></codeline>
+<codeline lineno="400"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>new_resources.end(),</highlight></codeline>
+<codeline lineno="401"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>cumulative_resource.begin(),</highlight></codeline>
+<codeline lineno="402"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>new_resources.begin(),</highlight></codeline>
+<codeline lineno="403"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::plus&lt;double&gt;());</highlight></codeline>
+<codeline lineno="404"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="405"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label_1a3728b76c8b32589e04ecaac821f11733" kindref="member">Label</ref>(</highlight></codeline>
+<codeline lineno="406"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>label.<ref refid="classlabelling_1_1Label_1a478f34a67528586877720483c5f0d38b" kindref="member">weight</ref>,<sp/>label.<ref refid="classlabelling_1_1Label_1a7c8972ee9d1c00fd348025c321467f75" kindref="member">vertex</ref>,<sp/>new_resources,<sp/>new_path,<sp/>label.<ref refid="classlabelling_1_1Label_1a182759fd08c2536f9e6a2614c790b127" kindref="member">params_ptr</ref>);</highlight></codeline>
+<codeline lineno="407"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="408"><highlight class="normal"></highlight></codeline>
+<codeline lineno="409"><highlight class="normal"></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="namespacelabelling_1a5bb0d5a3d1eeb92546902c6cdc12c71d" kindref="member">getPhiValue</ref>(</highlight></codeline>
+<codeline lineno="410"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label" kindref="compound">labelling::Label</ref>&amp;<sp/><sp/><sp/><sp/>fwd_label,</highlight></codeline>
+<codeline lineno="411"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label" kindref="compound">labelling::Label</ref>&amp;<sp/><sp/><sp/><sp/>bwd_label,</highlight></codeline>
+<codeline lineno="412"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;double&gt;&amp;<sp/>max_res)<sp/>{</highlight></codeline>
+<codeline lineno="413"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">&amp;<sp/></highlight><highlight class="keywordtype">id</highlight><highlight class="normal"><sp/>=<sp/>fwd_label.<ref refid="classlabelling_1_1Label_1a182759fd08c2536f9e6a2614c790b127" kindref="member">params_ptr</ref>-&gt;<ref refid="classbidirectional_1_1Params_1a7d318c4af901a82c3f566d59c6de1b62" kindref="member">critical_res</ref>;</highlight></codeline>
+<codeline lineno="414"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>std::abs(</highlight></codeline>
+<codeline lineno="415"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>fwd_label.<ref refid="classlabelling_1_1Label_1a2c185387fad46a29bce3dd99b111a1c4" kindref="member">resource_consumption</ref>[</highlight><highlight class="keywordtype">id</highlight><highlight class="normal">]<sp/>-</highlight></codeline>
+<codeline lineno="416"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>(max_res[</highlight><highlight class="keywordtype">id</highlight><highlight class="normal">]<sp/>-<sp/>bwd_label.<ref refid="classlabelling_1_1Label_1a2c185387fad46a29bce3dd99b111a1c4" kindref="member">resource_consumption</ref>[</highlight><highlight class="keywordtype">id</highlight><highlight class="normal">]));</highlight></codeline>
+<codeline lineno="417"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="418"><highlight class="normal"></highlight></codeline>
+<codeline lineno="419"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="namespacelabelling_1ad7fee591bcb066e39ff97138ab0ba5ca" kindref="member">halfwayCheck</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref>&amp;<sp/>label,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;Label&gt;&amp;<sp/>labels)<sp/>{</highlight></codeline>
+<codeline lineno="420"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>attempt<sp/>to<sp/>find<sp/>path<sp/>in<sp/>already<sp/>seen<sp/>labels<sp/>with<sp/>lower<sp/>phi<sp/>value</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="421"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>it<sp/>=</highlight></codeline>
+<codeline lineno="422"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>std::find_if(labels.begin(),<sp/>labels.end(),<sp/>[&amp;label](</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref>&amp;<sp/>l)<sp/>{</highlight></codeline>
+<codeline lineno="423"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>If<sp/>path<sp/>already<sp/>seen</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="424"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(std::equal(</highlight></codeline>
+<codeline lineno="425"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>l.partial_path.begin(),</highlight></codeline>
+<codeline lineno="426"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>l.partial_path.end(),</highlight></codeline>
+<codeline lineno="427"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>label.<ref refid="classlabelling_1_1Label_1a7511d29a3aa0272b1a0e1ea5fb75ff14" kindref="member">partial_path</ref>.begin()))<sp/>{</highlight></codeline>
+<codeline lineno="428"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Match<sp/>if<sp/>phi<sp/>value<sp/>is<sp/>lower</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="429"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>(l.phi<sp/>&lt;<sp/>label.<ref refid="classlabelling_1_1Label_1a632cd90937f05a8ea69ad60d4c103c66" kindref="member">phi</ref>);</highlight></codeline>
+<codeline lineno="430"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="431"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="432"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>});</highlight></codeline>
+<codeline lineno="433"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>Path<sp/>already<sp/>been<sp/>found<sp/>with<sp/>lower<sp/>phi<sp/>value</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="434"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(it<sp/>!=<sp/>labels.end())</highlight></codeline>
+<codeline lineno="435"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="436"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>Path<sp/>not<sp/>been<sp/>found<sp/>or<sp/>phi<sp/>value<sp/>is<sp/>lower</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="437"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="438"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="439"><highlight class="normal"></highlight></codeline>
+<codeline lineno="440"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="namespacelabelling_1a9c2e8f16965144d445ba68216dae648f" kindref="member">mergePreCheck</ref>(</highlight></codeline>
+<codeline lineno="441"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label" kindref="compound">labelling::Label</ref>&amp;<sp/><sp/><sp/><sp/>fwd_label,</highlight></codeline>
+<codeline lineno="442"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label" kindref="compound">labelling::Label</ref>&amp;<sp/><sp/><sp/><sp/>bwd_label,</highlight></codeline>
+<codeline lineno="443"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;double&gt;&amp;<sp/>max_res)<sp/>{</highlight></codeline>
+<codeline lineno="444"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(fwd_label.<ref refid="classlabelling_1_1Label_1a7c8972ee9d1c00fd348025c321467f75" kindref="member">vertex</ref>.<ref refid="structbidirectional_1_1Vertex_1a93afb7643b7fb823dc2e337d233bef9e" kindref="member">lemon_id</ref><sp/>==<sp/>-1<sp/>||<sp/>bwd_label.<ref refid="classlabelling_1_1Label_1a7c8972ee9d1c00fd348025c321467f75" kindref="member">vertex</ref>.<ref refid="structbidirectional_1_1Vertex_1a93afb7643b7fb823dc2e337d233bef9e" kindref="member">lemon_id</ref><sp/>==<sp/>-1)</highlight></codeline>
+<codeline lineno="445"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="446"><highlight class="normal"></highlight></codeline>
+<codeline lineno="447"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>Merge<sp/>paths</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="448"><highlight class="normal"><sp/><sp/>std::vector&lt;int&gt;<sp/>path<sp/>=<sp/>fwd_label.<ref refid="classlabelling_1_1Label_1a7511d29a3aa0272b1a0e1ea5fb75ff14" kindref="member">partial_path</ref>;</highlight></codeline>
+<codeline lineno="449"><highlight class="normal"><sp/><sp/>path.insert(</highlight></codeline>
+<codeline lineno="450"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>path.end(),</highlight></codeline>
+<codeline lineno="451"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>bwd_label.<ref refid="classlabelling_1_1Label_1a7511d29a3aa0272b1a0e1ea5fb75ff14" kindref="member">partial_path</ref>.rbegin(),</highlight></codeline>
+<codeline lineno="452"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>bwd_label.<ref refid="classlabelling_1_1Label_1a7511d29a3aa0272b1a0e1ea5fb75ff14" kindref="member">partial_path</ref>.rend());</highlight></codeline>
+<codeline lineno="453"><highlight class="normal"></highlight></codeline>
+<codeline lineno="454"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(fwd_label.<ref refid="classlabelling_1_1Label_1a182759fd08c2536f9e6a2614c790b127" kindref="member">params_ptr</ref>-&gt;<ref refid="classbidirectional_1_1Params_1aa19060565463ffc251019a1dea026e6d" kindref="member">elementary</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="455"><highlight class="normal"><sp/><sp/><sp/><sp/>std::sort(path.begin(),<sp/>path.end());</highlight></codeline>
+<codeline lineno="456"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal">&amp;<sp/>contains_duplicates<sp/>=</highlight></codeline>
+<codeline lineno="457"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::adjacent_find(path.begin(),<sp/>path.end())<sp/>!=<sp/>path.end();</highlight></codeline>
+<codeline lineno="458"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>!contains_duplicates;</highlight></codeline>
+<codeline lineno="459"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="460"><highlight class="normal"></highlight></codeline>
+<codeline lineno="461"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>Check<sp/>for<sp/>2-cycles.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="462"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>Check<sp/>at<sp/>end<sp/>of<sp/>partial<sp/>path<sp/>should<sp/>be<sp/>sufficient<sp/>since<sp/>individual<sp/>paths</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="463"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>are<sp/>2-cycle<sp/>free</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="464"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(fwd_label.<ref refid="classlabelling_1_1Label_1a182759fd08c2536f9e6a2614c790b127" kindref="member">params_ptr</ref>-&gt;<ref refid="classbidirectional_1_1Params_1ade4211d18d72a33dccb323ea1861fe70" kindref="member">two_cycle_elimination</ref><sp/>&amp;&amp;</highlight></codeline>
+<codeline lineno="465"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>fwd_label.<ref refid="classlabelling_1_1Label_1a7511d29a3aa0272b1a0e1ea5fb75ff14" kindref="member">partial_path</ref>.size()<sp/>&gt;<sp/>1<sp/>&amp;&amp;<sp/>bwd_label.<ref refid="classlabelling_1_1Label_1a7511d29a3aa0272b1a0e1ea5fb75ff14" kindref="member">partial_path</ref>.size()<sp/>&gt;<sp/>1)<sp/>{</highlight></codeline>
+<codeline lineno="466"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(fwd_label.<ref refid="classlabelling_1_1Label_1a676337cc2e66ddaba088c736b9220651" kindref="member">getPredecessorId</ref>()<sp/>==<sp/>bwd_label.<ref refid="classlabelling_1_1Label_1a7511d29a3aa0272b1a0e1ea5fb75ff14" kindref="member">partial_path</ref>.back())</highlight></codeline>
+<codeline lineno="467"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="468"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(bwd_label.<ref refid="classlabelling_1_1Label_1a676337cc2e66ddaba088c736b9220651" kindref="member">getPredecessorId</ref>()<sp/>==<sp/>fwd_label.<ref refid="classlabelling_1_1Label_1a7511d29a3aa0272b1a0e1ea5fb75ff14" kindref="member">partial_path</ref>.back())</highlight></codeline>
+<codeline lineno="469"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="470"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="471"><highlight class="normal"></highlight></codeline>
+<codeline lineno="472"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="473"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="474"><highlight class="normal"></highlight></codeline>
+<codeline lineno="475"><highlight class="normal"><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref><sp/><ref refid="namespacelabelling_1a19937349c6ec5c31d5994aac45c5d2fd" kindref="member">mergeLabels</ref>(</highlight></codeline>
+<codeline lineno="476"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref>&amp;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fwd_label,</highlight></codeline>
+<codeline lineno="477"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label" kindref="compound">Label</ref>&amp;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>bwd_label,</highlight></codeline>
+<codeline lineno="478"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structbidirectional_1_1AdjVertex" kindref="compound">bidirectional::AdjVertex</ref>&amp;<sp/>adj_vertex,</highlight></codeline>
+<codeline lineno="479"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structbidirectional_1_1Vertex" kindref="compound">bidirectional::Vertex</ref>&amp;<sp/><sp/><sp/><sp/>sink,</highlight></codeline>
+<codeline lineno="480"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;double&gt;&amp;<sp/><sp/><sp/><sp/><sp/><sp/>max_res,</highlight></codeline>
+<codeline lineno="481"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;double&gt;&amp;<sp/><sp/><sp/><sp/><sp/><sp/>min_res)<sp/>{</highlight></codeline>
+<codeline lineno="482"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>No<sp/>edge<sp/>between<sp/>the<sp/>labels<sp/>return<sp/>empty<sp/>label</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="483"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!adj_vertex.<ref refid="structbidirectional_1_1AdjVertex_1abf769818349400a6598021c1bed78045" kindref="member">init</ref>)<sp/>{</highlight></codeline>
+<codeline lineno="484"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label_1a3728b76c8b32589e04ecaac821f11733" kindref="member">Label</ref>();</highlight></codeline>
+<codeline lineno="485"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="486"><highlight class="normal"><sp/><sp/>std::vector&lt;double&gt;<sp/><sp/><sp/><sp/>final_res;</highlight></codeline>
+<codeline lineno="487"><highlight class="normal"><sp/><sp/><ref refid="classbidirectional_1_1Params" kindref="compound">bidirectional::Params</ref>*<sp/><ref refid="classlabelling_1_1Label_1a182759fd08c2536f9e6a2614c790b127" kindref="member">params_ptr</ref><sp/>=<sp/>fwd_label.<ref refid="classlabelling_1_1Label_1a182759fd08c2536f9e6a2614c790b127" kindref="member">params_ptr</ref>;</highlight></codeline>
+<codeline lineno="488"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>Dummy<sp/>label</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="489"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>bwd_label_ptr<sp/>=<sp/>std::make_unique&lt;Label&gt;();</highlight></codeline>
+<codeline lineno="490"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>Extend<sp/>resources<sp/>along<sp/>edge</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="491"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(params_ptr-&gt;<ref refid="classbidirectional_1_1Params_1afa96dcebb31c930ea4bd339fc72779a5" kindref="member">ref_callback</ref><sp/>==<sp/></highlight><highlight class="keyword">nullptr</highlight><highlight class="normal">)<sp/>{</highlight></codeline>
+<codeline lineno="492"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;double&gt;&amp;<sp/>temp_res<sp/>=<sp/><ref refid="namespacebidirectional_1a6b3d052fd58c8158b4e7a79acbed3c0e" kindref="member">bidirectional::additiveForwardREF</ref>(</highlight></codeline>
+<codeline lineno="493"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fwd_label.<ref refid="classlabelling_1_1Label_1a2c185387fad46a29bce3dd99b111a1c4" kindref="member">resource_consumption</ref>,<sp/>adj_vertex.<ref refid="structbidirectional_1_1AdjVertex_1a3755b5ef7a009834706922a54d115927" kindref="member">resource_consumption</ref>);</highlight></codeline>
+<codeline lineno="494"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Process<sp/>backward<sp/>label<sp/>(invert<sp/>path<sp/>and<sp/>resources)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="495"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>bwd_label_<sp/>=</highlight></codeline>
+<codeline lineno="496"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::make_unique&lt;Label&gt;(<ref refid="namespacelabelling_1ae172758fb8d07cc0a490d8715966e1b7" kindref="member">processBwdLabel</ref>(bwd_label,<sp/>max_res,<sp/>temp_res));</highlight></codeline>
+<codeline lineno="497"><highlight class="normal"><sp/><sp/><sp/><sp/>final_res<sp/>=<sp/>bwd_label_-&gt;resource_consumption;</highlight></codeline>
+<codeline lineno="498"><highlight class="normal"><sp/><sp/><sp/><sp/>bwd_label_ptr.swap(bwd_label_);</highlight></codeline>
+<codeline lineno="499"><highlight class="normal"><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="500"><highlight class="normal"><sp/><sp/><sp/><sp/>final_res<sp/>=<sp/>params_ptr-&gt;<ref refid="classbidirectional_1_1Params_1afa96dcebb31c930ea4bd339fc72779a5" kindref="member">ref_callback</ref>-&gt;<ref refid="classbidirectional_1_1REFCallback_1a82a485c94d647e74ee025a7dd3554224" kindref="member">REF_join</ref>(</highlight></codeline>
+<codeline lineno="501"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fwd_label.<ref refid="classlabelling_1_1Label_1a2c185387fad46a29bce3dd99b111a1c4" kindref="member">resource_consumption</ref>,</highlight></codeline>
+<codeline lineno="502"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>bwd_label.<ref refid="classlabelling_1_1Label_1a2c185387fad46a29bce3dd99b111a1c4" kindref="member">resource_consumption</ref>,</highlight></codeline>
+<codeline lineno="503"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fwd_label.<ref refid="classlabelling_1_1Label_1a7c8972ee9d1c00fd348025c321467f75" kindref="member">vertex</ref>.<ref refid="structbidirectional_1_1Vertex_1a31a815c1052e67dbe13c7327b020aa0c" kindref="member">user_id</ref>,</highlight></codeline>
+<codeline lineno="504"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>bwd_label.<ref refid="classlabelling_1_1Label_1a7c8972ee9d1c00fd348025c321467f75" kindref="member">vertex</ref>.<ref refid="structbidirectional_1_1Vertex_1a31a815c1052e67dbe13c7327b020aa0c" kindref="member">user_id</ref>,</highlight></codeline>
+<codeline lineno="505"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>adj_vertex.<ref refid="structbidirectional_1_1AdjVertex_1a3755b5ef7a009834706922a54d115927" kindref="member">resource_consumption</ref>);</highlight></codeline>
+<codeline lineno="506"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Invert<sp/>backward<sp/>resource</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="507"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal">&amp;<sp/><sp/><sp/>c_res<sp/>=<sp/>params_ptr-&gt;<ref refid="classbidirectional_1_1Params_1a7d318c4af901a82c3f566d59c6de1b62" kindref="member">critical_res</ref>;</highlight></codeline>
+<codeline lineno="508"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>bwd_res_inverted<sp/>=</highlight></codeline>
+<codeline lineno="509"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>max_res[c_res]<sp/>-<sp/>bwd_label.<ref refid="classlabelling_1_1Label_1a2c185387fad46a29bce3dd99b111a1c4" kindref="member">resource_consumption</ref>[c_res];</highlight></codeline>
+<codeline lineno="510"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>in<sp/>the<sp/>case<sp/>when<sp/>default<sp/>REF_join<sp/>has<sp/>been<sp/>called<sp/>(or<sp/>user<sp/>hasn&apos;t</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="511"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>added<sp/>resource<sp/>consumption)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="512"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">&amp;<sp/>bwd_monotone_edge<sp/>=</highlight></codeline>
+<codeline lineno="513"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>(adj_vertex.<ref refid="structbidirectional_1_1AdjVertex_1a3755b5ef7a009834706922a54d115927" kindref="member">resource_consumption</ref>[c_res]<sp/>==<sp/>0)</highlight></codeline>
+<codeline lineno="514"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>?<sp/>1</highlight></codeline>
+<codeline lineno="515"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>:<sp/>adj_vertex.<ref refid="structbidirectional_1_1AdjVertex_1a3755b5ef7a009834706922a54d115927" kindref="member">resource_consumption</ref>[c_res];</highlight></codeline>
+<codeline lineno="516"><highlight class="normal"><sp/><sp/><sp/><sp/>if<sp/>(final_res[c_res]<sp/>!=<sp/>(fwd_label.<ref refid="classlabelling_1_1Label_1a2c185387fad46a29bce3dd99b111a1c4" kindref="member">resource_consumption</ref>[c_res]<sp/>+</highlight></codeline>
+<codeline lineno="517"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>bwd_monotone_edge<sp/>+<sp/>bwd_res_inverted))<sp/>{</highlight></codeline>
+<codeline lineno="518"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>final_res[c_res]<sp/>+=<sp/>bwd_res_inverted;</highlight></codeline>
+<codeline lineno="519"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="520"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>bwd_label_<sp/>=</highlight></codeline>
+<codeline lineno="521"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::make_unique&lt;Label&gt;(<ref refid="namespacelabelling_1ae172758fb8d07cc0a490d8715966e1b7" kindref="member">processBwdLabel</ref>(bwd_label,<sp/>max_res,<sp/>min_res));</highlight></codeline>
+<codeline lineno="522"><highlight class="normal"><sp/><sp/><sp/><sp/>bwd_label_ptr.swap(bwd_label_);</highlight></codeline>
+<codeline lineno="523"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="524"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>process<sp/>final<sp/>weight</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="525"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">&amp;<sp/><ref refid="classlabelling_1_1Label_1a478f34a67528586877720483c5f0d38b" kindref="member">weight</ref><sp/>=</highlight></codeline>
+<codeline lineno="526"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>fwd_label.<ref refid="classlabelling_1_1Label_1a478f34a67528586877720483c5f0d38b" kindref="member">weight</ref><sp/>+<sp/>adj_vertex.<ref refid="structbidirectional_1_1AdjVertex_1a416d2c737409cf4ed7d7494508f3a7de" kindref="member">weight</ref><sp/>+<sp/>bwd_label_ptr-&gt;weight;</highlight></codeline>
+<codeline lineno="527"><highlight class="normal"></highlight></codeline>
+<codeline lineno="528"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>Merge<sp/>paths</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="529"><highlight class="normal"><sp/><sp/>std::vector&lt;int&gt;<sp/>final_path<sp/>=<sp/>fwd_label.<ref refid="classlabelling_1_1Label_1a7511d29a3aa0272b1a0e1ea5fb75ff14" kindref="member">partial_path</ref>;</highlight></codeline>
+<codeline lineno="530"><highlight class="normal"><sp/><sp/>final_path.insert(</highlight></codeline>
+<codeline lineno="531"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>final_path.end(),</highlight></codeline>
+<codeline lineno="532"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>bwd_label_ptr-&gt;partial_path.begin(),</highlight></codeline>
+<codeline lineno="533"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>bwd_label_ptr-&gt;partial_path.end());</highlight></codeline>
+<codeline lineno="534"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//<sp/>Get<sp/>phi<sp/>value</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="535"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">&amp;<sp/><ref refid="classlabelling_1_1Label_1a632cd90937f05a8ea69ad60d4c103c66" kindref="member">phi</ref><sp/>=<sp/><ref refid="namespacelabelling_1a5bb0d5a3d1eeb92546902c6cdc12c71d" kindref="member">getPhiValue</ref>(fwd_label,<sp/>bwd_label,<sp/>max_res);</highlight></codeline>
+<codeline lineno="536"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="classlabelling_1_1Label_1a3728b76c8b32589e04ecaac821f11733" kindref="member">Label</ref>(weight,<sp/>sink,<sp/>final_res,<sp/>final_path,<sp/>params_ptr,<sp/>phi);</highlight></codeline>
+<codeline lineno="537"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="538"><highlight class="normal"></highlight></codeline>
+<codeline lineno="539"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>labelling</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="/__w/cspy/cspy/torressa/cspy/src/cc/labelling.cc"/>
+  </compounddef>
+</doxygen>

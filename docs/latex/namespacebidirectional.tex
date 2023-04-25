@@ -1,0 +1,169 @@
+\hypertarget{namespacebidirectional}{}\section{bidirectional Namespace Reference}
+\label{namespacebidirectional}\index{bidirectional@{bidirectional}}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structbidirectional_1_1AdjVertex}{Adj\+Vertex}
+\item 
+class \hyperlink{classbidirectional_1_1BiDirectional}{Bi\+Directional}
+\item 
+class \hyperlink{classbidirectional_1_1DiGraph}{Di\+Graph}
+\item 
+class \hyperlink{classbidirectional_1_1Params}{Params}
+\item 
+class \hyperlink{classbidirectional_1_1REFCallback}{R\+E\+F\+Callback}
+\item 
+class \hyperlink{classbidirectional_1_1ResourceMap}{Resource\+Map}
+\item 
+class \hyperlink{classbidirectional_1_1Search}{Search}
+\item 
+struct \hyperlink{structbidirectional_1_1Vertex}{Vertex}
+\end{DoxyCompactItemize}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \hyperlink{namespacebidirectional_a507ec433f8ac22a92fcc3b8aad252f29}{Negative\+Cost\+Cycle\+Present} \{ \hyperlink{namespacebidirectional_a507ec433f8ac22a92fcc3b8aad252f29a50727807c27ff7820eef09fbe631eba9}{T\+R\+UE}, 
+\hyperlink{namespacebidirectional_a507ec433f8ac22a92fcc3b8aad252f29a7fcb4521ab8f836164a0670be9848d18}{F\+A\+L\+SE}, 
+\hyperlink{namespacebidirectional_a507ec433f8ac22a92fcc3b8aad252f29aa5cae7e7a4dd360b53f1c5532ed64f59}{U\+N\+K\+N\+O\+WN}
+ \}
+\item 
+enum \hyperlink{namespacebidirectional_a4cbe6f0bfbd3629c2cd44c98014aed70}{Directions} \{ \hyperlink{namespacebidirectional_a4cbe6f0bfbd3629c2cd44c98014aed70a798987f7644a83982bae650870e1ccc0}{F\+WD}, 
+\hyperlink{namespacebidirectional_a4cbe6f0bfbd3629c2cd44c98014aed70a3e91263cd11d5fd4ceaec8830938740f}{B\+WD}, 
+\hyperlink{namespacebidirectional_a4cbe6f0bfbd3629c2cd44c98014aed70ab50b3fbd895a667b43b3e9eb3bd54f85}{B\+O\+TH}, 
+\hyperlink{namespacebidirectional_a4cbe6f0bfbd3629c2cd44c98014aed70a37837b18a2ed90dd3c428984af217f47}{N\+O\+D\+IR}
+ \}\begin{DoxyCompactList}\small\item\em Internal enum for directions. \end{DoxyCompactList}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{namespacebidirectional_a13e4a7c0617b0c9092e57cba21c75438}{detect\+Negative\+Cost\+Cycle} (\hyperlink{classbidirectional_1_1DiGraph}{Di\+Graph} $\ast$graph\+\_\+ptr)
+\item 
+void \hyperlink{namespacebidirectional_a35feb503e8ae674a3756aebc9a3b1d0f}{lower\+Bound\+Weight} (std\+::vector$<$ double $>$ $\ast$lower\+\_\+bound\+\_\+weight, const \hyperlink{classbidirectional_1_1DiGraph}{Di\+Graph} \&graph, const bool \&forward)
+\item 
+int \hyperlink{namespacebidirectional_a7b92b2282139801a9e2668a743ad07a1}{get\+Critical\+Res} (const std\+::vector$<$ double $>$ \&max\+\_\+res, const \hyperlink{classbidirectional_1_1DiGraph}{Di\+Graph} \&graph)
+\item 
+std\+::vector$<$ double $>$ \hyperlink{namespacebidirectional_a6b3d052fd58c8158b4e7a79acbed3c0e}{additive\+Forward\+R\+EF} (const std\+::vector$<$ double $>$ \&cumulative\+\_\+resource, const std\+::vector$<$ double $>$ \&edge\+\_\+resource\+\_\+consumption)
+\begin{DoxyCompactList}\small\item\em Default additive R\+EF for forward labels. \end{DoxyCompactList}\item 
+std\+::vector$<$ double $>$ \hyperlink{namespacebidirectional_a36f100766b94f6950283274ff7d4e7a6}{additive\+Backward\+R\+EF} (const std\+::vector$<$ double $>$ \&cumulative\+\_\+resource, const std\+::vector$<$ double $>$ \&edge\+\_\+resource\+\_\+consumption, const int \&critical\+\_\+res=0)
+\begin{DoxyCompactList}\small\item\em Default additive R\+EF for backward labels. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Enumeration Type Documentation}
+\mbox{\Hypertarget{namespacebidirectional_a4cbe6f0bfbd3629c2cd44c98014aed70}\label{namespacebidirectional_a4cbe6f0bfbd3629c2cd44c98014aed70}} 
+\index{bidirectional@{bidirectional}!Directions@{Directions}}
+\index{Directions@{Directions}!bidirectional@{bidirectional}}
+\subsubsection{\texorpdfstring{Directions}{Directions}}
+{\footnotesize\ttfamily enum \hyperlink{namespacebidirectional_a4cbe6f0bfbd3629c2cd44c98014aed70}{bidirectional\+::\+Directions}}
+
+
+
+Internal enum for directions. 
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{F\+WD@{F\+WD}!bidirectional@{bidirectional}}\index{bidirectional@{bidirectional}!F\+WD@{F\+WD}}}\mbox{\Hypertarget{namespacebidirectional_a4cbe6f0bfbd3629c2cd44c98014aed70a798987f7644a83982bae650870e1ccc0}\label{namespacebidirectional_a4cbe6f0bfbd3629c2cd44c98014aed70a798987f7644a83982bae650870e1ccc0}} 
+F\+WD&Forward. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{B\+WD@{B\+WD}!bidirectional@{bidirectional}}\index{bidirectional@{bidirectional}!B\+WD@{B\+WD}}}\mbox{\Hypertarget{namespacebidirectional_a4cbe6f0bfbd3629c2cd44c98014aed70a3e91263cd11d5fd4ceaec8830938740f}\label{namespacebidirectional_a4cbe6f0bfbd3629c2cd44c98014aed70a3e91263cd11d5fd4ceaec8830938740f}} 
+B\+WD&Backward. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{B\+O\+TH@{B\+O\+TH}!bidirectional@{bidirectional}}\index{bidirectional@{bidirectional}!B\+O\+TH@{B\+O\+TH}}}\mbox{\Hypertarget{namespacebidirectional_a4cbe6f0bfbd3629c2cd44c98014aed70ab50b3fbd895a667b43b3e9eb3bd54f85}\label{namespacebidirectional_a4cbe6f0bfbd3629c2cd44c98014aed70ab50b3fbd895a667b43b3e9eb3bd54f85}} 
+B\+O\+TH&Both. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{N\+O\+D\+IR@{N\+O\+D\+IR}!bidirectional@{bidirectional}}\index{bidirectional@{bidirectional}!N\+O\+D\+IR@{N\+O\+D\+IR}}}\mbox{\Hypertarget{namespacebidirectional_a4cbe6f0bfbd3629c2cd44c98014aed70a37837b18a2ed90dd3c428984af217f47}\label{namespacebidirectional_a4cbe6f0bfbd3629c2cd44c98014aed70a37837b18a2ed90dd3c428984af217f47}} 
+N\+O\+D\+IR&No direction. \\
+\hline
+
+\end{DoxyEnumFields}
+\mbox{\Hypertarget{namespacebidirectional_a507ec433f8ac22a92fcc3b8aad252f29}\label{namespacebidirectional_a507ec433f8ac22a92fcc3b8aad252f29}} 
+\index{bidirectional@{bidirectional}!Negative\+Cost\+Cycle\+Present@{Negative\+Cost\+Cycle\+Present}}
+\index{Negative\+Cost\+Cycle\+Present@{Negative\+Cost\+Cycle\+Present}!bidirectional@{bidirectional}}
+\subsubsection{\texorpdfstring{Negative\+Cost\+Cycle\+Present}{NegativeCostCyclePresent}}
+{\footnotesize\ttfamily enum \hyperlink{namespacebidirectional_a507ec433f8ac22a92fcc3b8aad252f29}{bidirectional\+::\+Negative\+Cost\+Cycle\+Present}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{T\+R\+UE@{T\+R\+UE}!bidirectional@{bidirectional}}\index{bidirectional@{bidirectional}!T\+R\+UE@{T\+R\+UE}}}\mbox{\Hypertarget{namespacebidirectional_a507ec433f8ac22a92fcc3b8aad252f29a50727807c27ff7820eef09fbe631eba9}\label{namespacebidirectional_a507ec433f8ac22a92fcc3b8aad252f29a50727807c27ff7820eef09fbe631eba9}} 
+T\+R\+UE&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{F\+A\+L\+SE@{F\+A\+L\+SE}!bidirectional@{bidirectional}}\index{bidirectional@{bidirectional}!F\+A\+L\+SE@{F\+A\+L\+SE}}}\mbox{\Hypertarget{namespacebidirectional_a507ec433f8ac22a92fcc3b8aad252f29a7fcb4521ab8f836164a0670be9848d18}\label{namespacebidirectional_a507ec433f8ac22a92fcc3b8aad252f29a7fcb4521ab8f836164a0670be9848d18}} 
+F\+A\+L\+SE&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{U\+N\+K\+N\+O\+WN@{U\+N\+K\+N\+O\+WN}!bidirectional@{bidirectional}}\index{bidirectional@{bidirectional}!U\+N\+K\+N\+O\+WN@{U\+N\+K\+N\+O\+WN}}}\mbox{\Hypertarget{namespacebidirectional_a507ec433f8ac22a92fcc3b8aad252f29aa5cae7e7a4dd360b53f1c5532ed64f59}\label{namespacebidirectional_a507ec433f8ac22a92fcc3b8aad252f29aa5cae7e7a4dd360b53f1c5532ed64f59}} 
+U\+N\+K\+N\+O\+WN&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{namespacebidirectional_a36f100766b94f6950283274ff7d4e7a6}\label{namespacebidirectional_a36f100766b94f6950283274ff7d4e7a6}} 
+\index{bidirectional@{bidirectional}!additive\+Backward\+R\+EF@{additive\+Backward\+R\+EF}}
+\index{additive\+Backward\+R\+EF@{additive\+Backward\+R\+EF}!bidirectional@{bidirectional}}
+\subsubsection{\texorpdfstring{additive\+Backward\+R\+E\+F()}{additiveBackwardREF()}}
+{\footnotesize\ttfamily std\+::vector$<$ double $>$ bidirectional\+::additive\+Backward\+R\+EF (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ double $>$ \&}]{cumulative\+\_\+resource,  }\item[{const std\+::vector$<$ double $>$ \&}]{edge\+\_\+resource\+\_\+consumption,  }\item[{const int \&}]{critical\+\_\+res }\end{DoxyParamCaption})}
+
+
+
+Default additive R\+EF for backward labels. 
+
+\mbox{\Hypertarget{namespacebidirectional_a6b3d052fd58c8158b4e7a79acbed3c0e}\label{namespacebidirectional_a6b3d052fd58c8158b4e7a79acbed3c0e}} 
+\index{bidirectional@{bidirectional}!additive\+Forward\+R\+EF@{additive\+Forward\+R\+EF}}
+\index{additive\+Forward\+R\+EF@{additive\+Forward\+R\+EF}!bidirectional@{bidirectional}}
+\subsubsection{\texorpdfstring{additive\+Forward\+R\+E\+F()}{additiveForwardREF()}}
+{\footnotesize\ttfamily std\+::vector$<$ double $>$ bidirectional\+::additive\+Forward\+R\+EF (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ double $>$ \&}]{cumulative\+\_\+resource,  }\item[{const std\+::vector$<$ double $>$ \&}]{edge\+\_\+resource\+\_\+consumption }\end{DoxyParamCaption})}
+
+
+
+Default additive R\+EF for forward labels. 
+
+\mbox{\Hypertarget{namespacebidirectional_a13e4a7c0617b0c9092e57cba21c75438}\label{namespacebidirectional_a13e4a7c0617b0c9092e57cba21c75438}} 
+\index{bidirectional@{bidirectional}!detect\+Negative\+Cost\+Cycle@{detect\+Negative\+Cost\+Cycle}}
+\index{detect\+Negative\+Cost\+Cycle@{detect\+Negative\+Cost\+Cycle}!bidirectional@{bidirectional}}
+\subsubsection{\texorpdfstring{detect\+Negative\+Cost\+Cycle()}{detectNegativeCostCycle()}}
+{\footnotesize\ttfamily void bidirectional\+::detect\+Negative\+Cost\+Cycle (\begin{DoxyParamCaption}\item[{\hyperlink{classbidirectional_1_1DiGraph}{Di\+Graph} $\ast$}]{graph }\end{DoxyParamCaption})}
+
+Detect if a negative cost cycle is present.
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt out}  & {\em graph,\hyperlink{classbidirectional_1_1DiGraph}{Di\+Graph}} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{namespacebidirectional_a7b92b2282139801a9e2668a743ad07a1}\label{namespacebidirectional_a7b92b2282139801a9e2668a743ad07a1}} 
+\index{bidirectional@{bidirectional}!get\+Critical\+Res@{get\+Critical\+Res}}
+\index{get\+Critical\+Res@{get\+Critical\+Res}!bidirectional@{bidirectional}}
+\subsubsection{\texorpdfstring{get\+Critical\+Res()}{getCriticalRes()}}
+{\footnotesize\ttfamily int bidirectional\+::get\+Critical\+Res (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ double $>$ \&}]{max\+\_\+res,  }\item[{const \hyperlink{classbidirectional_1_1DiGraph}{Di\+Graph} \&}]{graph }\end{DoxyParamCaption})}
+
+\mbox{[}E\+X\+P\+E\+R\+I\+M\+E\+N\+T\+AL\mbox{]} Get possible critical resource by solving longest paths on the graph with each resource as distance for each edge.
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em vector} & of double with maximum resources (upper bounds). \\
+\hline
+\mbox{\tt in}  & {\em \hyperlink{classbidirectional_1_1DiGraph}{bidirectional\+::\+Di\+Graph},with} & graph. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int with critical resource id. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacebidirectional_a35feb503e8ae674a3756aebc9a3b1d0f}\label{namespacebidirectional_a35feb503e8ae674a3756aebc9a3b1d0f}} 
+\index{bidirectional@{bidirectional}!lower\+Bound\+Weight@{lower\+Bound\+Weight}}
+\index{lower\+Bound\+Weight@{lower\+Bound\+Weight}!bidirectional@{bidirectional}}
+\subsubsection{\texorpdfstring{lower\+Bound\+Weight()}{lowerBoundWeight()}}
+{\footnotesize\ttfamily void bidirectional\+::lower\+Bound\+Weight (\begin{DoxyParamCaption}\item[{std\+::vector$<$ double $>$ $\ast$}]{lower\+\_\+bound\+\_\+weight,  }\item[{const \hyperlink{classbidirectional_1_1DiGraph}{Di\+Graph} \&}]{graph,  }\item[{const bool \&}]{forward }\end{DoxyParamCaption})}
+
+Solve shortest path using the distance provided as input and set the lower\+\_\+bound\+\_\+weight for each node. Uses L\+E\+M\+ON\textquotesingle{}s Bellman-\/\+Ford (just in case of negative weights) \begin{DoxySeeAlso}{See also}
+\+: \href{https://lemon.cs.elte.hu/pub/doc/latest/a00038.html}{\tt https\+://lemon.\+cs.\+elte.\+hu/pub/doc/latest/a00038.\+html}
+\end{DoxySeeAlso}
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt out}  & {\em lower\+\_\+bound\+\_\+weight,vector} & of double that contains the lower bound in the appropriate vertex index \\
+\hline
+\mbox{\tt in}  & {\em graph} & \\
+\hline
+\end{DoxyParams}

@@ -1,0 +1,445 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.13">
+  <compounddef id="classbidirectional_1_1Search" kind="class" language="C++" prot="public">
+    <compoundname>bidirectional::Search</compoundname>
+    <includes refid="search_8h" local="no">search.h</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="classbidirectional_1_1Search_1ad5a262892bdeae2978453c9967ab7372" prot="public" static="no" mutable="no">
+        <type><ref refid="namespacebidirectional_1a4cbe6f0bfbd3629c2cd44c98014aed70" kindref="member">Directions</ref></type>
+        <definition>Directions bidirectional::Search::direction</definition>
+        <argsstring></argsstring>
+        <name>direction</name>
+        <briefdescription>
+<para>Direction of <ref refid="classbidirectional_1_1Search" kindref="compound">Search</ref>. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/search.h" line="15" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/search.h" bodystart="15" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classbidirectional_1_1Search_1a0d03b4c804f947b14f7ec603d7005055" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool bidirectional::Search::stop</definition>
+        <argsstring></argsstring>
+        <name>stop</name>
+        <initializer>= false</initializer>
+        <briefdescription>
+<para>Stopping criteria for each direction. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/search.h" line="18" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/search.h" bodystart="18" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classbidirectional_1_1Search_1a51f9dea11b07ce6e196df86ce0912d7d" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool bidirectional::Search::bound_exceeded</definition>
+        <argsstring></argsstring>
+        <name>bound_exceeded</name>
+        <initializer>= false</initializer>
+        <briefdescription>
+<para>Stopping criteria for each direction. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/search.h" line="20" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/search.h" bodystart="20" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classbidirectional_1_1Search_1a5143275aff96ad18651c6050832a854a" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int bidirectional::Search::unprocessed_count</definition>
+        <argsstring></argsstring>
+        <name>unprocessed_count</name>
+        <initializer>= 0</initializer>
+        <briefdescription>
+<para>Number of unprocessed labels generated. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/search.h" line="22" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/search.h" bodystart="22" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classbidirectional_1_1Search_1a951da4144a4cf70e3288d0c5898769b9" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int bidirectional::Search::processed_count</definition>
+        <argsstring></argsstring>
+        <name>processed_count</name>
+        <initializer>= 0</initializer>
+        <briefdescription>
+<para>Number of labels processed. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/search.h" line="24" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/search.h" bodystart="24" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classbidirectional_1_1Search_1a3a9007631e48d796e85ae2cfc3a247ab" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int bidirectional::Search::generated_count</definition>
+        <argsstring></argsstring>
+        <name>generated_count</name>
+        <initializer>= 0</initializer>
+        <briefdescription>
+<para>Number of labels generated (includes the possibly infeasible extensions) </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/search.h" line="26" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/search.h" bodystart="26" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classbidirectional_1_1Search_1ac06fcd122e7d2bb99e493c9a82cbecd1" prot="public" static="no" mutable="no">
+        <type>std::unique_ptr&lt; std::vector&lt; double &gt; &gt;</type>
+        <definition>std::unique_ptr&lt;std::vector&lt;double&gt; &gt; bidirectional::Search::lower_bound_weight</definition>
+        <argsstring></argsstring>
+        <name>lower_bound_weight</name>
+        <briefdescription>
+<para>Lower bounds from any node to sink. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/search.h" line="31" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/search.h" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classbidirectional_1_1Search_1a7548a1928ca152017f6f4fe7a5c55089" prot="public" static="no" mutable="no">
+        <type>std::set&lt; int &gt;</type>
+        <definition>std::set&lt;int&gt; bidirectional::Search::visited_vertices</definition>
+        <argsstring></argsstring>
+        <name>visited_vertices</name>
+        <briefdescription>
+<para>vector with indices of vertices visited </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/search.h" line="33" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/search.h" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classbidirectional_1_1Search_1a3c1bc6eaad5e1dfe7d8181b4c34db1bd" prot="public" static="no" mutable="no">
+        <type>std::shared_ptr&lt; <ref refid="classlabelling_1_1Label" kindref="compound">labelling::Label</ref> &gt;</type>
+        <definition>std::shared_ptr&lt;labelling::Label&gt; bidirectional::Search::current_label</definition>
+        <argsstring></argsstring>
+        <name>current_label</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/search.h" line="34" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/search.h" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classbidirectional_1_1Search_1aa7996593da90536ffce5cb681dc26a9b" prot="public" static="no" mutable="no">
+        <type>std::shared_ptr&lt; <ref refid="classlabelling_1_1Label" kindref="compound">labelling::Label</ref> &gt;</type>
+        <definition>std::shared_ptr&lt;labelling::Label&gt; bidirectional::Search::intermediate_label</definition>
+        <argsstring></argsstring>
+        <name>intermediate_label</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Intermediate current best label with possibly complete source-sink path (shared pointer as we want to be able to substitute it without resetting) </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/search.h" line="38" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/search.h" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classbidirectional_1_1Search_1aa9159c191cdef5d5555614b9efcb8dc5" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; std::vector&lt; <ref refid="classlabelling_1_1Label" kindref="compound">labelling::Label</ref> &gt; &gt;</type>
+        <definition>std::vector&lt;std::vector&lt;labelling::Label&gt; &gt; bidirectional::Search::efficient_labels</definition>
+        <argsstring></argsstring>
+        <name>efficient_labels</name>
+        <briefdescription>
+<para>vector with pareto optimal labels (per node) in each direction </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/search.h" line="41" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/search.h" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classbidirectional_1_1Search_1a4b87b9c1f546b3138cb1bba0cc309a80" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; std::shared_ptr&lt; <ref refid="classlabelling_1_1Label" kindref="compound">labelling::Label</ref> &gt; &gt;</type>
+        <definition>std::vector&lt;std::shared_ptr&lt;labelling::Label&gt; &gt; bidirectional::Search::best_labels</definition>
+        <argsstring></argsstring>
+        <name>best_labels</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>vector with pointer to label with least weight (per node) in each direction </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/search.h" line="44" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/search.h" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classbidirectional_1_1Search_1aeb057642c57dde16fec701f625781651" prot="public" static="no" mutable="no">
+        <type>std::unique_ptr&lt; std::vector&lt; <ref refid="classlabelling_1_1Label" kindref="compound">labelling::Label</ref> &gt; &gt;</type>
+        <definition>std::unique_ptr&lt;std::vector&lt;labelling::Label&gt; &gt; bidirectional::Search::unprocessed_labels</definition>
+        <argsstring></argsstring>
+        <name>unprocessed_labels</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>heap vector to keep unprocessed labels ordered. the order depends on the on the direction of the search. i.e. forward -&gt; increasing in the monotone resource, backward -&gt; decreasing in the monotone resource. </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/search.h" line="51" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/search.h" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classbidirectional_1_1Search_1af38a13e27dcd3b69e78dc7943ee90f46" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void bidirectional::Search::makeHeap</definition>
+        <argsstring>()</argsstring>
+        <name>makeHeap</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Initialises heap using the appropriate comparison i.e. increasing in the monotone resource forward lists, decreasing otherwise </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/search.h" line="61" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/search.cc" bodystart="10" bodyend="21"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1Search_1a2c1a7067a4ce02805e8ab5f9beac8c7c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void bidirectional::Search::pushHeap</definition>
+        <argsstring>()</argsstring>
+        <name>pushHeap</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Push new elements in heap using the appropriate comparison i.e. increasing in the monotone resource forward lists, decreasing otherwise </para>        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/search.h" line="68" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/search.cc" bodystart="23" bodyend="36"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1Search_1ab2c67d7e3c1040f4d2586f3e5a82e1bf" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void bidirectional::Search::pushUnprocessedLabel</definition>
+        <argsstring>(const labelling::Label &amp;label)</argsstring>
+        <name>pushUnprocessedLabel</name>
+        <param>
+          <type>const <ref refid="classlabelling_1_1Label" kindref="compound">labelling::Label</ref> &amp;</type>
+          <declname>label</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/search.h" line="70" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/search.h" bodystart="70" bodyend="73"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1Search_1a729c7a379b04d777ac0bc844e5b488b7" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void bidirectional::Search::pushEfficientLabel</definition>
+        <argsstring>(const int &amp;lemon_id, const labelling::Label &amp;label)</argsstring>
+        <name>pushEfficientLabel</name>
+        <param>
+          <type>const int &amp;</type>
+          <declname>lemon_id</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classlabelling_1_1Label" kindref="compound">labelling::Label</ref> &amp;</type>
+          <declname>label</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/search.h" line="75" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/search.h" bodystart="75" bodyend="77"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1Search_1a25ab49cfbc9f074630e059429fc7f0cc" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void bidirectional::Search::replaceBestLabel</definition>
+        <argsstring>(const int &amp;lemon_id, const labelling::Label &amp;label)</argsstring>
+        <name>replaceBestLabel</name>
+        <param>
+          <type>const int &amp;</type>
+          <declname>lemon_id</declname>
+        </param>
+        <param>
+          <type>const <ref refid="classlabelling_1_1Label" kindref="compound">labelling::Label</ref> &amp;</type>
+          <declname>label</declname>
+        </param>
+        <briefdescription>
+<para>Replace best label. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/search.h" line="80" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/search.h" bodystart="80" bodyend="83"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1Search_1a2b2e85f750fd35df23f470ce2222dcfb" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void bidirectional::Search::replaceCurrentLabel</definition>
+        <argsstring>(const labelling::Label &amp;label)</argsstring>
+        <name>replaceCurrentLabel</name>
+        <param>
+          <type>const <ref refid="classlabelling_1_1Label" kindref="compound">labelling::Label</ref> &amp;</type>
+          <declname>label</declname>
+        </param>
+        <briefdescription>
+<para>Replace best label. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/search.h" line="86" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/search.h" bodystart="86" bodyend="89"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1Search_1a66b5168d25b5fe7f673f6d335ae716d1" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void bidirectional::Search::replaceIntermediateLabel</definition>
+        <argsstring>(const labelling::Label &amp;label)</argsstring>
+        <name>replaceIntermediateLabel</name>
+        <param>
+          <type>const <ref refid="classlabelling_1_1Label" kindref="compound">labelling::Label</ref> &amp;</type>
+          <declname>label</declname>
+        </param>
+        <briefdescription>
+<para>Replace intermediate label. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/search.h" line="92" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/search.h" bodystart="92" bodyend="95"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1Search_1a91b68db5c76c29195db8b2e4566fc601" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void bidirectional::Search::addVisitedVertex</definition>
+        <argsstring>(const int &amp;lemon_id)</argsstring>
+        <name>addVisitedVertex</name>
+        <param>
+          <type>const int &amp;</type>
+          <declname>lemon_id</declname>
+        </param>
+        <briefdescription>
+<para>Update vertices visited. </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/search.h" line="98" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/search.h" bodystart="98" bodyend="100"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1Search_1a6d5235bb92e3ca770634e5a77b55c4e4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>bidirectional::Search::Search</definition>
+        <argsstring>(const Directions &amp;direction_in)</argsstring>
+        <name>Search</name>
+        <param>
+          <type>const <ref refid="namespacebidirectional_1a4cbe6f0bfbd3629c2cd44c98014aed70" kindref="member">Directions</ref> &amp;</type>
+          <declname>direction_in</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/search.h" line="102" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/search.cc" bodystart="5" bodyend="8"/>
+      </memberdef>
+      <memberdef kind="function" id="classbidirectional_1_1Search_1a4a361bd0416ed0208792b19fabc4e749" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>bidirectional::Search::~Search</definition>
+        <argsstring>()</argsstring>
+        <name>~Search</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/__w/cspy/cspy/torressa/cspy/src/cc/search.h" line="103" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/search.h" bodystart="103" bodyend="103"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="49">
+        <label>bidirectional::Search</label>
+        <link refid="classbidirectional_1_1Search"/>
+        <childnode refid="50" relation="usage">
+          <edgelabel>+intermediate_label</edgelabel>
+          <edgelabel>+current_label</edgelabel>
+        </childnode>
+        <childnode refid="51" relation="usage">
+          <edgelabel>+best_labels</edgelabel>
+        </childnode>
+        <childnode refid="52" relation="usage">
+          <edgelabel>+visited_vertices</edgelabel>
+        </childnode>
+        <childnode refid="53" relation="usage">
+          <edgelabel>+direction</edgelabel>
+        </childnode>
+        <childnode refid="54" relation="usage">
+          <edgelabel>+lower_bound_weight</edgelabel>
+        </childnode>
+        <childnode refid="55" relation="usage">
+          <edgelabel>+generated_count</edgelabel>
+          <edgelabel>+unprocessed_count</edgelabel>
+          <edgelabel>+processed_count</edgelabel>
+        </childnode>
+        <childnode refid="56" relation="usage">
+          <edgelabel>+bound_exceeded</edgelabel>
+          <edgelabel>+stop</edgelabel>
+        </childnode>
+        <childnode refid="57" relation="usage">
+          <edgelabel>+efficient_labels</edgelabel>
+        </childnode>
+        <childnode refid="58" relation="usage">
+          <edgelabel>+unprocessed_labels</edgelabel>
+        </childnode>
+      </node>
+      <node id="50">
+        <label>shared_ptr&lt; labelling::Label &gt;</label>
+      </node>
+      <node id="52">
+        <label>set&lt; int &gt;</label>
+      </node>
+      <node id="51">
+        <label>vector&lt; std::shared_ptr&lt; labelling::Label &gt; &gt;</label>
+      </node>
+      <node id="54">
+        <label>unique_ptr&lt; std::vector&lt; double &gt; &gt;</label>
+      </node>
+      <node id="55">
+        <label>int</label>
+      </node>
+      <node id="53">
+        <label>Directions</label>
+      </node>
+      <node id="58">
+        <label>unique_ptr&lt; std::vector&lt; labelling::Label &gt; &gt;</label>
+      </node>
+      <node id="56">
+        <label>bool</label>
+      </node>
+      <node id="57">
+        <label>vector&lt; std::vector&lt; labelling::Label &gt; &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="/__w/cspy/cspy/torressa/cspy/src/cc/search.h" line="12" column="1" bodyfile="/__w/cspy/cspy/torressa/cspy/src/cc/search.h" bodystart="12" bodyend="104"/>
+    <listofallmembers>
+      <member refid="classbidirectional_1_1Search_1a91b68db5c76c29195db8b2e4566fc601" prot="public" virt="non-virtual"><scope>bidirectional::Search</scope><name>addVisitedVertex</name></member>
+      <member refid="classbidirectional_1_1Search_1a4b87b9c1f546b3138cb1bba0cc309a80" prot="public" virt="non-virtual"><scope>bidirectional::Search</scope><name>best_labels</name></member>
+      <member refid="classbidirectional_1_1Search_1a51f9dea11b07ce6e196df86ce0912d7d" prot="public" virt="non-virtual"><scope>bidirectional::Search</scope><name>bound_exceeded</name></member>
+      <member refid="classbidirectional_1_1Search_1a3c1bc6eaad5e1dfe7d8181b4c34db1bd" prot="public" virt="non-virtual"><scope>bidirectional::Search</scope><name>current_label</name></member>
+      <member refid="classbidirectional_1_1Search_1ad5a262892bdeae2978453c9967ab7372" prot="public" virt="non-virtual"><scope>bidirectional::Search</scope><name>direction</name></member>
+      <member refid="classbidirectional_1_1Search_1aa9159c191cdef5d5555614b9efcb8dc5" prot="public" virt="non-virtual"><scope>bidirectional::Search</scope><name>efficient_labels</name></member>
+      <member refid="classbidirectional_1_1Search_1a3a9007631e48d796e85ae2cfc3a247ab" prot="public" virt="non-virtual"><scope>bidirectional::Search</scope><name>generated_count</name></member>
+      <member refid="classbidirectional_1_1Search_1aa7996593da90536ffce5cb681dc26a9b" prot="public" virt="non-virtual"><scope>bidirectional::Search</scope><name>intermediate_label</name></member>
+      <member refid="classbidirectional_1_1Search_1ac06fcd122e7d2bb99e493c9a82cbecd1" prot="public" virt="non-virtual"><scope>bidirectional::Search</scope><name>lower_bound_weight</name></member>
+      <member refid="classbidirectional_1_1Search_1af38a13e27dcd3b69e78dc7943ee90f46" prot="public" virt="non-virtual"><scope>bidirectional::Search</scope><name>makeHeap</name></member>
+      <member refid="classbidirectional_1_1Search_1a951da4144a4cf70e3288d0c5898769b9" prot="public" virt="non-virtual"><scope>bidirectional::Search</scope><name>processed_count</name></member>
+      <member refid="classbidirectional_1_1Search_1a729c7a379b04d777ac0bc844e5b488b7" prot="public" virt="non-virtual"><scope>bidirectional::Search</scope><name>pushEfficientLabel</name></member>
+      <member refid="classbidirectional_1_1Search_1a2c1a7067a4ce02805e8ab5f9beac8c7c" prot="public" virt="non-virtual"><scope>bidirectional::Search</scope><name>pushHeap</name></member>
+      <member refid="classbidirectional_1_1Search_1ab2c67d7e3c1040f4d2586f3e5a82e1bf" prot="public" virt="non-virtual"><scope>bidirectional::Search</scope><name>pushUnprocessedLabel</name></member>
+      <member refid="classbidirectional_1_1Search_1a25ab49cfbc9f074630e059429fc7f0cc" prot="public" virt="non-virtual"><scope>bidirectional::Search</scope><name>replaceBestLabel</name></member>
+      <member refid="classbidirectional_1_1Search_1a2b2e85f750fd35df23f470ce2222dcfb" prot="public" virt="non-virtual"><scope>bidirectional::Search</scope><name>replaceCurrentLabel</name></member>
+      <member refid="classbidirectional_1_1Search_1a66b5168d25b5fe7f673f6d335ae716d1" prot="public" virt="non-virtual"><scope>bidirectional::Search</scope><name>replaceIntermediateLabel</name></member>
+      <member refid="classbidirectional_1_1Search_1a6d5235bb92e3ca770634e5a77b55c4e4" prot="public" virt="non-virtual"><scope>bidirectional::Search</scope><name>Search</name></member>
+      <member refid="classbidirectional_1_1Search_1a0d03b4c804f947b14f7ec603d7005055" prot="public" virt="non-virtual"><scope>bidirectional::Search</scope><name>stop</name></member>
+      <member refid="classbidirectional_1_1Search_1a5143275aff96ad18651c6050832a854a" prot="public" virt="non-virtual"><scope>bidirectional::Search</scope><name>unprocessed_count</name></member>
+      <member refid="classbidirectional_1_1Search_1aeb057642c57dde16fec701f625781651" prot="public" virt="non-virtual"><scope>bidirectional::Search</scope><name>unprocessed_labels</name></member>
+      <member refid="classbidirectional_1_1Search_1a7548a1928ca152017f6f4fe7a5c55089" prot="public" virt="non-virtual"><scope>bidirectional::Search</scope><name>visited_vertices</name></member>
+      <member refid="classbidirectional_1_1Search_1a4a361bd0416ed0208792b19fabc4e749" prot="public" virt="non-virtual"><scope>bidirectional::Search</scope><name>~Search</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>
