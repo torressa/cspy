@@ -74,12 +74,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-10.15, macos-11]
-        python-version: [3.7, 3.8, 3.9, "3.10", "3.11"]
+        os: [macos-10.15, macos-11, macos-13]
+        python-version: [3.9, "3.10", "3.11"]
     env:
       TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
       TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
-      SYSTEM_VERSION_COMPAT: 0
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python ${{ matrix.python-version }}
