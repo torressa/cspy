@@ -27,11 +27,11 @@ jobs:
       fail-fast: false
       matrix:
         python: # Update this list whenever the docker image is updated (check /opt/python/)
-          - cp37-cp37m
           - cp38-cp38
           - cp39-cp39
           - cp310-cp310
           - cp311-cp311
+          - cp312-cp312
     steps:
       - uses: actions/checkout@v2
       - name: Install python3-devel
@@ -74,8 +74,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-10.15, macos-11, macos-13]
-        python-version: [3.9, "3.10", "3.11"]
+        os: [macos-12, macos-13, macos-14]
+        python-version: [3.8, 3.9, "3.10", "3.11", "3.12"]
     env:
       TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
       TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
@@ -113,7 +113,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: [3.7, 3.8, 3.9, "3.10", "3.11"]
+        python-version: [3.8, 3.9, "3.10", "3.11", "3.12"]
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python ${{ matrix.python-version }}
