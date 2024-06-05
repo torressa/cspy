@@ -19,8 +19,8 @@ jobs:
     container:
       image: quay.io/pypa/manylinux2014_x86_64
       env:
-        TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
-        TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+        TWINE_USERNAME: "__token__"
+        TWINE_PASSWORD: ${{ secrets.PYPI_API_KEY }}
         PLAT: manylinux2014_x86_64
         PYBIN: '/opt/python/${{ matrix.python }}/bin'
     strategy:
@@ -77,14 +77,18 @@ jobs:
         os: [macos-12, macos-13, macos-14]
         python-version: [3.8, 3.9, "3.10", "3.11", "3.12"]
     env:
-      TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
-      TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+      TWINE_USERNAME: "__token__"
+      TWINE_PASSWORD: ${{ secrets.PYPI_API_KEY }}
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
+      - name: Install swig
+        run: |
+          brew update
+          brew install swig
       - name: Configure
         run: |
           echo $pythonLocation
@@ -108,8 +112,8 @@ jobs:
   windows-build:
     runs-on: windows-2019
     env:
-      TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
-      TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+      TWINE_USERNAME: "__token__"
+      TWINE_PASSWORD: ${{ secrets.PYPI_API_KEY }}
     strategy:
       fail-fast: false
       matrix:
