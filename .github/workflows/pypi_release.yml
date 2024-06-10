@@ -19,8 +19,6 @@ jobs:
     container:
       image: quay.io/pypa/manylinux2014_x86_64
       env:
-        TWINE_USERNAME: "__token__"
-        TWINE_PASSWORD: ${{ secrets.PYPI_API_KEY }}
         PLAT: manylinux2014_x86_64
         PYBIN: '/opt/python/${{ matrix.python }}/bin'
     strategy:
@@ -63,10 +61,11 @@ jobs:
         run: |
           "${PYBIN}/pip" install cspy --no-index -f build/python/wheelhouse-repaired/
           "${PYBIN}/python3" -m unittest discover -s test/python/
-      - name: upload wheel
-        run: |
-          ${PYBIN}/pip install twine
-          ${PYBIN}/python3 -m twine upload build/python/wheelhouse-repaired/*
+      - name: upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-wheels
+          path: build/python/wheelhouse-repaired/
         continue-on-error: true
 
   macos-build:
@@ -76,9 +75,6 @@ jobs:
       matrix:
         os: [macos-12, macos-13, macos-14]
         python-version: [3.8, 3.9, "3.10", "3.11", "3.12"]
-    env:
-      TWINE_USERNAME: "__token__"
-      TWINE_PASSWORD: ${{ secrets.PYPI_API_KEY }}
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python ${{ matrix.python-version }}
@@ -103,10 +99,11 @@ jobs:
           delocate-wheel -w wheelhouse -v build/python/dist/*.whl
           cd build
           ctest --verbose -R python_unittest
-      - name: upload wheel
-        run: |
-          python3 -m pip install twine
-          twine upload wheelhouse/*
+      - name: upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-wheels
+          path: wheelhouse/
         continue-on-error: true
 
   windows-build:
@@ -132,8 +129,45 @@ jobs:
         run: |
           cd build
           ctest -C Release --verbose
-      - name: upload wheel
-        run: |
-          pip install twine
-          twine upload .\build\python\dist\*
+      - name: upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-wheels
+          path: build/python/dist/
         continue-on-error: true
+
+  pypi-publish:
+    name: Upload release to PyPI
+    needs: [build-manylinux2014-x86_64-wheel, macos-build, windows-build]
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/cspy
+    permissions:
+      id-token: write  # IMPORTANT: this permission is mandatory for trusted publishing
+    steps:
+    # retrieve your distributions here
+    - uses: actions/download-artifact@v4
+      with:
+        name: linux-wheels
+        path: allwheels
+    - name: Display structure of Linux wheels
+      run: ls -R allwheels
+    - uses: actions/download-artifact@v4
+      with:
+        name: macos-wheels
+        path: allwheels
+    - uses: actions/download-artifact@v4
+      with:
+        name: windows-wheels
+        path: allwheels
+    - name: Display allwheels dir
+      run: ls -R allwheels
+      
+    - name: Publish package distributions to PyPI
+      uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        packages-dir: allwheels 
+        verbose: true
+        skip-existing: true
+        password: ${{ secrets.PYPI_API_KEY }}
